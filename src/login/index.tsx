@@ -1,4 +1,5 @@
 import { Button, Form, Input } from 'antd';
+import { useState } from 'react';
 import styled from 'styled-components';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 
@@ -43,18 +44,46 @@ const Container = styled.div`
 		overflow-wrap: break-word;
 		max-width: 300px;
 	}
+
+	&.shake {
+		animation: shake-animation 0.3s ease;
+	}
+
+	@keyframes shake-animation {
+		0% {
+			transform: translateX(0);
+		}
+		25% {
+			transform: translateX(-8px);
+		}
+		50% {
+			transform: translateX(8px);
+		}
+		75% {
+			transform: translateX(-8px);
+		}
+		100% {
+			transform: translateX(0);
+		}
+	}
 `;
 
 const Login = () => {
 	const [form] = Form.useForm<Api.UserServiceGetUserInfo.ResponseBody>();
 
+	const [className, setClassName] = useState('');
+
 	const onSignIn = async () => {
 		const values = await form.validateFields();
 		console.log('values', values);
+		setClassName('shake');
+		setTimeout(() => {
+			setClassName('');
+		}, 500);
 	};
 
 	return (
-		<Container>
+		<Container className={className}>
 			<h1>微信机器人管理后台</h1>
 			<img
 				src="https://img.houhoukang.com/uranus/qrcode_for_gh.jpg"
