@@ -95,7 +95,13 @@ const Login = () => {
 		const values = await form.validateFields();
 		const resp = await runAsync(values);
 		if (resp.success) {
-			navigate('/');
+			const search = new URLSearchParams(window.location.search);
+			const redirect = search.get('redirect');
+			if (redirect) {
+				navigate(decodeURIComponent(redirect));
+			} else {
+				navigate('/');
+			}
 		} else {
 			message.error(resp.message);
 			setClassName('shake');

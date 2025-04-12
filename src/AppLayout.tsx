@@ -2,8 +2,10 @@ import { LogoutOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { App, Avatar, Dropdown, Layout, Menu, Skeleton, theme, Watermark } from 'antd';
 import type { MenuProps } from 'antd';
+import logo from 'public/logo.svg';
 import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import { UrlLogin } from './constant/redirect-url';
 import { UserContext } from './context/user';
 
@@ -31,6 +33,32 @@ const siderStyle: React.CSSProperties = {
 	scrollbarGutter: 'stable',
 };
 
+const Logo = styled.div`
+	width: 250px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+
+	.icon {
+		margin: 0 auto;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		background: url('${logo}') center / contain no-repeat;
+	}
+
+	.title {
+		width: 180px;
+		height: 32px;
+		margin-inline-end: 24px;
+		color: #fff;
+		font-weight: 600;
+		font-size: 18px;
+		line-height: 32px;
+		vertical-align: middle;
+	}
+`;
+
 const AppLayout: React.FC = () => {
 	const {
 		token: { colorBgContainer },
@@ -40,8 +68,9 @@ const AppLayout: React.FC = () => {
 
 	const [selectedKeys, setselectedKeys] = useState<string[]>([]);
 
+	const pathname = window.location.pathname;
+
 	useEffect(() => {
-		const pathname = window.location.pathname;
 		if (!pathname) {
 			setselectedKeys([]);
 		} else {
@@ -105,7 +134,10 @@ const AppLayout: React.FC = () => {
 		>
 			<Layout style={rootStyle}>
 				<Header style={headerStyle}>
-					<div className="logo">微信机器人管理后台</div>
+					<Logo>
+						<div className="icon" />
+						<div className="title">微信机器人管理后台</div>
+					</Logo>
 					<Dropdown
 						menu={{ items }}
 						placement="bottomRight"
@@ -116,30 +148,32 @@ const AppLayout: React.FC = () => {
 								size="default"
 								gap={4}
 							>
-								{(user?.display_name || '').charAt(0).toUpperCase()}
+								{(user.display_name || '').charAt(0).toUpperCase()}
 							</Avatar>
-							<span style={{ color: '#ffffff', marginLeft: 5, fontSize: 15 }}>{user?.display_name}</span>
+							<span style={{ color: '#ffffff', marginLeft: 5, fontSize: 15 }}>{user.display_name}</span>
 						</div>
 					</Dropdown>
 				</Header>
 				<Layout>
-					<Sider
-						width={200}
-						collapsible
-						defaultCollapsed
-						style={{ background: colorBgContainer, ...siderStyle }}
-					>
-						<Menu
-							mode="inline"
-							style={{ height: '100%', borderRight: 0 }}
-							selectedKeys={selectedKeys}
-							onClick={ev => {
-								setselectedKeys([ev.key]);
-								navigate(ev.key);
-							}}
-							items={[]}
-						/>
-					</Sider>
+					{pathname !== '/' && (
+						<Sider
+							width={200}
+							collapsible
+							defaultCollapsed
+							style={{ background: colorBgContainer, ...siderStyle }}
+						>
+							<Menu
+								mode="inline"
+								style={{ height: '100%', borderRight: 0 }}
+								selectedKeys={selectedKeys}
+								onClick={ev => {
+									setselectedKeys([ev.key]);
+									navigate(ev.key);
+								}}
+								items={[]}
+							/>
+						</Sider>
+					)}
 					<UserContext.Provider value={{ user: user, signOut }}>
 						<Layout style={{ padding: '10px 10px 0 10px' }}>
 							<Outlet />

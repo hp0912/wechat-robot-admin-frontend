@@ -12,36 +12,43 @@ body {
 	text-overflow: ellipsis;
 }
 
-.logo {
-	width: 120px;
-	min-width: 120px;
-	height: 32px;
-	background: rgba(255, 255, 255, 0.2);
-	border-radius: 6px;
-	margin-inline-end: 24px;
-	color: #fff;
-	font-weight: 600;
-	font-size: 18px;
-	line-height: 32px;
-	text-align: center;
-	vertical-align: middle;
-	animation: pro-layout-title-hide___2tsNI 0.3s;
+.skin {
+	background-color: rgb(64, 64, 64);
+	background-image: url(https://img.houhoukang.com/wechat-robot-admin-bg.jpg);
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	min-width: 1000px;
+	z-index: -10;
+	background-position: center 0;
+	background-repeat: no-repeat;
+	background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	zoom: 1;
 }
 
-.skin {
-  background-color: rgb(64, 64, 64);
-  background-image: url(https://img.houhoukang.com/wechat-robot-admin-bg.jpg);
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  min-width: 1000px;
-  z-index: -10;
-  background-position: center 0;
-  background-repeat: no-repeat;
-  background-size: cover;
-  -webkit-background-size: cover;
-  -o-background-size: cover;
-  zoom: 1;
+.nav,
+.filter,
+.content,
+.pagination {
+	background-color: #fff;
+	padding: 8px 12px;
+	border-radius: 4px;
+}
+
+.nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.filter {
+	margin: 16px 0;
+}
+
+.pagination {
+	margin-top: 16px;
 }
