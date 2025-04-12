@@ -53,9 +53,9 @@ if (isDev) {
 		},
 		proxy: [
 			{
-				context: ['/v1/**'],
+				context: ['/api/v1/**'],
 				changeOrigin: true,
-				target: 'http://127.0.0.1:9001',
+				target: 'http://127.0.0.1:9000',
 				secure: false,
 				cookieDomainRewrite: '',
 			},

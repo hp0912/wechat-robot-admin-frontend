@@ -19,8 +19,8 @@ export const Init = () => {
 	const respInterceptor = (response: AxiosResponse<AnyType, AnyType>) => {
 		const data = response.data as { code: number; error: string };
 		switch (data.code) {
-			case 0:
-				return response.data;
+			case 200:
+				return response;
 			case 401:
 				window.location.href = `${UrlLogin}?redirect=${encodeURIComponent(window.location.href)}`;
 				return;

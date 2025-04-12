@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 
-type IUser = Api.UserServiceGetUserInfo.ResponseBody;
+type IUser = Api.V1UserSelfList.ResponseBody['data'];
 
 interface IContext {
 	user?: IUser;

@@ -1,5 +1,7 @@
-import { Button, Form, Input } from 'antd';
+import { useRequest } from 'ahooks';
+import { App, Button, Form, Input } from 'antd';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 
@@ -69,17 +71,38 @@ const Container = styled.div`
 `;
 
 const Login = () => {
-	const [form] = Form.useForm<Api.UserServiceGetUserInfo.ResponseBody>();
+	const { message } = App.useApp();
+	const navigate = useNavigate();
+
+	const [form] = Form.useForm<Api.V1OauthWechatCreate.RequestBody>();
 
 	const [className, setClassName] = useState('');
 
+	const { runAsync, loading } = useRequest(
+		async (data: Api.V1OauthWechatCreate.RequestBody) => {
+			const resp = await window.wechatRobotClient.api.v1OauthWechatCreate(data);
+			return resp.data;
+		},
+		{
+			manual: true,
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
 	const onSignIn = async () => {
 		const values = await form.validateFields();
-		console.log('values', values);
-		setClassName('shake');
-		setTimeout(() => {
-			setClassName('');
-		}, 500);
+		const resp = await runAsync(values);
+		if (resp.success) {
+			navigate('/');
+		} else {
+			message.error(resp.message);
+			setClassName('shake');
+			setTimeout(() => {
+				setClassName('');
+			}, 500);
+		}
 	};
 
 	return (
@@ -112,6 +135,7 @@ const Login = () => {
 						type="primary"
 						size="large"
 						block
+						loading={loading}
 						onClick={onSignIn}
 					>
 						登陆

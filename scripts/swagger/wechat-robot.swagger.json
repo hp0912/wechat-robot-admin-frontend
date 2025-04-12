@@ -1,100 +1,213 @@
 {
-	"swagger": "2.0",
+	"openapi": "3.0.1",
 	"info": {
-		"title": "proto/odin_server_proto/admin/user.proto",
-		"version": "version not set"
+		"title": "微信机器人管理后台",
+		"description": "",
+		"version": "1.0.0"
 	},
-	"consumes": ["application/json"],
-	"produces": ["application/json"],
+	"tags": [],
 	"paths": {
-		"/api/v1/user": {
-			"get": {
-				"summary": "GetUserInfo 获取当前登录用户信息",
-				"operationId": "UserService_GetUserInfo",
-				"responses": {
-					"200": {
-						"description": "A successful response.",
-						"schema": {
-							"$ref": "#/definitions/adminGetUserInfoResponse"
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/runtimeError"
+		"/api/v1/oauth/wechat": {
+			"post": {
+				"summary": "微信二维码登陆",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "微信登陆",
+				"tags": [],
+				"parameters": [],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"code": {
+										"type": "string"
+									}
+								},
+								"x-apifox-orders": ["code"],
+								"required": ["code"],
+								"x-apifox-ignore-properties": []
+							}
 						}
 					}
 				},
-				"tags": ["UserService"]
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"success": {
+											"type": "boolean"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"x-apifox-orders": ["code", "success", "message"],
+									"required": ["success", "message", "code"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-283294404-run",
+				"security": []
+			}
+		},
+		"/api/v1/user/self": {
+			"get": {
+				"summary": "获取当前登陆用户",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "number"
+												},
+												"wechat_id": {
+													"type": "string"
+												},
+												"display_name": {
+													"type": "string"
+												},
+												"role": {
+													"type": "number"
+												},
+												"status": {
+													"type": "number"
+												},
+												"avatar_url": {
+													"type": "string"
+												},
+												"last_login_time": {
+													"type": "number"
+												},
+												"created_time": {
+													"type": "number"
+												}
+											},
+											"required": [
+												"id",
+												"wechat_id",
+												"display_name",
+												"role",
+												"status",
+												"avatar_url",
+												"last_login_time",
+												"created_time"
+											],
+											"x-apifox-orders": [
+												"id",
+												"wechat_id",
+												"display_name",
+												"role",
+												"status",
+												"avatar_url",
+												"last_login_time",
+												"created_time"
+											],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								},
+								"examples": {
+									"1": {
+										"summary": "成功示例",
+										"value": {
+											"code": 0,
+											"message": "",
+											"data": {
+												"id": 0,
+												"wechat_id": "string",
+												"display_name": "string",
+												"role": 0,
+												"status": 0,
+												"avatar_url": "string",
+												"last_login_time": 0,
+												"created_time": 0
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-283299886-run",
+				"security": []
 			}
 		},
 		"/api/v1/user/logout": {
-			"post": {
-				"summary": "Logout 退出当前登录用户",
-				"operationId": "UserService_Logout",
+			"delete": {
+				"summary": "用户登出",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [],
 				"responses": {
 					"200": {
-						"description": "A successful response.",
-						"schema": {
-							"$ref": "#/definitions/commonResponse"
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/runtimeError"
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"x-apifox-orders": ["code", "message"],
+									"required": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								}
+							}
 						}
 					}
 				},
-				"tags": ["UserService"]
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-283300727-run",
+				"security": []
 			}
 		}
 	},
-	"definitions": {
-		"adminGetUserInfoResponse": {
-			"type": "object",
-			"properties": {
-				"username": {
-					"type": "string",
-					"title": "用户名/域账号"
-				}
-			}
-		},
-		"commonResponse": {
-			"type": "object"
-		},
-		"protobufAny": {
-			"type": "object",
-			"properties": {
-				"type_url": {
-					"type": "string"
-				},
-				"value": {
-					"type": "string",
-					"format": "byte"
-				}
-			}
-		},
-		"runtimeError": {
-			"type": "object",
-			"properties": {
-				"error": {
-					"type": "string"
-				},
-				"code": {
-					"type": "integer",
-					"format": "int32"
-				},
-				"message": {
-					"type": "string"
-				},
-				"details": {
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/protobufAny"
-					}
-				}
-			}
-		}
-	}
+	"components": {
+		"schemas": {},
+		"securitySchemes": {}
+	},
+	"servers": []
 }
