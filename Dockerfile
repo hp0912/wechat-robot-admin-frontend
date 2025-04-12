@@ -1,4 +1,4 @@
-FROM yunke-registry.cn-hangzhou.cr.aliyuncs.com/yued/node-image-base:v18.20.3-alpine-rc AS builder_web
+FROM node:20.19.8-slim AS builder_web
 
 ENV CI=1
 
@@ -17,9 +17,7 @@ ADD ./ /app
 
 RUN pnpm run build-types branch=$BRANCH && pnpm run build
 
-FROM yunke-registry.cn-hangzhou.cr.aliyuncs.com/yued/nginx-base:1.21.0-alpine-1.1.0
-
-LABEL sync-cdn="true" sync-cdn-pre-action="/docker-entrypoint.d/replace.sh" sync-cdn-by-deploy-env="1" sync-cdn-target="/app/dist" probe="none"
+FROM nginx:stable-alpine-slim
 
 COPY --from=builder_web /app/dist /app/dist
 COPY --from=builder_web /app/nginx.conf /etc/nginx/conf.d/default.conf
