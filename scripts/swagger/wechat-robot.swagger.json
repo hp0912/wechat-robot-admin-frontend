@@ -1,0 +1,100 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"title": "proto/odin_server_proto/admin/user.proto",
+		"version": "version not set"
+	},
+	"consumes": ["application/json"],
+	"produces": ["application/json"],
+	"paths": {
+		"/api/v1/user": {
+			"get": {
+				"summary": "GetUserInfo 获取当前登录用户信息",
+				"operationId": "UserService_GetUserInfo",
+				"responses": {
+					"200": {
+						"description": "A successful response.",
+						"schema": {
+							"$ref": "#/definitions/adminGetUserInfoResponse"
+						}
+					},
+					"default": {
+						"description": "An unexpected error response.",
+						"schema": {
+							"$ref": "#/definitions/runtimeError"
+						}
+					}
+				},
+				"tags": ["UserService"]
+			}
+		},
+		"/api/v1/user/logout": {
+			"post": {
+				"summary": "Logout 退出当前登录用户",
+				"operationId": "UserService_Logout",
+				"responses": {
+					"200": {
+						"description": "A successful response.",
+						"schema": {
+							"$ref": "#/definitions/commonResponse"
+						}
+					},
+					"default": {
+						"description": "An unexpected error response.",
+						"schema": {
+							"$ref": "#/definitions/runtimeError"
+						}
+					}
+				},
+				"tags": ["UserService"]
+			}
+		}
+	},
+	"definitions": {
+		"adminGetUserInfoResponse": {
+			"type": "object",
+			"properties": {
+				"username": {
+					"type": "string",
+					"title": "用户名/域账号"
+				}
+			}
+		},
+		"commonResponse": {
+			"type": "object"
+		},
+		"protobufAny": {
+			"type": "object",
+			"properties": {
+				"type_url": {
+					"type": "string"
+				},
+				"value": {
+					"type": "string",
+					"format": "byte"
+				}
+			}
+		},
+		"runtimeError": {
+			"type": "object",
+			"properties": {
+				"error": {
+					"type": "string"
+				},
+				"code": {
+					"type": "integer",
+					"format": "int32"
+				},
+				"message": {
+					"type": "string"
+				},
+				"details": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/protobufAny"
+					}
+				}
+			}
+		}
+	}
+}

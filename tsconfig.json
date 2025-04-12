@@ -1,0 +1,36 @@
+{
+  "ts-node": {
+    "compilerOptions": {
+      "target": "ES2020",
+      "module": "commonjs"
+    }
+  },
+  "compilerOptions": {
+    "sourceMap": true,
+    "allowJs": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "importHelpers": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "noEmitOnError": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": false,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "module": "esnext",
+    "target": "esnext",
+    "lib": ["dom", "ES2020"],
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "typeRoots": ["node_modules/@types", "src/@types"],
+  },
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./rsbuild.config.ts"],
+  "exclude": ["node_modules"]
+}
