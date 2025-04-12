@@ -3,7 +3,7 @@ import { Avatar, Dropdown, Layout, Menu, theme } from 'antd';
 import type { MenuProps } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { Login } from './constant/redirect-url';
+import { UrlLogin } from './constant/redirect-url';
 import { UserContext } from './context/user';
 
 const { Header, Sider } = Layout;
@@ -62,7 +62,7 @@ const AppLayout: React.FC = () => {
 			icon: <LogoutOutlined />,
 			onClick: async () => {
 				await signOut();
-				window.location.href = `${Login}?redirect=${encodeURIComponent(window.location.href)}`;
+				window.location.href = `${UrlLogin}?redirect=${encodeURIComponent(window.location.href)}`;
 			},
 		},
 	];

@@ -1,6 +1,6 @@
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import type { AnyType } from '@/common/types';
-import { Login } from '@/constant/redirect-url';
+import { UrlLogin } from '@/constant/redirect-url';
 import { clientInit } from './clientInit';
 
 const baseURL = `${process.env.NODE_ENV === 'development' ? '/' : '/kms-server'}/`;
@@ -22,7 +22,7 @@ export const Init = () => {
 			case 0:
 				return response.data;
 			case 401:
-				window.location.href = `${Login}?redirect=${encodeURIComponent(window.location.href)}`;
+				window.location.href = `${UrlLogin}?redirect=${encodeURIComponent(window.location.href)}`;
 				return;
 			default:
 				return Promise.reject(errorWrapper(data));

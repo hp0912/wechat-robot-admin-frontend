@@ -7,7 +7,9 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import App404 from './404';
 import AppLayout from './AppLayout';
 import routers from './AppRoutes';
+import { UrlLogin } from './constant/redirect-url';
 import { UserContext } from './context/user';
+import Login from './login';
 import { Init } from './utils/appInit';
 
 dayjs.extend(customParseFormat);
@@ -67,6 +69,10 @@ const App = () => {
 									);
 								})}
 							</Route>
+							<Route
+								path={UrlLogin}
+								element={<Login />}
+							/>
 							<Route
 								path="*"
 								element={<App404 />}

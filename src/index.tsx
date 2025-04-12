@@ -17,6 +17,7 @@ ReactDOM.createRoot(root).render(
 		theme={{ token: { colorPrimary: COLOR_COMMON } }}
 	>
 		<AntdApp>
+			<div className="skin" />
 			<App />
 		</AntdApp>
 	</ConfigProvider>,

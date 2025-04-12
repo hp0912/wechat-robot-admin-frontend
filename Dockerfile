@@ -1,7 +1,5 @@
 FROM node:20.19.8-slim AS builder_web
 
-ENV CI=1
-
 WORKDIR /app
 ADD ./package.json /app/package.json
 ADD ./pnpm-lock.yaml /app/pnpm-lock.yaml
