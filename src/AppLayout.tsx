@@ -147,9 +147,9 @@ const AppLayout: React.FC = () => {
 								style={{ verticalAlign: 'middle', backgroundColor: 'rgb(132, 132, 131)' }}
 								size="default"
 								gap={4}
-							>
-								{(user.display_name || '').charAt(0).toUpperCase()}
-							</Avatar>
+								src={user.avatar_url}
+								alt={user.display_name}
+							/>
 							<span style={{ color: '#ffffff', marginLeft: 5, fontSize: 15 }}>{user.display_name}</span>
 						</div>
 					</Dropdown>

@@ -87,6 +87,10 @@ const Login = () => {
 			manual: true,
 			onError: reason => {
 				message.error(reason.message);
+				setClassName('shake');
+				setTimeout(() => {
+					setClassName('');
+				}, 500);
 			},
 		},
 	);
@@ -94,20 +98,14 @@ const Login = () => {
 	const onSignIn = async () => {
 		const values = await form.validateFields();
 		const resp = await runAsync(values);
-		if (resp.success) {
+		if (resp.data.success) {
 			const search = new URLSearchParams(window.location.search);
 			const redirect = search.get('redirect');
 			if (redirect) {
-				navigate(decodeURIComponent(redirect));
+				window.location.href = decodeURIComponent(redirect);
 			} else {
 				navigate('/');
 			}
-		} else {
-			message.error(resp.message);
-			setClassName('shake');
-			setTimeout(() => {
-				setClassName('');
-			}, 500);
 		}
 	};
 

@@ -1,16 +1,63 @@
-import { EditOutlined, EllipsisOutlined, PlusOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
-import { useSetState } from 'ahooks';
-import { Avatar, Breadcrumb, Button, Card, Col, Flex, Input, Pagination, Radio, Row } from 'antd';
+import {
+	EditOutlined,
+	EllipsisOutlined,
+	LoginOutlined,
+	LogoutOutlined,
+	PlusOutlined,
+	ScanOutlined,
+	SearchOutlined,
+	SettingOutlined,
+} from '@ant-design/icons';
+import { useBoolean, useRequest, useSetState } from 'ahooks';
+import {
+	App,
+	Avatar,
+	Breadcrumb,
+	Button,
+	Card,
+	Col,
+	Empty,
+	Flex,
+	Input,
+	Pagination,
+	Radio,
+	Row,
+	Spin,
+	Tooltip,
+} from 'antd';
+import dayjs from 'dayjs';
+import NewRobot from './NewRobot';
 
 const actions: React.ReactNode[] = [
 	<EditOutlined key="edit" />,
 	<SettingOutlined key="setting" />,
 	<EllipsisOutlined key="ellipsis" />,
 ];
-const loading = false;
 
 const RobotList = () => {
+	const { message } = App.useApp();
+
+	const [onNewOpen, setOnNewOpen] = useBoolean(false);
 	const [search, setSearch] = useSetState({ keyword: '', status: 'all', pageIndex: 1 });
+
+	const { data, loading, refresh } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1RobotListList({
+				keyword: search.keyword,
+				status: search.status === 'all' ? undefined : search.status,
+				page_index: search.pageIndex,
+				page_size: 10,
+			});
+			return resp.data?.data || [];
+		},
+		{
+			manual: false,
+			refreshDeps: [search],
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
 
 	return (
 		<div>
@@ -26,6 +73,7 @@ const RobotList = () => {
 				<Button
 					type="primary"
 					icon={<PlusOutlined />}
+					onClick={setOnNewOpen.setTrue}
 				>
 					创建机器人
 				</Button>
@@ -42,9 +90,10 @@ const RobotList = () => {
 							placeholder="搜索机器人"
 							prefix={<SearchOutlined />}
 							allowClear
-							value={search.keyword}
-							onChange={ev => {
-								setSearch({ keyword: ev.target.value });
+							onKeyDown={ev => {
+								if (ev.key === 'Enter') {
+									setSearch({ keyword: ev.currentTarget.value });
+								}
 							}}
 						/>
 					</Col>
@@ -70,41 +119,83 @@ const RobotList = () => {
 				className="content"
 				style={{ height: 'calc(100vh - 278px)', overflowY: 'auto' }}
 			>
-				<Flex
-					gap="middle"
-					align="start"
-					justify="center"
-					wrap="wrap"
-				>
-					{new Array(20).fill(0).map((item, index) => {
-						return (
-							<Card
-								loading={loading}
-								actions={actions}
-								style={{ minWidth: 300 }}
-								key={index}
-							>
-								<Card.Meta
-									avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=2" />}
-									title="Card title"
-									description={
-										<>
-											<p>This is the description</p>
-											<p>This is the description</p>
-										</>
-									}
-								/>
-							</Card>
-						);
-					})}
-				</Flex>
+				<Spin spinning={loading}>
+					<Flex
+						gap="middle"
+						align="start"
+						justify="start"
+						wrap="wrap"
+					>
+						{data?.items?.length ? (
+							data.items.map(item => {
+								return (
+									<Card
+										loading={false}
+										actions={actions}
+										style={{ minWidth: 300 }}
+										key={item.id}
+									>
+										<Card.Meta
+											avatar={<Avatar src={item.avatar} />}
+											title={
+												<Flex
+													align="start"
+													justify="space-between"
+												>
+													{item.status === 'online' ? (
+														<>
+															<span>{item.nickname}</span>
+															<Tooltip title="退出登录">
+																<Button icon={<LogoutOutlined />} />
+															</Tooltip>
+														</>
+													) : (
+														<>
+															{item.nickname ? (
+																<>
+																	<span>{item.nickname}</span>
+																	<Tooltip title="重新登录">
+																		<Button icon={<LoginOutlined />} />
+																	</Tooltip>
+																</>
+															) : (
+																<>
+																	<span style={{ color: 'gray' }}>未登陆</span>
+																	<Tooltip title="扫码登录">
+																		<Button icon={<ScanOutlined />} />
+																	</Tooltip>
+																</>
+															)}
+														</>
+													)}
+												</Flex>
+											}
+											description={
+												<>
+													<p>机器人编码: {item.robot_code}</p>
+													<p>微信号: {item.wechat_id || '-'}</p>
+													<p>
+														登录时间:{' '}
+														{item.last_login_at ? dayjs(item.last_login_at * 1000).format('YYYY-MM-DD HH:mm:ss') : '-'}
+													</p>
+												</>
+											}
+										/>
+									</Card>
+								);
+							})
+						) : (
+							<Empty description="暂无数据" />
+						)}
+					</Flex>
+				</Spin>
 			</div>
 			<div className="pagination">
 				<Pagination
 					align="end"
 					current={search.pageIndex}
 					pageSize={10}
-					total={2}
+					total={data?.total || 0}
 					showSizeChanger={false}
 					showTotal={total => `共 ${total} 条`}
 					onChange={page => {
@@ -112,6 +203,13 @@ const RobotList = () => {
 					}}
 				/>
 			</div>
+			{onNewOpen && (
+				<NewRobot
+					open={onNewOpen}
+					onRefresh={refresh}
+					onClose={setOnNewOpen.setFalse}
+				/>
+			)}
 		</div>
 	);
 };
