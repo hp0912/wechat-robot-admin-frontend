@@ -426,6 +426,197 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-283367522-run",
 				"security": []
 			}
+		},
+		"/api/v1/robot/view": {
+			"get": {
+				"summary": "获取机器人详情",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "number"
+												},
+												"robot_code": {
+													"type": "string"
+												},
+												"owner": {
+													"type": "string"
+												},
+												"device_id": {
+													"type": "string"
+												},
+												"device_name": {
+													"type": "string"
+												},
+												"wechat_id": {
+													"type": "string"
+												},
+												"nickname": {
+													"type": "string"
+												},
+												"avatar": {
+													"type": "string"
+												},
+												"status": {
+													"type": "string"
+												},
+												"redis_db": {
+													"type": "number"
+												},
+												"error_message": {
+													"type": "string"
+												},
+												"last_login_at": {
+													"type": "number"
+												},
+												"created_at": {
+													"type": "number"
+												}
+											},
+											"required": [
+												"id",
+												"robot_code",
+												"owner",
+												"device_id",
+												"device_name",
+												"wechat_id",
+												"nickname",
+												"avatar",
+												"status",
+												"redis_db",
+												"error_message",
+												"last_login_at",
+												"created_at"
+											],
+											"x-apifox-orders": [
+												"id",
+												"robot_code",
+												"owner",
+												"device_id",
+												"device_name",
+												"wechat_id",
+												"nickname",
+												"avatar",
+												"status",
+												"redis_db",
+												"error_message",
+												"last_login_at",
+												"created_at"
+											],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								},
+								"examples": {
+									"1": {
+										"summary": "成功示例",
+										"value": {
+											"code": 0,
+											"message": "",
+											"data": {
+												"id": 0,
+												"robot_code": "string",
+												"owner": "string",
+												"device_id": "string",
+												"device_name": "string",
+												"wechat_id": "string",
+												"nickname": "string",
+												"avatar": "string",
+												"status": "string",
+												"redis_db": 0,
+												"error_message": "string",
+												"last_login_at": 0,
+												"created_at": 0
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-286221600-run",
+				"security": []
+			}
+		},
+		"/api/v1/robot/remove": {
+			"delete": {
+				"summary": "删除机器人",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"x-apifox-orders": ["code", "message"],
+									"required": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-286223075-run",
+				"security": []
+			}
 		}
 	},
 	"components": {

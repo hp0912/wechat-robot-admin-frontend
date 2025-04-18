@@ -1,12 +1,13 @@
 import {
-	EditOutlined,
-	EllipsisOutlined,
+	InteractionFilled,
 	LoginOutlined,
 	LogoutOutlined,
 	PlusOutlined,
+	RedoOutlined,
+	ReloadOutlined,
 	ScanOutlined,
 	SearchOutlined,
-	SettingOutlined,
+	SettingFilled,
 } from '@ant-design/icons';
 import { useBoolean, useRequest, useSetState } from 'ahooks';
 import {
@@ -26,13 +27,9 @@ import {
 	Tooltip,
 } from 'antd';
 import dayjs from 'dayjs';
+import Remove from './actions/Remove';
+import RobotMetadata from './actions/RobotMetadata';
 import NewRobot from './NewRobot';
-
-const actions: React.ReactNode[] = [
-	<EditOutlined key="edit" />,
-	<SettingOutlined key="setting" />,
-	<EllipsisOutlined key="ellipsis" />,
-];
 
 const RobotList = () => {
 	const { message } = App.useApp();
@@ -120,19 +117,66 @@ const RobotList = () => {
 				style={{ height: 'calc(100vh - 278px)', overflowY: 'auto' }}
 			>
 				<Spin spinning={loading}>
-					<Flex
-						gap="middle"
-						align="start"
-						justify="start"
-						wrap="wrap"
-					>
-						{data?.items?.length ? (
-							data.items.map(item => {
+					{data?.items?.length ? (
+						<Flex
+							gap="middle"
+							align="start"
+							justify="start"
+							wrap="wrap"
+						>
+							{data.items.map(item => {
 								return (
 									<Card
 										loading={false}
-										actions={actions}
-										style={{ minWidth: 300 }}
+										actions={[
+											<RobotMetadata
+												key="meta"
+												robotId={item.id}
+												robotStatus={item.status}
+											/>,
+											<Tooltip
+												key="refresh"
+												title="刷新机器人状态"
+											>
+												<Button
+													type="text"
+													icon={<InteractionFilled />}
+												/>
+											</Tooltip>,
+											<Tooltip
+												key="settings"
+												title="机器人公共配置"
+											>
+												<Button
+													type="text"
+													icon={<SettingFilled />}
+												/>
+											</Tooltip>,
+											<Tooltip
+												key="reload-client"
+												title="重启机器人客户端"
+											>
+												<Button
+													type="text"
+													icon={<RedoOutlined />}
+												/>
+											</Tooltip>,
+											<Tooltip
+												key="reload-server"
+												title="重启机器人服务端"
+											>
+												<Button
+													type="text"
+													icon={<ReloadOutlined />}
+												/>
+											</Tooltip>,
+											<Remove
+												key="remove"
+												robotId={item.id}
+												onRefresh={refresh}
+											/>,
+										]}
+										style={{ width: 300 }}
 										key={item.id}
 									>
 										<Card.Meta
@@ -144,25 +188,40 @@ const RobotList = () => {
 												>
 													{item.status === 'online' ? (
 														<>
-															<span>{item.nickname}</span>
+															<div className="ellipsis">
+																<span>{item.nickname}</span>
+															</div>
 															<Tooltip title="退出登录">
-																<Button icon={<LogoutOutlined />} />
+																<Button
+																	type="text"
+																	icon={<LogoutOutlined />}
+																/>
 															</Tooltip>
 														</>
 													) : (
 														<>
 															{item.nickname ? (
 																<>
-																	<span>{item.nickname}</span>
+																	<div className="ellipsis">
+																		<span>{item.nickname}</span>
+																	</div>
 																	<Tooltip title="重新登录">
-																		<Button icon={<LoginOutlined />} />
+																		<Button
+																			type="text"
+																			icon={<LoginOutlined />}
+																		/>
 																	</Tooltip>
 																</>
 															) : (
 																<>
-																	<span style={{ color: 'gray' }}>未登陆</span>
+																	<div className="ellipsis">
+																		<span style={{ color: 'gray' }}>未登陆</span>
+																	</div>
 																	<Tooltip title="扫码登录">
-																		<Button icon={<ScanOutlined />} />
+																		<Button
+																			type="text"
+																			icon={<ScanOutlined />}
+																		/>
 																	</Tooltip>
 																</>
 															)}
@@ -183,11 +242,19 @@ const RobotList = () => {
 										/>
 									</Card>
 								);
-							})
-						) : (
-							<Empty description="暂无数据" />
-						)}
-					</Flex>
+							})}
+						</Flex>
+					) : (
+						<Empty description="您还没有创建过机器人">
+							<Button
+								type="primary"
+								icon={<PlusOutlined />}
+								onClick={setOnNewOpen.setTrue}
+							>
+								立即创建
+							</Button>
+						</Empty>
+					)}
 				</Spin>
 			</div>
 			<div className="pagination">
