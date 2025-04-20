@@ -580,17 +580,24 @@
 				"deprecated": false,
 				"description": "",
 				"tags": [],
-				"parameters": [
-					{
-						"name": "id",
-						"in": "query",
-						"description": "",
-						"required": true,
-						"schema": {
-							"type": "number"
+				"parameters": [],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									}
+								},
+								"x-apifox-orders": ["id"],
+								"required": ["id"],
+								"x-apifox-ignore-properties": []
+							}
 						}
 					}
-				],
+				},
 				"responses": {
 					"200": {
 						"description": "成功",
@@ -615,6 +622,112 @@
 					}
 				},
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-286223075-run",
+				"security": []
+			}
+		},
+		"/api/v1/robot/restart-client": {
+			"post": {
+				"summary": "重启机器人客户端",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									}
+								},
+								"x-apifox-orders": ["id"],
+								"required": ["id"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"x-apifox-orders": ["code", "message"],
+									"required": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-286493021-run",
+				"security": []
+			}
+		},
+		"/api/v1/robot/restart-server": {
+			"post": {
+				"summary": "重启机器人服务端",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									}
+								},
+								"x-apifox-orders": ["id"],
+								"required": ["id"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"x-apifox-orders": ["code", "message"],
+									"required": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-286493033-run",
 				"security": []
 			}
 		}

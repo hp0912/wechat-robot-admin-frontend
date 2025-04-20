@@ -1,6 +1,6 @@
-import { DeleteFilled } from '@ant-design/icons';
+import { RedoOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { App, Button, Popconfirm, Tooltip } from 'antd';
+import { App, Button, Popconfirm, theme, Tooltip } from 'antd';
 import React from 'react';
 import LoadingOutlined from '@/icons/LoadingOutlined';
 
@@ -9,19 +9,20 @@ interface IProps {
 	onRefresh: () => void;
 }
 
-const Remove = (props: IProps) => {
+const RestartClient = (props: IProps) => {
+	const { token } = theme.useToken();
 	const { message } = App.useApp();
 
 	const { runAsync, loading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1RobotRemoveDelete({
+			await window.wechatRobotClient.api.v1RobotRestartClientCreate({
 				id: props.robotId,
 			});
 		},
 		{
 			manual: true,
 			onSuccess: () => {
-				message.success('删除成功');
+				message.success('重启客户端成功');
 			},
 			onError: reason => {
 				message.error(reason.message);
@@ -39,26 +40,24 @@ const Remove = (props: IProps) => {
 	}
 
 	return (
-		<Tooltip title="删除机器人">
+		<Tooltip title="重启机器人客户端">
 			<Popconfirm
-				title="删除机器人"
-				description="确定要删除这个机器人吗？"
-				okButtonProps={{ danger: true }}
+				title="重启机器人客户端"
+				description="确定要重启这个机器人的客户端吗？"
 				onConfirm={async () => {
 					await runAsync();
 					props.onRefresh();
 				}}
-				okText="删除"
+				okText="重启客户端"
 				cancelText="取消"
 			>
 				<Button
 					type="text"
-					danger
-					icon={<DeleteFilled />}
+					icon={<RedoOutlined style={{ color: token.colorWarning }} />}
 				/>
 			</Popconfirm>
 		</Tooltip>
 	);
 };
 
-export default React.memo(Remove);
+export default React.memo(RestartClient);

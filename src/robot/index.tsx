@@ -3,8 +3,6 @@ import {
 	LoginOutlined,
 	LogoutOutlined,
 	PlusOutlined,
-	RedoOutlined,
-	ReloadOutlined,
 	ScanOutlined,
 	SearchOutlined,
 	SettingFilled,
@@ -28,6 +26,8 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import Remove from './actions/Remove';
+import RestartClient from './actions/RestartClient';
+import RestartServer from './actions/RestartServer';
 import RobotMetadata from './actions/RobotMetadata';
 import NewRobot from './NewRobot';
 
@@ -152,24 +152,16 @@ const RobotList = () => {
 													icon={<SettingFilled />}
 												/>
 											</Tooltip>,
-											<Tooltip
-												key="reload-client"
-												title="重启机器人客户端"
-											>
-												<Button
-													type="text"
-													icon={<RedoOutlined />}
-												/>
-											</Tooltip>,
-											<Tooltip
-												key="reload-server"
-												title="重启机器人服务端"
-											>
-												<Button
-													type="text"
-													icon={<ReloadOutlined />}
-												/>
-											</Tooltip>,
+											<RestartClient
+												key="restart-client"
+												robotId={item.id}
+												onRefresh={refresh}
+											/>,
+											<RestartServer
+												key="restart-server"
+												robotId={item.id}
+												onRefresh={refresh}
+											/>,
 											<Remove
 												key="remove"
 												robotId={item.id}
