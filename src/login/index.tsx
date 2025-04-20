@@ -131,6 +131,7 @@ const Login = () => {
 					<Input
 						placeholder="请输入6位数字验证码"
 						size="large"
+						autoFocus
 						allowClear
 					/>
 				</Form.Item>

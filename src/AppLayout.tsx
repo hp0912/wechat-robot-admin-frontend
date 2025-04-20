@@ -94,6 +94,7 @@ const AppLayout: React.FC = () => {
 			manual: false,
 			onError: reason => {
 				message.error(reason.message);
+				window.location.href = `${UrlLogin}?redirect=${encodeURIComponent(window.location.href)}`;
 			},
 		},
 	);

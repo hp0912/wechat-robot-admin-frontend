@@ -730,6 +730,293 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-286493033-run",
 				"security": []
 			}
+		},
+		"/api/v1/robot/login": {
+			"post": {
+				"summary": "机器人登陆",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									}
+								},
+								"x-apifox-orders": ["id"],
+								"required": ["id"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"uuid": {
+													"type": "string"
+												},
+												"awken": {
+													"type": "boolean"
+												}
+											},
+											"x-apifox-orders": ["uuid", "awken"],
+											"required": ["uuid", "awken"],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"x-apifox-orders": ["code", "message", "data"],
+									"required": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-286534959-run",
+				"security": []
+			}
+		},
+		"/api/v1/robot/login-check": {
+			"post": {
+				"summary": "机器人登陆检查",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"uuid": {
+										"type": "string"
+									}
+								},
+								"x-apifox-orders": ["id", "uuid"],
+								"required": ["id", "uuid"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"uuid": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"pushLoginUrlexpiredTime": {
+													"type": "number"
+												},
+												"expiredTime": {
+													"type": "number"
+												},
+												"headImgUrl": {
+													"type": "string"
+												},
+												"nickName": {
+													"type": "string"
+												},
+												"acctSectResp": {
+													"type": "object",
+													"properties": {
+														"userName": {
+															"type": "string"
+														},
+														"alias": {
+															"type": "string"
+														},
+														"bindMobile": {
+															"type": "string"
+														},
+														"fsurl": {
+															"type": "string"
+														},
+														"nickName": {
+															"type": "string"
+														}
+													},
+													"x-apifox-orders": ["userName", "alias", "bindMobile", "fsurl", "nickName"],
+													"required": ["userName", "alias", "bindMobile", "fsurl", "nickName"],
+													"x-apifox-ignore-properties": []
+												}
+											},
+											"x-apifox-orders": [
+												"uuid",
+												"status",
+												"pushLoginUrlexpiredTime",
+												"expiredTime",
+												"headImgUrl",
+												"nickName",
+												"acctSectResp"
+											],
+											"required": [
+												"uuid",
+												"status",
+												"pushLoginUrlexpiredTime",
+												"expiredTime",
+												"headImgUrl",
+												"nickName",
+												"acctSectResp"
+											],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"x-apifox-orders": ["code", "message", "data"],
+									"required": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-286536340-run",
+				"security": []
+			}
+		},
+		"/api/v1/robot/logout": {
+			"delete": {
+				"summary": "机器人登出",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									}
+								},
+								"x-apifox-orders": ["id"],
+								"required": ["id"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"x-apifox-orders": ["code", "message"],
+									"required": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-286537392-run",
+				"security": []
+			}
+		},
+		"/api/v1/robot/state": {
+			"get": {
+				"summary": "机器人状态检查",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"x-apifox-orders": ["code", "message"],
+									"required": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-286538078-run",
+				"security": []
+			}
 		}
 	},
 	"components": {

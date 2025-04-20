@@ -1,12 +1,4 @@
-import {
-	InteractionFilled,
-	LoginOutlined,
-	LogoutOutlined,
-	PlusOutlined,
-	ScanOutlined,
-	SearchOutlined,
-	SettingFilled,
-} from '@ant-design/icons';
+import { LoginOutlined, LogoutOutlined, PlusOutlined, SearchOutlined, SettingFilled } from '@ant-design/icons';
 import { useBoolean, useRequest, useSetState } from 'ahooks';
 import {
 	App,
@@ -25,10 +17,12 @@ import {
 	Tooltip,
 } from 'antd';
 import dayjs from 'dayjs';
+import Login from './actions/Login';
 import Remove from './actions/Remove';
 import RestartClient from './actions/RestartClient';
 import RestartServer from './actions/RestartServer';
 import RobotMetadata from './actions/RobotMetadata';
+import RobotState from './actions/RobotState';
 import NewRobot from './NewRobot';
 
 const RobotList = () => {
@@ -134,15 +128,11 @@ const RobotList = () => {
 												robotId={item.id}
 												robotStatus={item.status}
 											/>,
-											<Tooltip
+											<RobotState
 												key="refresh"
-												title="刷新机器人状态"
-											>
-												<Button
-													type="text"
-													icon={<InteractionFilled />}
-												/>
-											</Tooltip>,
+												robotId={item.id}
+												onRefresh={refresh}
+											/>,
 											<Tooltip
 												key="settings"
 												title="机器人公共配置"
@@ -168,7 +158,7 @@ const RobotList = () => {
 												onRefresh={refresh}
 											/>,
 										]}
-										style={{ width: 300 }}
+										style={{ width: 305 }}
 										key={item.id}
 									>
 										<Card.Meta
@@ -209,12 +199,10 @@ const RobotList = () => {
 																	<div className="ellipsis">
 																		<span style={{ color: 'gray' }}>未登陆</span>
 																	</div>
-																	<Tooltip title="扫码登录">
-																		<Button
-																			type="text"
-																			icon={<ScanOutlined />}
-																		/>
-																	</Tooltip>
+																	<Login
+																		robotId={item.id}
+																		onRefresh={refresh}
+																	/>
 																</>
 															)}
 														</>

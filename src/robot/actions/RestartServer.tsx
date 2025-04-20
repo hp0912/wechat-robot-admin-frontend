@@ -1,6 +1,6 @@
-import { ReloadOutlined } from '@ant-design/icons';
+import { PlayCircleFilled } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { App, Button, Popconfirm, theme, Tooltip } from 'antd';
+import { App, Button, Popconfirm, Tooltip } from 'antd';
 import React from 'react';
 import LoadingOutlined from '@/icons/LoadingOutlined';
 
@@ -10,7 +10,6 @@ interface IProps {
 }
 
 const RestartServer = (props: IProps) => {
-	const { token } = theme.useToken();
 	const { message } = App.useApp();
 
 	const { runAsync, loading } = useRequest(
@@ -43,18 +42,24 @@ const RestartServer = (props: IProps) => {
 		<Tooltip title="重启机器人服务端">
 			<Popconfirm
 				title="重启机器人服务端"
-				description="确定要重启这个机器人的服务端吗？"
+				description={
+					<>
+						<p>重启机器人服务端后需要重新扫码登陆</p>
+						<p>
+							确定要重启这个机器人的<b>服务端</b>吗？
+						</p>
+					</>
+				}
 				onConfirm={async () => {
 					await runAsync();
 					props.onRefresh();
 				}}
-				okText="重启服务端"
+				okText="重启"
 				cancelText="取消"
 			>
 				<Button
 					type="text"
-					danger
-					icon={<ReloadOutlined style={{ color: token.colorWarning }} />}
+					icon={<PlayCircleFilled />}
 				/>
 			</Popconfirm>
 		</Tooltip>

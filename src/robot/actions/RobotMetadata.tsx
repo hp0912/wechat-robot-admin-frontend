@@ -2,7 +2,7 @@ import { AndroidFilled } from '@ant-design/icons';
 import { useBoolean } from 'ahooks';
 import { Button, theme, Tooltip } from 'antd';
 import React from 'react';
-import RobotDetail from './RobotDetail';
+import RobotDetail from './components/RobotDetail';
 
 interface IProps {
 	robotId: number;

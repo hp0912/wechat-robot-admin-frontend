@@ -1,6 +1,6 @@
-import { RedoOutlined } from '@ant-design/icons';
+import { BulbFilled } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { App, Button, Popconfirm, theme, Tooltip } from 'antd';
+import { App, Button, Popconfirm, Tooltip } from 'antd';
 import React from 'react';
 import LoadingOutlined from '@/icons/LoadingOutlined';
 
@@ -10,7 +10,6 @@ interface IProps {
 }
 
 const RestartClient = (props: IProps) => {
-	const { token } = theme.useToken();
 	const { message } = App.useApp();
 
 	const { runAsync, loading } = useRequest(
@@ -43,17 +42,21 @@ const RestartClient = (props: IProps) => {
 		<Tooltip title="重启机器人客户端">
 			<Popconfirm
 				title="重启机器人客户端"
-				description="确定要重启这个机器人的客户端吗？"
+				description={
+					<>
+						确定要重启这个机器人的<b>客户端</b>吗？
+					</>
+				}
 				onConfirm={async () => {
 					await runAsync();
 					props.onRefresh();
 				}}
-				okText="重启客户端"
+				okText="重启"
 				cancelText="取消"
 			>
 				<Button
 					type="text"
-					icon={<RedoOutlined style={{ color: token.colorWarning }} />}
+					icon={<BulbFilled />}
 				/>
 			</Popconfirm>
 		</Tooltip>
