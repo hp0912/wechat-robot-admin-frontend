@@ -57,7 +57,7 @@ const RobotLogin = (props: IProps) => {
 					setScanState({
 						uuid: resp.uuid,
 						qrcode: `http://weixin.qq.com/x/${resp.uuid}`,
-						status: undefined,
+						status: 'active',
 					});
 					return;
 				}
@@ -69,7 +69,7 @@ const RobotLogin = (props: IProps) => {
 		},
 	);
 
-	useRequest(
+	const { cancel } = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.api.v1RobotLoginCheckCreate({
 				id: props.robotId,
@@ -93,6 +93,7 @@ const RobotLogin = (props: IProps) => {
 					setScanState({
 						status: 'expired',
 					});
+					cancel();
 					return;
 				}
 				if (resp?.headImgUrl) {
@@ -104,6 +105,10 @@ const RobotLogin = (props: IProps) => {
 				}
 			},
 			onError: reason => {
+				setScanState({
+					status: 'expired',
+				});
+				cancel();
 				message.error(reason.message);
 			},
 		},

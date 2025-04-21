@@ -1,29 +1,8 @@
-import { LoginOutlined, LogoutOutlined, PlusOutlined, SearchOutlined, SettingFilled } from '@ant-design/icons';
+import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { useBoolean, useRequest, useSetState } from 'ahooks';
-import {
-	App,
-	Avatar,
-	Breadcrumb,
-	Button,
-	Card,
-	Col,
-	Empty,
-	Flex,
-	Input,
-	Pagination,
-	Radio,
-	Row,
-	Spin,
-	Tooltip,
-} from 'antd';
-import dayjs from 'dayjs';
-import Login from './actions/Login';
-import Remove from './actions/Remove';
-import RestartClient from './actions/RestartClient';
-import RestartServer from './actions/RestartServer';
-import RobotMetadata from './actions/RobotMetadata';
-import RobotState from './actions/RobotState';
+import { App, Breadcrumb, Button, Col, Empty, Flex, Input, Pagination, Radio, Row, Spin } from 'antd';
 import NewRobot from './NewRobot';
+import Robot from './Robot';
 
 const RobotList = () => {
 	const { message } = App.useApp();
@@ -120,107 +99,10 @@ const RobotList = () => {
 						>
 							{data.items.map(item => {
 								return (
-									<Card
-										loading={false}
-										actions={[
-											<RobotMetadata
-												key="meta"
-												robotId={item.id}
-												robotStatus={item.status}
-											/>,
-											<RobotState
-												key="refresh"
-												robotId={item.id}
-												onRefresh={refresh}
-											/>,
-											<Tooltip
-												key="settings"
-												title="机器人公共配置"
-											>
-												<Button
-													type="text"
-													icon={<SettingFilled />}
-												/>
-											</Tooltip>,
-											<RestartClient
-												key="restart-client"
-												robotId={item.id}
-												onRefresh={refresh}
-											/>,
-											<RestartServer
-												key="restart-server"
-												robotId={item.id}
-												onRefresh={refresh}
-											/>,
-											<Remove
-												key="remove"
-												robotId={item.id}
-												onRefresh={refresh}
-											/>,
-										]}
-										style={{ width: 305 }}
+									<Robot
 										key={item.id}
-									>
-										<Card.Meta
-											avatar={<Avatar src={item.avatar} />}
-											title={
-												<Flex
-													align="start"
-													justify="space-between"
-												>
-													{item.status === 'online' ? (
-														<>
-															<div className="ellipsis">
-																<span>{item.nickname}</span>
-															</div>
-															<Tooltip title="退出登录">
-																<Button
-																	type="text"
-																	icon={<LogoutOutlined />}
-																/>
-															</Tooltip>
-														</>
-													) : (
-														<>
-															{item.nickname ? (
-																<>
-																	<div className="ellipsis">
-																		<span>{item.nickname}</span>
-																	</div>
-																	<Tooltip title="重新登录">
-																		<Button
-																			type="text"
-																			icon={<LoginOutlined />}
-																		/>
-																	</Tooltip>
-																</>
-															) : (
-																<>
-																	<div className="ellipsis">
-																		<span style={{ color: 'gray' }}>未登陆</span>
-																	</div>
-																	<Login
-																		robotId={item.id}
-																		onRefresh={refresh}
-																	/>
-																</>
-															)}
-														</>
-													)}
-												</Flex>
-											}
-											description={
-												<>
-													<p>机器人编码: {item.robot_code}</p>
-													<p>微信号: {item.wechat_id || '-'}</p>
-													<p>
-														登录时间:{' '}
-														{item.last_login_at ? dayjs(item.last_login_at * 1000).format('YYYY-MM-DD HH:mm:ss') : '-'}
-													</p>
-												</>
-											}
-										/>
-									</Card>
+										robot={item}
+									/>
 								);
 							})}
 						</Flex>
