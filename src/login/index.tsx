@@ -133,6 +133,13 @@ const Login = () => {
 						size="large"
 						autoFocus
 						allowClear
+						onKeyDown={ev => {
+							if (ev.key === 'Enter') {
+								if (!loading) {
+									onSignIn();
+								}
+							}
+						}}
 					/>
 				</Form.Item>
 				<Form.Item>
