@@ -102,6 +102,7 @@ const RobotList = () => {
 									<Robot
 										key={item.id}
 										robot={item}
+										onRefresh={refresh}
 									/>
 								);
 							})}

@@ -14,6 +14,7 @@ import RobotState from './actions/RobotState';
 
 interface IProps {
 	robot: Api.V1RobotListList.ResponseBody['data']['items'][number];
+	onRefresh: () => void;
 }
 
 const Robot = (props: IProps) => {
@@ -79,7 +80,7 @@ const Robot = (props: IProps) => {
 				<Remove
 					key="remove"
 					robotId={robot.id}
-					onRefresh={refresh}
+					onRefresh={props.onRefresh}
 				/>,
 			]}
 			style={{ width: 310 }}
