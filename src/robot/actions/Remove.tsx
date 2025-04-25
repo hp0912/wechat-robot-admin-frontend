@@ -1,16 +1,17 @@
 import { DeleteFilled } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { App, Button, Popconfirm, Tooltip } from 'antd';
+import { App, Button, Tooltip } from 'antd';
 import React from 'react';
 import LoadingOutlined from '@/icons/LoadingOutlined';
 
 interface IProps {
 	robotId: number;
+	buttonText?: string;
 	onRefresh: () => void;
 }
 
 const Remove = (props: IProps) => {
-	const { message } = App.useApp();
+	const { message, modal } = App.useApp();
 
 	const { runAsync, loading } = useRequest(
 		async () => {
@@ -29,6 +30,33 @@ const Remove = (props: IProps) => {
 		},
 	);
 
+	const onRemove = () => {
+		modal.confirm({
+			title: '删除机器人',
+			width: 275,
+			content: '确定要删除这个机器人吗？',
+			okText: '删除',
+			cancelText: '取消',
+			onOk: async () => {
+				await runAsync();
+				props.onRefresh();
+			},
+		});
+	};
+
+	if (props.buttonText) {
+		return (
+			<Button
+				type="text"
+				icon={<DeleteFilled />}
+				loading={loading}
+				onClick={onRemove}
+			>
+				{props.buttonText}
+			</Button>
+		);
+	}
+
 	if (loading) {
 		return (
 			<Button
@@ -40,23 +68,12 @@ const Remove = (props: IProps) => {
 
 	return (
 		<Tooltip title="删除机器人">
-			<Popconfirm
-				title="删除机器人"
-				description="确定要删除这个机器人吗？"
-				okButtonProps={{ danger: true }}
-				onConfirm={async () => {
-					await runAsync();
-					props.onRefresh();
-				}}
-				okText="删除"
-				cancelText="取消"
-			>
-				<Button
-					type="text"
-					danger
-					icon={<DeleteFilled />}
-				/>
-			</Popconfirm>
+			<Button
+				type="text"
+				danger
+				icon={<DeleteFilled />}
+				onClick={onRemove}
+			/>
 		</Tooltip>
 	);
 };

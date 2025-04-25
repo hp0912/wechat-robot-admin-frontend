@@ -1,16 +1,17 @@
 import { PlayCircleFilled } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { App, Button, Popconfirm, Tooltip } from 'antd';
+import { App, Button, Tooltip } from 'antd';
 import React from 'react';
 import LoadingOutlined from '@/icons/LoadingOutlined';
 
 interface IProps {
 	robotId: number;
+	buttonText?: string;
 	onRefresh: () => void;
 }
 
 const RestartServer = (props: IProps) => {
-	const { message } = App.useApp();
+	const { message, modal } = App.useApp();
 
 	const { runAsync, loading } = useRequest(
 		async () => {
@@ -29,6 +30,40 @@ const RestartServer = (props: IProps) => {
 		},
 	);
 
+	const onRestart = () => {
+		modal.confirm({
+			title: '重启机器人服务端',
+			width: 330,
+			content: (
+				<>
+					<p>重启机器人服务端后需要重新扫码登陆</p>
+					<p>
+						确定要重启这个机器人的<b>服务端</b>吗？
+					</p>
+				</>
+			),
+			okText: '重启',
+			cancelText: '取消',
+			onOk: async () => {
+				await runAsync();
+				props.onRefresh();
+			},
+		});
+	};
+
+	if (props.buttonText) {
+		return (
+			<Button
+				type="text"
+				icon={<PlayCircleFilled />}
+				loading={loading}
+				onClick={onRestart}
+			>
+				{props.buttonText}
+			</Button>
+		);
+	}
+
 	if (loading) {
 		return (
 			<Button
@@ -40,28 +75,11 @@ const RestartServer = (props: IProps) => {
 
 	return (
 		<Tooltip title="重启机器人服务端">
-			<Popconfirm
-				title="重启机器人服务端"
-				description={
-					<>
-						<p>重启机器人服务端后需要重新扫码登陆</p>
-						<p>
-							确定要重启这个机器人的<b>服务端</b>吗？
-						</p>
-					</>
-				}
-				onConfirm={async () => {
-					await runAsync();
-					props.onRefresh();
-				}}
-				okText="重启"
-				cancelText="取消"
-			>
-				<Button
-					type="text"
-					icon={<PlayCircleFilled />}
-				/>
-			</Popconfirm>
+			<Button
+				type="text"
+				icon={<PlayCircleFilled />}
+				onClick={onRestart}
+			/>
 		</Tooltip>
 	);
 };

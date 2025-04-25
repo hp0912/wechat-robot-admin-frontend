@@ -1,6 +1,5 @@
-import { SettingFilled } from '@ant-design/icons';
 import { useRequest, useUpdateEffect } from 'ahooks';
-import { App, Avatar, Button, Card, Flex, Tooltip } from 'antd';
+import { App, Avatar, Card, Flex } from 'antd';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
@@ -58,15 +57,6 @@ const Robot = (props: IProps) => {
 					robotId={robot.id}
 					onRefresh={refresh}
 				/>,
-				<Tooltip
-					key="settings"
-					title="机器人公共配置"
-				>
-					<Button
-						type="text"
-						icon={<SettingFilled />}
-					/>
-				</Tooltip>,
 				<RestartClient
 					key="restart-client"
 					robotId={robot.id}

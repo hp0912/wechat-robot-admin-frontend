@@ -108,15 +108,20 @@ const RobotList = () => {
 							})}
 						</Flex>
 					) : (
-						<Empty description="您还没有创建过机器人">
-							<Button
-								type="primary"
-								icon={<PlusOutlined />}
-								onClick={setOnNewOpen.setTrue}
-							>
-								立即创建
-							</Button>
-						</Empty>
+						<>
+							{!search.keyword && search.status === 'all' ? (
+								<Empty description="您还没有创建过机器人">
+									<Button
+										type="primary"
+										icon={<PlusOutlined />}
+										onClick={setOnNewOpen.setTrue}
+									>
+										立即创建
+									</Button>
+								</Empty>
+							) : null}
+							<Empty description="暂无数据" />
+						</>
 					)}
 				</Spin>
 			</div>

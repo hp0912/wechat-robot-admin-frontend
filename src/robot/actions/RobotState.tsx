@@ -6,6 +6,7 @@ import LoadingOutlined from '@/icons/LoadingOutlined';
 
 interface IProps {
 	robotId: number;
+	buttonText?: string;
 	onRefresh: () => void;
 }
 
@@ -29,6 +30,19 @@ const RobotState = (props: IProps) => {
 			},
 		},
 	);
+
+	if (props.buttonText) {
+		return (
+			<Button
+				type="text"
+				icon={<InteractionFilled />}
+				loading={loading}
+				onClick={runAsync}
+			>
+				{props.buttonText}
+			</Button>
+		);
+	}
 
 	if (loading) {
 		return (
