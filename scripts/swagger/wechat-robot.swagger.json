@@ -1005,6 +1005,134 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-286538078-run",
 				"security": []
 			}
+		},
+		"/api/v1/system/robot-container-stats": {
+			"get": {
+				"summary": "获取系统概览",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"client": {
+													"type": "object",
+													"properties": {
+														"status": {
+															"type": "string"
+														},
+														"memory_usage": {
+															"type": "object",
+															"properties": {
+																"usage": {
+																	"type": "string"
+																},
+																"limit": {
+																	"type": "string"
+																},
+																"percent": {
+																	"type": "string"
+																}
+															},
+															"x-apifox-orders": ["usage", "limit", "percent"],
+															"required": ["usage", "limit", "percent"],
+															"x-apifox-ignore-properties": []
+														},
+														"cpu_usage": {
+															"type": "string"
+														},
+														"disk_read": {
+															"type": "string"
+														},
+														"disk_write": {
+															"type": "string"
+														}
+													},
+													"x-apifox-orders": ["status", "memory_usage", "cpu_usage", "disk_read", "disk_write"],
+													"required": ["status", "memory_usage", "cpu_usage", "disk_read", "disk_write"],
+													"x-apifox-ignore-properties": []
+												},
+												"server": {
+													"type": "object",
+													"properties": {
+														"status": {
+															"type": "string"
+														},
+														"memory_usage": {
+															"type": "object",
+															"properties": {
+																"usage": {
+																	"type": "string"
+																},
+																"limit": {
+																	"type": "string"
+																},
+																"percent": {
+																	"type": "string"
+																}
+															},
+															"x-apifox-orders": ["usage", "limit", "percent"],
+															"required": ["usage", "limit", "percent"],
+															"x-apifox-ignore-properties": []
+														},
+														"cpu_usage": {
+															"type": "string"
+														},
+														"disk_read": {
+															"type": "string"
+														},
+														"disk_write": {
+															"type": "string"
+														}
+													},
+													"x-apifox-orders": ["status", "memory_usage", "cpu_usage", "disk_read", "disk_write"],
+													"required": ["status", "memory_usage", "cpu_usage", "disk_read", "disk_write"],
+													"x-apifox-ignore-properties": []
+												}
+											},
+											"x-apifox-orders": ["client", "server"],
+											"required": ["client", "server"],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"x-apifox-orders": ["code", "message", "data"],
+									"required": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-291545326-run",
+				"security": []
+			}
 		}
 	},
 	"components": {

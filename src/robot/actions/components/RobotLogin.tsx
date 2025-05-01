@@ -51,7 +51,7 @@ const RobotLogin = (props: IProps) => {
 				if (resp?.auto_login) {
 					props.onRefresh();
 					props.onClose();
-					message.success('登陆成功');
+					message.success('登录成功');
 					return;
 				}
 
@@ -102,7 +102,7 @@ const RobotLogin = (props: IProps) => {
 				if (resp?.acctSectResp?.userName) {
 					props.onRefresh();
 					props.onClose();
-					message.success('登陆成功');
+					message.success('登录成功');
 					return;
 				}
 				if (resp?.status === 4 || resp?.expiredTime < 10) {
@@ -170,7 +170,7 @@ const RobotLogin = (props: IProps) => {
 					return (
 						<div>
 							<CheckCircleFilled style={{ color: 'green' }} />{' '}
-							<span style={{ color: 'green' }}>请在手机上确认登陆</span>
+							<span style={{ color: 'green' }}>请在手机上确认登录</span>
 						</div>
 					);
 				}
@@ -194,7 +194,7 @@ const RobotLogin = (props: IProps) => {
 			footer={null}
 		>
 			<Container>
-				<p>扫码登陆微信</p>
+				<p>扫码登录微信</p>
 				<QRCode
 					style={{ margin: '0 auto 8px auto' }}
 					size={200}
@@ -207,7 +207,7 @@ const RobotLogin = (props: IProps) => {
 				/>
 				{!!scanState.percent && (
 					<>
-						<p style={{ fontSize: 12, textAlign: 'center', color: '#7c7978', marginBottom: 5 }}>登陆倒计时</p>
+						<p style={{ fontSize: 12, textAlign: 'center', color: '#7c7978', marginBottom: 5 }}>登录倒计时</p>
 						<Progress
 							percent={scanState.percent}
 							strokeColor={scanState.strokeColor}

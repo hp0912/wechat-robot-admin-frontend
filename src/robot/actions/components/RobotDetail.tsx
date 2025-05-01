@@ -40,7 +40,7 @@ const BaseContainer = styled.div`
 	}
 `;
 
-const RobotOnlineDetail = (props: IProps) => {
+const RobotDetail = (props: IProps) => {
 	const { message } = App.useApp();
 	const { token } = theme.useToken();
 
@@ -186,7 +186,7 @@ const RobotOnlineDetail = (props: IProps) => {
 											flex="1 1 auto"
 											className="ellipsis  base-info-value"
 										>
-											{data.wechat_id}
+											{data.wechat_id || <Tag color="gray">未绑定</Tag>}
 										</Col>
 									</Row>
 									<Row
@@ -204,7 +204,7 @@ const RobotOnlineDetail = (props: IProps) => {
 											flex="1 1 auto"
 											className="ellipsis  base-info-value"
 										>
-											{data.nickname}
+											{data.nickname || <Tag color="gray">未绑定</Tag>}
 										</Col>
 									</Row>
 									<Row
@@ -244,7 +244,11 @@ const RobotOnlineDetail = (props: IProps) => {
 											flex="1 1 auto"
 											className="ellipsis base-info-value"
 										>
-											{dayjs(data.last_login_at * 1000).format('YYYY-MM-DD HH:mm:ss')}
+											{data.last_login_at ? (
+												dayjs(data.last_login_at * 1000).format('YYYY-MM-DD HH:mm:ss')
+											) : (
+												<Tag color="gray">未登录</Tag>
+											)}
 										</Col>
 									</Row>
 									<Row
@@ -383,4 +387,4 @@ const RobotOnlineDetail = (props: IProps) => {
 	);
 };
 
-export default React.memo(RobotOnlineDetail);
+export default React.memo(RobotDetail);

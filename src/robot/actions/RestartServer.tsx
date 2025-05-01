@@ -36,7 +36,7 @@ const RestartServer = (props: IProps) => {
 			width: 330,
 			content: (
 				<>
-					<p>重启机器人服务端后需要重新扫码登陆</p>
+					<p>重启机器人服务端后需要重新扫码登录</p>
 					<p>
 						确定要重启这个机器人的<b>服务端</b>吗？
 					</p>

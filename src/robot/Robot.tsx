@@ -98,7 +98,7 @@ const Robot = (props: IProps) => {
 						) : (
 							<>
 								<div className="ellipsis">
-									<span style={{ color: 'gray' }}>未登陆</span>
+									<span style={{ color: 'gray' }}>未登录</span>
 								</div>
 								<Login
 									robotId={robot.id}

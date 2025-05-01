@@ -150,7 +150,7 @@ const Login = () => {
 						loading={loading}
 						onClick={onSignIn}
 					>
-						登陆
+						登录
 					</Button>
 				</Form.Item>
 			</Form>
