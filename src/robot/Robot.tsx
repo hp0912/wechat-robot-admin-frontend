@@ -51,6 +51,8 @@ const Robot = (props: IProps) => {
 					key="meta"
 					robotId={robot.id}
 					robotStatus={robot.status}
+					onListRefresh={props.onRefresh}
+					onDetailRefresh={refresh}
 				/>,
 				<RobotState
 					key="refresh"

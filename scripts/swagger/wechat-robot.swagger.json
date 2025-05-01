@@ -580,24 +580,17 @@
 				"deprecated": false,
 				"description": "",
 				"tags": [],
-				"parameters": [],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"type": "object",
-								"properties": {
-									"id": {
-										"type": "number"
-									}
-								},
-								"x-apifox-orders": ["id"],
-								"required": ["id"],
-								"x-apifox-ignore-properties": []
-							}
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
 						}
 					}
-				},
+				],
 				"responses": {
 					"200": {
 						"description": "成功",
@@ -633,24 +626,17 @@
 				"deprecated": false,
 				"description": "",
 				"tags": [],
-				"parameters": [],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"type": "object",
-								"properties": {
-									"id": {
-										"type": "number"
-									}
-								},
-								"x-apifox-orders": ["id"],
-								"required": ["id"],
-								"x-apifox-ignore-properties": []
-							}
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
 						}
 					}
-				},
+				],
 				"responses": {
 					"200": {
 						"description": "成功",
@@ -686,24 +672,17 @@
 				"deprecated": false,
 				"description": "",
 				"tags": [],
-				"parameters": [],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"type": "object",
-								"properties": {
-									"id": {
-										"type": "number"
-									}
-								},
-								"x-apifox-orders": ["id"],
-								"required": ["id"],
-								"x-apifox-ignore-properties": []
-							}
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
 						}
 					}
-				},
+				],
 				"responses": {
 					"200": {
 						"description": "成功",
@@ -808,22 +787,29 @@
 				"deprecated": false,
 				"description": "",
 				"tags": [],
-				"parameters": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
 				"requestBody": {
 					"content": {
 						"application/json": {
 							"schema": {
 								"type": "object",
 								"properties": {
-									"id": {
-										"type": "number"
-									},
 									"uuid": {
 										"type": "string"
 									}
 								},
-								"x-apifox-orders": ["id", "uuid"],
-								"required": ["id", "uuid"],
+								"x-apifox-orders": ["uuid"],
+								"required": ["uuid"],
 								"x-apifox-ignore-properties": []
 							}
 						}

@@ -83,10 +83,14 @@ const RobotLogin = (props: IProps) => {
 
 	const { cancel } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1RobotLoginCheckCreate({
-				id: props.robotId,
-				uuid: qrData?.uuid || '',
-			});
+			const resp = await window.wechatRobotClient.api.v1RobotLoginCheckCreate(
+				{
+					id: props.robotId,
+				},
+				{
+					uuid: qrData?.uuid || '',
+				},
+			);
 			return resp.data?.data;
 		},
 		{

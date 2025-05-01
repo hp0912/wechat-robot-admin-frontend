@@ -34,7 +34,7 @@ const RobotState = (props: IProps) => {
 	if (props.buttonText) {
 		return (
 			<Button
-				type="text"
+				type="primary"
 				icon={<InteractionFilled />}
 				loading={loading}
 				onClick={runAsync}

@@ -9,7 +9,7 @@ interface IProps {
 	onClose: () => void;
 }
 
-const RobotDetail = (props: IProps) => {
+const RobotOfflineDetail = (props: IProps) => {
 	const { message } = App.useApp();
 
 	const { open, onClose } = props;
@@ -119,4 +119,4 @@ const RobotDetail = (props: IProps) => {
 	);
 };
 
-export default React.memo(RobotDetail);
+export default React.memo(RobotOfflineDetail);

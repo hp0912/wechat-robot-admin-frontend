@@ -54,7 +54,7 @@ const RestartServer = (props: IProps) => {
 	if (props.buttonText) {
 		return (
 			<Button
-				type="text"
+				type="primary"
 				icon={<PlayCircleFilled />}
 				loading={loading}
 				onClick={onRestart}

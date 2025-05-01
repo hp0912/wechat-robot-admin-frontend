@@ -51,7 +51,7 @@ const RestartClient = (props: IProps) => {
 	if (props.buttonText) {
 		return (
 			<Button
-				type="text"
+				type="primary"
 				icon={<BulbFilled />}
 				loading={loading}
 				onClick={onRestart}

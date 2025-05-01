@@ -47,7 +47,8 @@ const Remove = (props: IProps) => {
 	if (props.buttonText) {
 		return (
 			<Button
-				type="text"
+				type="primary"
+				danger
 				icon={<DeleteFilled />}
 				loading={loading}
 				onClick={onRemove}
