@@ -718,24 +718,17 @@
 				"deprecated": false,
 				"description": "",
 				"tags": [],
-				"parameters": [],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"type": "object",
-								"properties": {
-									"id": {
-										"type": "number"
-									}
-								},
-								"x-apifox-orders": ["id"],
-								"required": ["id"],
-								"x-apifox-ignore-properties": []
-							}
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
 						}
 					}
-				},
+				],
 				"responses": {
 					"200": {
 						"description": "成功",
@@ -915,24 +908,17 @@
 				"deprecated": false,
 				"description": "",
 				"tags": [],
-				"parameters": [],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"type": "object",
-								"properties": {
-									"id": {
-										"type": "number"
-									}
-								},
-								"x-apifox-orders": ["id"],
-								"required": ["id"],
-								"x-apifox-ignore-properties": []
-							}
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
 						}
 					}
-				},
+				],
 				"responses": {
 					"200": {
 						"description": "成功",
@@ -1197,6 +1183,155 @@
 					}
 				},
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-291551040-run",
+				"security": []
+			}
+		},
+		"/api/v1/contact/list": {
+			"get": {
+				"summary": "联系人列表",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": {
+														"type": "number"
+													},
+													"wechat_id": {
+														"type": "string"
+													},
+													"owner": {
+														"type": "string"
+													},
+													"alias": {
+														"type": "string"
+													},
+													"nickname": {
+														"type": "string"
+													},
+													"avatar": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string"
+													},
+													"remark": {
+														"type": "string"
+													},
+													"pyinitial": {
+														"type": "string"
+													},
+													"quan_pin": {
+														"type": "string"
+													},
+													"sex": {
+														"type": "number"
+													},
+													"country": {
+														"type": "string"
+													},
+													"province": {
+														"type": "string"
+													},
+													"city": {
+														"type": "string"
+													},
+													"signature": {
+														"type": "string"
+													},
+													"sns_background": {
+														"type": "string"
+													},
+													"created_at": {
+														"type": "number"
+													},
+													"updated_at": {
+														"type": "number"
+													}
+												},
+												"x-apifox-orders": [
+													"id",
+													"wechat_id",
+													"owner",
+													"alias",
+													"nickname",
+													"avatar",
+													"type",
+													"remark",
+													"pyinitial",
+													"quan_pin",
+													"sex",
+													"country",
+													"province",
+													"city",
+													"signature",
+													"sns_background",
+													"created_at",
+													"updated_at"
+												],
+												"required": [
+													"id",
+													"wechat_id",
+													"owner",
+													"alias",
+													"nickname",
+													"avatar",
+													"type",
+													"remark",
+													"pyinitial",
+													"quan_pin",
+													"sex",
+													"country",
+													"province",
+													"city",
+													"signature",
+													"sns_background",
+													"created_at",
+													"updated_at"
+												],
+												"x-apifox-ignore-properties": []
+											}
+										}
+									},
+									"x-apifox-orders": ["code", "message", "data"],
+									"required": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-291564992-run",
 				"security": []
 			}
 		}

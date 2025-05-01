@@ -1,4 +1,4 @@
-import { FileTextFilled, SettingFilled } from '@ant-design/icons';
+import { ContactsFilled, FileTextFilled, SettingFilled } from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Tabs, Tag, theme } from 'antd';
 import dayjs from 'dayjs';
@@ -8,6 +8,7 @@ import Remove from '../Remove';
 import RestartClient from '../RestartClient';
 import RestartServer from '../RestartServer';
 import RobotState from '../RobotState';
+import Contact from './Contact';
 import ContainerLog from './ContainerLog';
 import SystemOverview from './SystemOverview';
 
@@ -150,6 +151,12 @@ const RobotDetail = (props: IProps) => {
 								icon: <SettingFilled />,
 								label: '系统概览',
 								children: <SystemOverview robotId={props.robotId} />,
+							},
+							{
+								key: 'concact',
+								icon: <ContactsFilled />,
+								label: '联系人',
+								children: <Contact robotId={props.robotId} />,
 							},
 							{
 								key: 'logs',
