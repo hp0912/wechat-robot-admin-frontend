@@ -17,3 +17,15 @@ export const formatDuration = (seconds: number): string => {
 		return `${day}天${hour}小时${minute}分${sec}秒`;
 	}
 };
+
+export const convertUrlsToLinks = (input: string): string => {
+	// Regular expression to match URLs
+	const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+	// Replace the URLs with <a> tags
+	const result = input.replace(urlRegex, url => {
+		return `<a href="${url}" target="_blank" rel="noreferrer">${url}</a>`;
+	});
+
+	return result;
+};

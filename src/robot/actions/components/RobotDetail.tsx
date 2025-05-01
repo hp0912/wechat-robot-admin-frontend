@@ -1,4 +1,4 @@
-import { SettingFilled } from '@ant-design/icons';
+import { FileTextFilled, SettingFilled } from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Tabs, Tag, theme } from 'antd';
 import dayjs from 'dayjs';
@@ -8,6 +8,7 @@ import Remove from '../Remove';
 import RestartClient from '../RestartClient';
 import RestartServer from '../RestartServer';
 import RobotState from '../RobotState';
+import ContainerLog from './ContainerLog';
 import SystemOverview from './SystemOverview';
 
 interface IProps {
@@ -130,7 +131,10 @@ const RobotDetail = (props: IProps) => {
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { padding: 0 } }}
 			footer={null}
 		>
-			<Row style={{ height: '100%' }}>
+			<Row
+				style={{ height: '100%' }}
+				wrap={false}
+			>
 				<Col
 					flex="1 1 auto"
 					style={{
@@ -146,6 +150,12 @@ const RobotDetail = (props: IProps) => {
 								icon: <SettingFilled />,
 								label: '系统概览',
 								children: <SystemOverview robotId={props.robotId} />,
+							},
+							{
+								key: 'logs',
+								icon: <FileTextFilled />,
+								label: '容器日志',
+								children: <ContainerLog robotId={props.robotId} />,
 							},
 						]}
 					/>

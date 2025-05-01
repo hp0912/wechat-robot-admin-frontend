@@ -49,6 +49,7 @@
 	},
 	"dependencies": {
 		"ahooks": "^3.8.4",
+		"ansicolor": "^2.0.3",
 		"antd": "^5.23.2",
 		"axios": "^1.7.9",
 		"dayjs": "^1.11.13",

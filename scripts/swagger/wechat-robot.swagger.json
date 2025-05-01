@@ -1133,6 +1133,72 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-291545326-run",
 				"security": []
 			}
+		},
+		"/api/v1/system/robot-container-logs": {
+			"get": {
+				"summary": "获取容器日志",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"client": {
+													"type": "array",
+													"items": {
+														"type": "string"
+													}
+												},
+												"server": {
+													"type": "array",
+													"items": {
+														"type": "string"
+													}
+												}
+											},
+											"x-apifox-orders": ["client", "server"],
+											"required": ["client", "server"],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"x-apifox-orders": ["code", "message", "data"],
+									"required": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-291551040-run",
+				"security": []
+			}
 		}
 	},
 	"components": {
