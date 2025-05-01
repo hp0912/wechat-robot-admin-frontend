@@ -777,12 +777,14 @@
 												"uuid": {
 													"type": "string"
 												},
-												"awken": {
+												"awken_login": {
+													"type": "boolean"
+												},
+												"auto_login": {
 													"type": "boolean"
 												}
 											},
-											"x-apifox-orders": ["uuid", "awken"],
-											"required": ["uuid", "awken"],
+											"x-apifox-orders": ["uuid", "awken_login", "auto_login"],
 											"x-apifox-ignore-properties": []
 										}
 									},

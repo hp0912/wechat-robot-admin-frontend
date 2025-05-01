@@ -1,6 +1,6 @@
 import { CheckCircleFilled, CloseCircleFilled, ReloadOutlined } from '@ant-design/icons';
 import { useRequest, useSetState } from 'ahooks';
-import { App, Button, Modal, QRCode, Space, Spin } from 'antd';
+import { App, Button, Modal, Progress, QRCode, Space, Spin, theme } from 'antd';
 import type { QRCodeProps } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
@@ -17,6 +17,8 @@ interface IState {
 	qrcode: string;
 	status?: QRCodeProps['status'];
 	avatar?: string;
+	percent?: number;
+	strokeColor?: string;
 }
 
 const Container = styled.div`
@@ -30,6 +32,7 @@ const Container = styled.div`
 
 const RobotLogin = (props: IProps) => {
 	const { message } = App.useApp();
+	const { token } = theme.useToken();
 
 	const { open, onClose } = props;
 
@@ -45,7 +48,16 @@ const RobotLogin = (props: IProps) => {
 		{
 			manual: false,
 			onSuccess: resp => {
-				if (resp?.uuid && resp.awken) {
+				if (resp?.auto_login) {
+					props.onRefresh();
+					props.onClose();
+					message.success('登陆成功');
+					return;
+				}
+
+				setScanState({ percent: 100, strokeColor: token.colorSuccess });
+
+				if (resp?.uuid && resp.awken_login) {
 					setScanState({
 						uuid: resp.uuid,
 						qrcode: `http://weixin.qq.com/x/${resp.uuid}`,
@@ -92,10 +104,21 @@ const RobotLogin = (props: IProps) => {
 				if (resp?.status === 4 || resp?.expiredTime < 10) {
 					setScanState({
 						status: 'expired',
+						percent: undefined,
 					});
 					cancel();
 					return;
 				}
+				// 默认240秒超时
+				const percent = Math.floor((resp?.expiredTime / 240) * 100);
+				let strokeColor = token.colorSuccess;
+				if (percent < 50) {
+					strokeColor = token.colorWarning;
+				}
+				if (percent < 20) {
+					strokeColor = token.colorError;
+				}
+				setScanState({ percent, strokeColor });
 				if (resp?.headImgUrl) {
 					setScanState({
 						avatar: resp.headImgUrl,
@@ -107,6 +130,7 @@ const RobotLogin = (props: IProps) => {
 			onError: reason => {
 				setScanState({
 					status: 'expired',
+					percent: undefined,
 				});
 				cancel();
 				message.error(reason.message);
@@ -138,7 +162,7 @@ const RobotLogin = (props: IProps) => {
 					</Space>
 				);
 			case 'scanned':
-				if (qrData?.awken) {
+				if (qrData?.awken_login) {
 					return (
 						<div>
 							<CheckCircleFilled style={{ color: 'green' }} />{' '}
@@ -168,7 +192,7 @@ const RobotLogin = (props: IProps) => {
 			<Container>
 				<p>扫码登陆微信</p>
 				<QRCode
-					style={{ margin: '0 auto 20px auto' }}
+					style={{ margin: '0 auto 8px auto' }}
 					size={200}
 					bordered={false}
 					value={scanState.qrcode}
@@ -177,6 +201,17 @@ const RobotLogin = (props: IProps) => {
 					statusRender={customStatusRender}
 					onRefresh={refreshAsync}
 				/>
+				{!!scanState.percent && (
+					<>
+						<p style={{ fontSize: 12, textAlign: 'center', color: '#7c7978', marginBottom: 5 }}>登陆倒计时</p>
+						<Progress
+							percent={scanState.percent}
+							strokeColor={scanState.strokeColor}
+							size="small"
+							showInfo={false}
+						/>
+					</>
+				)}
 			</Container>
 		</Modal>
 	);
