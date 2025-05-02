@@ -1,15 +1,15 @@
 import { LogoutOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { App, Avatar, Dropdown, Layout, Menu, Skeleton, theme, Watermark } from 'antd';
+import { App, Avatar, Dropdown, Layout, Skeleton, Watermark } from 'antd';
 import type { MenuProps } from 'antd';
 import logo from 'public/logo.svg';
-import React, { useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import { UrlLogin } from './constant/redirect-url';
 import { UserContext } from './context/user';
 
-const { Header, Sider } = Layout;
+const { Header } = Layout;
 
 const rootStyle: React.CSSProperties = { minHeight: '100vh' };
 const headerStyle: React.CSSProperties = {
@@ -21,16 +21,6 @@ const headerStyle: React.CSSProperties = {
 	justifyContent: 'space-between',
 	alignItems: 'center',
 	paddingRight: 40,
-};
-const siderStyle: React.CSSProperties = {
-	overflow: 'auto',
-	height: 'calc(100vh - 64px)',
-	position: 'sticky',
-	insetInlineStart: 0,
-	top: 64,
-	bottom: 0,
-	scrollbarWidth: 'thin',
-	scrollbarGutter: 'stable',
 };
 
 const Logo = styled.div`
@@ -60,29 +50,7 @@ const Logo = styled.div`
 `;
 
 const AppLayout: React.FC = () => {
-	const {
-		token: { colorBgContainer },
-	} = theme.useToken();
 	const { message } = App.useApp();
-	const navigate = useNavigate();
-
-	const [selectedKeys, setselectedKeys] = useState<string[]>([]);
-
-	const pathname = window.location.pathname;
-
-	useEffect(() => {
-		if (!pathname) {
-			setselectedKeys([]);
-		} else {
-			let routeKey = '';
-			if (pathname.startsWith('UrlPrefix')) {
-				routeKey = pathname.split('/').slice(1, 3).join('/');
-			} else {
-				routeKey = pathname.split('/')[1];
-			}
-			setselectedKeys([`/${routeKey}`]);
-		}
-	}, []);
 
 	// 获取用户详情
 	const { data: user, loading: userLoading } = useRequest(
@@ -156,25 +124,6 @@ const AppLayout: React.FC = () => {
 					</Dropdown>
 				</Header>
 				<Layout>
-					{pathname !== '/' && (
-						<Sider
-							width={200}
-							collapsible
-							defaultCollapsed
-							style={{ background: colorBgContainer, ...siderStyle }}
-						>
-							<Menu
-								mode="inline"
-								style={{ height: '100%', borderRight: 0 }}
-								selectedKeys={selectedKeys}
-								onClick={ev => {
-									setselectedKeys([ev.key]);
-									navigate(ev.key);
-								}}
-								items={[]}
-							/>
-						</Sider>
-					)}
 					<UserContext.Provider value={{ user: user, signOut }}>
 						<Layout style={{ padding: '10px 10px 0 10px' }}>
 							<Outlet />
