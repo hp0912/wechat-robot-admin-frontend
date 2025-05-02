@@ -62,7 +62,7 @@ const RobotList = () => {
 							allowClear
 							onKeyDown={ev => {
 								if (ev.key === 'Enter') {
-									setSearch({ keyword: ev.currentTarget.value });
+									setSearch({ keyword: ev.currentTarget.value, pageIndex: 1 });
 								}
 							}}
 						/>
@@ -74,7 +74,7 @@ const RobotList = () => {
 							buttonStyle="solid"
 							value={search.status}
 							onChange={ev => {
-								setSearch({ status: ev.target.value });
+								setSearch({ status: ev.target.value, pageIndex: 1 });
 							}}
 						>
 							<Radio.Button value="all">全部</Radio.Button>

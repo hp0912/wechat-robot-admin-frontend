@@ -1395,6 +1395,370 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-291564992-run",
 				"security": []
 			}
+		},
+		"/api/v1/chat-room/members": {
+			"get": {
+				"summary": "群成员列表",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					},
+					{
+						"name": "chat_room_id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "keyword",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "page_index",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
+						}
+					},
+					{
+						"name": "page_size",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"items": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"id": {
+																"type": "number"
+															},
+															"chat_room_id": {
+																"type": "string"
+															},
+															"wechat_id": {
+																"type": "string"
+															},
+															"alias": {
+																"type": "string"
+															},
+															"nickname": {
+																"type": "string"
+															},
+															"avatar": {
+																"type": "string"
+															},
+															"inviter_wechat_id": {
+																"type": "string"
+															},
+															"is_admin": {
+																"type": "boolean"
+															},
+															"is_leaved": {
+																"type": "boolean"
+															},
+															"score": {
+																"type": "number"
+															},
+															"remark": {
+																"type": "string"
+															},
+															"joined_at": {
+																"type": "number"
+															},
+															"last_active_at": {
+																"type": "number"
+															},
+															"leaved_at": {
+																"type": "string"
+															}
+														},
+														"x-apifox-orders": [
+															"id",
+															"chat_room_id",
+															"wechat_id",
+															"alias",
+															"nickname",
+															"avatar",
+															"inviter_wechat_id",
+															"is_admin",
+															"is_leaved",
+															"score",
+															"remark",
+															"joined_at",
+															"last_active_at",
+															"leaved_at"
+														],
+														"required": ["chat_room_id", "leaved_at"],
+														"x-apifox-ignore-properties": []
+													}
+												},
+												"total": {
+													"type": "number"
+												}
+											},
+											"required": ["items", "total"],
+											"x-apifox-orders": ["items", "total"],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								},
+								"examples": {
+									"1": {
+										"summary": "成功示例",
+										"value": {
+											"code": 0,
+											"message": "string",
+											"data": {
+												"items": [
+													{
+														"id": 0,
+														"wechat_id": "string",
+														"owner": "string",
+														"alias": "string",
+														"nickname": "string",
+														"avatar": "string",
+														"type": "string",
+														"remark": "string",
+														"pyinitial": "string",
+														"quan_pin": "string",
+														"sex": 0,
+														"country": "string",
+														"province": "string",
+														"city": "string",
+														"signature": "string",
+														"sns_background": "string",
+														"created_at": 0,
+														"updated_at": 0
+													}
+												],
+												"total": 0
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-291620695-run",
+				"security": []
+			}
+		},
+		"/api/v1/contact/sync": {
+			"post": {
+				"summary": "同步联系人",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": ["code", "message"],
+									"x-apifox-orders": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								},
+								"examples": {
+									"1": {
+										"summary": "成功示例",
+										"value": {
+											"code": 0,
+											"message": "string",
+											"data": {
+												"items": [
+													{
+														"id": 0,
+														"wechat_id": "string",
+														"owner": "string",
+														"alias": "string",
+														"nickname": "string",
+														"avatar": "string",
+														"type": "string",
+														"remark": "string",
+														"pyinitial": "string",
+														"quan_pin": "string",
+														"sex": 0,
+														"country": "string",
+														"province": "string",
+														"city": "string",
+														"signature": "string",
+														"sns_background": "string",
+														"created_at": 0,
+														"updated_at": 0
+													}
+												],
+												"total": 0
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-291626156-run",
+				"security": []
+			}
+		},
+		"/api/v1/chat-room/members/sync": {
+			"post": {
+				"summary": "同步群成员",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					},
+					{
+						"name": "chat_room_id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": ["code", "message"],
+									"x-apifox-orders": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								},
+								"examples": {
+									"1": {
+										"summary": "成功示例",
+										"value": {
+											"code": 0,
+											"message": "string",
+											"data": {
+												"items": [
+													{
+														"id": 0,
+														"wechat_id": "string",
+														"owner": "string",
+														"alias": "string",
+														"nickname": "string",
+														"avatar": "string",
+														"type": "string",
+														"remark": "string",
+														"pyinitial": "string",
+														"quan_pin": "string",
+														"sex": 0,
+														"country": "string",
+														"province": "string",
+														"city": "string",
+														"signature": "string",
+														"sns_background": "string",
+														"created_at": 0,
+														"updated_at": 0
+													}
+												],
+												"total": 0
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-291627797-run",
+				"security": []
+			}
 		}
 	},
 	"components": {
