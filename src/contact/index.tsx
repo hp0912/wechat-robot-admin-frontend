@@ -5,10 +5,11 @@ import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
+import ChatRoomMember from '@/chat-room/ChatRoomMember';
+import { DefaultAvatar } from '@/constant';
 import FemaleFilled from '@/icons/FemaleFilled';
 import GroupFilled from '@/icons/GroupFilled';
 import MaleFilled from '@/icons/MaleFilled';
-import GroupMember from './GroupMember';
 
 interface IProps {
 	robotId: number;
@@ -152,7 +153,7 @@ const Contact = (props: IProps) => {
 									avatar={
 										<Avatar
 											style={{ marginLeft: 8 }}
-											src={item.avatar}
+											src={item.avatar || DefaultAvatar}
 										/>
 									}
 									title={
@@ -230,7 +231,7 @@ const Contact = (props: IProps) => {
 				/>
 			</div>
 			{groupMemberState.open && (
-				<GroupMember
+				<ChatRoomMember
 					open={groupMemberState.open}
 					robotId={props.robotId}
 					chatRoom={groupMemberState.chatRoom!}

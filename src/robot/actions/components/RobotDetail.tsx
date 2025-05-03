@@ -4,13 +4,13 @@ import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Tabs, Tag, theme } from
 import dayjs from 'dayjs';
 import React from 'react';
 import styled from 'styled-components';
+import Contact from '@/contact';
+import ContainerLog from '@/container-log';
+import SystemOverview from '@/system-overview';
 import Remove from '../Remove';
 import RestartClient from '../RestartClient';
 import RestartServer from '../RestartServer';
 import RobotState from '../RobotState';
-import Contact from './Contact';
-import ContainerLog from './ContainerLog';
-import SystemOverview from './SystemOverview';
 
 interface IProps {
 	robotId: number;
