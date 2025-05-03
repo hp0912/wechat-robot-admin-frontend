@@ -4,7 +4,9 @@ import { App, Avatar, Button, Col, Dropdown, Flex, Input, List, Pagination, Radi
 import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
+import type { ReactNode } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
+import ChatHistory from '@/chat';
 import ChatRoomMember from '@/chat-room/ChatRoomMember';
 import { DefaultAvatar } from '@/constant';
 import FemaleFilled from '@/icons/FemaleFilled';
@@ -13,18 +15,26 @@ import MaleFilled from '@/icons/MaleFilled';
 
 interface IProps {
 	robotId: number;
+	robot: Api.V1RobotViewList.ResponseBody['data'];
 }
 
-type IChatRoom = Api.V1ContactListList.ResponseBody['data']['items'][number];
+type IContact = Api.V1ContactListList.ResponseBody['data']['items'][number];
 
 const Contact = (props: IProps) => {
 	const { message } = App.useApp();
 
 	const [search, setSearch] = useSetState({ keyword: '', type: 'all', pageIndex: 1 });
-	const [groupMemberState, setGroupMemberState] = useState<{ open?: boolean; chatRoom?: IChatRoom }>({});
+	const [groupMemberState, setGroupMemberState] = useState<{ open?: boolean; chatRoom?: IContact }>({});
+	const [chatHistoryState, setChatHistoryState] = useState<{ open?: boolean; contact?: IContact; title?: ReactNode }>(
+		{},
+	);
 
 	const onGroupMemberClose = useMemoizedFn(() => {
 		setGroupMemberState({ open: false });
+	});
+
+	const onChatHistoryClose = useMemoizedFn(() => {
+		setChatHistoryState({ open: false });
 	});
 
 	// 手动同步联系人
@@ -35,7 +45,7 @@ const Contact = (props: IProps) => {
 			});
 		},
 		{
-			manual: false,
+			manual: true,
 			onError: reason => {
 				message.error(reason.message);
 			},
@@ -84,7 +94,7 @@ const Contact = (props: IProps) => {
 					wrap={false}
 					gutter={8}
 				>
-					<Col flex="0 0 350px">
+					<Col flex="0 0 275px">
 						<Input
 							placeholder="搜索联系人"
 							style={{ width: '100%' }}
@@ -202,8 +212,20 @@ const Contact = (props: IProps) => {
 												}
 											},
 										}}
-										onClick={ev => {
-											console.log(1, ev);
+										onClick={() => {
+											if (item.type === 'friend') {
+												setChatHistoryState({
+													open: true,
+													contact: item,
+													title: `我与${item.nickname || item.alias || item.wechat_id} 的聊天记录`,
+												});
+											} else {
+												setChatHistoryState({
+													open: true,
+													contact: item,
+													title: `${item.nickname || item.alias || item.wechat_id} 的聊天记录`,
+												});
+											}
 										}}
 									>
 										聊天记录
@@ -236,6 +258,16 @@ const Contact = (props: IProps) => {
 					robotId={props.robotId}
 					chatRoom={groupMemberState.chatRoom!}
 					onClose={onGroupMemberClose}
+				/>
+			)}
+			{chatHistoryState.open && (
+				<ChatHistory
+					open={chatHistoryState.open}
+					title={chatHistoryState.title}
+					robotId={props.robotId}
+					robot={props.robot}
+					contact={chatHistoryState.contact!}
+					onClose={onChatHistoryClose}
 				/>
 			)}
 		</div>

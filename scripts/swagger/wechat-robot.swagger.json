@@ -1759,6 +1759,202 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-291627797-run",
 				"security": []
 			}
+		},
+		"/api/v1/chat/history": {
+			"get": {
+				"summary": "获取聊天记录",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
+						}
+					},
+					{
+						"name": "contact_id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "keyword",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "page_index",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
+						}
+					},
+					{
+						"name": "page_size",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"items": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"id": {
+																"type": "number"
+															},
+															"msg_id": {
+																"type": "number"
+															},
+															"client_msg_id": {
+																"type": "number"
+															},
+															"is_group": {
+																"type": "boolean"
+															},
+															"is_atme": {
+																"type": "boolean"
+															},
+															"is_recalled": {
+																"type": "boolean"
+															},
+															"type": {
+																"type": "number"
+															},
+															"content": {
+																"type": "string"
+															},
+															"display_full_content": {
+																"type": "string"
+															},
+															"message_source": {
+																"type": "string"
+															},
+															"from_wxid": {
+																"type": "string"
+															},
+															"sender_wxid": {
+																"type": "string"
+															},
+															"sender_nickname": {
+																"type": "string"
+															},
+															"sender_avatar": {
+																"type": "string"
+															},
+															"to_wxid": {
+																"type": "string"
+															},
+															"attachment_url": {
+																"type": "string"
+															},
+															"created_at": {
+																"type": "number"
+															},
+															"updated_at": {
+																"type": "number"
+															}
+														},
+														"x-apifox-orders": [
+															"id",
+															"msg_id",
+															"client_msg_id",
+															"is_group",
+															"is_atme",
+															"is_recalled",
+															"type",
+															"content",
+															"display_full_content",
+															"message_source",
+															"from_wxid",
+															"sender_wxid",
+															"sender_nickname",
+															"sender_avatar",
+															"to_wxid",
+															"attachment_url",
+															"created_at",
+															"updated_at"
+														],
+														"required": [
+															"id",
+															"msg_id",
+															"client_msg_id",
+															"is_group",
+															"is_atme",
+															"is_recalled",
+															"type",
+															"content",
+															"display_full_content",
+															"message_source",
+															"from_wxid",
+															"sender_wxid",
+															"to_wxid",
+															"attachment_url",
+															"created_at",
+															"updated_at",
+															"sender_nickname",
+															"sender_avatar"
+														],
+														"x-apifox-ignore-properties": []
+													}
+												},
+												"total": {
+													"type": "number"
+												}
+											},
+											"x-apifox-orders": ["items", "total"],
+											"required": ["items", "total"],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"x-apifox-orders": ["code", "message", "data"],
+									"required": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-291671581-run",
+				"security": []
+			}
 		}
 	},
 	"components": {

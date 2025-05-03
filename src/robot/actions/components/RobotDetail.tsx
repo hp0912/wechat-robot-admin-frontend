@@ -156,7 +156,12 @@ const RobotDetail = (props: IProps) => {
 								key: 'concact',
 								icon: <ContactsFilled />,
 								label: '联系人',
-								children: <Contact robotId={props.robotId} />,
+								children: (
+									<Contact
+										robotId={props.robotId}
+										robot={data}
+									/>
+								),
 							},
 							{
 								key: 'logs',
