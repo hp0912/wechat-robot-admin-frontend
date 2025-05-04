@@ -2255,6 +2255,53 @@
         "x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-291751142-run",
         "security": []
       }
+    },
+    "/api/v1/chat/voice/download": {
+      "get": {
+        "summary": "下载语音",
+        "x-apifox-folder": "",
+        "x-apifox-status": "released",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "message_id",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apifox-ignore-properties": [],
+                  "x-apifox-orders": []
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-291753948-run",
+        "security": []
+      }
     }
   },
   "components": {

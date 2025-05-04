@@ -71,6 +71,28 @@ const ChatHistory = (props: IProps) => {
 		},
 	);
 
+	const { runAsync: downloadVoice, loading: downloadVoiceLoading } = useRequest(
+		async (messageId: number) => {
+			// 发送请求，指定返回类型为blob
+			const resp = await axios({
+				method: 'GET',
+				url: '/api/v1/chat/image/download',
+				params: {
+					id: props.robotId,
+					message_id: messageId,
+				},
+				responseType: 'blob', // 重要：指定响应类型为blob
+			});
+			onAttachDownload(resp, messageId);
+		},
+		{
+			manual: true,
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
 	const messageContentRender = (msg: Api.V1ChatHistoryList.ResponseBody['data']['items'][number]) => {
 		const msgType = msg.type as MessageType;
 		switch (msgType) {
@@ -114,6 +136,10 @@ const ChatHistory = (props: IProps) => {
 						type="primary"
 						icon={<VoiceOutlined />}
 						ghost
+						loading={downloadVoiceLoading}
+						onClick={() => {
+							downloadVoice(msg.id);
+						}}
 					>
 						下载语音
 					</Button>
