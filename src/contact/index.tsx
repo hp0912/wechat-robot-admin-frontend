@@ -94,7 +94,7 @@ const Contact = (props: IProps) => {
 					wrap={false}
 					gutter={8}
 				>
-					<Col flex="0 0 275px">
+					<Col flex="0 0 300px">
 						<Input
 							placeholder="搜索联系人"
 							style={{ width: '100%' }}
@@ -126,6 +126,7 @@ const Contact = (props: IProps) => {
 					type="primary"
 					style={{ marginRight: 8 }}
 					loading={syncLoading}
+					ghost
 					onClick={async () => {
 						await runAsync();
 						setSearch({ pageIndex: 1 });

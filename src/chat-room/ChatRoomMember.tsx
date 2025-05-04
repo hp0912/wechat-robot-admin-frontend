@@ -103,7 +103,7 @@ const GroupMember = (props: IProps) => {
 					wrap={false}
 					gutter={8}
 				>
-					<Col flex="0 1 275px">
+					<Col flex="0 1 300px">
 						<Input
 							placeholder="搜索群成员"
 							prefix={<SearchOutlined />}

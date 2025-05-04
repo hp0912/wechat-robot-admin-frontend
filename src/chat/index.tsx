@@ -1,6 +1,7 @@
 import { ClockCircleOutlined, PictureOutlined, SearchOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Input, List, Pagination, Row, Space, Tag, theme } from 'antd';
+import axios from 'axios';
 import dayjs from 'dayjs';
 import React from 'react';
 import type { ReactNode } from 'react';
@@ -8,6 +9,7 @@ import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar, MessageTypeMap } from '@/constant';
 import { MessageType } from '@/constant/types';
 import VoiceOutlined from '@/icons/VoiceOutlined';
+import { onAttachDownload } from '@/utils';
 
 interface IProps {
 	robotId: number;
@@ -47,6 +49,28 @@ const ChatHistory = (props: IProps) => {
 		},
 	);
 
+	const { runAsync: downloadImage, loading: downloadImageLoading } = useRequest(
+		async (messageId: number) => {
+			// 发送请求，指定返回类型为blob
+			const resp = await axios({
+				method: 'GET',
+				url: '/api/v1/chat/image/download',
+				params: {
+					id: props.robotId,
+					message_id: messageId,
+				},
+				responseType: 'blob', // 重要：指定响应类型为blob
+			});
+			onAttachDownload(resp, messageId);
+		},
+		{
+			manual: true,
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
 	const messageContentRender = (msg: Api.V1ChatHistoryList.ResponseBody['data']['items'][number]) => {
 		const msgType = msg.type as MessageType;
 		switch (msgType) {
@@ -65,6 +89,11 @@ const ChatHistory = (props: IProps) => {
 					<Button
 						type="primary"
 						icon={<PictureOutlined />}
+						loading={downloadImageLoading}
+						ghost
+						onClick={() => {
+							downloadImage(msg.id);
+						}}
 					>
 						下载图片
 					</Button>
@@ -74,6 +103,7 @@ const ChatHistory = (props: IProps) => {
 					<Button
 						type="primary"
 						icon={<VideoCameraOutlined />}
+						ghost
 					>
 						下载视频
 					</Button>
@@ -83,6 +113,7 @@ const ChatHistory = (props: IProps) => {
 					<Button
 						type="primary"
 						icon={<VoiceOutlined />}
+						ghost
 					>
 						下载语音
 					</Button>
@@ -204,20 +235,22 @@ const ChatHistory = (props: IProps) => {
 											</div>
 										}
 									/>
-									<Space>
-										{item.sender_wxid === robot.wechat_id &&
-											!item.is_recalled &&
-											now - Number(item.created_at) < 60 * 2 && (
-												<Button
-													type="primary"
-													ghost
-													icon={<ClockCircleOutlined />}
-												>
-													撤回
-												</Button>
-											)}
-										{downloadButtonRender(item)}
-									</Space>
+									<div style={{ marginRight: 8 }}>
+										<Space>
+											{item.sender_wxid === robot.wechat_id &&
+												!item.is_recalled &&
+												now - Number(item.created_at) < 60 * 2 && (
+													<Button
+														type="primary"
+														ghost
+														icon={<ClockCircleOutlined />}
+													>
+														撤回
+													</Button>
+												)}
+											{downloadButtonRender(item)}
+										</Space>
+									</div>
 								</List.Item>
 							);
 						}}
