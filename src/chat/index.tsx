@@ -1,4 +1,4 @@
-import { SearchOutlined } from '@ant-design/icons';
+import { ClockCircleOutlined, PictureOutlined, SearchOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Input, List, Pagination, Row, Space, Tag, theme } from 'antd';
 import dayjs from 'dayjs';
@@ -7,6 +7,7 @@ import type { ReactNode } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar, MessageTypeMap } from '@/constant';
 import { MessageType } from '@/constant/types';
+import VoiceOutlined from '@/icons/VoiceOutlined';
 
 interface IProps {
 	robotId: number;
@@ -55,6 +56,43 @@ const ChatHistory = (props: IProps) => {
 				return `[${MessageTypeMap[msgType] || '未知消息'}]`;
 		}
 	};
+
+	const downloadButtonRender = (msg: Api.V1ChatHistoryList.ResponseBody['data']['items'][number]) => {
+		const msgType = msg.type as MessageType;
+		switch (msgType) {
+			case MessageType.Image:
+				return (
+					<Button
+						type="primary"
+						icon={<PictureOutlined />}
+					>
+						下载图片
+					</Button>
+				);
+			case MessageType.Video:
+				return (
+					<Button
+						type="primary"
+						icon={<VideoCameraOutlined />}
+					>
+						下载视频
+					</Button>
+				);
+			case MessageType.Voice:
+				return (
+					<Button
+						type="primary"
+						icon={<VoiceOutlined />}
+					>
+						下载语音
+					</Button>
+				);
+			default:
+				return null;
+		}
+	};
+
+	const now = Date.now() / 1000;
 
 	return (
 		<Drawer
@@ -166,6 +204,20 @@ const ChatHistory = (props: IProps) => {
 											</div>
 										}
 									/>
+									<Space>
+										{item.sender_wxid === robot.wechat_id &&
+											!item.is_recalled &&
+											now - Number(item.created_at) < 60 * 2 && (
+												<Button
+													type="primary"
+													ghost
+													icon={<ClockCircleOutlined />}
+												>
+													撤回
+												</Button>
+											)}
+										{downloadButtonRender(item)}
+									</Space>
 								</List.Item>
 							);
 						}}
