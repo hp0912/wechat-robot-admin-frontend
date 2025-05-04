@@ -76,7 +76,7 @@ const ChatHistory = (props: IProps) => {
 			// 发送请求，指定返回类型为blob
 			const resp = await axios({
 				method: 'GET',
-				url: '/api/v1/chat/image/download',
+				url: '/api/v1/chat/voice/download',
 				params: {
 					id: props.robotId,
 					message_id: messageId,
