@@ -1,15 +1,16 @@
-import { ClockCircleOutlined, PictureOutlined, SearchOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { ClockCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Input, List, Pagination, Row, Space, Tag, theme } from 'antd';
-import axios from 'axios';
 import dayjs from 'dayjs';
 import React from 'react';
 import type { ReactNode } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
-import { DefaultAvatar, MessageTypeMap } from '@/constant';
-import { MessageType } from '@/constant/types';
-import VoiceOutlined from '@/icons/VoiceOutlined';
-import { onAttachDownload } from '@/utils';
+import { AppMessageTypeMap, DefaultAvatar, MessageTypeMap } from '@/constant';
+import { AppMessageType, MessageType } from '@/constant/types';
+import AttachDownload from './components/AttachDownload';
+import ImageDownload from './components/ImageDownload';
+import VideoDownload from './components/VideoDownload';
+import VoiceDownload from './components/VoiceDownload';
 
 interface IProps {
 	robotId: number;
@@ -49,55 +50,14 @@ const ChatHistory = (props: IProps) => {
 		},
 	);
 
-	const { runAsync: downloadImage, loading: downloadImageLoading } = useRequest(
-		async (messageId: number) => {
-			// 发送请求，指定返回类型为blob
-			const resp = await axios({
-				method: 'GET',
-				url: '/api/v1/chat/image/download',
-				params: {
-					id: props.robotId,
-					message_id: messageId,
-				},
-				responseType: 'blob', // 重要：指定响应类型为blob
-			});
-			onAttachDownload(resp, messageId);
-		},
-		{
-			manual: true,
-			onError: reason => {
-				message.error(reason.message);
-			},
-		},
-	);
-
-	const { runAsync: downloadVoice, loading: downloadVoiceLoading } = useRequest(
-		async (messageId: number) => {
-			// 发送请求，指定返回类型为blob
-			const resp = await axios({
-				method: 'GET',
-				url: '/api/v1/chat/voice/download',
-				params: {
-					id: props.robotId,
-					message_id: messageId,
-				},
-				responseType: 'blob', // 重要：指定响应类型为blob
-			});
-			onAttachDownload(resp, messageId);
-		},
-		{
-			manual: true,
-			onError: reason => {
-				message.error(reason.message);
-			},
-		},
-	);
-
 	const messageContentRender = (msg: Api.V1ChatHistoryList.ResponseBody['data']['items'][number]) => {
 		const msgType = msg.type as MessageType;
+		const subType = msg.app_msg_type as AppMessageType;
 		switch (msgType) {
 			case MessageType.Text:
 				return msg.content;
+			case MessageType.App:
+				return `[${AppMessageTypeMap[subType] || '未知消息'}]`;
 			default:
 				return `[${MessageTypeMap[msgType] || '未知消息'}]`;
 		}
@@ -105,45 +65,39 @@ const ChatHistory = (props: IProps) => {
 
 	const downloadButtonRender = (msg: Api.V1ChatHistoryList.ResponseBody['data']['items'][number]) => {
 		const msgType = msg.type as MessageType;
+		const subType = msg.app_msg_type as AppMessageType;
 		switch (msgType) {
 			case MessageType.Image:
 				return (
-					<Button
-						type="primary"
-						icon={<PictureOutlined />}
-						loading={downloadImageLoading}
-						ghost
-						onClick={() => {
-							downloadImage(msg.id);
-						}}
-					>
-						下载图片
-					</Button>
+					<ImageDownload
+						robotId={props.robotId}
+						messageId={msg.id}
+					/>
 				);
 			case MessageType.Video:
 				return (
-					<Button
-						type="primary"
-						icon={<VideoCameraOutlined />}
-						ghost
-					>
-						下载视频
-					</Button>
+					<VideoDownload
+						robotId={props.robotId}
+						messageId={msg.id}
+					/>
 				);
 			case MessageType.Voice:
 				return (
-					<Button
-						type="primary"
-						icon={<VoiceOutlined />}
-						ghost
-						loading={downloadVoiceLoading}
-						onClick={() => {
-							downloadVoice(msg.id);
-						}}
-					>
-						下载语音
-					</Button>
+					<VoiceDownload
+						robotId={props.robotId}
+						messageId={msg.id}
+					/>
 				);
+			case MessageType.App:
+				if (subType === AppMessageType.Attach) {
+					return (
+						<AttachDownload
+							robotId={props.robotId}
+							messageId={msg.id}
+						/>
+					);
+				}
+				return null;
 			default:
 				return null;
 		}
