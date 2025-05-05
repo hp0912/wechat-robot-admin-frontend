@@ -1,6 +1,6 @@
 import { FileOutlined } from '@ant-design/icons';
 import { useBoolean, useMemoizedFn } from 'ahooks';
-import { Button } from 'antd';
+import { App, Button } from 'antd';
 import React from 'react';
 import streamSaver from 'streamsaver';
 
@@ -10,6 +10,8 @@ interface IProps {
 }
 
 const AttachDownload = (props: IProps) => {
+	const { message } = App.useApp();
+
 	const [loading, setLoading] = useBoolean(false);
 
 	const downloadFile = useMemoizedFn(async () => {
@@ -18,6 +20,14 @@ const AttachDownload = (props: IProps) => {
 
 			const url = `/api/v1/chat/file/download?id=${props.robotId}&message_id=${props.messageId}`;
 			const resp = await fetch(url);
+			if (!resp.ok) {
+				resp.json().then(data => {
+					if ('message' in data && typeof data.message === 'string') {
+						message.error(data.message);
+					}
+				});
+				return;
+			}
 
 			const disposition = resp.headers.get('Content-Disposition') || '';
 			const fileName = /filename="?([^";]+)"?/.exec(disposition)?.[1] || 'file.bin';
