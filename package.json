@@ -34,6 +34,7 @@
 		"@types/react": "^19.0.7",
 		"@types/react-dom": "^19.0.3",
 		"@types/react-resizable": "^3.0.8",
+		"@types/streamsaver": "^2.0.5",
 		"@yunke/yunke-setting-plugin": "^3.1.0",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",
@@ -58,6 +59,7 @@
 		"react-dom": "^19.0.0",
 		"react-resizable": "^3.0.5",
 		"react-router-dom": "^7.1.5",
+		"streamsaver": "^2.0.6",
 		"styled-components": "^6.1.14"
 	}
 }

@@ -1,9 +1,8 @@
 import { FileOutlined } from '@ant-design/icons';
-import { useRequest } from 'ahooks';
-import { App, Button } from 'antd';
-import axios from 'axios';
+import { useBoolean, useMemoizedFn } from 'ahooks';
+import { Button } from 'antd';
 import React from 'react';
-import { onAttachDownload } from '@/utils';
+import streamSaver from 'streamsaver';
 
 interface IProps {
 	robotId: number;
@@ -11,29 +10,34 @@ interface IProps {
 }
 
 const AttachDownload = (props: IProps) => {
-	const { message } = App.useApp();
+	const [loading, setLoading] = useBoolean(false);
 
-	const { runAsync, loading } = useRequest(
-		async () => {
-			// 发送请求，指定返回类型为blob
-			const resp = await axios({
-				method: 'GET',
-				url: '/api/v1/chat/attach/download',
-				params: {
-					id: props.robotId,
-					message_id: props.messageId,
-				},
-				responseType: 'blob', // 重要：指定响应类型为blob
-			});
-			onAttachDownload(resp, props.messageId);
-		},
-		{
-			manual: true,
-			onError: reason => {
-				message.error(reason.message);
-			},
-		},
-	);
+	const downloadFile = useMemoizedFn(async () => {
+		try {
+			setLoading.setTrue();
+
+			const url = `/api/v1/chat/file/download?id=${props.robotId}&message_id=${props.messageId}`;
+			const resp = await fetch(url);
+
+			const disposition = resp.headers.get('Content-Disposition') || '';
+			const fileName = /filename="?([^";]+)"?/.exec(disposition)?.[1] || 'file.bin';
+
+			const fileStream = streamSaver.createWriteStream(fileName);
+			const writer = fileStream.getWriter();
+
+			if (resp.body) {
+				const reader = resp.body.getReader();
+				while (true) {
+					const { done, value } = await reader.read();
+					if (done) break;
+					await writer.write(value);
+				}
+				writer.close();
+			}
+		} finally {
+			setLoading.setFalse();
+		}
+	});
 
 	return (
 		<Button
@@ -41,7 +45,7 @@ const AttachDownload = (props: IProps) => {
 			icon={<FileOutlined />}
 			loading={loading}
 			ghost
-			onClick={runAsync}
+			onClick={downloadFile}
 		>
 			下载附件
 		</Button>
