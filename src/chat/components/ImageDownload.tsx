@@ -1,9 +1,7 @@
 import { PictureOutlined } from '@ant-design/icons';
-import { useRequest } from 'ahooks';
-import { App, Button } from 'antd';
-import axios from 'axios';
+import { Button } from 'antd';
 import React from 'react';
-import { onAttachDownload } from '@/utils';
+import { useAttachDownload } from '@/hooks';
 
 interface IProps {
 	robotId: number;
@@ -11,29 +9,7 @@ interface IProps {
 }
 
 const ImageDownload = (props: IProps) => {
-	const { message } = App.useApp();
-
-	const { runAsync, loading } = useRequest(
-		async () => {
-			// 发送请求，指定返回类型为blob
-			const resp = await axios({
-				method: 'GET',
-				url: '/api/v1/chat/image/download',
-				params: {
-					id: props.robotId,
-					message_id: props.messageId,
-				},
-				responseType: 'blob', // 重要：指定响应类型为blob
-			});
-			onAttachDownload(resp, props.messageId);
-		},
-		{
-			manual: true,
-			onError: reason => {
-				message.error(reason.message);
-			},
-		},
-	);
+	const { loading, onAttachDownload } = useAttachDownload('image', props.robotId, props.messageId);
 
 	return (
 		<Button
@@ -41,7 +17,7 @@ const ImageDownload = (props: IProps) => {
 			icon={<PictureOutlined />}
 			loading={loading}
 			ghost
-			onClick={runAsync}
+			onClick={onAttachDownload}
 		>
 			下载图片
 		</Button>

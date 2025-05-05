@@ -1,8 +1,7 @@
 import { FileOutlined } from '@ant-design/icons';
-import { useBoolean, useMemoizedFn } from 'ahooks';
-import { App, Button } from 'antd';
+import { Button } from 'antd';
 import React from 'react';
-import streamSaver from 'streamsaver';
+import { useAttachDownload } from '@/hooks';
 
 interface IProps {
 	robotId: number;
@@ -10,44 +9,7 @@ interface IProps {
 }
 
 const AttachDownload = (props: IProps) => {
-	const { message } = App.useApp();
-
-	const [loading, setLoading] = useBoolean(false);
-
-	const downloadFile = useMemoizedFn(async () => {
-		try {
-			setLoading.setTrue();
-
-			const url = `/api/v1/chat/file/download?id=${props.robotId}&message_id=${props.messageId}`;
-			const resp = await fetch(url);
-			if (!resp.ok) {
-				resp.json().then(data => {
-					if ('message' in data && typeof data.message === 'string') {
-						message.error(data.message);
-					}
-				});
-				return;
-			}
-
-			const disposition = resp.headers.get('Content-Disposition') || '';
-			const fileName = /filename="?([^";]+)"?/.exec(disposition)?.[1] || 'file.bin';
-
-			const fileStream = streamSaver.createWriteStream(fileName);
-			const writer = fileStream.getWriter();
-
-			if (resp.body) {
-				const reader = resp.body.getReader();
-				while (true) {
-					const { done, value } = await reader.read();
-					if (done) break;
-					await writer.write(value);
-				}
-				writer.close();
-			}
-		} finally {
-			setLoading.setFalse();
-		}
-	});
+	const { loading, onAttachDownload } = useAttachDownload('file', props.robotId, props.messageId);
 
 	return (
 		<Button
@@ -55,7 +17,7 @@ const AttachDownload = (props: IProps) => {
 			icon={<FileOutlined />}
 			loading={loading}
 			ghost
-			onClick={downloadFile}
+			onClick={onAttachDownload}
 		>
 			下载附件
 		</Button>
