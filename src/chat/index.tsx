@@ -1,4 +1,4 @@
-import { ClockCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 import { useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Input, List, Pagination, Row, Space, Tag, theme } from 'antd';
 import dayjs from 'dayjs';
@@ -9,6 +9,7 @@ import { AppMessageTypeMap, DefaultAvatar, MessageTypeMap } from '@/constant';
 import { AppMessageType, MessageType } from '@/constant/types';
 import AttachDownload from './components/AttachDownload';
 import ImageDownload from './components/ImageDownload';
+import MessageRevoke from './components/MessageRevoke';
 import VideoDownload from './components/VideoDownload';
 import VoiceDownload from './components/VoiceDownload';
 
@@ -220,13 +221,10 @@ const ChatHistory = (props: IProps) => {
 											{item.sender_wxid === robot.wechat_id &&
 												!item.is_recalled &&
 												now - Number(item.created_at) < 60 * 2 && (
-													<Button
-														type="primary"
-														ghost
-														icon={<ClockCircleOutlined />}
-													>
-														撤回
-													</Button>
+													<MessageRevoke
+														robotId={props.robotId}
+														messageId={item.id}
+													/>
 												)}
 											{downloadButtonRender(item)}
 										</Space>
