@@ -1,10 +1,11 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { useRequest, useSetState } from 'ahooks';
+import { useBoolean, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Input, List, Pagination, Row, Space, Tag, theme } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import type { ReactNode } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
+import SendMessage from '@/components/send-message';
 import { AppMessageTypeMap, DefaultAvatar, MessageTypeMap } from '@/constant';
 import { AppMessageType, MessageType } from '@/constant/types';
 import AttachDownload from './components/AttachDownload';
@@ -29,6 +30,7 @@ const ChatHistory = (props: IProps) => {
 	const { contact, robot } = props;
 
 	const [search, setSearch] = useSetState({ keyword: '', pageIndex: 1 });
+	const [sendMessageOpen, setSendMessageOpen] = useBoolean(false);
 
 	const { data, loading } = useRequest(
 		async () => {
@@ -127,7 +129,12 @@ const ChatHistory = (props: IProps) => {
 			}
 			extra={
 				<Space>
-					<Button type="primary">发送消息</Button>
+					<Button
+						type="primary"
+						onClick={setSendMessageOpen.setTrue}
+					>
+						发送消息
+					</Button>
 				</Space>
 			}
 			open={props.open}
@@ -250,6 +257,15 @@ const ChatHistory = (props: IProps) => {
 						}}
 					/>
 				</div>
+				{sendMessageOpen && (
+					<SendMessage
+						open={sendMessageOpen}
+						robotId={props.robotId}
+						robot={props.robot}
+						contactId={props.contact.wechat_id!}
+						onClose={setSendMessageOpen.setFalse}
+					/>
+				)}
 			</div>
 		</Drawer>
 	);

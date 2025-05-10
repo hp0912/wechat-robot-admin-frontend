@@ -4,6 +4,20 @@ import type { Select, SelectProps } from 'antd';
 import type { ComponentProps } from 'react';
 import styled from 'styled-components';
 
+const ContentContainer = styled.div`
+	min-width: 80px;
+	max-width: 450px;
+	max-height: 300px;
+	overflow: auto;
+
+	p:first-child {
+		margin-top: 0;
+	}
+	p:last-child {
+		margin-bottom: 0;
+	}
+`;
+
 export const maxTagPlaceholder: SelectProps['maxTagPlaceholder'] = omittedValues => {
 	if (!omittedValues || omittedValues.length === 0) {
 		return null;
@@ -12,11 +26,11 @@ export const maxTagPlaceholder: SelectProps['maxTagPlaceholder'] = omittedValues
 		<Popover
 			placement="top"
 			content={
-				<div style={{ minWidth: 80, maxWidth: 450, maxHeight: 300, overflow: 'auto' }}>
+				<ContentContainer>
 					{omittedValues.map(item => (
 						<p key={item.key || item.value}>{item.label}</p>
 					))}
-				</div>
+				</ContentContainer>
 			}
 		>
 			+{omittedValues.length}...

@@ -8,6 +8,7 @@ import type { ReactNode } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import ChatHistory from '@/chat';
 import ChatRoomMember from '@/chat-room/ChatRoomMember';
+import SendMessage from '@/components/send-message';
 import { DefaultAvatar } from '@/constant';
 import FemaleFilled from '@/icons/FemaleFilled';
 import GroupFilled from '@/icons/GroupFilled';
@@ -25,6 +26,7 @@ const Contact = (props: IProps) => {
 
 	const [search, setSearch] = useSetState({ keyword: '', type: 'all', pageIndex: 1 });
 	const [groupMemberState, setGroupMemberState] = useState<{ open?: boolean; chatRoom?: IContact }>({});
+	const [sendMessageState, setSendMessageState] = useState<{ open?: boolean; contactId?: string }>({});
 	const [chatHistoryState, setChatHistoryState] = useState<{ open?: boolean; contact?: IContact; title?: ReactNode }>(
 		{},
 	);
@@ -35,6 +37,10 @@ const Contact = (props: IProps) => {
 
 	const onChatHistoryClose = useMemoizedFn(() => {
 		setChatHistoryState({ open: false });
+	});
+
+	const onSendMessageClose = useMemoizedFn(() => {
+		setSendMessageState({ open: false });
 	});
 
 	// 手动同步联系人
@@ -210,6 +216,9 @@ const Contact = (props: IProps) => {
 													case 'group-member':
 														setGroupMemberState({ open: true, chatRoom: item });
 														break;
+													case 'send-message':
+														setSendMessageState({ open: true, contactId: item.wechat_id });
+														break;
 												}
 											},
 										}}
@@ -269,6 +278,15 @@ const Contact = (props: IProps) => {
 					robot={props.robot}
 					contact={chatHistoryState.contact!}
 					onClose={onChatHistoryClose}
+				/>
+			)}
+			{sendMessageState.open && (
+				<SendMessage
+					open={sendMessageState.open}
+					robotId={props.robotId}
+					robot={props.robot}
+					contactId={sendMessageState.contactId!}
+					onClose={onSendMessageClose}
 				/>
 			)}
 		</div>
