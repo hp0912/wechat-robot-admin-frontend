@@ -1,9 +1,15 @@
+import { InboxOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { App, Button, Flex, Input, Modal, Select, Space } from 'antd';
+import { App, Avatar, Button, Col, Flex, Input, Modal, Progress, Row, Select, Space, Upload } from 'antd';
+import type { GetProp, UploadFile, UploadProps } from 'antd';
+import axios from 'axios';
 import React, { useState } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 import { maxTagPlaceholder } from '@/common/maxTagPlaceholder';
+import { DefaultAvatar } from '@/constant';
+
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 interface IProps {
 	open: boolean;
@@ -22,12 +28,15 @@ enum EMessageType {
 }
 
 const SendMessage = (props: IProps) => {
-	const { message } = App.useApp();
+	const { message, modal } = App.useApp();
 
 	const [submitLoading, setSubmitLoading] = useState(false);
 	const [messageType, setMessageType] = useState<EMessageType>(EMessageType.Text);
 	const [textMessageContent, setTextMessageContent] = useState('');
 	const [mentions, setMentions] = useState<string[]>([]);
+	// 文件相关
+	const [attach, setAttach] = useState<UploadFile>();
+	const [percent, setPercent] = useState(0);
 
 	const { data, loading } = useRequest(
 		async () => {
@@ -74,6 +83,59 @@ const SendMessage = (props: IProps) => {
 		},
 	);
 
+	const { runAsync: sendAttach, loading: sendAttachLoading } = useRequest(
+		async (type: 'image') => {
+			const formData = new FormData();
+			await new Promise<void>((resolve, reject) => {
+				const reader = new FileReader();
+				reader.readAsDataURL((attach as FileType).slice(0, 1));
+				reader.onerror = () => {
+					reject(new Error('文件读取失败，请检查文件是否被删除、被移动位置或被修改，请尝试重新选择文件。'));
+				};
+				reader.onload = async () => {
+					resolve();
+				};
+			});
+
+			formData.append(type, attach as FileType);
+			formData.append('id', props.robotId.toString());
+			formData.append('to_wxid', props.contactId);
+
+			let path = '';
+			switch (type) {
+				case 'image':
+					path = '/api/v1/message/send/image?id=' + props.robotId;
+					break;
+			}
+			await axios.post(path, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+				onUploadProgress: progressEvent => {
+					if (progressEvent.total) {
+						const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+						setPercent(percentCompleted);
+					}
+				},
+			});
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('发送成功');
+				setAttach(undefined);
+				setPercent(0);
+			},
+			onError: reason => {
+				setPercent(0);
+				modal.error({
+					title: '发送失败',
+					content: reason.message,
+				});
+			},
+		},
+	);
+
 	const getContent = () => {
 		switch (messageType) {
 			case EMessageType.Text:
@@ -88,7 +150,35 @@ const SendMessage = (props: IProps) => {
 					/>
 				);
 			case EMessageType.Image:
-				return <div>图片消息</div>;
+				return (
+					<>
+						<Upload.Dragger
+							name="file"
+							maxCount={1}
+							multiple={false}
+							accept=".jpg, .jpeg, .png, .gif, .webp"
+							beforeUpload={file => {
+								setAttach(file);
+								return false;
+							}}
+							onRemove={() => {
+								setAttach(undefined);
+							}}
+						>
+							<p className="ant-upload-drag-icon">
+								<InboxOutlined />
+							</p>
+							<p className="ant-upload-text">单击或将图片拖到此区域进行上传</p>
+							<p className="ant-upload-hint">只支持单图片上传，不超过50M</p>
+						</Upload.Dragger>
+						{sendAttachLoading && (
+							<Progress
+								percent={percent}
+								status={percent >= 100 ? undefined : 'active'}
+							/>
+						)}
+					</>
+				);
 			case EMessageType.Video:
 				return <div>视频消息</div>;
 			case EMessageType.Voice:
@@ -104,7 +194,7 @@ const SendMessage = (props: IProps) => {
 		if (messageType === EMessageType.Text) {
 			return !textMessageContent;
 		}
-		return false;
+		return attach === undefined;
 	};
 
 	const onSend = async () => {
@@ -112,6 +202,9 @@ const SendMessage = (props: IProps) => {
 		try {
 			if (messageType === EMessageType.Text) {
 				await sendTextMessage();
+			}
+			if (messageType === EMessageType.Image) {
+				await sendAttach('image');
 			}
 		} finally {
 			setSubmitLoading(false);
@@ -133,21 +226,23 @@ const SendMessage = (props: IProps) => {
 			>
 				<Space>
 					<Select
+						disabled={sendAttachLoading}
 						value={messageType}
 						options={[
 							{ label: '文本消息', value: EMessageType.Text },
 							{ label: '图片消息', value: EMessageType.Image },
 							{ label: '视频消息', value: EMessageType.Video },
 							{ label: '语音消息', value: EMessageType.Voice },
-							{ label: '文件消息', value: EMessageType.File },
+							{ label: '文件消息 (暂不支持)', value: EMessageType.File, disabled: true },
 						]}
 						onChange={value => {
 							setMessageType(value);
+							setAttach(undefined);
 						}}
 					/>
 					{messageType === EMessageType.Text && (
 						<Select
-							style={{ width: 150 }}
+							style={{ width: 185 }}
 							mode="multiple"
 							placeholder="选择@对象"
 							showSearch
@@ -159,7 +254,27 @@ const SendMessage = (props: IProps) => {
 							options={(data || []).map(item => {
 								const labelText = item.nickname || item.alias || item.wechat_id;
 								return {
-									label: labelText,
+									label: (
+										<Row
+											align="middle"
+											wrap={false}
+											gutter={3}
+										>
+											<Col flex="0 0 auto">
+												<Avatar
+													src={item.avatar || DefaultAvatar}
+													gap={0}
+													size={18}
+												/>
+											</Col>
+											<Col
+												flex="1 1 auto"
+												className="ellipsis"
+											>
+												{labelText}
+											</Col>
+										</Row>
+									),
 									value: item.wechat_id,
 									text: `${item.nickname || ''} ${item.alias || ''} ${item.wechat_id}`,
 								};

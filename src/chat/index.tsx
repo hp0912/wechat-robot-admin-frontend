@@ -69,6 +69,10 @@ const ChatHistory = (props: IProps) => {
 	const downloadButtonRender = (msg: Api.V1ChatHistoryList.ResponseBody['data']['items'][number]) => {
 		const msgType = msg.type as MessageType;
 		const subType = msg.app_msg_type as AppMessageType;
+		if (!msg.content) {
+			// 自己发送的消息拿不到 xml 内容
+			return null;
+		}
 		switch (msgType) {
 			case MessageType.Image:
 				return (
@@ -116,7 +120,7 @@ const ChatHistory = (props: IProps) => {
 					wrap={false}
 				>
 					<Col flex="0 0 32px">
-						<Avatar src={contact.avatar} />
+						<Avatar src={contact.avatar || DefaultAvatar} />
 					</Col>
 					<Col
 						flex="0 1 auto"
