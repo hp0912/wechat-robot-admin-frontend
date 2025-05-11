@@ -84,7 +84,7 @@ const SendMessage = (props: IProps) => {
 	);
 
 	const { runAsync: sendAttach, loading: sendAttachLoading } = useRequest(
-		async (type: 'image') => {
+		async (type: 'image' | 'video') => {
 			const formData = new FormData();
 			await new Promise<void>((resolve, reject) => {
 				const reader = new FileReader();
@@ -105,6 +105,9 @@ const SendMessage = (props: IProps) => {
 			switch (type) {
 				case 'image':
 					path = '/api/v1/message/send/image?id=' + props.robotId;
+					break;
+				case 'video':
+					path = '/api/v1/message/send/video?id=' + props.robotId;
 					break;
 			}
 			await axios.post(path, formData, {
@@ -151,7 +154,7 @@ const SendMessage = (props: IProps) => {
 				);
 			case EMessageType.Image:
 				return (
-					<>
+					<React.Fragment key="image">
 						<Upload.Dragger
 							name="file"
 							maxCount={1}
@@ -177,14 +180,42 @@ const SendMessage = (props: IProps) => {
 								status={percent >= 100 ? undefined : 'active'}
 							/>
 						)}
-					</>
+					</React.Fragment>
 				);
 			case EMessageType.Video:
-				return <div>视频消息</div>;
+				return (
+					<React.Fragment key="video">
+						<Upload.Dragger
+							name="file"
+							maxCount={1}
+							multiple={false}
+							accept=".mp4, .avi, .mov, .mkv, .flv, .webm"
+							beforeUpload={file => {
+								setAttach(file);
+								return false;
+							}}
+							onRemove={() => {
+								setAttach(undefined);
+							}}
+						>
+							<p className="ant-upload-drag-icon">
+								<InboxOutlined />
+							</p>
+							<p className="ant-upload-text">单击或将视频拖到此区域进行上传</p>
+							<p className="ant-upload-hint">只支持单视频上传，不超过50M</p>
+						</Upload.Dragger>
+						{sendAttachLoading && (
+							<Progress
+								percent={percent}
+								status={percent >= 100 ? undefined : 'active'}
+							/>
+						)}
+					</React.Fragment>
+				);
 			case EMessageType.Voice:
 				return <div>语音消息</div>;
 			case EMessageType.File:
-				return <div>文件消息</div>;
+				return null;
 			default:
 				return null;
 		}
@@ -205,6 +236,9 @@ const SendMessage = (props: IProps) => {
 			}
 			if (messageType === EMessageType.Image) {
 				await sendAttach('image');
+			}
+			if (messageType === EMessageType.Video) {
+				await sendAttach('video');
 			}
 		} finally {
 			setSubmitLoading(false);
