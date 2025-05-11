@@ -84,7 +84,7 @@ const SendMessage = (props: IProps) => {
 	);
 
 	const { runAsync: sendAttach, loading: sendAttachLoading } = useRequest(
-		async (type: 'image' | 'video') => {
+		async (type: 'image' | 'video' | 'voice') => {
 			const formData = new FormData();
 			await new Promise<void>((resolve, reject) => {
 				const reader = new FileReader();
@@ -108,6 +108,9 @@ const SendMessage = (props: IProps) => {
 					break;
 				case 'video':
 					path = '/api/v1/message/send/video?id=' + props.robotId;
+					break;
+				case 'voice':
+					path = '/api/v1/message/send/voice?id=' + props.robotId;
 					break;
 			}
 			await axios.post(path, formData, {
@@ -213,7 +216,35 @@ const SendMessage = (props: IProps) => {
 					</React.Fragment>
 				);
 			case EMessageType.Voice:
-				return <div>语音消息</div>;
+				return (
+					<React.Fragment key="voice">
+						<Upload.Dragger
+							name="file"
+							maxCount={1}
+							multiple={false}
+							accept=".amr, .mp3, .wav"
+							beforeUpload={file => {
+								setAttach(file);
+								return false;
+							}}
+							onRemove={() => {
+								setAttach(undefined);
+							}}
+						>
+							<p className="ant-upload-drag-icon">
+								<InboxOutlined />
+							</p>
+							<p className="ant-upload-text">单击或将语音文件拖到此区域进行上传</p>
+							<p className="ant-upload-hint">只支持语音文件上传，不超过50M</p>
+						</Upload.Dragger>
+						{sendAttachLoading && (
+							<Progress
+								percent={percent}
+								status={percent >= 100 ? undefined : 'active'}
+							/>
+						)}
+					</React.Fragment>
+				);
 			case EMessageType.File:
 				return null;
 			default:
@@ -239,6 +270,9 @@ const SendMessage = (props: IProps) => {
 			}
 			if (messageType === EMessageType.Video) {
 				await sendAttach('video');
+			}
+			if (messageType === EMessageType.Voice) {
+				await sendAttach('voice');
 			}
 		} finally {
 			setSubmitLoading(false);
