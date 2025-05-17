@@ -1,4 +1,4 @@
-import { ContactsFilled, FileTextFilled, SettingFilled } from '@ant-design/icons';
+import { FileTextFilled, OpenAIFilled, SettingFilled, WechatFilled } from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Tabs, Tag, theme } from 'antd';
 import dayjs from 'dayjs';
@@ -6,6 +6,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Contact from '@/contact';
 import ContainerLog from '@/container-log';
+import GlobalSettings from '@/settings';
 import SystemOverview from '@/system-overview';
 import Remove from '../Remove';
 import RestartClient from '../RestartClient';
@@ -147,14 +148,8 @@ const RobotDetail = (props: IProps) => {
 					<Tabs
 						items={[
 							{
-								key: 'system-overview',
-								icon: <SettingFilled />,
-								label: '系统概览',
-								children: <SystemOverview robotId={props.robotId} />,
-							},
-							{
 								key: 'concact',
-								icon: <ContactsFilled />,
+								icon: <WechatFilled />,
 								label: '联系人',
 								children: (
 									<Contact
@@ -164,10 +159,22 @@ const RobotDetail = (props: IProps) => {
 								),
 							},
 							{
+								key: 'system-settings',
+								icon: <OpenAIFilled />,
+								label: '系统设置',
+								children: <GlobalSettings robotId={props.robotId} />,
+							},
+							{
 								key: 'logs',
 								icon: <FileTextFilled />,
 								label: '容器日志',
 								children: <ContainerLog robotId={props.robotId} />,
+							},
+							{
+								key: 'system-overview',
+								icon: <SettingFilled />,
+								label: '系统概览',
+								children: <SystemOverview robotId={props.robotId} />,
 							},
 						]}
 					/>
