@@ -490,6 +490,7 @@ const GlobalSettings = (props: IProps) => {
 													name="chat_room_summary_cron"
 													label="总结时间(每天)"
 													labelCol={{ flex: '0 0 120px' }}
+													rules={[{ required: true, message: '总结时间不能为空' }]}
 												>
 													<TimePicker />
 												</Form.Item>
@@ -542,6 +543,7 @@ const GlobalSettings = (props: IProps) => {
 													name="news_cron"
 													label="发布时间(每天)"
 													labelCol={{ flex: '0 0 120px' }}
+													rules={[{ required: true, message: '发布时间不能为空' }]}
 												>
 													<TimePicker />
 												</Form.Item>
@@ -579,6 +581,7 @@ const GlobalSettings = (props: IProps) => {
 													name="morning_cron"
 													label="发布时间(每天)"
 													labelCol={{ flex: '0 0 120px' }}
+													rules={[{ required: true, message: '发布时间不能为空' }]}
 												>
 													<TimePicker />
 												</Form.Item>
@@ -596,9 +599,9 @@ const GlobalSettings = (props: IProps) => {
 							<Form.Item
 								name="friend_sync_cron"
 								label="同步周期"
-								rules={[{ required: true, message: '同步周期不能为空' }]}
 							>
 								<InputNumber
+									disabled
 									addonBefore={'每隔'}
 									addonAfter={'小时同步一次'}
 									min={0.2}

@@ -159,9 +159,9 @@ const RobotDetail = (props: IProps) => {
 								),
 							},
 							{
-								key: 'system-settings',
+								key: 'global-settings',
 								icon: <OpenAIFilled />,
-								label: '系统设置',
+								label: '全局设置',
 								children: <GlobalSettings robotId={props.robotId} />,
 							},
 							{
