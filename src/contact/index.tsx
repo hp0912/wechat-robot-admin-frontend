@@ -13,6 +13,8 @@ import { DefaultAvatar } from '@/constant';
 import FemaleFilled from '@/icons/FemaleFilled';
 import GroupFilled from '@/icons/GroupFilled';
 import MaleFilled from '@/icons/MaleFilled';
+import ChatRoomSettings from '@/settings/ChatRoomSettings';
+import FriendSettings from '@/settings/FriendSettings';
 
 interface IProps {
 	robotId: number;
@@ -27,6 +29,8 @@ const Contact = (props: IProps) => {
 	const [search, setSearch] = useSetState({ keyword: '', type: 'all', pageIndex: 1 });
 	const [groupMemberState, setGroupMemberState] = useState<{ open?: boolean; chatRoom?: IContact }>({});
 	const [sendMessageState, setSendMessageState] = useState<{ open?: boolean; contactId?: string }>({});
+	const [friendSettingsState, setFriendSettingsState] = useState<{ open?: boolean; contact?: IContact }>({});
+	const [chatRoomSettingsState, setChatRoomSettingsState] = useState<{ open?: boolean; chatRoom?: IContact }>({});
 	const [chatHistoryState, setChatHistoryState] = useState<{ open?: boolean; contact?: IContact; title?: ReactNode }>(
 		{},
 	);
@@ -41,6 +45,14 @@ const Contact = (props: IProps) => {
 
 	const onSendMessageClose = useMemoizedFn(() => {
 		setSendMessageState({ open: false });
+	});
+
+	const onFriendSettingsClose = useMemoizedFn(() => {
+		setFriendSettingsState({ open: false });
+	});
+
+	const onChatRoomSettingsClose = useMemoizedFn(() => {
+		setChatRoomSettingsState({ open: false });
 	});
 
 	// 手动同步联系人
@@ -157,10 +169,10 @@ const Contact = (props: IProps) => {
 					renderItem={item => {
 						const items: MenuProps['items'] = [{ label: '发送消息', key: 'send-message' }];
 						if (item.type === 'friend') {
-							items.push({ label: 'AI设置', key: 'settings' });
+							items.push({ label: '好友设置', key: 'friend-settings' });
 							items.push({ label: '删除好友', key: 'delete', danger: true });
 						} else {
-							items.push({ label: '群聊设置', key: 'settings' });
+							items.push({ label: '群聊设置', key: 'chat-room-settings' });
 							items.push({ label: '查看群成员', key: 'group-member' });
 							items.push({ label: '退出群聊', key: 'delete', danger: true });
 						}
@@ -218,6 +230,12 @@ const Contact = (props: IProps) => {
 														break;
 													case 'send-message':
 														setSendMessageState({ open: true, contactId: item.wechat_id });
+														break;
+													case 'friend-settings':
+														setFriendSettingsState({ open: true, contact: item });
+														break;
+													case 'chat-room-settings':
+														setChatRoomSettingsState({ open: true, chatRoom: item });
 														break;
 												}
 											},
@@ -287,6 +305,22 @@ const Contact = (props: IProps) => {
 					robot={props.robot}
 					contactId={sendMessageState.contactId!}
 					onClose={onSendMessageClose}
+				/>
+			)}
+			{friendSettingsState.open && (
+				<FriendSettings
+					open={friendSettingsState.open}
+					robotId={props.robotId}
+					contact={friendSettingsState.contact!}
+					onClose={onFriendSettingsClose}
+				/>
+			)}
+			{chatRoomSettingsState.open && (
+				<ChatRoomSettings
+					open={chatRoomSettingsState.open}
+					robotId={props.robotId}
+					chatRoom={chatRoomSettingsState.chatRoom!}
+					onClose={onChatRoomSettingsClose}
 				/>
 			)}
 		</div>
