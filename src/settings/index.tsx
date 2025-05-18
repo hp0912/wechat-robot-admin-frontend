@@ -1,11 +1,18 @@
 import { useRequest } from 'ahooks';
-import { App, AutoComplete, Button, Form, Input, InputNumber, Select, Spin, Switch, TimePicker } from 'antd';
-import type dayjs from 'dayjs';
+import { Alert, App, AutoComplete, Button, Form, Input, InputNumber, Select, Spin, Switch, TimePicker } from 'antd';
+import dayjs from 'dayjs';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import type { AnyType } from '@/common/types';
 import ParamsGroup from '@/components/ParamsGroup';
-import { toCronExpression } from '@/utils';
+import {
+	fromCronExpression,
+	generateMondayCronExpression,
+	generateMonthlyCronExpression,
+	parseMondayCronExpression,
+	parseMonthlyCronExpression,
+	toCronExpression,
+} from '@/utils';
 
 interface IProps {
 	robotId: number;
@@ -22,6 +29,29 @@ const GlobalSettings = (props: IProps) => {
 		return toCronExpression(cron.hour(), cron.minute());
 	};
 
+	const validateMondayCron = (cron: dayjs.Dayjs) => {
+		return generateMondayCronExpression(cron.hour(), cron.minute());
+	};
+
+	const validateMonthlyCron = (cron: dayjs.Dayjs) => {
+		return generateMonthlyCronExpression(cron.hour(), cron.minute());
+	};
+
+	const cronToDayjs = (cron: string) => {
+		const { minute, hour } = fromCronExpression(cron);
+		return dayjs().hour(hour).minute(minute).second(0).millisecond(0);
+	};
+
+	const mondayCronToDayjs = (cron: string) => {
+		const { minute, hour } = parseMondayCronExpression(cron);
+		return dayjs().hour(hour).minute(minute).second(0).millisecond(0);
+	};
+
+	const monthlyCronToDayjs = (cron: string) => {
+		const { minute, hour } = parseMonthlyCronExpression(cron);
+		return dayjs().hour(hour).minute(minute).second(0).millisecond(0);
+	};
+
 	const { loading, refresh } = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.api.v1GlobalSettingsList({ id: props.robotId });
@@ -30,8 +60,34 @@ const GlobalSettings = (props: IProps) => {
 		{
 			manual: false,
 			onSuccess: resp => {
-				if (resp?.data?.image_ai_settings && typeof resp.data.image_ai_settings === 'object') {
+				if (!resp?.data) {
+					return;
+				}
+				if (resp.data.image_ai_settings && typeof resp.data.image_ai_settings === 'object') {
 					resp.data.image_ai_settings = JSON.stringify(resp.data.image_ai_settings, null, 2) as unknown as object;
+				}
+				if (resp.data.friend_sync_cron) {
+					resp.data.friend_sync_cron = '1';
+				}
+				const cronFields: (keyof Api.V1GlobalSettingsList.ResponseBody['data'])[] = [
+					'chat_room_ranking_daily_cron',
+					'chat_room_summary_cron',
+					'morning_cron',
+					'news_cron',
+				];
+				for (const field of cronFields) {
+					if (resp.data[field]) {
+						const cronValue = resp.data[field] as string;
+						(resp.data as AnyType)[field] = cronToDayjs(cronValue);
+					}
+				}
+				if (resp.data.chat_room_ranking_weekly_cron) {
+					const cronValue = resp.data.chat_room_ranking_weekly_cron as string;
+					(resp.data as AnyType).chat_room_ranking_weekly_cron = mondayCronToDayjs(cronValue);
+				}
+				if (resp.data.chat_room_ranking_month_cron) {
+					const cronValue = resp.data.chat_room_ranking_month_cron as string;
+					(resp.data as AnyType).chat_room_ranking_month_cron = monthlyCronToDayjs(cronValue);
 				}
 				form.setFieldsValue(resp?.data || {});
 			},
@@ -77,18 +133,23 @@ const GlobalSettings = (props: IProps) => {
 		const configId = values.id;
 		const cronFields: (keyof Api.V1GlobalSettingsCreate.RequestBody)[] = [
 			'chat_room_ranking_daily_cron',
-			'chat_room_ranking_weekly_cron',
-			'chat_room_ranking_month_cron',
 			'chat_room_summary_cron',
 			'morning_cron',
-			'friend_sync_cron',
 			'news_cron',
 		];
 		for (const field of cronFields) {
 			if (values[field]) {
 				const cronValue = values[field] as dayjs.Dayjs;
-				values[field] = validateCron(cronValue);
+				(values as AnyType)[field] = validateCron(cronValue);
 			}
+		}
+		if (values.chat_room_ranking_weekly_cron) {
+			const cronValue = values.chat_room_ranking_weekly_cron as unknown as dayjs.Dayjs;
+			(values as AnyType).chat_room_ranking_weekly_cron = validateMondayCron(cronValue);
+		}
+		if (values.chat_room_ranking_month_cron) {
+			const cronValue = values.chat_room_ranking_month_cron as unknown as dayjs.Dayjs;
+			(values as AnyType).chat_room_ranking_month_cron = validateMonthlyCron(cronValue);
 		}
 		await onSave({ ...values, config_id: configId, id: props.robotId });
 	};
@@ -110,9 +171,19 @@ const GlobalSettings = (props: IProps) => {
 							<Input />
 						</Form.Item>
 						<ParamsGroup
-							title="聊天AI设置"
+							title="AI聊天设置"
 							style={{ marginTop: 10 }}
 						>
+							<Alert
+								style={{ marginTop: 10, marginBottom: 10 }}
+								type="info"
+								description={
+									<>
+										开启AI聊天设置会自动应用于每一个好友和群聊，也可以在<b>好友设置</b>和<b>群聊设置</b>
+										里面单独定制化设置。
+									</>
+								}
+							/>
 							<Form.Item
 								name="chat_ai_enabled"
 								label="聊天AI"
@@ -220,6 +291,16 @@ const GlobalSettings = (props: IProps) => {
 							title="AI绘图设置"
 							style={{ marginTop: 24 }}
 						>
+							<Alert
+								style={{ marginTop: 10, marginBottom: 10 }}
+								type="info"
+								description={
+									<>
+										开启AI绘图设置会自动应用于每一个好友和群聊，也可以在<b>好友设置</b>和<b>群聊设置</b>
+										里面单独定制化设置。
+									</>
+								}
+							/>
 							<Form.Item
 								name="image_ai_enabled"
 								label="绘图AI"
@@ -288,7 +369,7 @@ const GlobalSettings = (props: IProps) => {
 													rules={[{ required: true, message: '绘图设置不能为空' }]}
 												>
 													<Input.TextArea
-														rows={6}
+														rows={8}
 														placeholder="请输入绘图设置"
 														allowClear
 													/>
@@ -304,6 +385,15 @@ const GlobalSettings = (props: IProps) => {
 							title="群聊欢迎新成员设置"
 							style={{ marginTop: 24 }}
 						>
+							<Alert
+								style={{ marginTop: 10, marginBottom: 10 }}
+								type="info"
+								description={
+									<>
+										开启欢迎新成员会自动应用于每一个群聊，也可以在<b>群聊设置</b>里面单独定制化设置。
+									</>
+								}
+							/>
 							<Form.Item
 								name="welcome_enabled"
 								label="欢迎新成员"
@@ -442,6 +532,15 @@ const GlobalSettings = (props: IProps) => {
 							title="群聊排行榜设置"
 							style={{ marginTop: 24 }}
 						>
+							<Alert
+								style={{ marginTop: 10, marginBottom: 10 }}
+								type="warning"
+								description={
+									<>
+										群聊排行榜设置<b>不会</b>自动应用于每一个群聊，需要在<b>群聊设置</b>里面手动开启。
+									</>
+								}
+							/>
 							<Form.Item
 								name="chat_room_ranking_enabled"
 								label="排行榜"
@@ -496,6 +595,15 @@ const GlobalSettings = (props: IProps) => {
 							title="群聊总结设置"
 							style={{ marginTop: 24 }}
 						>
+							<Alert
+								style={{ marginTop: 10, marginBottom: 10 }}
+								type="warning"
+								description={
+									<>
+										群聊总结设置<b>不会</b>自动应用于每一个群聊，需要在<b>群聊设置</b>里面手动开启。
+									</>
+								}
+							/>
 							<Form.Item
 								name="chat_room_summary_enabled"
 								label="群聊总结"
@@ -548,6 +656,15 @@ const GlobalSettings = (props: IProps) => {
 							title="每日早报设置"
 							style={{ marginTop: 24 }}
 						>
+							<Alert
+								style={{ marginTop: 10, marginBottom: 10 }}
+								type="warning"
+								description={
+									<>
+										每日早报设置<b>不会</b>自动应用于每一个群聊，需要在<b>群聊设置</b>里面手动开启。
+									</>
+								}
+							/>
 							<Form.Item
 								name="news_enabled"
 								label="每日早报"
@@ -601,6 +718,15 @@ const GlobalSettings = (props: IProps) => {
 							title="每日早安设置"
 							style={{ marginTop: 24 }}
 						>
+							<Alert
+								style={{ marginTop: 10, marginBottom: 10 }}
+								type="warning"
+								description={
+									<>
+										每日早安设置<b>不会</b>自动应用于每一个群聊，需要在<b>群聊设置</b>里面手动开启。
+									</>
+								}
+							/>
 							<Form.Item
 								name="morning_enabled"
 								label="每日早安"
