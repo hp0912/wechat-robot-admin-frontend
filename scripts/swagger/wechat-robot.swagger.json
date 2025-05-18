@@ -2100,7 +2100,7 @@
 				"security": []
 			}
 		},
-		"/api/v1/common-settings": {
+		"/api/v1/global-settings": {
 			"get": {
 				"summary": "获取公共配置",
 				"x-apifox-folder": "",
@@ -2164,7 +2164,10 @@
 													"type": "string"
 												},
 												"image_ai_settings": {
-													"type": "string"
+													"type": "object",
+													"properties": {},
+													"x-apifox-orders": [],
+													"x-apifox-ignore-properties": []
 												},
 												"welcome_enabled": {
 													"type": "boolean"
@@ -2346,7 +2349,12 @@
 								"type": "object",
 								"properties": {
 									"id": {
-										"type": "number"
+										"type": "number",
+										"description": "机器人ID"
+									},
+									"config_id": {
+										"type": "number",
+										"description": "配置ID"
 									},
 									"chat_ai_enabled": {
 										"type": "boolean"
@@ -2373,7 +2381,10 @@
 										"type": "string"
 									},
 									"image_ai_settings": {
-										"type": "string"
+										"type": "object",
+										"properties": {},
+										"x-apifox-orders": [],
+										"x-apifox-ignore-properties": []
 									},
 									"welcome_enabled": {
 										"type": "boolean"
@@ -2466,10 +2477,12 @@
 									"news_cron",
 									"morning_enabled",
 									"morning_cron",
-									"friend_sync_cron"
+									"friend_sync_cron",
+									"config_id"
 								],
 								"x-apifox-orders": [
 									"id",
+									"config_id",
 									"chat_ai_enabled",
 									"chat_ai_trigger",
 									"chat_base_url",

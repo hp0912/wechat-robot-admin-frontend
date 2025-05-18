@@ -1,28 +1,38 @@
 import { useRequest } from 'ahooks';
 import { App, AutoComplete, Button, Form, Input, InputNumber, Select, Spin, Switch, TimePicker } from 'antd';
+import type dayjs from 'dayjs';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type { AnyType } from '@/common/types';
 import ParamsGroup from '@/components/ParamsGroup';
+import { toCronExpression } from '@/utils';
 
 interface IProps {
 	robotId: number;
 }
 
-type IFormValue = Api.V1CommonSettingsCreate.RequestBody;
+type IFormValue = Api.V1GlobalSettingsCreate.RequestBody;
 
 const GlobalSettings = (props: IProps) => {
 	const { message } = App.useApp();
 
 	const [form] = Form.useForm<IFormValue>();
 
-	const { loading } = useRequest(
+	const validateCron = (cron: dayjs.Dayjs) => {
+		return toCronExpression(cron.hour(), cron.minute());
+	};
+
+	const { loading, refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1CommonSettingsList({ id: props.robotId });
+			const resp = await window.wechatRobotClient.api.v1GlobalSettingsList({ id: props.robotId });
 			return resp.data;
 		},
 		{
 			manual: false,
 			onSuccess: resp => {
+				if (resp?.data?.image_ai_settings && typeof resp.data.image_ai_settings === 'object') {
+					resp.data.image_ai_settings = JSON.stringify(resp.data.image_ai_settings, null, 2) as unknown as object;
+				}
 				form.setFieldsValue(resp?.data || {});
 			},
 			onError: reason => {
@@ -32,14 +42,15 @@ const GlobalSettings = (props: IProps) => {
 	);
 
 	const { runAsync: onSave, loading: saveLoading } = useRequest(
-		async (data: Api.V1CommonSettingsCreate.RequestBody) => {
-			const resp = await window.wechatRobotClient.api.v1CommonSettingsCreate({ id: props.robotId }, data);
+		async (data: Api.V1GlobalSettingsCreate.RequestBody) => {
+			const resp = await window.wechatRobotClient.api.v1GlobalSettingsCreate({ id: props.robotId }, data);
 			return resp.data;
 		},
 		{
 			manual: true,
 			onSuccess: () => {
 				message.success('保存成功');
+				refresh();
 			},
 			onError: reason => {
 				message.error(reason.message);
@@ -49,7 +60,37 @@ const GlobalSettings = (props: IProps) => {
 
 	const onOk = async () => {
 		const values = await form.validateFields();
-		await onSave(values);
+
+		if (values.image_ai_enabled) {
+			try {
+				const json = JSON.parse(values.image_ai_settings as unknown as string);
+				if (!json || typeof json !== 'object' || Array.isArray(json)) {
+					message.error('绘图设置格式错误，不是有效的JSON对象格式');
+					return;
+				}
+				values.image_ai_settings = json;
+			} catch {
+				message.error('绘图设置格式错误，不是有效的JSON对象格式');
+				return;
+			}
+		}
+		const configId = values.id;
+		const cronFields: (keyof Api.V1GlobalSettingsCreate.RequestBody)[] = [
+			'chat_room_ranking_daily_cron',
+			'chat_room_ranking_weekly_cron',
+			'chat_room_ranking_month_cron',
+			'chat_room_summary_cron',
+			'morning_cron',
+			'friend_sync_cron',
+			'news_cron',
+		];
+		for (const field of cronFields) {
+			if (values[field]) {
+				const cronValue = values[field] as dayjs.Dayjs;
+				values[field] = validateCron(cronValue);
+			}
+		}
+		await onSave({ ...values, config_id: configId, id: props.robotId });
 	};
 
 	return (
@@ -223,7 +264,7 @@ const GlobalSettings = (props: IProps) => {
 																		},
 																		null,
 																		2,
-																	),
+																	) as AnyType,
 																});
 															}
 															if (value === 'glm') {
@@ -235,7 +276,7 @@ const GlobalSettings = (props: IProps) => {
 																		},
 																		null,
 																		2,
-																	),
+																	) as AnyType,
 																});
 															}
 														}}
@@ -337,9 +378,11 @@ const GlobalSettings = (props: IProps) => {
 																		label="表情包长度"
 																		rules={[{ required: true, message: '表情包长度不能为空' }]}
 																	>
-																		<Input
+																		<InputNumber
 																			placeholder="请输入表情包长度"
-																			allowClear
+																			min={1}
+																			precision={0}
+																			style={{ width: '100%' }}
 																		/>
 																	</Form.Item>
 																</>
