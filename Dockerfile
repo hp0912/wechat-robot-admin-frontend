@@ -2,6 +2,7 @@ FROM node:18.20.8 AS builder_web
 
 WORKDIR /app
 
+# Install pnpm
 RUN npm install -g pnpm@8.15.9
 
 ADD ./package.json /app/package.json
