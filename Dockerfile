@@ -1,4 +1,4 @@
-FROM node:20.19.8-slim AS builder_web
+FROM node:18.20.8 AS builder_web
 
 WORKDIR /app
 ADD ./package.json /app/package.json
