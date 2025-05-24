@@ -88,9 +88,6 @@ devDependencies:
   '@types/streamsaver':
     specifier: ^2.0.5
     version: 2.0.5
-  '@yunke/yunke-setting-plugin':
-    specifier: ^3.1.0
-    version: 3.1.0
   eslint:
     specifier: ^9.18.0
     version: 9.18.0
@@ -1419,18 +1416,6 @@ packages:
       eslint-visitor-keys: 4.2.0
     dev: true
 
-  /@yunke/yunke-setting-plugin@3.1.0:
-    resolution: {integrity: sha512-PoFM+9NURYaek+8p7sUMRutkD2ScpTMKaMfPVUsUpM6MqyLkhyyOo8Vik0o6CDwzp+zWX7KFfir/jn+2oMjWsA==}
-    requiresBuild: true
-    dependencies:
-      axios: 0.21.4
-      dayjs: 1.11.13
-      dotenv: 10.0.0
-      minimist: 1.2.8
-    transitivePeerDependencies:
-      - debug
-    dev: true
-
   /abort-controller@3.0.0:
     resolution: {integrity: sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==}
     engines: {node: '>=6.5'}
@@ -1752,14 +1737,6 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       possible-typed-array-names: 1.0.0
-    dev: true
-
-  /axios@0.21.4:
-    resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
-    dependencies:
-      follow-redirects: 1.15.9
-    transitivePeerDependencies:
-      - debug
     dev: true
 
   /axios@1.7.9:
@@ -2493,11 +2470,6 @@ packages:
     resolution: {integrity: sha512-y5z4NhblzwNk8XBIYVzjLcFkANK0rxbRDO6kGOfH9QrVYIGVEX52IqwSprKVsaLHM9pnNkCSxazZF/JPydDPvA==}
     dependencies:
       dotenv: 14.3.2
-    dev: true
-
-  /dotenv@10.0.0:
-    resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
-    engines: {node: '>=10'}
     dev: true
 
   /dotenv@14.3.2:
@@ -3987,10 +3959,6 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
       brace-expansion: 2.0.1
-    dev: true
-
-  /minimist@1.2.8:
-    resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
     dev: true
 
   /minipass@7.1.2:
