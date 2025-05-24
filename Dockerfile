@@ -1,6 +1,9 @@
 FROM node:18.20.8 AS builder_web
 
 WORKDIR /app
+
+RUN npm install -g pnpm
+
 ADD ./package.json /app/package.json
 ADD ./pnpm-lock.yaml /app/pnpm-lock.yaml
 
