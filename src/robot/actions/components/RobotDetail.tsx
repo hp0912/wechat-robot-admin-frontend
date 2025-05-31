@@ -8,6 +8,7 @@ import Contact from '@/contact';
 import ContainerLog from '@/container-log';
 import GlobalSettings from '@/settings';
 import SystemOverview from '@/system-overview';
+import RecreateRobotContainer from '../RecreateRobotContainer';
 import Remove from '../Remove';
 import RestartClient from '../RestartClient';
 import RestartServer from '../RestartServer';
@@ -119,6 +120,10 @@ const RobotDetail = (props: IProps) => {
 						robotId={data.id}
 						onRefresh={onRefresh}
 						buttonText="重启服务端"
+					/>
+					<RecreateRobotContainer
+						robotId={data.id}
+						onRefresh={onRefresh}
 					/>
 					<Remove
 						robotId={data.id}

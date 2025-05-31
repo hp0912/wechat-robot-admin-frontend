@@ -51,6 +51,7 @@ if (isDev) {
 		historyApiFallback: {
 			index: '/index.html',
 		},
+		compress: false,
 		proxy: [
 			{
 				context: ['/api/v1/**'],

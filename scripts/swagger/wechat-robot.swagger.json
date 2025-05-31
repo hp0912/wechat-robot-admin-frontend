@@ -3274,6 +3274,144 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-297250685-run",
 				"security": []
 			}
+		},
+		"/api/v1/robot/docker/image/pull": {
+			"get": {
+				"summary": "拉取机器人客户端和服务端最新镜像",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"x-apifox-orders": ["code", "message"],
+									"required": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-303151964-run",
+				"security": []
+			}
+		},
+		"/api/v1/robot/docker/container/remove": {
+			"delete": {
+				"summary": "删除机器人客户端和服务端容器",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"x-apifox-orders": ["code", "message"],
+									"required": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-303151966-run",
+				"security": []
+			}
+		},
+		"/api/v1/robot/docker/container/start": {
+			"post": {
+				"summary": "启动机器人客户端和服务端容器",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"x-apifox-orders": ["code", "message"],
+									"required": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-303151967-run",
+				"security": []
+			}
 		}
 	},
 	"components": {
