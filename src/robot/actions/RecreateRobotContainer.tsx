@@ -1,6 +1,7 @@
 import { DockerOutlined, DownOutlined } from '@ant-design/icons';
-import { useMemoizedFn, useSetState } from 'ahooks';
+import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Button, Dropdown, Modal } from 'antd';
+import type { MenuProps } from 'antd';
 import React from 'react';
 
 interface IProps {
@@ -64,13 +65,94 @@ const Progress = (props: { open?: boolean; progress: ImagePullRender[] }) => {
 };
 
 const RecreateRobotContainer = (props: IProps) => {
-	const { modal } = App.useApp();
+	const { message, modal } = App.useApp();
 
 	const [imagePullState, setImagePullState] = useSetState<ImagePullState>({
 		loading: false,
 		eventSource: null,
 		progress: [],
 	});
+
+	const { runAsync: removeContainer, loading: removeLoading } = useRequest(
+		async () => {
+			await window.wechatRobotClient.api.v1RobotDockerContainerRemoveDelete({ id: props.robotId });
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('操作成功');
+				props.onRefresh();
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	const { runAsync: createContainer, loading: createLoading } = useRequest(
+		async () => {
+			await window.wechatRobotClient.api.v1RobotDockerContainerStartCreate({ id: props.robotId });
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('操作成功');
+				props.onRefresh();
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	const items: MenuProps['items'] = [
+		{
+			label: '删除客户端和服务端容器',
+			key: 'remove',
+			onClick: () => {
+				if (removeLoading) {
+					message.warning('正在删除容器，请稍后再试');
+					return;
+				}
+				modal.confirm({
+					title: '删除机器人容器',
+					content: (
+						<>
+							确定要删除这个机器人的<b>客户端和服务端容器</b>吗？
+						</>
+					),
+					okText: '删除',
+					cancelText: '取消',
+					onOk: async () => {
+						await removeContainer();
+					},
+				});
+			},
+		},
+		{
+			label: '创建客户端和服务端容器',
+			key: 'create',
+			onClick: () => {
+				if (createLoading) {
+					message.warning('正在创建容器，请稍后再试');
+					return;
+				}
+				modal.confirm({
+					title: '创建机器人容器',
+					content: (
+						<>
+							确定要创建这个机器人的<b>客户端和服务端容器</b>吗？
+						</>
+					),
+					okText: '创建',
+					cancelText: '取消',
+					onOk: async () => {
+						await createContainer();
+					},
+				});
+			},
+		},
+	];
 
 	const pullDockerImages = useMemoizedFn(() => {
 		const eventSource = new EventSource('/api/v1/robot/docker/image/pull?id=' + props.robotId);
@@ -130,7 +212,7 @@ const RecreateRobotContainer = (props: IProps) => {
 		<div style={{ display: 'inline-block' }}>
 			<Dropdown.Button
 				type="primary"
-				menu={{ items: [] }}
+				menu={{ items }}
 				buttonsRender={() => {
 					return [
 						<Button
