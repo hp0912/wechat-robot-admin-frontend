@@ -47,7 +47,9 @@ const Progress = (props: { open?: boolean; progress: ImagePullRender[] }) => {
 								<span>{item.image}</span>
 							</p>
 						)}
-						{!!item.detail?.length && <pre style={{ margin: 0 }}>{item.detail.join('\n')}</pre>}
+						{!!item.detail?.length && (
+							<pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{item.detail.join('\n')}</pre>
+						)}
 						{!!item.progress && (
 							<p>
 								<b style={{ marginRight: 3 }}>进度:</b>
@@ -82,9 +84,14 @@ const RecreateRobotContainer = (props: IProps) => {
 					const prevProgress = prev.progress || [];
 					const existingIndex = prevProgress.findIndex(item => item.image === progress.image);
 					if (existingIndex !== -1) {
-						prevProgress[existingIndex].progress = progress.progress || '0%';
+						if (progress.progress) {
+							prevProgress[existingIndex].progress = progress.progress;
+						}
 						if (progress.status) {
 							prevProgress[existingIndex].detail.push(progress.status);
+							if (progress.status === 'complete') {
+								prevProgress[existingIndex].progress = '100%';
+							}
 						}
 						if (progress.error) {
 							prevProgress[existingIndex].detail.push(progress.error);
@@ -93,7 +100,7 @@ const RecreateRobotContainer = (props: IProps) => {
 						const newItem: ImagePullRender = {
 							image: progress.image,
 							detail: [],
-							progress: progress.progress || '0%',
+							progress: progress.progress,
 						};
 						if (progress.status) {
 							newItem.detail.push(progress.status);
@@ -110,7 +117,7 @@ const RecreateRobotContainer = (props: IProps) => {
 
 		eventSource.addEventListener('complete', () => {
 			eventSource.close();
-			setImagePullState({ open: true, loading: false, eventSource: null, progress: [] });
+			setImagePullState({ open: false, loading: false, eventSource: null, progress: [] });
 		});
 
 		eventSource.addEventListener('error', () => {
