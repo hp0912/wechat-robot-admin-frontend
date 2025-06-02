@@ -568,21 +568,39 @@ const GlobalSettings = (props: IProps) => {
 													rules={[{ required: true, message: '发榜时间不能为空' }]}
 													labelCol={{ flex: '0 0 120px' }}
 												>
-													<TimePicker />
+													<TimePicker
+														disabledTime={() => {
+															return {
+																disabledSeconds: () => Array.from({ length: 59 }, (_, i) => i + 1),
+															};
+														}}
+													/>
 												</Form.Item>
 												<Form.Item
 													name="chat_room_ranking_weekly_cron"
 													label="发榜时间(每周)"
 													labelCol={{ flex: '0 0 120px' }}
 												>
-													<TimePicker />
+													<TimePicker
+														disabledTime={() => {
+															return {
+																disabledSeconds: () => Array.from({ length: 59 }, (_, i) => i + 1),
+															};
+														}}
+													/>
 												</Form.Item>
 												<Form.Item
 													name="chat_room_ranking_month_cron"
 													label="发榜时间(每月)"
 													labelCol={{ flex: '0 0 120px' }}
 												>
-													<TimePicker />
+													<TimePicker
+														disabledTime={() => {
+															return {
+																disabledSeconds: () => Array.from({ length: 59 }, (_, i) => i + 1),
+															};
+														}}
+													/>
 												</Form.Item>
 											</>
 										);
@@ -643,7 +661,13 @@ const GlobalSettings = (props: IProps) => {
 													labelCol={{ flex: '0 0 120px' }}
 													rules={[{ required: true, message: '总结时间不能为空' }]}
 												>
-													<TimePicker />
+													<TimePicker
+														disabledTime={() => {
+															return {
+																disabledSeconds: () => Array.from({ length: 59 }, (_, i) => i + 1),
+															};
+														}}
+													/>
 												</Form.Item>
 											</>
 										);
@@ -705,7 +729,13 @@ const GlobalSettings = (props: IProps) => {
 													labelCol={{ flex: '0 0 120px' }}
 													rules={[{ required: true, message: '发布时间不能为空' }]}
 												>
-													<TimePicker />
+													<TimePicker
+														disabledTime={() => {
+															return {
+																disabledSeconds: () => Array.from({ length: 59 }, (_, i) => i + 1),
+															};
+														}}
+													/>
 												</Form.Item>
 											</>
 										);
@@ -752,7 +782,13 @@ const GlobalSettings = (props: IProps) => {
 													labelCol={{ flex: '0 0 120px' }}
 													rules={[{ required: true, message: '发布时间不能为空' }]}
 												>
-													<TimePicker />
+													<TimePicker
+														disabledTime={() => {
+															return {
+																disabledSeconds: () => Array.from({ length: 59 }, (_, i) => i + 1),
+															};
+														}}
+													/>
 												</Form.Item>
 											</>
 										);

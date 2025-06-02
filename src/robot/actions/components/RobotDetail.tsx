@@ -151,6 +151,7 @@ const RobotDetail = (props: IProps) => {
 					}}
 				>
 					<Tabs
+						destroyInactiveTabPane
 						items={[
 							{
 								key: 'concact',

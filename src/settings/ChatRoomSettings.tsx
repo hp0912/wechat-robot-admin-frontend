@@ -685,11 +685,11 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="news_type"
 												label="早报类型"
-												rules={[{ required: true, message: '早报类型不能为空' }]}
 											>
 												<Select
 													placeholder="请选择早报类型"
 													style={{ width: '100%' }}
+													allowClear
 													options={[
 														{ label: '文字', value: 'text' },
 														{ label: '图片', value: 'image' },
