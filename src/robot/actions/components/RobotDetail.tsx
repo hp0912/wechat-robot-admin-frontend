@@ -1,6 +1,7 @@
 import { FileTextFilled, OpenAIFilled, SettingFilled, WechatFilled } from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Tabs, Tag, theme } from 'antd';
+import type { TabsProps } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import styled from 'styled-components';
@@ -85,6 +86,38 @@ const RobotDetail = (props: IProps) => {
 		);
 	}
 
+	const items: TabsProps['items'] = [
+		{
+			key: 'concact',
+			icon: <WechatFilled />,
+			label: '联系人',
+			children: (
+				<Contact
+					robotId={props.robotId}
+					robot={data}
+				/>
+			),
+		},
+		{
+			key: 'global-settings',
+			icon: <OpenAIFilled />,
+			label: '全局设置',
+			children: <GlobalSettings robotId={props.robotId} />,
+		},
+		{
+			key: 'logs',
+			icon: <FileTextFilled />,
+			label: '容器日志',
+			children: <ContainerLog robotId={props.robotId} />,
+		},
+		{
+			key: 'system-overview',
+			icon: <SettingFilled />,
+			label: '系统概览',
+			children: <SystemOverview robotId={props.robotId} />,
+		},
+	];
+
 	return (
 		<Drawer
 			title={
@@ -152,37 +185,7 @@ const RobotDetail = (props: IProps) => {
 				>
 					<Tabs
 						destroyInactiveTabPane
-						items={[
-							{
-								key: 'concact',
-								icon: <WechatFilled />,
-								label: '联系人',
-								children: (
-									<Contact
-										robotId={props.robotId}
-										robot={data}
-									/>
-								),
-							},
-							{
-								key: 'global-settings',
-								icon: <OpenAIFilled />,
-								label: '全局设置',
-								children: <GlobalSettings robotId={props.robotId} />,
-							},
-							{
-								key: 'logs',
-								icon: <FileTextFilled />,
-								label: '容器日志',
-								children: <ContainerLog robotId={props.robotId} />,
-							},
-							{
-								key: 'system-overview',
-								icon: <SettingFilled />,
-								label: '系统概览',
-								children: <SystemOverview robotId={props.robotId} />,
-							},
-						]}
+						items={items}
 					/>
 				</Col>
 				<Col
