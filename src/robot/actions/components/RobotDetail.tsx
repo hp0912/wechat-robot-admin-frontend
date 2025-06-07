@@ -1,6 +1,7 @@
 import { FileTextFilled, OpenAIFilled, SettingFilled, WechatFilled } from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Tabs, Tag, theme } from 'antd';
+import type { TabsProps } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import styled from 'styled-components';
@@ -8,6 +9,7 @@ import Contact from '@/contact';
 import ContainerLog from '@/container-log';
 import GlobalSettings from '@/settings';
 import SystemOverview from '@/system-overview';
+import RecreateRobotContainer from '../RecreateRobotContainer';
 import Remove from '../Remove';
 import RestartClient from '../RestartClient';
 import RestartServer from '../RestartServer';
@@ -84,6 +86,38 @@ const RobotDetail = (props: IProps) => {
 		);
 	}
 
+	const items: TabsProps['items'] = [
+		{
+			key: 'concact',
+			icon: <WechatFilled />,
+			label: '联系人',
+			children: (
+				<Contact
+					robotId={props.robotId}
+					robot={data}
+				/>
+			),
+		},
+		{
+			key: 'global-settings',
+			icon: <OpenAIFilled />,
+			label: '全局设置',
+			children: <GlobalSettings robotId={props.robotId} />,
+		},
+		{
+			key: 'logs',
+			icon: <FileTextFilled />,
+			label: '容器日志',
+			children: <ContainerLog robotId={props.robotId} />,
+		},
+		{
+			key: 'system-overview',
+			icon: <SettingFilled />,
+			label: '系统概览',
+			children: <SystemOverview robotId={props.robotId} />,
+		},
+	];
+
 	return (
 		<Drawer
 			title={
@@ -120,6 +154,10 @@ const RobotDetail = (props: IProps) => {
 						onRefresh={onRefresh}
 						buttonText="重启服务端"
 					/>
+					<RecreateRobotContainer
+						robotId={data.id}
+						onRefresh={onRefresh}
+					/>
 					<Remove
 						robotId={data.id}
 						onRefresh={onRemoveRefresh}
@@ -146,37 +184,8 @@ const RobotDetail = (props: IProps) => {
 					}}
 				>
 					<Tabs
-						items={[
-							{
-								key: 'concact',
-								icon: <WechatFilled />,
-								label: '联系人',
-								children: (
-									<Contact
-										robotId={props.robotId}
-										robot={data}
-									/>
-								),
-							},
-							{
-								key: 'global-settings',
-								icon: <OpenAIFilled />,
-								label: '全局设置',
-								children: <GlobalSettings robotId={props.robotId} />,
-							},
-							{
-								key: 'logs',
-								icon: <FileTextFilled />,
-								label: '容器日志',
-								children: <ContainerLog robotId={props.robotId} />,
-							},
-							{
-								key: 'system-overview',
-								icon: <SettingFilled />,
-								label: '系统概览',
-								children: <SystemOverview robotId={props.robotId} />,
-							},
-						]}
+						destroyInactiveTabPane
+						items={items}
 					/>
 				</Col>
 				<Col

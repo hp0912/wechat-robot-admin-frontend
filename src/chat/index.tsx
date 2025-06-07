@@ -60,8 +60,14 @@ const ChatHistory = (props: IProps) => {
 			case MessageType.Text:
 				return msg.content;
 			case MessageType.App:
+				if (msg.display_full_content) {
+					return msg.display_full_content;
+				}
 				return `[${AppMessageTypeMap[subType] || '未知消息'}]`;
 			default:
+				if (msg.display_full_content) {
+					return msg.display_full_content;
+				}
 				return `[${MessageTypeMap[msgType] || '未知消息'}]`;
 		}
 	};
