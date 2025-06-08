@@ -3,7 +3,7 @@ import type { AnyType } from '@/common/types';
 import { UrlLogin } from '@/constant/redirect-url';
 import { clientInit } from './clientInit';
 
-const baseURL = `${process.env.NODE_ENV === 'development' ? '/' : '/kms-server'}/`;
+const baseURL = '/';
 
 export const Init = () => {
 	const errorWrapper = (stack: { code: number; message?: string; error?: string }) => {
