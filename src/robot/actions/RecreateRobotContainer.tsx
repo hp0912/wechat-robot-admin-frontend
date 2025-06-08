@@ -1,6 +1,13 @@
-import { DockerOutlined, DownOutlined } from '@ant-design/icons';
+import {
+	CloseCircleOutlined,
+	DeleteOutlined,
+	DockerOutlined,
+	DownOutlined,
+	PlayCircleOutlined,
+	PlaySquareOutlined,
+} from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
-import { App, Button, Dropdown, Modal } from 'antd';
+import { App, Button, Dropdown, Modal, theme } from 'antd';
 import type { MenuProps } from 'antd';
 import React from 'react';
 
@@ -65,6 +72,7 @@ const Progress = (props: { open?: boolean; progress: ImagePullRender[] }) => {
 };
 
 const RecreateRobotContainer = (props: IProps) => {
+	const { token } = theme.useToken();
 	const { message, modal } = App.useApp();
 
 	const [imagePullState, setImagePullState] = useSetState<ImagePullState>({
@@ -73,14 +81,14 @@ const RecreateRobotContainer = (props: IProps) => {
 		progress: [],
 	});
 
-	const { runAsync: removeContainer, loading: removeLoading } = useRequest(
+	const { runAsync: removeClientContainer, loading: removeClientLoading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1RobotDockerContainerRemoveDelete({ id: props.robotId });
+			await window.wechatRobotClient.api.v1RobotDockerContainerClientRemoveDelete({ id: props.robotId });
 		},
 		{
 			manual: true,
 			onSuccess: () => {
-				message.success('操作成功');
+				message.success('删除客户端容器成功');
 				props.onRefresh();
 			},
 			onError: reason => {
@@ -89,14 +97,46 @@ const RecreateRobotContainer = (props: IProps) => {
 		},
 	);
 
-	const { runAsync: createContainer, loading: createLoading } = useRequest(
+	const { runAsync: removeServerContainer, loading: removeServerLoading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1RobotDockerContainerStartCreate({ id: props.robotId });
+			await window.wechatRobotClient.api.v1RobotDockerContainerServerRemoveDelete({ id: props.robotId });
 		},
 		{
 			manual: true,
 			onSuccess: () => {
-				message.success('操作成功');
+				message.success('删除服务端容器成功');
+				props.onRefresh();
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	const { runAsync: createClientContainer, loading: createClientLoading } = useRequest(
+		async () => {
+			await window.wechatRobotClient.api.v1RobotDockerContainerClientStartCreate({ id: props.robotId });
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('创建客户端容器成功');
+				props.onRefresh();
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	const { runAsync: createServerContainer, loading: createServerLoading } = useRequest(
+		async () => {
+			await window.wechatRobotClient.api.v1RobotDockerContainerServerStartCreate({ id: props.robotId });
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('创建服务端容器成功');
 				props.onRefresh();
 			},
 			onError: reason => {
@@ -107,47 +147,97 @@ const RecreateRobotContainer = (props: IProps) => {
 
 	const items: MenuProps['items'] = [
 		{
-			label: '删除客户端和服务端容器',
-			key: 'remove',
+			label: '删除客户端容器',
+			key: 'remove-client',
+			icon: <CloseCircleOutlined style={{ color: token.colorError }} />,
 			onClick: () => {
-				if (removeLoading) {
+				if (removeClientLoading) {
 					message.warning('正在删除容器，请稍后再试');
 					return;
 				}
 				modal.confirm({
-					title: '删除机器人容器',
+					title: '删除机器人客户端容器',
 					content: (
 						<>
-							确定要删除这个机器人的<b>客户端和服务端容器</b>吗？
+							确定要删除这个机器人的<b>客户端容器</b>吗？
 						</>
 					),
 					okText: '删除',
 					cancelText: '取消',
 					onOk: async () => {
-						await removeContainer();
+						await removeClientContainer();
 					},
 				});
 			},
 		},
 		{
-			label: '创建客户端和服务端容器',
-			key: 'create',
+			label: '删除服务端容器',
+			key: 'remove-server',
+			icon: <DeleteOutlined style={{ color: token.colorError }} />,
 			onClick: () => {
-				if (createLoading) {
+				if (removeServerLoading) {
+					message.warning('正在删除容器，请稍后再试');
+					return;
+				}
+				modal.confirm({
+					title: '删除机器人服务端容器',
+					content: (
+						<>
+							确定要删除这个机器人的<b>服务端容器</b>吗？
+						</>
+					),
+					okText: '删除',
+					cancelText: '取消',
+					onOk: async () => {
+						await removeServerContainer();
+					},
+				});
+			},
+		},
+		{
+			label: '创建客户端容器',
+			key: 'create-client',
+			icon: <PlayCircleOutlined style={{ color: token.colorPrimary }} />,
+			onClick: () => {
+				if (createClientLoading) {
 					message.warning('正在创建容器，请稍后再试');
 					return;
 				}
 				modal.confirm({
-					title: '创建机器人容器',
+					title: '创建机器人客户端容器',
 					content: (
 						<>
-							确定要创建这个机器人的<b>客户端和服务端容器</b>吗？
+							确定要创建这个机器人的<b>客户端容器</b>吗？
 						</>
 					),
 					okText: '创建',
 					cancelText: '取消',
 					onOk: async () => {
-						await createContainer();
+						await createClientContainer();
+					},
+				});
+			},
+		},
+		{
+			label: '创建服务端容器',
+			key: 'create-server',
+			icon: <PlaySquareOutlined style={{ color: token.colorPrimary }} />,
+			onClick: () => {
+				if (createServerLoading) {
+					message.warning('正在创建容器，请稍后再试');
+					return;
+				}
+				modal.confirm({
+					title: '创建机器人服务端容器',
+					content: (
+						<>
+							确定要创建这个机器人的<b>服务端容器</b>吗？
+						</>
+					),
+					okText: '创建',
+					cancelText: '取消',
+					onOk: async () => {
+						await createServerContainer();
 					},
 				});
 			},
