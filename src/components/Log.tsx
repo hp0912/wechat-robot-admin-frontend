@@ -32,7 +32,7 @@ const Log = (props: IProps) => {
 	const [logRenderStr, setLogRenderStr] = useState<string>('');
 
 	useEffect(() => {
-		const ansiColored = parse(props.content || '');
+		const ansiColored = parse((props.content || '').replace(/</g, '&lt;').replace(/>/g, '&gt;'));
 		let str = '';
 		ansiColored.spans.forEach(item => {
 			if (item.css) {
