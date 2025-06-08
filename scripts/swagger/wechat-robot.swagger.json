@@ -3321,9 +3321,9 @@
 				"security": []
 			}
 		},
-		"/api/v1/robot/docker/container/remove": {
+		"/api/v1/robot/docker/container/client/remove": {
 			"delete": {
-				"summary": "删除机器人客户端和服务端容器",
+				"summary": "删除机器人客户端容器",
 				"x-apifox-folder": "",
 				"x-apifox-status": "released",
 				"deprecated": false,
@@ -3367,9 +3367,9 @@
 				"security": []
 			}
 		},
-		"/api/v1/robot/docker/container/start": {
+		"/api/v1/robot/docker/container/client/start": {
 			"post": {
-				"summary": "启动机器人客户端和服务端容器",
+				"summary": "启动机器人客户端容器",
 				"x-apifox-folder": "",
 				"x-apifox-status": "released",
 				"deprecated": false,
@@ -3410,6 +3410,98 @@
 					}
 				},
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-303151967-run",
+				"security": []
+			}
+		},
+		"/api/v1/robot/docker/container/server/remove": {
+			"delete": {
+				"summary": "删除机器人服务端容器",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"x-apifox-orders": ["code", "message"],
+									"required": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-305832995-run",
+				"security": []
+			}
+		},
+		"/api/v1/robot/docker/container/server/start": {
+			"post": {
+				"summary": "启动机器人服务端容器",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"x-apifox-orders": ["code", "message"],
+									"required": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-305833051-run",
 				"security": []
 			}
 		}
