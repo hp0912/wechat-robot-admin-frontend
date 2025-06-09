@@ -260,7 +260,12 @@ const RecreateRobotContainer = (props: IProps) => {
 							prevProgress[existingIndex].progress = progress.progress;
 						}
 						if (progress.status) {
-							prevProgress[existingIndex].detail.push(progress.status);
+							const detail = prevProgress[existingIndex].detail;
+							const lastDetailItem = detail[detail.length - 1];
+							// 去除一些重复的日志
+							if (lastDetailItem && lastDetailItem !== progress.status) {
+								detail.push(progress.status);
+							}
 							if (progress.status === 'complete') {
 								prevProgress[existingIndex].progress = '100%';
 							}
