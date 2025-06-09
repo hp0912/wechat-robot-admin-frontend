@@ -136,7 +136,7 @@ const Contact = (props: IProps) => {
 						>
 							<Radio.Button value="all">全部</Radio.Button>
 							<Radio.Button value="friend">朋友</Radio.Button>
-							<Radio.Button value="group">群聊</Radio.Button>
+							<Radio.Button value="chat_room">群聊</Radio.Button>
 						</Radio.Group>
 					</Col>
 				</Row>
@@ -173,7 +173,7 @@ const Contact = (props: IProps) => {
 							items.push({ label: '删除好友', key: 'delete', danger: true });
 						} else {
 							items.push({ label: '群聊设置', key: 'chat-room-settings' });
-							items.push({ label: '查看群成员', key: 'group-member' });
+							items.push({ label: '查看群成员', key: 'chat-room-member' });
 							items.push({ label: '退出群聊', key: 'delete', danger: true });
 						}
 						return (
@@ -225,7 +225,7 @@ const Contact = (props: IProps) => {
 											items,
 											onClick: ev => {
 												switch (ev.key) {
-													case 'group-member':
+													case 'chat-room-member':
 														setGroupMemberState({ open: true, chatRoom: item });
 														break;
 													case 'send-message':
