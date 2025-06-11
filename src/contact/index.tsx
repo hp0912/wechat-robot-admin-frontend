@@ -199,7 +199,7 @@ const Contact = (props: IProps) => {
 														<MaleFilled style={{ color: 'gray', marginLeft: 8 }} />
 													)}
 												</>
-											) : (
+											) : item.type === 'official_account' ? null : (
 												<GroupFilled style={{ color: '#08db3a', marginLeft: 8 }} />
 											)}
 										</>
@@ -220,46 +220,48 @@ const Contact = (props: IProps) => {
 										</>
 									}
 								/>
-								<div style={{ marginRight: 8 }}>
-									<Dropdown.Button
-										menu={{
-											items,
-											onClick: ev => {
-												switch (ev.key) {
-													case 'chat-room-member':
-														setGroupMemberState({ open: true, chatRoom: item });
-														break;
-													case 'send-message':
-														setSendMessageState({ open: true, contactId: item.wechat_id });
-														break;
-													case 'friend-settings':
-														setFriendSettingsState({ open: true, contact: item });
-														break;
-													case 'chat-room-settings':
-														setChatRoomSettingsState({ open: true, chatRoom: item });
-														break;
+								{item.type === 'official_account' ? null : (
+									<div style={{ marginRight: 8 }}>
+										<Dropdown.Button
+											menu={{
+												items,
+												onClick: ev => {
+													switch (ev.key) {
+														case 'chat-room-member':
+															setGroupMemberState({ open: true, chatRoom: item });
+															break;
+														case 'send-message':
+															setSendMessageState({ open: true, contactId: item.wechat_id });
+															break;
+														case 'friend-settings':
+															setFriendSettingsState({ open: true, contact: item });
+															break;
+														case 'chat-room-settings':
+															setChatRoomSettingsState({ open: true, chatRoom: item });
+															break;
+													}
+												},
+											}}
+											onClick={() => {
+												if (item.type === 'friend') {
+													setChatHistoryState({
+														open: true,
+														contact: item,
+														title: `我与${item.nickname || item.alias || item.wechat_id} 的聊天记录`,
+													});
+												} else {
+													setChatHistoryState({
+														open: true,
+														contact: item,
+														title: `${item.nickname || item.alias || item.wechat_id} 的聊天记录`,
+													});
 												}
-											},
-										}}
-										onClick={() => {
-											if (item.type === 'friend') {
-												setChatHistoryState({
-													open: true,
-													contact: item,
-													title: `我与${item.nickname || item.alias || item.wechat_id} 的聊天记录`,
-												});
-											} else {
-												setChatHistoryState({
-													open: true,
-													contact: item,
-													title: `${item.nickname || item.alias || item.wechat_id} 的聊天记录`,
-												});
-											}
-										}}
-									>
-										聊天记录
-									</Dropdown.Button>
-								</div>
+											}}
+										>
+											聊天记录
+										</Dropdown.Button>
+									</div>
+								)}
 							</List.Item>
 						);
 					}}
