@@ -125,7 +125,7 @@ const Contact = (props: IProps) => {
 							}}
 						/>
 					</Col>
-					<Col flex="0 0 230px">
+					<Col flex="0 0 260px">
 						<Radio.Group
 							optionType="button"
 							buttonStyle="solid"
