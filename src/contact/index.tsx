@@ -26,7 +26,7 @@ type IContact = Api.V1ContactListList.ResponseBody['data']['items'][number];
 const Contact = (props: IProps) => {
 	const { message } = App.useApp();
 
-	const [search, setSearch] = useSetState({ keyword: '', type: 'all', pageIndex: 1 });
+	const [search, setSearch] = useSetState({ keyword: '', type: 'chat_room', pageIndex: 1 });
 	const [groupMemberState, setGroupMemberState] = useState<{ open?: boolean; chatRoom?: IContact }>({});
 	const [sendMessageState, setSendMessageState] = useState<{ open?: boolean; contactId?: string }>({});
 	const [friendSettingsState, setFriendSettingsState] = useState<{ open?: boolean; contact?: IContact }>({});
@@ -134,9 +134,10 @@ const Contact = (props: IProps) => {
 								setSearch({ type: ev.target.value, pageIndex: 1 });
 							}}
 						>
-							<Radio.Button value="all">全部</Radio.Button>
-							<Radio.Button value="friend">朋友</Radio.Button>
 							<Radio.Button value="chat_room">群聊</Radio.Button>
+							<Radio.Button value="friend">朋友</Radio.Button>
+							<Radio.Button value="official_account">公众号</Radio.Button>
+							<Radio.Button value="all">全部</Radio.Button>
 						</Radio.Group>
 					</Col>
 				</Row>
