@@ -386,12 +386,13 @@ const ChatRoomSettings = (props: IProps) => {
 															form.setFieldsValue({
 																image_ai_settings: JSON.stringify(
 																	{
-																		ReqKey: 'high_aes_general_v21_L',
-																		ModelVersion: 'general_v2.1_L',
-																		DrawReqScheduleConf: 'general_v20_9B_rephraser',
-																		ApiKey: '',
-																		ApiSecret: '',
-																		ReturnUrl: true,
+																		api_key: '',
+																		model: 'doubao-seedream-3-0-t2i-250415',
+																		response_format: 'url',
+																		size: '1024x1024',
+																		seed: -1,
+																		guidance_scale: 2.5,
+																		watermark: false,
 																	},
 																	null,
 																	2,
@@ -402,8 +403,10 @@ const ChatRoomSettings = (props: IProps) => {
 															form.setFieldsValue({
 																image_ai_settings: JSON.stringify(
 																	{
-																		ApiKey: '',
-																		Model: '',
+																		api_key: '',
+																		model: 'cogview-4-250304',
+																		quality: 'hd',
+																		size: '1024x1024',
 																	},
 																	null,
 																	2,

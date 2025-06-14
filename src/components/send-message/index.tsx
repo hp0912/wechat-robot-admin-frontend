@@ -15,7 +15,7 @@ interface IProps {
 	open: boolean;
 	robotId: number;
 	robot: Api.V1RobotViewList.ResponseBody['data'];
-	contactId: string;
+	contact: Api.V1ContactListList.ResponseBody['data']['items'][number];
 	onClose: () => void;
 }
 
@@ -42,7 +42,7 @@ const SendMessage = (props: IProps) => {
 		async () => {
 			const resp = await window.wechatRobotClient.api.v1ChatRoomMembersList({
 				id: props.robotId,
-				chat_room_id: props.contactId,
+				chat_room_id: props.contact.wechat_id,
 				page_index: 1,
 				page_size: 500,
 			});
@@ -51,7 +51,7 @@ const SendMessage = (props: IProps) => {
 		},
 		{
 			manual: false,
-			ready: props.contactId?.endsWith('@chatroom'),
+			ready: props.contact.wechat_id?.endsWith('@chatroom'),
 			onError: reason => {
 				message.error(reason.message);
 			},
@@ -64,7 +64,7 @@ const SendMessage = (props: IProps) => {
 				{ id: props.robotId },
 				{
 					id: props.robotId,
-					to_wxid: props.contactId,
+					to_wxid: props.contact.wechat_id!,
 					content: textMessageContent,
 					at: mentions,
 				},
@@ -99,7 +99,7 @@ const SendMessage = (props: IProps) => {
 
 			formData.append(type, attach as FileType);
 			formData.append('id', props.robotId.toString());
-			formData.append('to_wxid', props.contactId);
+			formData.append('to_wxid', props.contact.wechat_id!);
 
 			let path = '';
 			switch (type) {
@@ -281,7 +281,14 @@ const SendMessage = (props: IProps) => {
 
 	return (
 		<Modal
-			title="发送消息"
+			title={
+				<>
+					发送消息
+					<span style={{ fontSize: 12, color: 'gray', marginLeft: 3 }}>
+						({props.contact.remark || props.contact.nickname || props.contact.wechat_id})
+					</span>
+				</>
+			}
 			open={props.open}
 			onCancel={props.onClose}
 			footer={null}

@@ -272,7 +272,7 @@ const ChatHistory = (props: IProps) => {
 						open={sendMessageOpen}
 						robotId={props.robotId}
 						robot={props.robot}
-						contactId={props.contact.wechat_id!}
+						contact={props.contact}
 						onClose={setSendMessageOpen.setFalse}
 					/>
 				)}
