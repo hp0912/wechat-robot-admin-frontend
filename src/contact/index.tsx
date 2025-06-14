@@ -28,7 +28,7 @@ const Contact = (props: IProps) => {
 
 	const [search, setSearch] = useSetState({ keyword: '', type: 'chat_room', pageIndex: 1 });
 	const [groupMemberState, setGroupMemberState] = useState<{ open?: boolean; chatRoom?: IContact }>({});
-	const [sendMessageState, setSendMessageState] = useState<{ open?: boolean; contactId?: string }>({});
+	const [sendMessageState, setSendMessageState] = useState<{ open?: boolean; contact?: IContact }>({});
 	const [friendSettingsState, setFriendSettingsState] = useState<{ open?: boolean; contact?: IContact }>({});
 	const [chatRoomSettingsState, setChatRoomSettingsState] = useState<{ open?: boolean; chatRoom?: IContact }>({});
 	const [chatHistoryState, setChatHistoryState] = useState<{ open?: boolean; contact?: IContact; title?: ReactNode }>(
@@ -231,7 +231,7 @@ const Contact = (props: IProps) => {
 															setGroupMemberState({ open: true, chatRoom: item });
 															break;
 														case 'send-message':
-															setSendMessageState({ open: true, contactId: item.wechat_id });
+															setSendMessageState({ open: true, contact: item });
 															break;
 														case 'friend-settings':
 															setFriendSettingsState({ open: true, contact: item });
@@ -306,7 +306,7 @@ const Contact = (props: IProps) => {
 					open={sendMessageState.open}
 					robotId={props.robotId}
 					robot={props.robot}
-					contactId={sendMessageState.contactId!}
+					contact={sendMessageState.contact!}
 					onClose={onSendMessageClose}
 				/>
 			)}
