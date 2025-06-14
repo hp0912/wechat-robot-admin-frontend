@@ -4,6 +4,7 @@ import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import type { AnyType } from '@/common/types';
 import ParamsGroup from '@/components/ParamsGroup';
+import { AiModels } from '@/constant/ai';
 
 interface IProps {
 	robotId: number;
@@ -278,7 +279,7 @@ const FriendSettings = (props: IProps) => {
 												<AutoComplete
 													placeholder="不填则使用全局配置"
 													style={{ width: '100%' }}
-													options={[{ value: 'gpt-4o-mini' }, { value: 'gpt-4o' }, { value: 'gpt-4.1' }]}
+													options={AiModels}
 												/>
 											</Form.Item>
 											<Form.Item

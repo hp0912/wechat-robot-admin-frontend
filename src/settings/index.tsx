@@ -5,6 +5,7 @@ import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import type { AnyType } from '@/common/types';
 import ParamsGroup from '@/components/ParamsGroup';
+import { AiModels } from '@/constant/ai';
 import {
 	fromCronExpression,
 	generateMondayCronExpression,
@@ -265,7 +266,7 @@ const GlobalSettings = (props: IProps) => {
 													<AutoComplete
 														placeholder="请选择或者手动输入聊天模型"
 														style={{ width: '100%' }}
-														options={[{ value: 'gpt-4o-mini' }, { value: 'gpt-4o' }, { value: 'gpt-4.1' }]}
+														options={AiModels}
 													/>
 												</Form.Item>
 												<Form.Item
@@ -655,7 +656,7 @@ const GlobalSettings = (props: IProps) => {
 													<AutoComplete
 														placeholder="请选择或者手动输入AI模型"
 														style={{ width: '100%' }}
-														options={[{ value: 'gpt-4o-mini' }, { value: 'gpt-4o' }, { value: 'gpt-4.1' }]}
+														options={AiModels}
 													/>
 												</Form.Item>
 												<Form.Item
