@@ -372,6 +372,7 @@ const FriendSettings = (props: IProps) => {
 													options={[
 														{ label: '智谱', value: 'glm' },
 														{ label: '豆包', value: 'doubao' },
+														{ label: '腾讯混元', value: 'hunyuan', disabled: true },
 													]}
 													onSelect={(value: string) => {
 														if (value === 'doubao') {
@@ -399,6 +400,31 @@ const FriendSettings = (props: IProps) => {
 																		model: 'cogview-4-250304',
 																		quality: 'hd',
 																		size: '1024x1024',
+																	},
+																	null,
+																	2,
+																) as AnyType,
+															});
+														}
+														if (value === 'hunyuan') {
+															form.setFieldsValue({
+																image_ai_settings: JSON.stringify(
+																	{
+																		SecretId: '',
+																		SecretKey: '',
+																		ChatId: null,
+																		LogoAdd: 1,
+																		LogoParam: {
+																			LogoUrl:
+																				'https://aoaoaowu-1256901433.cos.ap-guangzhou.myqcloud.com/images/ai-logo.jpg',
+																			LogoImage: null,
+																			LogoRect: {
+																				X: 10,
+																				Y: 10,
+																				Width: 20,
+																				Height: 20,
+																			},
+																		},
 																	},
 																	null,
 																	2,
