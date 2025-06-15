@@ -115,6 +115,68 @@ const ChatRoomSettings = (props: IProps) => {
 		await onSave({ ...values, chat_room_id: chatRoom.wechat_id!, config_id: configId, id: props.robotId });
 	};
 
+	const applyGlobalSettings = (type: 'chat' | 'drawing' | 'welcome' | 'all') => {
+		if (!globalSettings?.data) {
+			message.error('全局配置不存在');
+			return;
+		}
+		const imageAiSettings = globalSettings.data.image_ai_settings
+			? JSON.stringify(globalSettings.data.image_ai_settings, null, 2)
+			: '{}';
+		const chatSettings: Partial<IFormValue> = {
+			chat_ai_enabled: globalSettings.data.chat_ai_enabled,
+			chat_ai_trigger: globalSettings.data.chat_ai_trigger,
+			chat_base_url: globalSettings.data.chat_base_url,
+			chat_api_key: globalSettings.data.chat_api_key,
+			chat_model: globalSettings.data.chat_model,
+			chat_prompt: globalSettings.data.chat_prompt,
+		};
+		const drawingSettings: Partial<IFormValue> = {
+			image_ai_enabled: globalSettings.data.image_ai_enabled,
+			image_model: globalSettings.data.image_model,
+			image_ai_settings: imageAiSettings as unknown as object,
+		};
+		const welcomeSettings: Partial<IFormValue> = {
+			welcome_enabled: globalSettings.data.welcome_enabled,
+			welcome_type: globalSettings.data.welcome_type,
+			welcome_text: globalSettings.data.welcome_text,
+			welcome_emoji_md5: globalSettings.data.welcome_emoji_md5,
+			welcome_emoji_len: globalSettings.data.welcome_emoji_len,
+			welcome_image_url: globalSettings.data.welcome_image_url,
+			welcome_url: globalSettings.data.welcome_url,
+		};
+		const otherSettings: Partial<IFormValue> = {
+			chat_room_ranking_enabled: globalSettings.data.chat_room_ranking_enabled,
+			chat_room_summary_enabled: globalSettings.data.chat_room_summary_enabled,
+			chat_room_summary_model: globalSettings.data.chat_room_summary_model,
+			news_enabled: globalSettings.data.news_enabled,
+			news_type: globalSettings.data.news_type,
+			morning_enabled: globalSettings.data.morning_enabled,
+		};
+		switch (type) {
+			case 'chat':
+				form.setFieldsValue(chatSettings);
+				break;
+			case 'drawing':
+				form.setFieldsValue(drawingSettings);
+				break;
+			case 'welcome':
+				form.setFieldsValue(welcomeSettings);
+				break;
+			case 'all':
+				form.setFieldsValue({
+					...chatSettings,
+					...drawingSettings,
+					...welcomeSettings,
+					...otherSettings,
+				});
+				break;
+			default:
+				message.error('未知类型');
+				return;
+		}
+	};
+
 	return (
 		<Drawer
 			title={
@@ -139,39 +201,7 @@ const ChatRoomSettings = (props: IProps) => {
 					<Button
 						type="primary"
 						loading={globalLoading}
-						onClick={() => {
-							if (!globalSettings?.data) {
-								message.error('全局配置不存在');
-								return;
-							}
-							const imageAiSettings = globalSettings.data.image_ai_settings
-								? JSON.stringify(globalSettings.data.image_ai_settings, null, 2)
-								: '{}';
-							form.setFieldsValue({
-								chat_ai_enabled: globalSettings.data.chat_ai_enabled,
-								chat_ai_trigger: globalSettings.data.chat_ai_trigger,
-								chat_base_url: globalSettings.data.chat_base_url,
-								chat_api_key: globalSettings.data.chat_api_key,
-								chat_model: globalSettings.data.chat_model,
-								chat_prompt: globalSettings.data.chat_prompt,
-								image_ai_enabled: globalSettings.data.image_ai_enabled,
-								image_model: globalSettings.data.image_model,
-								image_ai_settings: imageAiSettings as unknown as object,
-								welcome_enabled: globalSettings.data.welcome_enabled,
-								welcome_type: globalSettings.data.welcome_type,
-								welcome_text: globalSettings.data.welcome_text,
-								welcome_emoji_md5: globalSettings.data.welcome_emoji_md5,
-								welcome_emoji_len: globalSettings.data.welcome_emoji_len,
-								welcome_image_url: globalSettings.data.welcome_image_url,
-								welcome_url: globalSettings.data.welcome_url,
-								chat_room_ranking_enabled: globalSettings.data.chat_room_ranking_enabled,
-								chat_room_summary_enabled: globalSettings.data.chat_room_summary_enabled,
-								chat_room_summary_model: globalSettings.data.chat_room_summary_model,
-								news_enabled: globalSettings.data.news_enabled,
-								news_type: globalSettings.data.news_type,
-								morning_enabled: globalSettings.data.morning_enabled,
-							});
-						}}
+						onClick={() => applyGlobalSettings('all')}
 					>
 						使用全局配置填充
 					</Button>
@@ -339,6 +369,16 @@ const ChatRoomSettings = (props: IProps) => {
 								return null;
 							}}
 						</Form.Item>
+						<Form.Item style={{ marginBottom: 6 }}>
+							<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+								<Button
+									disabled={globalLoading}
+									onClick={() => applyGlobalSettings('chat')}
+								>
+									使用全局配置填充AI聊天设置
+								</Button>
+							</div>
+						</Form.Item>
 					</ParamsGroup>
 					<ParamsGroup
 						title="AI绘图设置"
@@ -432,6 +472,16 @@ const ChatRoomSettings = (props: IProps) => {
 								}
 								return null;
 							}}
+						</Form.Item>
+						<Form.Item style={{ marginBottom: 6 }}>
+							<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+								<Button
+									disabled={globalLoading}
+									onClick={() => applyGlobalSettings('drawing')}
+								>
+									使用全局配置填充AI绘图设置
+								</Button>
+							</div>
 						</Form.Item>
 					</ParamsGroup>
 					<ParamsGroup
@@ -579,6 +629,16 @@ const ChatRoomSettings = (props: IProps) => {
 								}
 								return null;
 							}}
+						</Form.Item>
+						<Form.Item style={{ marginBottom: 6 }}>
+							<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+								<Button
+									disabled={globalLoading}
+									onClick={() => applyGlobalSettings('welcome')}
+								>
+									使用全局配置填充群聊欢迎新成员设置
+								</Button>
+							</div>
 						</Form.Item>
 					</ParamsGroup>
 					<ParamsGroup
