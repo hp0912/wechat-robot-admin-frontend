@@ -99,6 +99,45 @@ const FriendSettings = (props: IProps) => {
 		await onSave({ ...values, wechat_id: contact.wechat_id!, config_id: configId, id: props.robotId });
 	};
 
+	const applyGlobalSettings = (type: 'chat' | 'drawing' | 'all') => {
+		if (!globalSettings?.data) {
+			message.error('全局配置不存在');
+			return;
+		}
+		const imageAiSettings = globalSettings.data.image_ai_settings
+			? JSON.stringify(globalSettings.data.image_ai_settings, null, 2)
+			: '{}';
+		const chatSettings: Partial<IFormValue> = {
+			chat_ai_enabled: globalSettings.data.chat_ai_enabled,
+			chat_base_url: globalSettings.data.chat_base_url,
+			chat_api_key: globalSettings.data.chat_api_key,
+			chat_model: globalSettings.data.chat_model,
+			chat_prompt: globalSettings.data.chat_prompt,
+		};
+		const drawingSettings: Partial<IFormValue> = {
+			image_ai_enabled: globalSettings.data.image_ai_enabled,
+			image_model: globalSettings.data.image_model,
+			image_ai_settings: imageAiSettings as unknown as object,
+		};
+		switch (type) {
+			case 'chat':
+				form.setFieldsValue(chatSettings);
+				break;
+			case 'drawing':
+				form.setFieldsValue(drawingSettings);
+				break;
+			case 'all':
+				form.setFieldsValue({
+					...chatSettings,
+					...drawingSettings,
+				});
+				break;
+			default:
+				message.error('未知类型');
+				return;
+		}
+	};
+
 	return (
 		<Drawer
 			title={
@@ -123,25 +162,7 @@ const FriendSettings = (props: IProps) => {
 					<Button
 						type="primary"
 						loading={globalLoading}
-						onClick={() => {
-							if (!globalSettings?.data) {
-								message.error('全局配置不存在');
-								return;
-							}
-							const imageAiSettings = globalSettings.data.image_ai_settings
-								? JSON.stringify(globalSettings.data.image_ai_settings, null, 2)
-								: '{}';
-							form.setFieldsValue({
-								chat_ai_enabled: globalSettings.data.chat_ai_enabled,
-								chat_base_url: globalSettings.data.chat_base_url,
-								chat_api_key: globalSettings.data.chat_api_key,
-								chat_model: globalSettings.data.chat_model,
-								chat_prompt: globalSettings.data.chat_prompt,
-								image_ai_enabled: globalSettings.data.image_ai_enabled,
-								image_model: globalSettings.data.image_model,
-								image_ai_settings: imageAiSettings as unknown as object,
-							});
-						}}
+						onClick={() => applyGlobalSettings('all')}
 					>
 						使用全局配置填充
 					</Button>
@@ -299,6 +320,16 @@ const FriendSettings = (props: IProps) => {
 								return null;
 							}}
 						</Form.Item>
+						<Form.Item style={{ marginBottom: 6 }}>
+							<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+								<Button
+									disabled={globalLoading}
+									onClick={() => applyGlobalSettings('chat')}
+								>
+									使用全局配置填充AI聊天设置
+								</Button>
+							</div>
+						</Form.Item>
 					</ParamsGroup>
 					<ParamsGroup
 						title="AI绘图设置"
@@ -392,6 +423,16 @@ const FriendSettings = (props: IProps) => {
 								}
 								return null;
 							}}
+						</Form.Item>
+						<Form.Item style={{ marginBottom: 6 }}>
+							<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+								<Button
+									disabled={globalLoading}
+									onClick={() => applyGlobalSettings('drawing')}
+								>
+									使用全局配置填充AI绘图设置
+								</Button>
+							</div>
 						</Form.Item>
 					</ParamsGroup>
 				</Form>
