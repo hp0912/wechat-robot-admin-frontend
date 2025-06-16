@@ -113,7 +113,7 @@ const Login = () => {
 		<Container className={className}>
 			<h1>微信机器人管理后台</h1>
 			<img
-				src="https://img.houhoukang.com/uranus/qrcode_for_gh.jpg"
+				src="/api/v1/oauth/official-account/url"
 				alt="二维码"
 			/>
 			<p>请使用微信扫描二维码关注公众号，输入「验证码」获取验证码（三分钟内有效）</p>
