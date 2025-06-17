@@ -1,8 +1,8 @@
 import { AndroidFilled } from '@ant-design/icons';
 import { useBoolean, useMemoizedFn } from 'ahooks';
 import { Button, theme, Tooltip } from 'antd';
-import React from 'react';
-import RobotDetail from './components/RobotDetail';
+import React, { Suspense } from 'react';
+import LoadingOutlined from '@/icons/LoadingOutlined';
 
 interface IProps {
 	robotId: number;
@@ -11,45 +11,50 @@ interface IProps {
 	onDetailRefresh: () => void;
 }
 
+const RobotDetail = React.lazy(() => import('./components/RobotDetail'));
+
 const RobotMetadata = (props: IProps) => {
 	const { token } = theme.useToken();
 
 	const [onDetailOpen, setOnDetailOpen] = useBoolean(false);
-	const [onTipOpen, setOnTipOpen] = useBoolean(false);
+	const [onLazyLoading, setLazyLoading] = useBoolean(false);
+
+	const onRobotDetailLoaded = useMemoizedFn(() => {
+		setLazyLoading.setFalse();
+	});
 
 	const onClose = useMemoizedFn(() => {
 		setOnDetailOpen.setFalse();
 	});
 
 	return (
-		<Tooltip
-			title={`机器人元数据${props.robotStatus === 'online' ? '（在线）' : '（离线）'}`}
-			open={onTipOpen}
-			onOpenChange={open => {
-				if (open) {
-					setOnTipOpen.setTrue();
-				} else {
-					setOnTipOpen.setFalse();
-				}
-			}}
-		>
+		<Tooltip title={`机器人元数据${props.robotStatus === 'online' ? '（在线）' : '（离线）'}`}>
 			<div style={{ display: 'inline-block' }}>
 				<Button
 					type="text"
-					icon={<AndroidFilled style={{ color: props.robotStatus === 'online' ? token.colorSuccess : 'gray' }} />}
+					icon={
+						onLazyLoading ? (
+							<LoadingOutlined spin />
+						) : (
+							<AndroidFilled style={{ color: props.robotStatus === 'online' ? token.colorSuccess : 'gray' }} />
+						)
+					}
 					onClick={() => {
 						setOnDetailOpen.setTrue();
-						setOnTipOpen.setFalse();
+						setLazyLoading.setTrue();
 					}}
 				/>
 				{onDetailOpen && (
-					<RobotDetail
-						robotId={props.robotId}
-						open={onDetailOpen}
-						onListRefresh={props.onListRefresh}
-						onDetailRefresh={props.onDetailRefresh}
-						onClose={onClose}
-					/>
+					<Suspense fallback={null}>
+						<RobotDetail
+							robotId={props.robotId}
+							open={onDetailOpen}
+							onListRefresh={props.onListRefresh}
+							onDetailRefresh={props.onDetailRefresh}
+							onClose={onClose}
+							onModuleLoaded={onRobotDetailLoaded}
+						/>
+					</Suspense>
 				)}
 			</div>
 		</Tooltip>

@@ -1,14 +1,12 @@
 import { FileTextFilled, OpenAIFilled, SettingFilled, WechatFilled } from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
-import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Tabs, Tag, theme } from 'antd';
+import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Spin, Tabs, Tag, theme } from 'antd';
 import type { TabsProps } from 'antd';
 import dayjs from 'dayjs';
-import React from 'react';
+import React, { Suspense, useEffect } from 'react';
 import styled from 'styled-components';
 import Contact from '@/contact';
-import ContainerLog from '@/container-log';
 import GlobalSettings from '@/settings';
-import SystemOverview from '@/system-overview';
 import RecreateRobotContainer from '../RecreateRobotContainer';
 import Remove from '../Remove';
 import RestartClient from '../RestartClient';
@@ -21,7 +19,11 @@ interface IProps {
 	onListRefresh: () => void;
 	onDetailRefresh: () => void;
 	onClose: () => void;
+	onModuleLoaded?: () => void;
 }
+
+const ContainerLog = React.lazy(() => import('@/container-log'));
+const SystemOverview = React.lazy(() => import('@/system-overview'));
 
 const BaseContainer = styled.div`
 	display: flex;
@@ -50,6 +52,10 @@ const RobotDetail = (props: IProps) => {
 	const { token } = theme.useToken();
 
 	const { open, onClose } = props;
+
+	useEffect(() => {
+		props.onModuleLoaded?.();
+	}, []);
 
 	const { data, loading, refresh } = useRequest(
 		async () => {
@@ -108,13 +114,21 @@ const RobotDetail = (props: IProps) => {
 			key: 'logs',
 			icon: <FileTextFilled />,
 			label: '容器日志',
-			children: <ContainerLog robotId={props.robotId} />,
+			children: (
+				<Suspense fallback={<Spin />}>
+					<ContainerLog robotId={props.robotId} />
+				</Suspense>
+			),
 		},
 		{
 			key: 'system-overview',
 			icon: <SettingFilled />,
 			label: '系统概览',
-			children: <SystemOverview robotId={props.robotId} />,
+			children: (
+				<Suspense fallback={<Spin />}>
+					<SystemOverview robotId={props.robotId} />
+				</Suspense>
+			),
 		},
 	];
 
