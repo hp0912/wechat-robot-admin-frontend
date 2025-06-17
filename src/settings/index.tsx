@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import type { AnyType } from '@/common/types';
+import ImageModel from '@/components/ImageModel';
 import ParamsGroup from '@/components/ParamsGroup';
 import { AiModels } from '@/constant/ai';
 import {
@@ -325,73 +326,7 @@ const GlobalSettings = (props: IProps) => {
 													label="绘图模型"
 													rules={[{ required: true, message: '绘图模型不能为空' }]}
 												>
-													<AutoComplete
-														placeholder="请选择或者手动输入绘图模型"
-														style={{ width: '100%' }}
-														options={[
-															{ label: '智谱', value: 'glm' },
-															{ label: '豆包', value: 'doubao' },
-															{ label: '腾讯混元', value: 'hunyuan', disabled: true },
-														]}
-														onSelect={(value: string) => {
-															if (value === 'doubao') {
-																form.setFieldsValue({
-																	image_ai_settings: JSON.stringify(
-																		{
-																			api_key: '',
-																			model: 'doubao-seedream-3-0-t2i-250415',
-																			response_format: 'url',
-																			size: '1024x1024',
-																			seed: -1,
-																			guidance_scale: 2.5,
-																			watermark: false,
-																		},
-																		null,
-																		2,
-																	) as AnyType,
-																});
-															}
-															if (value === 'glm') {
-																form.setFieldsValue({
-																	image_ai_settings: JSON.stringify(
-																		{
-																			api_key: '',
-																			model: 'cogview-4-250304',
-																			quality: 'hd',
-																			size: '1024x1024',
-																		},
-																		null,
-																		2,
-																	) as AnyType,
-																});
-															}
-															if (value === 'hunyuan') {
-																form.setFieldsValue({
-																	image_ai_settings: JSON.stringify(
-																		{
-																			SecretId: '',
-																			SecretKey: '',
-																			ChatId: null,
-																			LogoAdd: 1,
-																			LogoParam: {
-																				LogoUrl:
-																					'https://aoaoaowu-1256901433.cos.ap-guangzhou.myqcloud.com/images/ai-logo.jpg',
-																				LogoImage: null,
-																				LogoRect: {
-																					X: 10,
-																					Y: 10,
-																					Width: 20,
-																					Height: 20,
-																				},
-																			},
-																		},
-																		null,
-																		2,
-																	) as AnyType,
-																});
-															}
-														}}
-													/>
+													<ImageModel placeholder="请选择或者手动输入绘图模型" />
 												</Form.Item>
 												<Form.Item
 													name="image_ai_settings"
