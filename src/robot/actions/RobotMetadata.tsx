@@ -11,7 +11,7 @@ interface IProps {
 	onDetailRefresh: () => void;
 }
 
-const RobotDetail = React.lazy(() => import('./components/RobotDetail'));
+const RobotDetail = React.lazy(() => import(/* webpackChunkName: "robot-detail" */ './components/RobotDetail'));
 
 const RobotMetadata = (props: IProps) => {
 	const { token } = theme.useToken();

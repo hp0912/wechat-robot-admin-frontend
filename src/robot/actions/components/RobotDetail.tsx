@@ -22,8 +22,8 @@ interface IProps {
 	onModuleLoaded?: () => void;
 }
 
-const ContainerLog = React.lazy(() => import('@/container-log'));
-const SystemOverview = React.lazy(() => import('@/system-overview'));
+const ContainerLog = React.lazy(() => import(/* webpackChunkName: "container-log" */ '@/container-log'));
+const SystemOverview = React.lazy(() => import(/* webpackChunkName: "system-overview" */ '@/system-overview'));
 
 const BaseContainer = styled.div`
 	display: flex;
