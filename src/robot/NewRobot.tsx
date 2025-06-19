@@ -1,5 +1,5 @@
 import { useRequest } from 'ahooks';
-import { App, Form, Input, Modal } from 'antd';
+import { App, Form, Input, Modal, notification } from 'antd';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 
@@ -11,6 +11,7 @@ interface IProps {
 
 const NewRobot = (props: IProps) => {
 	const { message } = App.useApp();
+	const [api, contextHolder] = notification.useNotification();
 
 	const { open, onClose } = props;
 
@@ -19,6 +20,17 @@ const NewRobot = (props: IProps) => {
 	const { runAsync: onCreate, loading: createLoading } = useRequest(
 		async (data: Api.V1RobotCreateCreate.RequestBody) => {
 			const resp = await window.wechatRobotClient.api.v1RobotCreateCreate(data);
+			api.success({
+				message: '创建成功',
+				description: (
+					<>
+						机器人创建成功，初始化机器人需要一些时间，请耐心等待。创建完成后点击机器人卡片中的<b>机器人图标</b>
+						查看机器人详情。
+					</>
+				),
+				duration: 0,
+			});
+			await new Promise(resolve => setTimeout(resolve, 15000)); // 等待15秒钟
 			return resp.data;
 		},
 		{
@@ -69,6 +81,7 @@ const NewRobot = (props: IProps) => {
 						allowClear
 					/>
 				</Form.Item>
+				{contextHolder}
 			</Form>
 		</Modal>
 	);
