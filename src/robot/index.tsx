@@ -1,11 +1,12 @@
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
-import { useBoolean, useRequest, useSetState } from 'ahooks';
-import { App, Breadcrumb, Button, Col, Empty, Flex, Input, Pagination, Radio, Row, Spin } from 'antd';
+import { useBoolean, useMemoizedFn, useRequest, useSetState } from 'ahooks';
+import { App, Breadcrumb, Button, Col, Empty, Flex, Input, notification, Pagination, Radio, Row, Spin } from 'antd';
 import NewRobot from './NewRobot';
 import Robot from './Robot';
 
 const RobotList = () => {
 	const { message } = App.useApp();
+	const [api, contextHolder] = notification.useNotification();
 
 	const [onNewOpen, setOnNewOpen] = useBoolean(false);
 	const [search, setSearch] = useSetState({ keyword: '', status: 'all', pageIndex: 1 });
@@ -28,6 +29,27 @@ const RobotList = () => {
 			},
 		},
 	);
+
+	const onSuccess = useMemoizedFn(() => {
+		api.success({
+			message: '创建成功',
+			description: (
+				<>
+					<p>机器人创建成功，初始化机器人需要一些时间，请耐心等待。</p>
+					<p>
+						创建完成后点击机器人卡片中的<b>机器人图标</b>
+						查看机器人详情。
+					</p>
+					<p>
+						如果<span style={{ color: 'red' }}>24小时内</span>未登录机器人，机器人实例将会被
+						<span style={{ color: 'red' }}>回收</span>，您可以在机器人详情 / 更新镜像的下拉选项的
+						<b>创建客户端容器</b>和<b>创建服务端容器</b>重新创建实例。
+					</p>
+				</>
+			),
+			duration: 0,
+		});
+	});
 
 	return (
 		<div>
@@ -141,10 +163,12 @@ const RobotList = () => {
 			{onNewOpen && (
 				<NewRobot
 					open={onNewOpen}
+					onSuccess={onSuccess}
 					onRefresh={refresh}
 					onClose={setOnNewOpen.setFalse}
 				/>
 			)}
+			{contextHolder}
 		</div>
 	);
 };
