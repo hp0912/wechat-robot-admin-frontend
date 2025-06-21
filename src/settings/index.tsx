@@ -15,6 +15,7 @@ import {
 	parseMonthlyCronExpression,
 	toCronExpression,
 } from '@/utils';
+import { ObjectToString, onTTSEnabledChange } from './utils';
 
 interface IProps {
 	robotId: number;
@@ -65,9 +66,7 @@ const GlobalSettings = (props: IProps) => {
 				if (!resp?.data) {
 					return;
 				}
-				if (resp.data.image_ai_settings && typeof resp.data.image_ai_settings === 'object') {
-					resp.data.image_ai_settings = JSON.stringify(resp.data.image_ai_settings, null, 2) as unknown as object;
-				}
+				ObjectToString(resp.data);
 				if (resp.data.friend_sync_cron) {
 					resp.data.friend_sync_cron = '1';
 				}
@@ -132,6 +131,25 @@ const GlobalSettings = (props: IProps) => {
 				return;
 			}
 		}
+		if (values.tts_enabled) {
+			try {
+				const json = JSON.parse(values.tts_settings as unknown as string);
+				if (!json || typeof json !== 'object' || Array.isArray(json)) {
+					message.error('语音设置格式错误，不是有效的JSON对象格式');
+					return;
+				}
+				values.tts_settings = json;
+				const json2 = JSON.parse(values.ltts_settings as unknown as string);
+				if (!json2 || typeof json2 !== 'object' || Array.isArray(json2)) {
+					message.error('长文本语音设置格式错误，不是有效的JSON对象格式');
+					return;
+				}
+				values.ltts_settings = json2;
+			} catch {
+				message.error('语音设置格式错误，不是有效的JSON对象格式');
+				return;
+			}
+		}
 		const configId = values.id;
 		const cronFields: (keyof Api.V1GlobalSettingsCreate.RequestBody)[] = [
 			'chat_room_ranking_daily_cron',
@@ -163,6 +181,7 @@ const GlobalSettings = (props: IProps) => {
 					<Form
 						form={form}
 						labelCol={{ flex: '0 0 95px' }}
+						labelWrap
 						wrapperCol={{ flex: '1 1 auto' }}
 						autoComplete="off"
 					>
@@ -347,6 +366,95 @@ const GlobalSettings = (props: IProps) => {
 							</Form.Item>
 						</ParamsGroup>
 						<ParamsGroup
+							title="AI文本转语音设置"
+							style={{ marginTop: 24 }}
+						>
+							<Alert
+								style={{ marginTop: 10, marginBottom: 10 }}
+								type="info"
+								description={
+									<>
+										开启AI文本转语音设置会自动应用于每一个好友和群聊，也可以在<b>好友设置</b>和<b>群聊设置</b>
+										里面单独定制化设置。
+									</>
+								}
+							/>
+							<Form.Item
+								name="tts_enabled"
+								label="文本转语音"
+								valuePropName="checked"
+								labelCol={{ flex: '0 0 110px' }}
+							>
+								<Switch
+									unCheckedChildren="关闭"
+									checkedChildren="开启"
+									onChange={(checked: boolean) => {
+										onTTSEnabledChange(form, checked);
+									}}
+								/>
+							</Form.Item>
+							<Form.Item
+								noStyle
+								shouldUpdate={(prev: IFormValue, next: IFormValue) => prev.tts_enabled !== next.tts_enabled}
+							>
+								{({ getFieldValue }) => {
+									if (getFieldValue('tts_enabled')) {
+										return (
+											<>
+												<Form.Item
+													name="tts_settings"
+													label="语音设置"
+													labelCol={{ flex: '0 0 110px' }}
+													rules={[{ required: true, message: '语音设置不能为空' }]}
+													tooltip={
+														<>
+															<a
+																target="_blank"
+																rel="noreferrer"
+																href="https://www.volcengine.com/docs/6561/79823"
+															>
+																语音设置文档
+															</a>
+														</>
+													}
+												>
+													<Input.TextArea
+														rows={8}
+														placeholder="请输入语音设置"
+														allowClear
+													/>
+												</Form.Item>
+												<Form.Item
+													name="ltts_settings"
+													label="长文本语音设置"
+													labelCol={{ flex: '0 0 110px' }}
+													rules={[{ required: true, message: '长文本语音设置不能为空' }]}
+													tooltip={
+														<>
+															<a
+																target="_blank"
+																rel="noreferrer"
+																href="https://www.volcengine.com/docs/6561/1096680"
+															>
+																长文本语音设置文档
+															</a>
+														</>
+													}
+												>
+													<Input.TextArea
+														rows={8}
+														placeholder="请输入长文本语音设置"
+														allowClear
+													/>
+												</Form.Item>
+											</>
+										);
+									}
+									return null;
+								}}
+							</Form.Item>
+						</ParamsGroup>
+						<ParamsGroup
 							title="群聊欢迎新成员设置"
 							style={{ marginTop: 24 }}
 						>
@@ -485,6 +593,64 @@ const GlobalSettings = (props: IProps) => {
 														}
 														return null;
 													}}
+												</Form.Item>
+											</>
+										);
+									}
+									return null;
+								}}
+							</Form.Item>
+						</ParamsGroup>
+						<ParamsGroup
+							title="群聊退群提醒设置"
+							style={{ marginTop: 24 }}
+						>
+							<Alert
+								style={{ marginTop: 10, marginBottom: 10 }}
+								type="info"
+								description={
+									<>
+										开启群聊退群提醒设置会自动应用于每一个好友和群聊，也可以在<b>好友设置</b>和<b>群聊设置</b>
+										里面单独定制化设置。
+									</>
+								}
+							/>
+							<Form.Item
+								name="leave_chat_room_alert_enabled"
+								label="退群提醒"
+								valuePropName="checked"
+							>
+								<Switch
+									unCheckedChildren="关闭"
+									checkedChildren="开启"
+									onChange={(checked: boolean) => {
+										if (checked && !form.getFieldValue('leave_chat_room_alert_text')) {
+											form.setFieldsValue({
+												leave_chat_room_alert_text: '阿拉蕾，{placeholder}',
+											});
+										}
+									}}
+								/>
+							</Form.Item>
+							<Form.Item
+								noStyle
+								shouldUpdate={(prev: IFormValue, next: IFormValue) =>
+									prev.leave_chat_room_alert_enabled !== next.leave_chat_room_alert_enabled
+								}
+							>
+								{({ getFieldValue }) => {
+									if (getFieldValue('leave_chat_room_alert_enabled')) {
+										return (
+											<>
+												<Form.Item
+													name="leave_chat_room_alert_text"
+													label="提醒文本"
+													rules={[{ required: true, message: '提醒文本不能为空' }]}
+												>
+													<Input
+														placeholder="请输入提醒文本"
+														allowClear
+													/>
 												</Form.Item>
 											</>
 										);
