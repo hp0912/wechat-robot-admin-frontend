@@ -5,6 +5,7 @@ import type { Api } from '@/api/wechat-robot/wechat-robot';
 import ImageModel from '@/components/ImageModel';
 import ParamsGroup from '@/components/ParamsGroup';
 import { AiModels } from '@/constant/ai';
+import { ObjectToString, onTTSEnabledChange } from './utils';
 
 interface IProps {
 	robotId: number;
@@ -51,9 +52,7 @@ const FriendSettings = (props: IProps) => {
 				if (!resp?.data) {
 					return;
 				}
-				if (resp.data.image_ai_settings && typeof resp.data.image_ai_settings === 'object') {
-					resp.data.image_ai_settings = JSON.stringify(resp.data.image_ai_settings, null, 2) as unknown as object;
-				}
+				ObjectToString(resp.data);
 				form.setFieldsValue(resp?.data || {});
 			},
 			onError: reason => {
@@ -95,17 +94,42 @@ const FriendSettings = (props: IProps) => {
 				return;
 			}
 		}
+		if (values.tts_enabled) {
+			try {
+				const json = JSON.parse(values.tts_settings as unknown as string);
+				if (!json || typeof json !== 'object' || Array.isArray(json)) {
+					message.error('语音设置格式错误，不是有效的JSON对象格式');
+					return;
+				}
+				values.tts_settings = json;
+				const json2 = JSON.parse(values.ltts_settings as unknown as string);
+				if (!json2 || typeof json2 !== 'object' || Array.isArray(json2)) {
+					message.error('长文本语音设置格式错误，不是有效的JSON对象格式');
+					return;
+				}
+				values.ltts_settings = json2;
+			} catch {
+				message.error('语音设置格式错误，不是有效的JSON对象格式');
+				return;
+			}
+		}
 		const configId = values.id;
 		await onSave({ ...values, wechat_id: contact.wechat_id!, config_id: configId, id: props.robotId });
 	};
 
-	const applyGlobalSettings = (type: 'chat' | 'drawing' | 'all') => {
+	const applyGlobalSettings = (type: 'chat' | 'drawing' | 'tts' | 'all') => {
 		if (!globalSettings?.data) {
 			message.error('全局配置不存在');
 			return;
 		}
 		const imageAiSettings = globalSettings.data.image_ai_settings
 			? JSON.stringify(globalSettings.data.image_ai_settings, null, 2)
+			: '{}';
+		const _ttsSettings = globalSettings.data.tts_settings
+			? JSON.stringify(globalSettings.data.tts_settings, null, 2)
+			: '{}';
+		const _lttsSettings = globalSettings.data.ltts_settings
+			? JSON.stringify(globalSettings.data.ltts_settings, null, 2)
 			: '{}';
 		const chatSettings: Partial<IFormValue> = {
 			chat_ai_enabled: globalSettings.data.chat_ai_enabled,
@@ -119,6 +143,11 @@ const FriendSettings = (props: IProps) => {
 			image_model: globalSettings.data.image_model,
 			image_ai_settings: imageAiSettings as unknown as object,
 		};
+		const ttsSettings: Partial<IFormValue> = {
+			tts_enabled: globalSettings.data.tts_enabled,
+			tts_settings: _ttsSettings as unknown as object,
+			ltts_settings: _lttsSettings as unknown as object,
+		};
 		switch (type) {
 			case 'chat':
 				form.setFieldsValue(chatSettings);
@@ -126,10 +155,14 @@ const FriendSettings = (props: IProps) => {
 			case 'drawing':
 				form.setFieldsValue(drawingSettings);
 				break;
+			case 'tts':
+				form.setFieldsValue(ttsSettings);
+				break;
 			case 'all':
 				form.setFieldsValue({
 					...chatSettings,
 					...drawingSettings,
+					...ttsSettings,
 				});
 				break;
 			default:
@@ -210,6 +243,7 @@ const FriendSettings = (props: IProps) => {
 				<Form
 					form={form}
 					labelCol={{ flex: '0 0 95px' }}
+					labelWrap
 					wrapperCol={{ flex: '1 1 auto' }}
 					autoComplete="off"
 				>
@@ -391,6 +425,104 @@ const FriendSettings = (props: IProps) => {
 									onClick={() => applyGlobalSettings('drawing')}
 								>
 									使用全局配置填充AI绘图设置
+								</Button>
+							</div>
+						</Form.Item>
+					</ParamsGroup>
+					<ParamsGroup
+						title="AI文本转语音设置"
+						style={{ marginTop: 24 }}
+					>
+						<>
+							{!globalSettings?.data?.tts_enabled && (
+								<Alert
+									style={{ marginTop: 10, marginBottom: 10 }}
+									type="warning"
+									description={<>全局设置下面的AI文本转语音设置未开启，当前设置将不会生效</>}
+								/>
+							)}
+						</>
+						<Form.Item
+							name="tts_enabled"
+							label="文本转语音"
+							labelCol={{ flex: '0 0 110px' }}
+							valuePropName="checked"
+						>
+							<Switch
+								unCheckedChildren="关闭"
+								checkedChildren="开启"
+								onChange={(checked: boolean) => {
+									onTTSEnabledChange(form, checked);
+								}}
+							/>
+						</Form.Item>
+						<Form.Item
+							noStyle
+							shouldUpdate={(prev: IFormValue, next: IFormValue) => prev.tts_enabled !== next.tts_enabled}
+						>
+							{({ getFieldValue }) => {
+								if (getFieldValue('tts_enabled')) {
+									return (
+										<>
+											<Form.Item
+												name="tts_settings"
+												label="语音设置"
+												labelCol={{ flex: '0 0 110px' }}
+												rules={[{ required: true, message: '语音设置不能为空' }]}
+												tooltip={
+													<>
+														<a
+															target="_blank"
+															rel="noreferrer"
+															href="https://www.volcengine.com/docs/6561/79823"
+														>
+															语音设置文档
+														</a>
+													</>
+												}
+											>
+												<Input.TextArea
+													rows={8}
+													placeholder="请输入语音设置"
+													allowClear
+												/>
+											</Form.Item>
+											<Form.Item
+												name="ltts_settings"
+												label="长文本语音设置"
+												labelCol={{ flex: '0 0 110px' }}
+												rules={[{ required: true, message: '长文本语音设置不能为空' }]}
+												tooltip={
+													<>
+														<a
+															target="_blank"
+															rel="noreferrer"
+															href="https://www.volcengine.com/docs/6561/1096680"
+														>
+															长文本语音设置文档
+														</a>
+													</>
+												}
+											>
+												<Input.TextArea
+													rows={8}
+													placeholder="请输入长文本语音设置"
+													allowClear
+												/>
+											</Form.Item>
+										</>
+									);
+								}
+								return null;
+							}}
+						</Form.Item>
+						<Form.Item style={{ marginBottom: 6 }}>
+							<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+								<Button
+									disabled={globalLoading}
+									onClick={() => applyGlobalSettings('tts')}
+								>
+									使用全局配置填充AI文本转语音设置
 								</Button>
 							</div>
 						</Form.Item>

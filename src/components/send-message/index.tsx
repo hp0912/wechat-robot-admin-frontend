@@ -24,6 +24,7 @@ enum EMessageType {
 	Image = 'image',
 	Video = 'video',
 	Voice = 'voice',
+	AITTS = 'aitts',
 	File = 'file',
 }
 
@@ -34,6 +35,7 @@ const SendMessage = (props: IProps) => {
 	const [messageType, setMessageType] = useState<EMessageType>(EMessageType.Text);
 	const [textMessageContent, setTextMessageContent] = useState('');
 	const [mentions, setMentions] = useState<string[]>([]);
+	const [speaker, setSpeaker] = useState<string>();
 	// 文件相关
 	const [attach, setAttach] = useState<UploadFile>();
 	const [percent, setPercent] = useState(0);
@@ -58,6 +60,22 @@ const SendMessage = (props: IProps) => {
 		},
 	);
 
+	const { data: timbres = [], loading: timbresLoading } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1MessageTimbreList({
+				id: props.robotId,
+			});
+			return [...new Set(resp.data?.data || [])];
+		},
+		{
+			manual: false,
+			ready: messageType === EMessageType.AITTS,
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
 	const { runAsync: sendTextMessage } = useRequest(
 		async () => {
 			await window.wechatRobotClient.api.v1MessageSendTextCreate(
@@ -76,6 +94,30 @@ const SendMessage = (props: IProps) => {
 				message.success('发送成功');
 				setTextMessageContent('');
 				setMentions([]);
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	const { runAsync: sendAITTSMessage } = useRequest(
+		async () => {
+			await window.wechatRobotClient.api.v1MessageSendAiTtsCreate(
+				{
+					id: props.robotId,
+					to_wxid: props.contact.wechat_id!,
+					speaker: speaker || '',
+					content: textMessageContent,
+				},
+				{ id: props.robotId },
+			);
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('发送成功');
+				setTextMessageContent('');
 			},
 			onError: reason => {
 				message.error(reason.message);
@@ -145,6 +187,7 @@ const SendMessage = (props: IProps) => {
 	const getContent = () => {
 		switch (messageType) {
 			case EMessageType.Text:
+			case EMessageType.AITTS:
 				return (
 					<Input.TextArea
 						placeholder="请输入消息内容"
@@ -256,6 +299,9 @@ const SendMessage = (props: IProps) => {
 		if (messageType === EMessageType.Text) {
 			return !textMessageContent;
 		}
+		if (messageType === EMessageType.AITTS) {
+			return !textMessageContent || !speaker;
+		}
 		return attach === undefined;
 	};
 
@@ -264,6 +310,9 @@ const SendMessage = (props: IProps) => {
 		try {
 			if (messageType === EMessageType.Text) {
 				await sendTextMessage();
+			}
+			if (messageType === EMessageType.AITTS) {
+				await sendAITTSMessage();
 			}
 			if (messageType === EMessageType.Image) {
 				await sendAttach('image');
@@ -301,6 +350,7 @@ const SendMessage = (props: IProps) => {
 			>
 				<Space>
 					<Select
+						style={{ width: 155 }}
 						disabled={sendAttachLoading}
 						value={messageType}
 						options={[
@@ -308,6 +358,7 @@ const SendMessage = (props: IProps) => {
 							{ label: '图片消息', value: EMessageType.Image },
 							{ label: '视频消息', value: EMessageType.Video },
 							{ label: '语音消息', value: EMessageType.Voice },
+							{ label: 'AI文本转语音消息', value: EMessageType.AITTS },
 							{ label: '文件消息 (暂不支持)', value: EMessageType.File, disabled: true },
 						]}
 						onChange={value => {
@@ -357,6 +408,24 @@ const SendMessage = (props: IProps) => {
 							value={mentions}
 							onChange={value => {
 								setMentions(value);
+							}}
+						/>
+					)}
+					{messageType === EMessageType.AITTS && (
+						<Select
+							style={{ width: 185 }}
+							placeholder="选择音色"
+							showSearch
+							allowClear
+							loading={timbresLoading}
+							filterOption={filterOption}
+							options={timbres.map(item => ({
+								label: item,
+								value: item,
+							}))}
+							value={speaker}
+							onChange={value => {
+								setSpeaker(value);
 							}}
 						/>
 					)}

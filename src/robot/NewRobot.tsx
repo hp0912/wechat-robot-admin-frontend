@@ -5,6 +5,7 @@ import type { Api } from '@/api/wechat-robot/wechat-robot';
 
 interface IProps {
 	open: boolean;
+	onSuccess: () => void;
 	onClose: () => void;
 	onRefresh: () => void;
 }
@@ -19,6 +20,8 @@ const NewRobot = (props: IProps) => {
 	const { runAsync: onCreate, loading: createLoading } = useRequest(
 		async (data: Api.V1RobotCreateCreate.RequestBody) => {
 			const resp = await window.wechatRobotClient.api.v1RobotCreateCreate(data);
+			props.onSuccess();
+			await new Promise(resolve => setTimeout(resolve, 20000)); // 等待20秒钟
 			return resp.data;
 		},
 		{
