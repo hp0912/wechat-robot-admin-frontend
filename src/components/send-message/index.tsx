@@ -422,6 +422,7 @@ const SendMessage = (props: IProps) => {
 							options={timbres.map(item => ({
 								label: item,
 								value: item,
+								text: item,
 							}))}
 							value={speaker}
 							onChange={value => {
