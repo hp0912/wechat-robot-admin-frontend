@@ -3670,6 +3670,136 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-305833051-run",
 				"security": []
 			}
+		},
+		"/api/v1/message/timbre": {
+			"get": {
+				"summary": "获取音色列表",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									},
+									"x-apifox-orders": ["code", "message", "data"],
+									"required": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-311936006-run",
+				"security": []
+			}
+		},
+		"/api/v1/message/send/ai/tts": {
+			"post": {
+				"summary": "发送AI TTS消息",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"to_wxid": {
+										"type": "string"
+									},
+									"speaker": {
+										"type": "string"
+									},
+									"content": {
+										"type": "string"
+									}
+								},
+								"x-apifox-orders": ["id", "to_wxid", "speaker", "content"],
+								"required": ["id", "to_wxid", "speaker", "content"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {},
+											"x-apifox-orders": [],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"x-apifox-orders": ["code", "message", "data"],
+									"required": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-311936010-run",
+				"security": []
+			}
 		}
 	},
 	"components": {
