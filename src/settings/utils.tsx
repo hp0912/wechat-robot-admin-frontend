@@ -7,15 +7,31 @@ export const onTTSEnabledChange = (form: FormInstance<AnyType>, checked: boolean
 			form.setFieldsValue({
 				tts_settings: JSON.stringify(
 					{
-						base_url: 'https://openspeech.bytedance.com/api/v1/tts',
 						access_token: '',
 						app: {
 							appid: '',
 							cluster: 'volcano_tts',
+							token: '',
 						},
 						audio: {
-							voice_type: 'BV412_streaming',
+							compression_rate: 1,
 							emotion: 'radio',
+							encoding: 'mp3',
+							language: 'cn',
+							pitch_ratio: 1,
+							rate: 24000,
+							speed_ratio: 1,
+							voice_type: 'BV412_streaming',
+							volume_ratio: 1,
+						},
+						base_url: 'https://openspeech.bytedance.com/api/v1/tts',
+						request: {
+							frontend_type: 'unitTson',
+							operation: 'query',
+							pure_english_opt: '1',
+							silence_duration: '125',
+							text_type: 'plain',
+							with_frontend: '1',
 						},
 					},
 					null,
@@ -27,11 +43,21 @@ export const onTTSEnabledChange = (form: FormInstance<AnyType>, checked: boolean
 			form.setFieldsValue({
 				ltts_settings: JSON.stringify(
 					{
-						base_url: 'https://openspeech.bytedance.com/api/v1/tts_async/submit',
-						appid: '',
 						access_token: '',
-						voice_type: 'BV104_streaming',
+						appid: '',
+						base_url: 'https://openspeech.bytedance.com/api/v1/tts_async/submit',
 						callback_url: '',
+						enable_subtitle: 0,
+						format: 'mp3',
+						language: '',
+						pitch: 1,
+						sample_rate: 24000,
+						sentence_interval: 0,
+						speed: 1,
+						style: '',
+						voice: '',
+						voice_type: 'BV406_V2_streaming',
+						volume: 1,
 					},
 					null,
 					2,
