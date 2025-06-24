@@ -2161,6 +2161,9 @@
 												"chat_prompt": {
 													"type": "string"
 												},
+												"max_completion_tokens": {
+													"type": "number"
+												},
 												"image_ai_enabled": {
 													"type": "boolean"
 												},
@@ -2187,6 +2190,22 @@
 													"properties": {},
 													"x-apifox-orders": [],
 													"x-apifox-ignore-properties": []
+												},
+												"pat_enabled": {
+													"type": "boolean"
+												},
+												"pat_type": {
+													"type": "string",
+													"enum": ["text", "voice"],
+													"x-apifox": {
+														"enumDescriptions": {
+															"text": "",
+															"voice": ""
+														}
+													}
+												},
+												"pat_text": {
+													"type": "string"
 												},
 												"welcome_enabled": {
 													"type": "boolean"
@@ -2279,12 +2298,16 @@
 												"chat_api_key",
 												"chat_model",
 												"chat_prompt",
+												"max_completion_tokens",
 												"image_ai_enabled",
 												"image_model",
 												"image_ai_settings",
 												"tts_enabled",
 												"tts_settings",
 												"ltts_settings",
+												"pat_enabled",
+												"pat_type",
+												"pat_text",
 												"welcome_enabled",
 												"welcome_type",
 												"welcome_text",
@@ -2343,7 +2366,11 @@
 												"tts_settings",
 												"leave_chat_room_alert_enabled",
 												"leave_chat_room_alert_text",
-												"ltts_settings"
+												"ltts_settings",
+												"max_completion_tokens",
+												"pat_enabled",
+												"pat_type",
+												"pat_text"
 											],
 											"x-apifox-ignore-properties": []
 										}
@@ -2409,6 +2436,9 @@
 									"chat_prompt": {
 										"type": "string"
 									},
+									"max_completion_tokens": {
+										"type": "number"
+									},
 									"image_ai_enabled": {
 										"type": "boolean"
 									},
@@ -2435,6 +2465,22 @@
 										"properties": {},
 										"x-apifox-orders": [],
 										"x-apifox-ignore-properties": []
+									},
+									"pat_enabled": {
+										"type": "boolean"
+									},
+									"pat_type": {
+										"type": "string",
+										"enum": ["text", "voice"],
+										"x-apifox": {
+											"enumDescriptions": {
+												"text": "",
+												"voice": ""
+											}
+										}
+									},
+									"pat_text": {
+										"type": "string"
 									},
 									"welcome_enabled": {
 										"type": "boolean"
@@ -2539,7 +2585,11 @@
 									"tts_settings",
 									"leave_chat_room_alert_enabled",
 									"leave_chat_room_alert_text",
-									"ltts_settings"
+									"ltts_settings",
+									"max_completion_tokens",
+									"pat_enabled",
+									"pat_type",
+									"pat_text"
 								],
 								"x-apifox-orders": [
 									"id",
@@ -2550,12 +2600,16 @@
 									"chat_api_key",
 									"chat_model",
 									"chat_prompt",
+									"max_completion_tokens",
 									"image_ai_enabled",
 									"image_model",
 									"image_ai_settings",
 									"tts_enabled",
 									"tts_settings",
 									"ltts_settings",
+									"pat_enabled",
+									"pat_type",
+									"pat_text",
 									"welcome_enabled",
 									"welcome_type",
 									"welcome_text",
@@ -2709,6 +2763,9 @@
 												"chat_prompt": {
 													"type": "string"
 												},
+												"max_completion_tokens": {
+													"type": "number"
+												},
 												"image_ai_enabled": {
 													"type": "boolean"
 												},
@@ -2745,6 +2802,7 @@
 												"chat_api_key",
 												"chat_model",
 												"chat_prompt",
+												"max_completion_tokens",
 												"image_ai_enabled",
 												"image_model",
 												"image_ai_settings",
@@ -2765,7 +2823,8 @@
 												"image_ai_settings",
 												"tts_enabled",
 												"tts_settings",
-												"ltts_settings"
+												"ltts_settings",
+												"max_completion_tokens"
 											],
 											"x-apifox-ignore-properties": []
 										}
@@ -2835,6 +2894,9 @@
 									"chat_prompt": {
 										"type": "string"
 									},
+									"max_completion_tokens": {
+										"type": "number"
+									},
 									"image_ai_enabled": {
 										"type": "boolean"
 									},
@@ -2878,7 +2940,8 @@
 									"wechat_id",
 									"tts_enabled",
 									"tts_settings",
-									"ltts_settings"
+									"ltts_settings",
+									"max_completion_tokens"
 								],
 								"x-apifox-orders": [
 									"id",
@@ -2890,6 +2953,7 @@
 									"chat_api_key",
 									"chat_model",
 									"chat_prompt",
+									"max_completion_tokens",
 									"image_ai_enabled",
 									"image_model",
 									"image_ai_settings",
@@ -3027,6 +3091,9 @@
 												"chat_prompt": {
 													"type": "string"
 												},
+												"max_completion_tokens": {
+													"type": "number"
+												},
 												"image_ai_enabled": {
 													"type": "boolean"
 												},
@@ -3053,6 +3120,22 @@
 													"properties": {},
 													"x-apifox-orders": [],
 													"x-apifox-ignore-properties": []
+												},
+												"pat_enabled": {
+													"type": "boolean"
+												},
+												"pat_type": {
+													"type": "string",
+													"enum": ["text", "voice"],
+													"x-apifox": {
+														"enumDescriptions": {
+															"text": "",
+															"voice": ""
+														}
+													}
+												},
+												"pat_text": {
+													"type": "string"
 												},
 												"welcome_enabled": {
 													"type": "boolean"
@@ -3124,12 +3207,16 @@
 												"chat_api_key",
 												"chat_model",
 												"chat_prompt",
+												"max_completion_tokens",
 												"image_ai_enabled",
 												"image_model",
 												"image_ai_settings",
 												"tts_enabled",
 												"tts_settings",
 												"ltts_settings",
+												"pat_enabled",
+												"pat_type",
+												"pat_text",
 												"welcome_enabled",
 												"welcome_type",
 												"welcome_text",
@@ -3174,7 +3261,11 @@
 												"tts_settings",
 												"leave_chat_room_alert_enabled",
 												"leave_chat_room_alert_text",
-												"ltts_settings"
+												"ltts_settings",
+												"max_completion_tokens",
+												"pat_enabled",
+												"pat_type",
+												"pat_text"
 											],
 											"x-apifox-ignore-properties": []
 										}
@@ -3244,6 +3335,9 @@
 									"chat_prompt": {
 										"type": "string"
 									},
+									"max_completion_tokens": {
+										"type": "number"
+									},
 									"image_ai_enabled": {
 										"type": "boolean"
 									},
@@ -3270,6 +3364,22 @@
 										"properties": {},
 										"x-apifox-orders": [],
 										"x-apifox-ignore-properties": []
+									},
+									"pat_enabled": {
+										"type": "boolean"
+									},
+									"pat_type": {
+										"type": "string",
+										"enum": ["text", "voice"],
+										"x-apifox": {
+											"enumDescriptions": {
+												"text": "",
+												"voice": ""
+											}
+										}
+									},
+									"pat_text": {
+										"type": "string"
 									},
 									"welcome_enabled": {
 										"type": "boolean"
@@ -3347,7 +3457,11 @@
 									"tts_settings",
 									"leave_chat_room_alert_enabled",
 									"leave_chat_room_alert_text",
-									"ltts_settings"
+									"ltts_settings",
+									"max_completion_tokens",
+									"pat_enabled",
+									"pat_type",
+									"pat_text"
 								],
 								"x-apifox-orders": [
 									"id",
@@ -3359,12 +3473,16 @@
 									"chat_api_key",
 									"chat_model",
 									"chat_prompt",
+									"max_completion_tokens",
 									"image_ai_enabled",
 									"image_model",
 									"image_ai_settings",
 									"tts_enabled",
 									"tts_settings",
 									"ltts_settings",
+									"pat_enabled",
+									"pat_type",
+									"pat_text",
 									"welcome_enabled",
 									"welcome_type",
 									"welcome_text",
