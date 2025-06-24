@@ -215,7 +215,9 @@ const Contact = (props: IProps) => {
 													)}
 												</>
 											) : (
-												<span>最近活跃时间: {dayjs(Number(item.updated_at) * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>
+												<span>
+													最近活跃时间: {dayjs(Number(item.last_active_at) * 1000).format('YYYY-MM-DD HH:mm:ss')}
+												</span>
 											)}
 										</>
 									}
