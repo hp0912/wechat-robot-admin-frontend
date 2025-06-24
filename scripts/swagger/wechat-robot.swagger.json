@@ -1271,6 +1271,9 @@
 															"created_at": {
 																"type": "number"
 															},
+															"last_active_at": {
+																"type": "number"
+															},
 															"updated_at": {
 																"type": "number"
 															}
@@ -1293,6 +1296,7 @@
 															"signature",
 															"sns_background",
 															"created_at",
+															"last_active_at",
 															"updated_at"
 														],
 														"x-apifox-ignore-properties": []
