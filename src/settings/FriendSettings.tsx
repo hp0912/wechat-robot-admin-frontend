@@ -19,6 +19,7 @@ import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import ImageModel from '@/components/ImageModel';
 import ParamsGroup from '@/components/ParamsGroup';
+import { DefaultAvatar } from '@/constant';
 import { AiModels } from '@/constant/ai';
 import { ObjectToString, onTTSEnabledChange } from './utils';
 
@@ -195,7 +196,7 @@ const FriendSettings = (props: IProps) => {
 					wrap={false}
 				>
 					<Col flex="0 0 32px">
-						<Avatar src={contact.avatar} />
+						<Avatar src={contact.avatar || DefaultAvatar} />
 					</Col>
 					<Col
 						flex="0 1 auto"

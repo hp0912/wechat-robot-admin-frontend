@@ -4,6 +4,7 @@ import { App, Avatar, Button, Col, Drawer, Input, List, Pagination, Row, Space, 
 import dayjs from 'dayjs';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
+import { DefaultAvatar } from '@/constant';
 
 interface IProps {
 	robotId: number;
@@ -64,7 +65,7 @@ const GroupMember = (props: IProps) => {
 					wrap={false}
 				>
 					<Col flex="0 0 32px">
-						<Avatar src={chatRoom.avatar} />
+						<Avatar src={chatRoom.avatar || DefaultAvatar} />
 					</Col>
 					<Col
 						flex="0 1 auto"
@@ -136,7 +137,7 @@ const GroupMember = (props: IProps) => {
 										avatar={
 											<Avatar
 												style={{ marginLeft: 8 }}
-												src={item.avatar}
+												src={item.avatar || DefaultAvatar}
 											/>
 										}
 										title={
