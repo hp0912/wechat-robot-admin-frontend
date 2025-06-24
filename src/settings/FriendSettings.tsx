@@ -1,5 +1,20 @@
 import { useRequest } from 'ahooks';
-import { Alert, App, AutoComplete, Avatar, Button, Col, Drawer, Form, Input, Row, Space, Spin, Switch } from 'antd';
+import {
+	Alert,
+	App,
+	AutoComplete,
+	Avatar,
+	Button,
+	Col,
+	Drawer,
+	Form,
+	Input,
+	InputNumber,
+	Row,
+	Space,
+	Spin,
+	Switch,
+} from 'antd';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import ImageModel from '@/components/ImageModel';
@@ -136,6 +151,7 @@ const FriendSettings = (props: IProps) => {
 			chat_base_url: globalSettings.data.chat_base_url,
 			chat_api_key: globalSettings.data.chat_api_key,
 			chat_model: globalSettings.data.chat_model,
+			max_completion_tokens: globalSettings.data.max_completion_tokens,
 			chat_prompt: globalSettings.data.chat_prompt,
 		};
 		const drawingSettings: Partial<IFormValue> = {
@@ -335,6 +351,18 @@ const FriendSettings = (props: IProps) => {
 													placeholder="不填则使用全局配置"
 													style={{ width: '100%' }}
 													options={AiModels}
+												/>
+											</Form.Item>
+											<Form.Item
+												name="max_completion_tokens"
+												label="最大回复"
+												rules={[{ required: true, message: '最大回复不能为空' }]}
+											>
+												<InputNumber
+													placeholder="请输入最大回复，为0则表示不限制"
+													style={{ width: '100%' }}
+													max={4096}
+													min={0}
 												/>
 											</Form.Item>
 											<Form.Item

@@ -290,6 +290,18 @@ const GlobalSettings = (props: IProps) => {
 													/>
 												</Form.Item>
 												<Form.Item
+													name="max_completion_tokens"
+													label="最大回复"
+													rules={[{ required: true, message: '最大回复不能为空' }]}
+												>
+													<InputNumber
+														placeholder="请输入最大回复，为0则表示不限制"
+														style={{ width: '100%' }}
+														max={4096}
+														min={0}
+													/>
+												</Form.Item>
+												<Form.Item
 													name="chat_prompt"
 													label="人设"
 													rules={[{ required: true, message: '人设不能为空' }]}
@@ -593,6 +605,68 @@ const GlobalSettings = (props: IProps) => {
 														}
 														return null;
 													}}
+												</Form.Item>
+											</>
+										);
+									}
+									return null;
+								}}
+							</Form.Item>
+						</ParamsGroup>
+						<ParamsGroup
+							title="群聊拍一拍设置"
+							style={{ marginTop: 24 }}
+						>
+							<Alert
+								style={{ marginTop: 10, marginBottom: 10 }}
+								type="info"
+								description={
+									<>
+										开启拍一拍交互会自动应用于每一个群聊，也可以在<b>群聊设置</b>里面单独定制化设置。
+									</>
+								}
+							/>
+							<Form.Item
+								name="pat_enabled"
+								label="拍一拍"
+								valuePropName="checked"
+							>
+								<Switch
+									unCheckedChildren="关闭"
+									checkedChildren="开启"
+								/>
+							</Form.Item>
+							<Form.Item
+								noStyle
+								shouldUpdate={(prev: IFormValue, next: IFormValue) => prev.pat_enabled !== next.pat_enabled}
+							>
+								{({ getFieldValue }) => {
+									if (getFieldValue('pat_enabled')) {
+										return (
+											<>
+												<Form.Item
+													name="pat_type"
+													label="交互类型"
+													rules={[{ required: true, message: '交互类型不能为空' }]}
+												>
+													<Select
+														placeholder="请选择交互类型"
+														style={{ width: '100%' }}
+														options={[
+															{ label: '文字', value: 'text' },
+															{ label: '语音', value: 'voice' },
+														]}
+													/>
+												</Form.Item>
+												<Form.Item
+													name="pat_text"
+													label="文字"
+													rules={[{ required: true, message: '文字不能为空' }]}
+												>
+													<Input
+														placeholder="请输入文字，为语音的时候，则是文字转语音"
+														allowClear
+													/>
 												</Form.Item>
 											</>
 										);
