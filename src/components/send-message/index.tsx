@@ -378,7 +378,7 @@ const SendMessage = (props: IProps) => {
 							maxTagPlaceholder={maxTagPlaceholder}
 							filterOption={filterOption}
 							options={(data || []).map(item => {
-								const labelText = item.nickname || item.alias || item.wechat_id;
+								const labelText = item.remark || item.nickname || item.alias || item.wechat_id;
 								return {
 									label: (
 										<Row
@@ -402,7 +402,7 @@ const SendMessage = (props: IProps) => {
 										</Row>
 									),
 									value: item.wechat_id,
-									text: `${item.nickname || ''} ${item.alias || ''} ${item.wechat_id}`,
+									text: `${item.remark || ''} ${item.nickname || ''} ${item.alias || ''} ${item.wechat_id}`,
 								};
 							})}
 							value={mentions}
