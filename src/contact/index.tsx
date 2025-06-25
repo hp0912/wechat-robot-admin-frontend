@@ -188,7 +188,7 @@ const Contact = (props: IProps) => {
 									}
 									title={
 										<>
-											<span>{item.nickname || item.alias || item.wechat_id}</span>
+											<span>{item.remark || item.nickname || item.alias || item.wechat_id}</span>
 											{item.type === 'friend' ? (
 												<>
 													{item.sex === 1 ? (
@@ -249,13 +249,13 @@ const Contact = (props: IProps) => {
 													setChatHistoryState({
 														open: true,
 														contact: item,
-														title: `我与${item.nickname || item.alias || item.wechat_id} 的聊天记录`,
+														title: `我与${item.remark || item.nickname || item.alias || item.wechat_id} 的聊天记录`,
 													});
 												} else {
 													setChatHistoryState({
 														open: true,
 														contact: item,
-														title: `${item.nickname || item.alias || item.wechat_id} 的聊天记录`,
+														title: `${item.remark || item.nickname || item.alias || item.wechat_id} 的聊天记录`,
 													});
 												}
 											}}

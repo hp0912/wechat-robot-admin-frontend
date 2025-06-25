@@ -72,7 +72,7 @@ const GroupMember = (props: IProps) => {
 						className="ellipsis"
 						style={{ padding: '0 3px' }}
 					>
-						{chatRoom.alias || chatRoom.nickname || chatRoom.wechat_id} 的群成员
+						{chatRoom.remark || chatRoom.alias || chatRoom.nickname || chatRoom.wechat_id} 的群成员
 					</Col>
 				</Row>
 			}
@@ -142,7 +142,7 @@ const GroupMember = (props: IProps) => {
 										}
 										title={
 											<span>
-												<span>{item.nickname || item.alias}</span>
+												<span>{item.remark || item.nickname || item.alias}</span>
 												{item.is_admin && (
 													<Tag
 														color={token.colorSuccess}

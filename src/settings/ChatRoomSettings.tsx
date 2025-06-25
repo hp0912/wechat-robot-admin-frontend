@@ -246,7 +246,7 @@ const ChatRoomSettings = (props: IProps) => {
 						className="ellipsis"
 						style={{ padding: '0 3px' }}
 					>
-						{chatRoom.alias || chatRoom.nickname || chatRoom.wechat_id} 聊天设置
+						{chatRoom.remark || chatRoom.alias || chatRoom.nickname || chatRoom.wechat_id} 聊天设置
 					</Col>
 				</Row>
 			}

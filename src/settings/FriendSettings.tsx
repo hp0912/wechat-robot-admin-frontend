@@ -203,7 +203,7 @@ const FriendSettings = (props: IProps) => {
 						className="ellipsis"
 						style={{ padding: '0 3px' }}
 					>
-						{contact.alias || contact.nickname || contact.wechat_id} 聊天设置
+						{contact.remark || contact.alias || contact.nickname || contact.wechat_id} 聊天设置
 					</Col>
 				</Row>
 			}
