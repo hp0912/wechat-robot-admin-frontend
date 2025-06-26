@@ -659,6 +659,28 @@ const GlobalSettings = (props: IProps) => {
 													/>
 												</Form.Item>
 												<Form.Item
+													noStyle
+													shouldUpdate={(prev: IFormValue, next: IFormValue) => prev.pat_type !== next.pat_type}
+												>
+													{({ getFieldValue }) => {
+														if (getFieldValue('pat_type') === 'voice') {
+															return (
+																<Form.Item
+																	name="pat_voice_timbre"
+																	label="语音音色"
+																	rules={[{ required: true, message: '语音音色不能为空' }]}
+																>
+																	<Input
+																		placeholder="请输入语音音色"
+																		allowClear
+																	/>
+																</Form.Item>
+															);
+														}
+														return null;
+													}}
+												</Form.Item>
+												<Form.Item
 													name="pat_text"
 													label="文字"
 													rules={[{ required: true, message: '文字不能为空' }]}

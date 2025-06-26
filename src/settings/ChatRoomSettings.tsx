@@ -177,6 +177,7 @@ const ChatRoomSettings = (props: IProps) => {
 			pat_enabled: globalSettings.data.pat_enabled,
 			pat_type: globalSettings.data.pat_type,
 			pat_text: globalSettings.data.pat_text,
+			pat_voice_timbre: globalSettings.data.pat_voice_timbre,
 		};
 		const ttsSettings: Partial<IFormValue> = {
 			tts_enabled: globalSettings.data.tts_enabled,
@@ -809,6 +810,28 @@ const ChatRoomSettings = (props: IProps) => {
 														{ label: '语音', value: 'voice' },
 													]}
 												/>
+											</Form.Item>
+											<Form.Item
+												noStyle
+												shouldUpdate={(prev: IFormValue, next: IFormValue) => prev.pat_type !== next.pat_type}
+											>
+												{({ getFieldValue }) => {
+													if (getFieldValue('pat_type') === 'voice') {
+														return (
+															<Form.Item
+																name="pat_voice_timbre"
+																label="语音音色"
+																rules={[{ required: true, message: '语音音色不能为空' }]}
+															>
+																<Input
+																	placeholder="请输入语音音色"
+																	allowClear
+																/>
+															</Form.Item>
+														);
+													}
+													return null;
+												}}
 											</Form.Item>
 											<Form.Item
 												name="pat_text"
