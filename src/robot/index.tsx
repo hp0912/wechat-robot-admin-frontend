@@ -1,6 +1,8 @@
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { useBoolean, useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Breadcrumb, Button, Col, Empty, Flex, Input, notification, Pagination, Radio, Row, Spin } from 'antd';
+import chatRoomQRCode from 'public/chat-room.jpg';
+import { useEffect } from 'react';
 import NewRobot from './NewRobot';
 import Robot from './Robot';
 
@@ -10,6 +12,32 @@ const RobotList = () => {
 
 	const [onNewOpen, setOnNewOpen] = useBoolean(false);
 	const [search, setSearch] = useSetState({ keyword: '', status: 'all', pageIndex: 1 });
+
+	useEffect(() => {
+		const closed = localStorage.getItem('robot-chat-room-closed');
+		if (closed && Date.now() - parseInt(closed, 10) < 1000 * 60 * 60 * 24) {
+			// 如果在一天内关闭过提示，则不再提示
+			return;
+		}
+		api.info({
+			message: '使用过程中遇到问题？',
+			placement: 'bottomRight',
+			onClose: () => {
+				localStorage.setItem('robot-chat-room-closed', Date.now().toString());
+			},
+			description: (
+				<>
+					<p>欢迎加入我们</p>
+					<img
+						src={chatRoomQRCode}
+						style={{ width: 300, height: 450, display: 'block' }}
+						alt="微信群二维码"
+					/>
+				</>
+			),
+			duration: 0,
+		});
+	}, []);
 
 	const { data, loading, refresh } = useRequest(
 		async () => {
