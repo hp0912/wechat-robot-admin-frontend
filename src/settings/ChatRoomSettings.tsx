@@ -177,6 +177,7 @@ const ChatRoomSettings = (props: IProps) => {
 			pat_enabled: globalSettings.data.pat_enabled,
 			pat_type: globalSettings.data.pat_type,
 			pat_text: globalSettings.data.pat_text,
+			pat_voice_timbre: globalSettings.data.pat_voice_timbre,
 		};
 		const ttsSettings: Partial<IFormValue> = {
 			tts_enabled: globalSettings.data.tts_enabled,
@@ -317,15 +318,6 @@ const ChatRoomSettings = (props: IProps) => {
 						title="AI聊天设置"
 						style={{ marginTop: 10 }}
 					>
-						<>
-							{!globalSettings?.data?.chat_ai_enabled && (
-								<Alert
-									style={{ marginTop: 10, marginBottom: 10 }}
-									type="warning"
-									description={<>全局设置下面的AI聊天设置未开启，当前设置将不会生效</>}
-								/>
-							)}
-						</>
 						<Form.Item
 							name="chat_ai_enabled"
 							label="聊天AI"
@@ -450,15 +442,6 @@ const ChatRoomSettings = (props: IProps) => {
 						title="AI绘图设置"
 						style={{ marginTop: 24 }}
 					>
-						<>
-							{!globalSettings?.data?.image_ai_enabled && (
-								<Alert
-									style={{ marginTop: 10, marginBottom: 10 }}
-									type="warning"
-									description={<>全局设置下面的AI绘图设置未开启，当前设置将不会生效</>}
-								/>
-							)}
-						</>
 						<Form.Item
 							name="image_ai_enabled"
 							label="绘图AI"
@@ -514,15 +497,6 @@ const ChatRoomSettings = (props: IProps) => {
 						title="AI文本转语音设置"
 						style={{ marginTop: 24 }}
 					>
-						<>
-							{!globalSettings?.data?.tts_enabled && (
-								<Alert
-									style={{ marginTop: 10, marginBottom: 10 }}
-									type="warning"
-									description={<>全局设置下面的AI文本转语音设置未开启，当前设置将不会生效</>}
-								/>
-							)}
-						</>
 						<Form.Item
 							name="tts_enabled"
 							label="文本转语音"
@@ -612,15 +586,6 @@ const ChatRoomSettings = (props: IProps) => {
 						title="群聊欢迎新成员设置"
 						style={{ marginTop: 24 }}
 					>
-						<>
-							{!globalSettings?.data?.welcome_enabled && (
-								<Alert
-									style={{ marginTop: 10, marginBottom: 10 }}
-									type="warning"
-									description={<>全局设置下面的群聊欢迎新成员设置未开启，当前设置将不会生效</>}
-								/>
-							)}
-						</>
 						<Form.Item
 							name="welcome_enabled"
 							label="欢迎新成员"
@@ -769,15 +734,6 @@ const ChatRoomSettings = (props: IProps) => {
 						title="群聊拍一拍设置"
 						style={{ marginTop: 24 }}
 					>
-						<Alert
-							style={{ marginTop: 10, marginBottom: 10 }}
-							type="info"
-							description={
-								<>
-									开启拍一拍交互会自动应用于每一个群聊，也可以在<b>群聊设置</b>里面单独定制化设置。
-								</>
-							}
-						/>
 						<Form.Item
 							name="pat_enabled"
 							label="拍一拍"
@@ -811,6 +767,28 @@ const ChatRoomSettings = (props: IProps) => {
 												/>
 											</Form.Item>
 											<Form.Item
+												noStyle
+												shouldUpdate={(prev: IFormValue, next: IFormValue) => prev.pat_type !== next.pat_type}
+											>
+												{({ getFieldValue }) => {
+													if (getFieldValue('pat_type') === 'voice') {
+														return (
+															<Form.Item
+																name="pat_voice_timbre"
+																label="语音音色"
+																rules={[{ required: true, message: '语音音色不能为空' }]}
+															>
+																<Input
+																	placeholder="请输入语音音色"
+																	allowClear
+																/>
+															</Form.Item>
+														);
+													}
+													return null;
+												}}
+											</Form.Item>
+											<Form.Item
 												name="pat_text"
 												label="文字"
 												rules={[{ required: true, message: '文本语言不能为空' }]}
@@ -841,15 +819,6 @@ const ChatRoomSettings = (props: IProps) => {
 						title="群聊退群提醒设置"
 						style={{ marginTop: 24 }}
 					>
-						<>
-							{!globalSettings?.data?.leave_chat_room_alert_enabled && (
-								<Alert
-									style={{ marginTop: 10, marginBottom: 10 }}
-									type="warning"
-									description={<>全局设置下面的群聊退群提醒设置未开启，当前设置将不会生效</>}
-								/>
-							)}
-						</>
 						<Form.Item
 							name="leave_chat_room_alert_enabled"
 							label="退群提醒"

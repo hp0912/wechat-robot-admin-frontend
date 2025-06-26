@@ -2207,6 +2207,9 @@
 												"pat_text": {
 													"type": "string"
 												},
+												"pat_voice_timbre": {
+													"type": "string"
+												},
 												"welcome_enabled": {
 													"type": "boolean"
 												},
@@ -2308,6 +2311,7 @@
 												"pat_enabled",
 												"pat_type",
 												"pat_text",
+												"pat_voice_timbre",
 												"welcome_enabled",
 												"welcome_type",
 												"welcome_text",
@@ -2370,7 +2374,8 @@
 												"max_completion_tokens",
 												"pat_enabled",
 												"pat_type",
-												"pat_text"
+												"pat_text",
+												"pat_voice_timbre"
 											],
 											"x-apifox-ignore-properties": []
 										}
@@ -2482,6 +2487,9 @@
 									"pat_text": {
 										"type": "string"
 									},
+									"pat_voice_timbre": {
+										"type": "string"
+									},
 									"welcome_enabled": {
 										"type": "boolean"
 									},
@@ -2589,7 +2597,8 @@
 									"max_completion_tokens",
 									"pat_enabled",
 									"pat_type",
-									"pat_text"
+									"pat_text",
+									"pat_voice_timbre"
 								],
 								"x-apifox-orders": [
 									"id",
@@ -2610,6 +2619,7 @@
 									"pat_enabled",
 									"pat_type",
 									"pat_text",
+									"pat_voice_timbre",
 									"welcome_enabled",
 									"welcome_type",
 									"welcome_text",
@@ -3137,6 +3147,9 @@
 												"pat_text": {
 													"type": "string"
 												},
+												"pat_voice_timbre": {
+													"type": "string"
+												},
 												"welcome_enabled": {
 													"type": "boolean"
 												},
@@ -3217,6 +3230,7 @@
 												"pat_enabled",
 												"pat_type",
 												"pat_text",
+												"pat_voice_timbre",
 												"welcome_enabled",
 												"welcome_type",
 												"welcome_text",
@@ -3265,7 +3279,8 @@
 												"max_completion_tokens",
 												"pat_enabled",
 												"pat_type",
-												"pat_text"
+												"pat_text",
+												"pat_voice_timbre"
 											],
 											"x-apifox-ignore-properties": []
 										}
@@ -3381,6 +3396,9 @@
 									"pat_text": {
 										"type": "string"
 									},
+									"pat_voice_timbre": {
+										"type": "string"
+									},
 									"welcome_enabled": {
 										"type": "boolean"
 									},
@@ -3461,7 +3479,8 @@
 									"max_completion_tokens",
 									"pat_enabled",
 									"pat_type",
-									"pat_text"
+									"pat_text",
+									"pat_voice_timbre"
 								],
 								"x-apifox-orders": [
 									"id",
@@ -3483,6 +3502,7 @@
 									"pat_enabled",
 									"pat_type",
 									"pat_text",
+									"pat_voice_timbre",
 									"welcome_enabled",
 									"welcome_type",
 									"welcome_text",
