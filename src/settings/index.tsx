@@ -1024,24 +1024,6 @@ const GlobalSettings = (props: IProps) => {
 								}}
 							</Form.Item>
 						</ParamsGroup>
-						<ParamsGroup
-							title="同步联系人设置"
-							style={{ marginTop: 24 }}
-						>
-							<Form.Item
-								name="friend_sync_cron"
-								label="同步周期"
-							>
-								<InputNumber
-									disabled
-									addonBefore={'每隔'}
-									addonAfter={'小时同步一次'}
-									min={0.2}
-									max={20}
-									precision={1}
-								/>
-							</Form.Item>
-						</ParamsGroup>
 					</Form>
 				</div>
 				<div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
