@@ -15,6 +15,10 @@ import GroupFilled from '@/icons/GroupFilled';
 import MaleFilled from '@/icons/MaleFilled';
 import ChatRoomSettings from '@/settings/ChatRoomSettings';
 import FriendSettings from '@/settings/FriendSettings';
+import ChatRoomAnnouncementChange from './ChatRoomAnnouncementChange';
+import ChatRoomNameChange from './ChatRoomNameChange';
+import ChatRoomQuit from './ChatRoomQuit';
+import ChatRoomRemarkChange from './ChatRoomRemarkChange';
 
 interface IProps {
 	robotId: number;
@@ -22,11 +26,20 @@ interface IProps {
 }
 
 type IContact = Api.V1ContactListList.ResponseBody['data']['items'][number];
+type ChatRoomAction = 'change-name' | 'change-remark' | 'change-announcement' | 'quit';
+
+interface IChatRoomActionState {
+	open?: boolean;
+	chatRoomId?: string;
+	chatRoomName?: string;
+	action?: ChatRoomAction;
+}
 
 const Contact = (props: IProps) => {
 	const { message } = App.useApp();
 
 	const [search, setSearch] = useSetState({ keyword: '', type: 'chat_room', pageIndex: 1 });
+	const [chatRoomAction, setChatRoomAction] = useSetState<IChatRoomActionState>({});
 	const [groupMemberState, setGroupMemberState] = useState<{ open?: boolean; chatRoom?: IContact }>({});
 	const [sendMessageState, setSendMessageState] = useState<{ open?: boolean; contact?: IContact }>({});
 	const [friendSettingsState, setFriendSettingsState] = useState<{ open?: boolean; contact?: IContact }>({});
@@ -55,6 +68,10 @@ const Contact = (props: IProps) => {
 		setChatRoomSettingsState({ open: false });
 	});
 
+	const onChatRoomActionClose = useMemoizedFn(() => {
+		setChatRoomAction({ open: false, chatRoomId: undefined, chatRoomName: undefined, action: undefined });
+	});
+
 	// 手动同步联系人
 	const { runAsync, loading: syncLoading } = useRequest(
 		async () => {
@@ -70,7 +87,7 @@ const Contact = (props: IProps) => {
 		},
 	);
 
-	const { data, loading } = useRequest(
+	const { data, loading, refresh } = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.api.v1ContactListList({
 				id: props.robotId,
@@ -175,7 +192,10 @@ const Contact = (props: IProps) => {
 						} else {
 							items.push({ label: '群聊设置', key: 'chat-room-settings' });
 							items.push({ label: '查看群成员', key: 'chat-room-member' });
-							items.push({ label: '退出群聊', key: 'delete', danger: true });
+							items.push({ label: '修改群名称', key: 'change-name' });
+							items.push({ label: '修改群备注', key: 'change-remark' });
+							items.push({ label: '修改群公告', key: 'change-announcement' });
+							items.push({ label: '退出群聊', key: 'quit', danger: true });
 						}
 						return (
 							<List.Item>
@@ -240,6 +260,38 @@ const Contact = (props: IProps) => {
 															break;
 														case 'chat-room-settings':
 															setChatRoomSettingsState({ open: true, chatRoom: item });
+															break;
+														case 'change-name':
+															setChatRoomAction({
+																open: true,
+																chatRoomId: item.wechat_id,
+																chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
+																action: 'change-name',
+															});
+															break;
+														case 'change-remark':
+															setChatRoomAction({
+																open: true,
+																chatRoomId: item.wechat_id,
+																chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
+																action: 'change-remark',
+															});
+															break;
+														case 'change-announcement':
+															setChatRoomAction({
+																open: true,
+																chatRoomId: item.wechat_id,
+																chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
+																action: 'change-announcement',
+															});
+															break;
+														case 'quit':
+															setChatRoomAction({
+																open: true,
+																chatRoomId: item.wechat_id,
+																chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
+																action: 'quit',
+															});
 															break;
 													}
 												},
@@ -326,6 +378,46 @@ const Contact = (props: IProps) => {
 					robotId={props.robotId}
 					chatRoom={chatRoomSettingsState.chatRoom!}
 					onClose={onChatRoomSettingsClose}
+				/>
+			)}
+			{chatRoomAction.open && chatRoomAction.action === 'change-name' && (
+				<ChatRoomNameChange
+					open={chatRoomAction.open}
+					robotId={props.robotId}
+					chatRoomId={chatRoomAction.chatRoomId!}
+					chatRoomName={chatRoomAction.chatRoomName!}
+					onClose={onChatRoomActionClose}
+					onRefresh={refresh}
+				/>
+			)}
+			{chatRoomAction.open && chatRoomAction.action === 'change-remark' && (
+				<ChatRoomRemarkChange
+					open={chatRoomAction.open}
+					robotId={props.robotId}
+					chatRoomId={chatRoomAction.chatRoomId!}
+					chatRoomName={chatRoomAction.chatRoomName!}
+					onClose={onChatRoomActionClose}
+					onRefresh={refresh}
+				/>
+			)}
+			{chatRoomAction.open && chatRoomAction.action === 'change-announcement' && (
+				<ChatRoomAnnouncementChange
+					open={chatRoomAction.open}
+					robotId={props.robotId}
+					chatRoomId={chatRoomAction.chatRoomId!}
+					chatRoomName={chatRoomAction.chatRoomName!}
+					onClose={onChatRoomActionClose}
+					onRefresh={refresh}
+				/>
+			)}
+			{chatRoomAction.open && chatRoomAction.action === 'quit' && (
+				<ChatRoomQuit
+					open={chatRoomAction.open}
+					robotId={props.robotId}
+					chatRoomId={chatRoomAction.chatRoomId!}
+					chatRoomName={chatRoomAction.chatRoomName!}
+					onClose={onChatRoomActionClose}
+					onRefresh={refresh}
 				/>
 			)}
 		</div>
