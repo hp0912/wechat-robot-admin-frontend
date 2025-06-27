@@ -1,16 +1,23 @@
-import { SearchOutlined } from '@ant-design/icons';
-import { useRequest, useSetState } from 'ahooks';
-import { App, Avatar, Button, Col, Drawer, Input, List, Pagination, Row, Space, Tag, theme } from 'antd';
+import { DownOutlined, SearchOutlined } from '@ant-design/icons';
+import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
+import { App, Avatar, Button, Col, Drawer, Dropdown, Input, List, Pagination, Row, Space, Tag, theme } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
+import ChatRoomMemberRemove from './ChatRoomMemberRemove';
 
 interface IProps {
 	robotId: number;
 	chatRoom: Api.V1ContactListList.ResponseBody['data']['items'][number];
 	open: boolean;
 	onClose: () => void;
+}
+
+interface IMemberRemoveState {
+	chatRoomMemberId?: string;
+	chatRoomMemberName?: string;
+	open?: boolean;
 }
 
 const GroupMember = (props: IProps) => {
@@ -20,6 +27,7 @@ const GroupMember = (props: IProps) => {
 	const { chatRoom } = props;
 
 	const [search, setSearch] = useSetState({ keyword: '', pageIndex: 1 });
+	const [memberRemoveState, setMemberRemoveState] = useSetState<IMemberRemoveState>({});
 
 	// 手动同步群成员
 	const { runAsync, loading: syncLoading } = useRequest(
@@ -37,7 +45,7 @@ const GroupMember = (props: IProps) => {
 		},
 	);
 
-	const { data, loading } = useRequest(
+	const { data, loading, refresh } = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.api.v1ChatRoomMembersList({
 				id: props.robotId,
@@ -56,6 +64,10 @@ const GroupMember = (props: IProps) => {
 			},
 		},
 	);
+
+	const onChatRoomMemberRemoveClose = useMemoizedFn(() => {
+		setMemberRemoveState({ open: false, chatRoomMemberId: undefined, chatRoomMemberName: undefined });
+	});
 
 	return (
 		<Drawer
@@ -174,10 +186,58 @@ const GroupMember = (props: IProps) => {
 											</>
 										}
 									/>
+									<div style={{ marginRight: 8 }}>
+										<Dropdown.Button
+											menu={{
+												items: [],
+												onClick: () => {
+													//
+												},
+											}}
+											buttonsRender={() => {
+												return [
+													<Button
+														key="left"
+														type="primary"
+														ghost
+														disabled={item.is_leaved}
+														onClick={() => {
+															setMemberRemoveState({
+																open: true,
+																chatRoomMemberId: item.wechat_id,
+																chatRoomMemberName: item.remark || item.nickname || item.alias || item.wechat_id,
+															});
+														}}
+													>
+														移除群成员
+													</Button>,
+													<Button
+														key="right"
+														type="primary"
+														ghost
+														disabled={item.is_leaved}
+														icon={<DownOutlined />}
+													/>,
+												];
+											}}
+										/>
+									</div>
 								</List.Item>
 							);
 						}}
 					/>
+					{memberRemoveState.open && (
+						<ChatRoomMemberRemove
+							robotId={props.robotId}
+							chatRoomId={chatRoom.wechat_id!}
+							chatRoomName={chatRoom.remark! || chatRoom.nickname! || chatRoom.alias! || chatRoom.wechat_id!}
+							chatRoomMemberId={memberRemoveState.chatRoomMemberId!}
+							chatRoomMemberName={memberRemoveState.chatRoomMemberName!}
+							open={memberRemoveState.open}
+							onRefresh={refresh}
+							onClose={onChatRoomMemberRemoveClose}
+						/>
+					)}
 				</div>
 				<div className="pagination">
 					<Pagination
