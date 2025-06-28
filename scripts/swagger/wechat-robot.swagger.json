@@ -1196,6 +1196,19 @@
 						"schema": {
 							"type": "number"
 						}
+					},
+					{
+						"name": "contact_ids",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"example": [""],
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
 					}
 				],
 				"responses": {
@@ -4298,6 +4311,840 @@
 					}
 				},
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-314738579-run",
+				"security": []
+			}
+		},
+		"/api/v1/moments/list": {
+			"get": {
+				"summary": "朋友圈列表",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
+						}
+					},
+					{
+						"name": "frist_page_md5",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "max_id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"FirstPageMd5": {
+													"type": "string"
+												},
+												"ObjectCount": {
+													"type": "integer"
+												},
+												"ObjectList": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"Id": {
+																"type": "string"
+															},
+															"Username": {
+																"type": "string"
+															},
+															"Nickname": {
+																"type": "string"
+															},
+															"Avatar": {
+																"type": "string"
+															},
+															"CreateTime": {
+																"type": "integer"
+															},
+															"ObjectDesc": {
+																"type": "object",
+																"properties": {
+																	"iLen": {
+																		"type": "integer"
+																	},
+																	"buffer": {
+																		"type": "string"
+																	}
+																},
+																"required": ["iLen", "buffer"],
+																"x-apifox-orders": ["iLen", "buffer"],
+																"x-apifox-ignore-properties": []
+															},
+															"LikeFlag": {
+																"type": "integer"
+															},
+															"LikeCount": {
+																"type": "integer"
+															},
+															"LikeUserListCount": {
+																"type": "integer"
+															},
+															"LikeUserList": {
+																"type": "array",
+																"items": {
+																	"type": "object",
+																	"properties": {
+																		"Username": {
+																			"type": "string"
+																		},
+																		"Nickname": {
+																			"type": "string"
+																		},
+																		"Source": {
+																			"type": "integer"
+																		},
+																		"Type": {
+																			"type": "integer"
+																		},
+																		"Content": {
+																			"type": "string"
+																		},
+																		"CreateTime": {
+																			"type": "integer"
+																		},
+																		"CommentId": {
+																			"type": "integer"
+																		},
+																		"ReplyCommentId": {
+																			"type": "integer"
+																		},
+																		"ReplyUsername": {
+																			"type": "string"
+																		},
+																		"IsNotRichText": {
+																			"type": "integer"
+																		},
+																		"ReplyCommentId2": {
+																			"type": "integer"
+																		},
+																		"CommentId2": {
+																			"type": "integer"
+																		},
+																		"DeleteFlag": {
+																			"type": "integer"
+																		},
+																		"CommentFlag": {
+																			"type": "integer"
+																		}
+																	},
+																	"x-apifox-orders": [
+																		"Username",
+																		"Nickname",
+																		"Source",
+																		"Type",
+																		"Content",
+																		"CreateTime",
+																		"CommentId",
+																		"ReplyCommentId",
+																		"ReplyUsername",
+																		"IsNotRichText",
+																		"ReplyCommentId2",
+																		"CommentId2",
+																		"DeleteFlag",
+																		"CommentFlag"
+																	],
+																	"x-apifox-ignore-properties": []
+																}
+															},
+															"CommentCount": {
+																"type": "integer"
+															},
+															"CommentUserListCount": {
+																"type": "integer"
+															},
+															"CommentUserList": {
+																"type": "array",
+																"items": {
+																	"type": "object",
+																	"properties": {
+																		"Username": {
+																			"type": "string"
+																		},
+																		"Nickname": {
+																			"type": "string"
+																		},
+																		"Source": {
+																			"type": "integer"
+																		},
+																		"Type": {
+																			"type": "integer"
+																		},
+																		"Content": {
+																			"type": "string"
+																		},
+																		"CreateTime": {
+																			"type": "integer"
+																		},
+																		"CommentId": {
+																			"type": "integer"
+																		},
+																		"ReplyCommentId": {
+																			"type": "integer"
+																		},
+																		"ReplyUsername": {
+																			"type": "string"
+																		},
+																		"IsNotRichText": {
+																			"type": "integer"
+																		},
+																		"ReplyCommentId2": {
+																			"type": "integer"
+																		},
+																		"CommentId2": {
+																			"type": "integer"
+																		},
+																		"DeleteFlag": {
+																			"type": "integer"
+																		},
+																		"CommentFlag": {
+																			"type": "integer"
+																		}
+																	},
+																	"x-apifox-orders": [
+																		"Username",
+																		"Nickname",
+																		"Source",
+																		"Type",
+																		"Content",
+																		"CreateTime",
+																		"CommentId",
+																		"ReplyCommentId",
+																		"ReplyUsername",
+																		"IsNotRichText",
+																		"ReplyCommentId2",
+																		"CommentId2",
+																		"DeleteFlag",
+																		"CommentFlag"
+																	],
+																	"x-apifox-ignore-properties": []
+																}
+															},
+															"WithUserCount": {
+																"type": "integer"
+															},
+															"WithUserListCount": {
+																"type": "integer"
+															},
+															"WithUserList": {
+																"type": "array",
+																"items": {
+																	"type": "object",
+																	"properties": {
+																		"Username": {
+																			"type": "string"
+																		},
+																		"Nickname": {
+																			"type": "string"
+																		},
+																		"Source": {
+																			"type": "integer"
+																		},
+																		"Type": {
+																			"type": "integer"
+																		},
+																		"Content": {
+																			"type": "string"
+																		},
+																		"CreateTime": {
+																			"type": "integer"
+																		},
+																		"CommentId": {
+																			"type": "integer"
+																		},
+																		"ReplyCommentId": {
+																			"type": "integer"
+																		},
+																		"ReplyUsername": {
+																			"type": "string"
+																		},
+																		"IsNotRichText": {
+																			"type": "integer"
+																		},
+																		"ReplyCommentId2": {
+																			"type": "integer"
+																		},
+																		"CommentId2": {
+																			"type": "integer"
+																		},
+																		"DeleteFlag": {
+																			"type": "integer"
+																		},
+																		"CommentFlag": {
+																			"type": "integer"
+																		}
+																	},
+																	"x-apifox-orders": [
+																		"Username",
+																		"Nickname",
+																		"Source",
+																		"Type",
+																		"Content",
+																		"CreateTime",
+																		"CommentId",
+																		"ReplyCommentId",
+																		"ReplyUsername",
+																		"IsNotRichText",
+																		"ReplyCommentId2",
+																		"CommentId2",
+																		"DeleteFlag",
+																		"CommentFlag"
+																	],
+																	"x-apifox-ignore-properties": []
+																}
+															},
+															"ExtFlag": {
+																"type": "integer"
+															},
+															"NoChange": {
+																"type": "integer"
+															},
+															"GroupCount": {
+																"type": "integer"
+															},
+															"GroupList": {
+																"type": "array",
+																"items": {
+																	"type": "object",
+																	"properties": {
+																		"GroupId": {
+																			"type": "integer"
+																		}
+																	},
+																	"x-apifox-orders": ["GroupId"],
+																	"x-apifox-ignore-properties": []
+																}
+															},
+															"IsNotRichText": {
+																"type": "integer"
+															},
+															"ReferUsername": {
+																"type": "string"
+															},
+															"ReferId": {
+																"type": "integer"
+															},
+															"BlackListCount": {
+																"type": "integer"
+															},
+															"BlackList": {
+																"type": "array",
+																"items": {
+																	"type": "object",
+																	"properties": {
+																		"iLen": {
+																			"type": "integer"
+																		},
+																		"buffer": {
+																			"type": "string"
+																		}
+																	},
+																	"x-apifox-orders": ["iLen", "buffer"],
+																	"x-apifox-ignore-properties": []
+																}
+															},
+															"DeleteFlag": {
+																"type": "integer"
+															},
+															"GroupUserCount": {
+																"type": "integer"
+															},
+															"GroupUser": {
+																"type": "array",
+																"items": {
+																	"type": "object",
+																	"properties": {
+																		"iLen": {
+																			"type": "integer"
+																		},
+																		"buffer": {
+																			"type": "string"
+																		}
+																	},
+																	"x-apifox-orders": ["iLen", "buffer"],
+																	"x-apifox-ignore-properties": []
+																}
+															},
+															"ObjectOperations": {
+																"type": "array",
+																"items": {
+																	"type": "object",
+																	"properties": {
+																		"iLen": {
+																			"type": "integer"
+																		},
+																		"buffer": {
+																			"type": "string"
+																		}
+																	},
+																	"x-apifox-orders": ["iLen", "buffer"],
+																	"x-apifox-ignore-properties": []
+																}
+															},
+															"SnsRedEnvelops": {
+																"type": "object",
+																"properties": {
+																	"RewardCount": {
+																		"type": "integer"
+																	},
+																	"RewardUserList": {
+																		"type": "string"
+																	},
+																	"ReportId": {
+																		"type": "integer"
+																	},
+																	"ReportKey": {
+																		"type": "integer"
+																	},
+																	"ResourceId": {
+																		"type": "integer"
+																	}
+																},
+																"required": ["RewardCount", "RewardUserList", "ReportId", "ReportKey", "ResourceId"],
+																"x-apifox-orders": [
+																	"RewardCount",
+																	"RewardUserList",
+																	"ReportId",
+																	"ReportKey",
+																	"ResourceId"
+																],
+																"x-apifox-ignore-properties": []
+															},
+															"PreDownloadInfo": {
+																"type": "object",
+																"properties": {
+																	"PreDownloadPercent": {
+																		"type": "integer"
+																	},
+																	"PreDownloadNetType": {
+																		"type": "integer"
+																	},
+																	"NoPreDownloadRange": {
+																		"type": "string"
+																	}
+																},
+																"required": ["PreDownloadPercent", "PreDownloadNetType", "NoPreDownloadRange"],
+																"x-apifox-orders": ["PreDownloadPercent", "PreDownloadNetType", "NoPreDownloadRange"],
+																"x-apifox-ignore-properties": []
+															},
+															"WeAppInfo": {
+																"type": "object",
+																"properties": {
+																	"MapPoiId": {
+																		"type": "string"
+																	},
+																	"AppId": {
+																		"type": "integer"
+																	},
+																	"UserName": {
+																		"type": "string"
+																	},
+																	"RedirectUrl": {
+																		"type": "string"
+																	},
+																	"ShowType": {
+																		"type": "integer"
+																	},
+																	"RScore": {
+																		"type": "integer"
+																	}
+																},
+																"required": ["MapPoiId", "AppId", "UserName", "RedirectUrl", "ShowType", "RScore"],
+																"x-apifox-orders": [
+																	"MapPoiId",
+																	"AppId",
+																	"UserName",
+																	"RedirectUrl",
+																	"ShowType",
+																	"RScore"
+																],
+																"x-apifox-ignore-properties": []
+															}
+														},
+														"x-apifox-orders": [
+															"Id",
+															"Username",
+															"Nickname",
+															"Avatar",
+															"CreateTime",
+															"ObjectDesc",
+															"LikeFlag",
+															"LikeCount",
+															"LikeUserListCount",
+															"LikeUserList",
+															"CommentCount",
+															"CommentUserListCount",
+															"CommentUserList",
+															"WithUserCount",
+															"WithUserListCount",
+															"WithUserList",
+															"ExtFlag",
+															"NoChange",
+															"GroupCount",
+															"GroupList",
+															"IsNotRichText",
+															"ReferUsername",
+															"ReferId",
+															"BlackListCount",
+															"BlackList",
+															"DeleteFlag",
+															"GroupUserCount",
+															"GroupUser",
+															"ObjectOperations",
+															"SnsRedEnvelops",
+															"PreDownloadInfo",
+															"WeAppInfo"
+														],
+														"x-apifox-ignore-properties": []
+													}
+												},
+												"NewRequestTime": {
+													"type": "integer"
+												},
+												"ObjectCountForSameMd5": {
+													"type": "integer"
+												},
+												"ControlFlag": {
+													"type": "integer"
+												},
+												"ServerConfig": {
+													"type": "object",
+													"properties": {
+														"PostMentionLimit": {
+															"type": "integer"
+														},
+														"CopyAndPasteWordLimit": {
+															"type": "integer"
+														}
+													},
+													"required": ["PostMentionLimit", "CopyAndPasteWordLimit"],
+													"x-apifox-orders": ["PostMentionLimit", "CopyAndPasteWordLimit"],
+													"x-apifox-ignore-properties": []
+												},
+												"AdvertiseCount": {
+													"type": "integer"
+												},
+												"AdvertiseList": {
+													"type": "string"
+												},
+												"Session": {
+													"type": "object",
+													"properties": {
+														"iLen": {
+															"type": "integer"
+														},
+														"buffer": {
+															"type": "string"
+														}
+													},
+													"required": ["iLen", "buffer"],
+													"x-apifox-orders": ["iLen", "buffer"],
+													"x-apifox-ignore-properties": []
+												},
+												"RecCount": {
+													"type": "integer"
+												},
+												"RecList": {
+													"type": "integer"
+												}
+											},
+											"required": [
+												"FirstPageMd5",
+												"ObjectCount",
+												"ObjectList",
+												"NewRequestTime",
+												"ObjectCountForSameMd5",
+												"ControlFlag",
+												"ServerConfig",
+												"AdvertiseCount",
+												"AdvertiseList",
+												"Session",
+												"RecCount",
+												"RecList"
+											],
+											"x-apifox-orders": [
+												"FirstPageMd5",
+												"ObjectCount",
+												"ObjectList",
+												"NewRequestTime",
+												"ObjectCountForSameMd5",
+												"ControlFlag",
+												"ServerConfig",
+												"AdvertiseCount",
+												"AdvertiseList",
+												"Session",
+												"RecCount",
+												"RecList"
+											],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								},
+								"examples": {
+									"1": {
+										"summary": "成功示例",
+										"value": {
+											"code": 0,
+											"message": "",
+											"data": {
+												"FirstPageMd5": "abcdef1234567890",
+												"ObjectCount": 1,
+												"ObjectList": [
+													{
+														"Id": 123456789,
+														"Username": "user1",
+														"Nickname": "昵称1",
+														"CreateTime": 1718000000,
+														"ObjectDesc": {
+															"iLen": 5,
+															"buffer": "描述内容"
+														},
+														"LikeFlag": 1,
+														"LikeCount": 1,
+														"LikeUserListCount": 1,
+														"LikeUserList": [
+															{
+																"Username": "likeuser1",
+																"Nickname": "点赞者昵称",
+																"Source": 1,
+																"Type": 1,
+																"Content": "点赞内容",
+																"CreateTime": 1718000001,
+																"CommentId": 1001,
+																"ReplyCommentId": 1000,
+																"ReplyUsername": "replyuser1",
+																"IsNotRichText": 0,
+																"ReplyCommentId2": 1000001,
+																"CommentId2": 1000002,
+																"DeleteFlag": 0,
+																"CommentFlag": 1
+															}
+														],
+														"CommentCount": 1,
+														"CommentUserListCount": 1,
+														"CommentUserList": [
+															{
+																"Username": "commentuser1",
+																"Nickname": "评论者昵称",
+																"Source": 2,
+																"Type": 2,
+																"Content": "评论内容",
+																"CreateTime": 1718000002,
+																"CommentId": 2001,
+																"ReplyCommentId": 2000,
+																"ReplyUsername": "replycommentuser1",
+																"IsNotRichText": 0,
+																"ReplyCommentId2": 2000001,
+																"CommentId2": 2000002,
+																"DeleteFlag": 0,
+																"CommentFlag": 1
+															}
+														],
+														"WithUserCount": 1,
+														"WithUserListCount": 1,
+														"WithUserList": [
+															{
+																"Username": "withuser1",
+																"Nickname": "提及者昵称",
+																"Source": 3,
+																"Type": 3,
+																"Content": "提及内容",
+																"CreateTime": 1718000003,
+																"CommentId": 3001,
+																"ReplyCommentId": 3000,
+																"ReplyUsername": "replywithuser1",
+																"IsNotRichText": 0,
+																"ReplyCommentId2": 3000001,
+																"CommentId2": 3000002,
+																"DeleteFlag": 0,
+																"CommentFlag": 1
+															}
+														],
+														"ExtFlag": 0,
+														"NoChange": 0,
+														"GroupCount": 1,
+														"GroupList": [
+															{
+																"GroupId": 10001
+															}
+														],
+														"IsNotRichText": 0,
+														"ReferUsername": "referuser1",
+														"ReferId": 987654321,
+														"BlackListCount": 1,
+														"BlackList": [
+															{
+																"iLen": 4,
+																"buffer": "黑名单用户"
+															}
+														],
+														"DeleteFlag": 0,
+														"GroupUserCount": 1,
+														"GroupUser": [
+															{
+																"iLen": 4,
+																"buffer": "分组用户"
+															}
+														],
+														"ObjectOperations": [
+															{
+																"iLen": 6,
+																"buffer": "操作描述"
+															}
+														],
+														"SnsRedEnvelops": {
+															"RewardCount": 1,
+															"RewardUserList": "rewarduser1",
+															"ReportId": 101,
+															"ReportKey": 202,
+															"ResourceId": 303
+														},
+														"PreDownloadInfo": {
+															"PreDownloadPercent": 80,
+															"PreDownloadNetType": 2,
+															"NoPreDownloadRange": "4G"
+														},
+														"WeAppInfo": {
+															"MapPoiId": "poi12345",
+															"AppId": 1234,
+															"UserName": "weappuser",
+															"RedirectUrl": "https://redirect.example.com",
+															"ShowType": 1,
+															"RScore": 5
+														}
+													}
+												],
+												"NewRequestTime": 1718000004,
+												"ObjectCountForSameMd5": 1,
+												"ControlFlag": 1,
+												"ServerConfig": {
+													"PostMentionLimit": 10,
+													"CopyAndPasteWordLimit": 100
+												},
+												"AdvertiseCount": 1,
+												"AdvertiseList": "广告内容1",
+												"Session": {
+													"iLen": 8,
+													"buffer": "session1"
+												},
+												"RecCount": 1,
+												"RecList": 1
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-315079544-run",
+				"security": []
+			}
+		},
+		"/api/v1/moments/down-media": {
+			"get": {
+				"summary": "下载朋友圈视频",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
+						}
+					},
+					{
+						"name": "url",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "key",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "string"
+										}
+									},
+									"x-apifox-orders": ["code", "message", "data"],
+									"required": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-315079670-run",
 				"security": []
 			}
 		}

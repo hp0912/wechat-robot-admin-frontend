@@ -111,10 +111,12 @@ const RobotDetail = (props: IProps) => {
 			icon: <MomentsFilled />,
 			label: '朋友圈',
 			children: (
-				<Moments
-					robotId={props.robotId}
-					robot={data}
-				/>
+				<Suspense fallback={<Spin />}>
+					<Moments
+						robotId={props.robotId}
+						robot={data}
+					/>
+				</Suspense>
 			),
 		},
 		{
