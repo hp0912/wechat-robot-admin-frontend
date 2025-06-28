@@ -20,6 +20,9 @@ dependencies:
   dayjs:
     specifier: ^1.11.13
     version: 1.11.13
+  fast-xml-parser:
+    specifier: ^5.2.5
+    version: 5.2.5
   qs:
     specifier: ^6.14.0
     version: 6.14.0
@@ -2940,6 +2943,13 @@ packages:
     resolution: {integrity: sha512-Atfo14OibSv5wAp4VWNsFYE1AchQRTv9cBGWET4pZWHzYshFSS9NQI6I57rdKn9croWVMbYFbLhJ+yJvmZIIHw==}
     dev: true
 
+  /fast-xml-parser@5.2.5:
+    resolution: {integrity: sha512-pfX9uG9Ki0yekDHx2SiuRIyFdyAr1kMIMitPvb0YBo8SUfKvia7w7FIyd/l6av85pFYRhZscS75MwMnbvY+hcQ==}
+    hasBin: true
+    dependencies:
+      strnum: 2.1.1
+    dev: false
+
   /fastq@1.18.0:
     resolution: {integrity: sha512-QKHXPW0hD8g4UET03SdOdunzSouc9N4AuHdsX8XNcTsuz+yYFILVNIX4l9yHABMhiEI9Db0JTTIpu0wB+Y1QQw==}
     dependencies:
@@ -5776,6 +5786,10 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
     dev: true
+
+  /strnum@2.1.1:
+    resolution: {integrity: sha512-7ZvoFTiCnGxBtDqJ//Cu6fWtZtc7Y3x+QOirG15wztbdngGSkht27o2pyGWrVy0b4WAy3jbKmnoK6g5VlVNUUw==}
+    dev: false
 
   /styled-components@6.1.14(react-dom@19.0.0)(react@19.0.0):
     resolution: {integrity: sha512-KtfwhU5jw7UoxdM0g6XU9VZQFV4do+KrM8idiVCH5h4v49W+3p3yMe0icYwJgZQZepa5DbH04Qv8P0/RdcLcgg==}
