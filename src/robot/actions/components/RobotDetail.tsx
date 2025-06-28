@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import React, { Suspense, useEffect } from 'react';
 import styled from 'styled-components';
 import Contact from '@/contact';
+import MomentsFilled from '@/icons/MomentsFilled';
 import GlobalSettings from '@/settings';
 import RecreateRobotContainer from '../RecreateRobotContainer';
 import Remove from '../Remove';
@@ -23,6 +24,7 @@ interface IProps {
 }
 
 const ContainerLog = React.lazy(() => import(/* webpackChunkName: "container-log" */ '@/container-log'));
+const Moments = React.lazy(() => import(/* webpackChunkName: "moments" */ '@/moments'));
 const SystemOverview = React.lazy(() => import(/* webpackChunkName: "system-overview" */ '@/system-overview'));
 
 const BaseContainer = styled.div`
@@ -99,6 +101,17 @@ const RobotDetail = (props: IProps) => {
 			label: '联系人',
 			children: (
 				<Contact
+					robotId={props.robotId}
+					robot={data}
+				/>
+			),
+		},
+		{
+			key: 'moments',
+			icon: <MomentsFilled />,
+			label: '朋友圈',
+			children: (
+				<Moments
 					robotId={props.robotId}
 					robot={data}
 				/>
