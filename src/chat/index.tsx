@@ -58,7 +58,11 @@ const ChatHistory = (props: IProps) => {
 		const subType = msg.app_msg_type as AppMessageType;
 		switch (msgType) {
 			case MessageType.Text:
-				return msg.content;
+				return (
+					<pre style={{ margin: 0, padding: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-all', color: '#010101' }}>
+						{msg.content}
+					</pre>
+				);
 			case MessageType.App:
 				if (msg.display_full_content) {
 					return msg.display_full_content;
@@ -204,7 +208,7 @@ const ChatHistory = (props: IProps) => {
 											)
 										}
 										title={
-											<span>
+											<span style={{ color: '#87888a' }}>
 												{item.is_group || item.sender_wxid !== robot.wechat_id ? (
 													<span>{item.sender_nickname || item.sender_wxid}</span>
 												) : (
