@@ -81,10 +81,10 @@ export interface Media {
 	userData?: string;
 	subType?: string;
 	videoSize?: VideoSize;
-	hd?: string;
-	uhd?: string;
-	url: string;
-	thumb: string;
+	hd?: URL;
+	uhd?: URL;
+	url: URL;
+	thumb: Thumb;
 	size: Size;
 	videoDuration?: string;
 	VideoColdDLRule?: VideoColdDLRule;

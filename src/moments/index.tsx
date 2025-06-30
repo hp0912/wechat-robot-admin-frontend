@@ -3,14 +3,12 @@ import { useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Dropdown, Flex, List, Row, Skeleton, Space, Spin, Tooltip } from 'antd';
 import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
-import { XMLParser } from 'fast-xml-parser';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import styled from 'styled-components';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import MediaList, { MediaVideo } from './MediaList';
-import type { IMoment, ITimeline } from './types';
 
 interface IProps {
 	robotId: number;
@@ -18,6 +16,7 @@ interface IProps {
 }
 
 type IContact = Api.V1ContactListList.ResponseBody['data']['items'][number];
+type IMoment = Api.V1MomentsListList.ResponseBody['data']['ObjectList'][number];
 
 interface IPrevState {
 	done?: boolean;
@@ -42,6 +41,10 @@ const Container = styled.div`
 
 	.moment-media-list {
 		margin-bottom: 3px;
+	}
+
+	.moment-location {
+		color: #4683d0;
 	}
 
 	.moment-delete {
@@ -100,7 +103,6 @@ const Moments = (props: IProps) => {
 					//
 				}
 				// 处理朋友圈数据
-				const xmlParser = new XMLParser({});
 				resp.data.data.ObjectList.forEach(item => {
 					if (item.Username === props.robot.wechat_id) {
 						// 机器人自己账号发的朋友圈
@@ -111,19 +113,16 @@ const Moments = (props: IProps) => {
 							item.Nickname = contactMap[item.Username!].remark;
 						}
 					}
-					const { Moment: _, ...restProps } = item;
-					const moment: IMoment = { ...restProps };
-					moment.Moment = xmlParser.parse(item.ObjectDesc?.buffer || '') as ITimeline;
-					if (momentIds.has(moment.IdStr!)) {
-						const targetIndex = nextState.moments!.findIndex(m => m.IdStr === moment.IdStr);
+					if (momentIds.has(item.IdStr!)) {
+						const targetIndex = nextState.moments!.findIndex(m => m.IdStr === item.IdStr);
 						if (targetIndex !== -1) {
-							nextState.moments![targetIndex] = moment; // 更新已有的朋友圈
+							nextState.moments![targetIndex] = item; // 更新已有的朋友圈
 						} else {
-							nextState.moments!.push(moment);
+							nextState.moments!.push(item);
 						}
 					} else {
-						nextState.moments!.push(moment);
-						momentIds.add(moment.IdStr!);
+						nextState.moments!.push(item);
+						momentIds.add(item.IdStr!);
 					}
 				});
 
@@ -228,7 +227,9 @@ const Moments = (props: IProps) => {
 							dataSource={prevState.moments || []}
 							renderItem={item => {
 								const items: MenuProps['items'] = [];
-								// console.log('[DEBUG]', item);
+								const media = item.TimelineObject?.ContentObject?.MediaList?.Media;
+								const momentLocation = item.TimelineObject?.Location;
+								console.log('[DEBUG]', item);
 								return (
 									<List.Item>
 										<List.Item.Meta
@@ -245,25 +246,20 @@ const Moments = (props: IProps) => {
 											}
 											description={
 												<>
-													{!!item.Moment?.TimelineObject?.contentDesc && (
-														<pre className="moment-content">{item.Moment.TimelineObject.contentDesc}</pre>
+													{!!item.TimelineObject?.ContentDesc && (
+														<pre className="moment-content">{item.TimelineObject.ContentDesc}</pre>
 													)}
-													{Array.isArray(item.Moment?.TimelineObject?.ContentObject?.mediaList?.media) ? (
-														<MediaList
-															className="moment-media-list"
-															dataSource={item.Moment.TimelineObject.ContentObject.mediaList.media}
-														/>
-													) : item.Moment?.TimelineObject?.ContentObject?.mediaList?.media?.id ? (
+													{Array.isArray(media) ? (
 														<>
-															{Number(item.Moment.TimelineObject.ContentObject.mediaList.media.type) === 6 ? (
+															{media.length === 1 && Number(media[0].Type) === 6 ? (
 																<MediaVideo
-																	dataSource={item.Moment.TimelineObject.ContentObject.mediaList.media}
-																	videoDownloadUrl={`/api/v1/moments/down-media?id=${props.robotId}&url=${encodeURIComponent(item.Moment.TimelineObject.ContentObject.mediaList.media.url)}`}
+																	dataSource={media[0]}
+																	videoDownloadUrl={`/api/v1/moments/down-media?id=${props.robotId}&url=${encodeURIComponent(media[0]!.URL!.Value!)}`}
 																/>
 															) : (
 																<MediaList
 																	className="moment-media-list"
-																	dataSource={[item.Moment.TimelineObject.ContentObject.mediaList.media]}
+																	dataSource={media}
 																/>
 															)}
 														</>
@@ -274,6 +270,11 @@ const Moments = (props: IProps) => {
 													>
 														<Space>
 															<span>{dayjs(Number(item.CreateTime) * 1000).fromNow()}</span>
+															{(momentLocation?.PoiName || momentLocation?.City || momentLocation?.PoiAddress) && (
+																<span className="moment-location">
+																	{momentLocation?.PoiName || momentLocation?.City || momentLocation?.PoiAddress}
+																</span>
+															)}
 															<>
 																{item.Username === props.robot.wechat_id && (
 																	<Button

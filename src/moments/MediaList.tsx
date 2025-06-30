@@ -14,8 +14,12 @@ import {
 import { Image, Space } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { ImageFallback } from '@/constant';
-import type { Media } from './types';
+
+type ContentObject =
+	Api.V1MomentsListList.ResponseBody['data']['ObjectList'][number]['TimelineObject']['ContentObject'];
+type Media = NonNullable<NonNullable<NonNullable<ContentObject>['MediaList']>['Media']>[number];
 
 interface IProps {
 	className?: string;
@@ -33,11 +37,16 @@ const ImageGroupContainer = styled.div`
 const MediaList = (props: IProps) => {
 	const [current, setCurrent] = useState(0);
 	const onDownload = () => {
-		const url = props.dataSource[current].url;
-		const suffix = url.slice(url.lastIndexOf('.'));
+		let url = props.dataSource[current].URL?.Value;
+		if (props.dataSource[current].HD?.Value) {
+			url = props.dataSource[current].HD.Value;
+		} else if (props.dataSource[current].UHD?.Value) {
+			url = props.dataSource[current].UHD.Value;
+		}
+		const suffix = url!.slice(url!.lastIndexOf('.'));
 		const filename = Date.now() + suffix;
 
-		fetch(url)
+		fetch(url!)
 			.then(response => response.blob())
 			.then(blob => {
 				const blobUrl = URL.createObjectURL(new Blob([blob]));
@@ -98,12 +107,12 @@ const MediaList = (props: IProps) => {
 				{props.dataSource.map(item => {
 					const width = props.dataSource.length === 1 ? undefined : 168;
 					const height = props.dataSource.length === 1 ? undefined : 168;
-					const src = item.hd || item.uhd || item.url || item.thumb;
+					const src = item.HD?.Value || item.UHD?.Value || item.URL?.Value || item.Thumb?.Value;
 
 					return (
 						<Image
-							key={item.id}
-							src={item.thumb?.replace('http://', 'https://')}
+							key={item.ID}
+							src={item.Thumb?.Value?.replace('http://', 'https://')}
 							referrerPolicy="no-referrer"
 							width={width}
 							height={height}
@@ -136,7 +145,7 @@ interface IMediaVideoProps {
 }
 
 export const MediaVideo = (props: IMediaVideoProps) => {
-	const src = props.dataSource.thumb?.replace('http://', 'https://');
+	const src = props.dataSource.Thumb?.Value?.replace('http://', 'https://');
 	return (
 		<Image
 			preview={{
