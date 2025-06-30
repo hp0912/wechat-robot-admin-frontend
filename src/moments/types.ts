@@ -69,10 +69,10 @@ interface ContentObject {
 }
 
 interface MediaList {
-	media: Media[];
+	media: Media | Media[];
 }
 
-interface Media {
+export interface Media {
 	id: string;
 	type: string;
 	title: string;
@@ -81,8 +81,10 @@ interface Media {
 	userData?: string;
 	subType?: string;
 	videoSize?: VideoSize;
-	url: URL;
-	thumb: Thumb;
+	hd?: string;
+	uhd?: string;
+	url: string;
+	thumb: string;
 	size: Size;
 	videoDuration?: string;
 	VideoColdDLRule?: VideoColdDLRule;
@@ -93,14 +95,14 @@ interface VideoSize {
 	height: string;
 }
 
-interface URL {
+export interface URL {
 	type: string;
 	md5: string;
 	videomd5: string;
 	value: string;
 }
 
-interface Thumb {
+export interface Thumb {
 	type: string;
 	value: string;
 }

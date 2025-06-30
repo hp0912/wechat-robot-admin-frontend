@@ -38,6 +38,10 @@ const Container = styled.div`
 		margin-bottom: 3px;
 	}
 
+	.moment-media-list {
+		margin-bottom: 3px;
+	}
+
 	.moment-delete {
 		color: #4683d0;
 	}
@@ -182,6 +186,7 @@ const Moments = (props: IProps) => {
 						style={{ maxHeight: 'calc(100vh - 235px)', overflowY: 'auto' }}
 						renderItem={item => {
 							const items: MenuProps['items'] = [];
+							console.log('[DEBUG]', item);
 							return (
 								<List.Item>
 									<List.Item.Meta
@@ -201,7 +206,17 @@ const Moments = (props: IProps) => {
 												{!!item.Moment?.TimelineObject?.contentDesc && (
 													<pre className="moment-content">{item.Moment.TimelineObject.contentDesc}</pre>
 												)}
-												{!!item.Moment?.TimelineObject?.ContentObject?.mediaList?.media?.length && <MediaList />}
+												{Array.isArray(item.Moment?.TimelineObject?.ContentObject?.mediaList?.media) ? (
+													<MediaList
+														className="moment-media-list"
+														dataSource={item.Moment.TimelineObject.ContentObject.mediaList.media}
+													/>
+												) : item.Moment?.TimelineObject?.ContentObject?.mediaList?.media?.id ? (
+													<MediaList
+														className="moment-media-list"
+														dataSource={[item.Moment.TimelineObject.ContentObject.mediaList.media]}
+													/>
+												) : null}
 												<Flex
 													justify="space-between"
 													align="middle"

@@ -12,11 +12,13 @@ import {
 import { Image, Space } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import type { Media } from './types';
 
-const imageList = [
-	'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
-	'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg',
-];
+interface IProps {
+	className?: string;
+	style?: React.CSSProperties;
+	dataSource: Media[];
+}
 
 const ImageGroupContainer = styled.div`
 	width: 520px;
@@ -25,11 +27,10 @@ const ImageGroupContainer = styled.div`
 	gap: 8px;
 `;
 
-const MediaList = () => {
+const MediaList = (props: IProps) => {
 	const [current, setCurrent] = useState(0);
-
 	const onDownload = () => {
-		const url = imageList[current];
+		const url = props.dataSource[current].url;
 		const suffix = url.slice(url.lastIndexOf('.'));
 		const filename = Date.now() + suffix;
 
@@ -87,12 +88,17 @@ const MediaList = () => {
 				},
 			}}
 		>
-			<ImageGroupContainer>
-				{imageList.map(item => (
+			<ImageGroupContainer
+				style={props.style}
+				className={props.className}
+			>
+				{props.dataSource.map(item => (
 					<Image
-						key={item}
-						src={item}
-						width={168}
+						key={item.id}
+						src={item.thumb}
+						referrerPolicy="no-referrer"
+						width={props.dataSource.length === 1 ? undefined : 168}
+						height={props.dataSource.length === 1 ? undefined : 168}
 					/>
 				))}
 			</ImageGroupContainer>
