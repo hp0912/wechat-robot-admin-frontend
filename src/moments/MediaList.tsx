@@ -43,6 +43,7 @@ const MediaList = (props: IProps) => {
 		} else if (props.dataSource[current].UHD?.Value) {
 			url = props.dataSource[current].UHD.Value;
 		}
+		url = url?.replace('http://', 'https://');
 		const suffix = url!.slice(url!.lastIndexOf('.'));
 		const filename = Date.now() + suffix;
 
