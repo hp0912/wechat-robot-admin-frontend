@@ -1,6 +1,6 @@
 import { DeleteFilled, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import { useRequest, useSetState } from 'ahooks';
-import { App, Avatar, Button, Col, Divider, Dropdown, Flex, List, Row, Skeleton, Space, Spin, Tooltip } from 'antd';
+import { App, Avatar, Button, Col, Dropdown, Flex, List, Row, Skeleton, Space, Spin, Tooltip } from 'antd';
 import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
 import { XMLParser } from 'fast-xml-parser';
@@ -184,8 +184,7 @@ const Moments = (props: IProps) => {
 				<div
 					id="moments-list"
 					style={{
-						// height: 'calc(100vh - 185px)',
-						height: 400,
+						height: 'calc(100vh - 185px)',
 						overflowY: 'auto',
 						border: '1px solid rgba(5,5,5,0.06)',
 						borderRadius: 4,
@@ -205,8 +204,23 @@ const Moments = (props: IProps) => {
 								/>
 							</div>
 						}
-						endMessage={<Divider plain>朋友圈加载完了...</Divider>}
-						scrollableTarget="scrollableDiv"
+						endMessage={
+							<div style={{ textAlign: 'center', padding: '12px 8px' }}>
+								<Button
+									type="primary"
+									block
+									onClick={() => {
+										setPrevState({ done: false, max_id: '0', frist_page_md5: '', moments: [] });
+										setTimeout(() => {
+											loadMoreData();
+										}, 60);
+									}}
+								>
+									加载完了，返回朋友圈首页
+								</Button>
+							</div>
+						}
+						scrollableTarget="moments-list"
 					>
 						<List
 							rowKey="IdStr"
