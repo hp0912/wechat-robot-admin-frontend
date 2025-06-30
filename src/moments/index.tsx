@@ -1,10 +1,11 @@
 import { DeleteFilled, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import { useRequest, useSetState } from 'ahooks';
-import { App, Avatar, Button, Col, Dropdown, Flex, List, Row, Space, Spin, Tooltip } from 'antd';
+import { App, Avatar, Button, Col, Divider, Dropdown, Flex, List, Row, Skeleton, Space, Spin, Tooltip } from 'antd';
 import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
 import { XMLParser } from 'fast-xml-parser';
 import React from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import styled from 'styled-components';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
@@ -19,6 +20,7 @@ interface IProps {
 type IContact = Api.V1ContactListList.ResponseBody['data']['items'][number];
 
 interface IPrevState {
+	done?: boolean;
 	frist_page_md5?: string;
 	max_id?: string;
 	moments?: IMoment[];
@@ -75,7 +77,7 @@ const Moments = (props: IProps) => {
 		},
 	);
 
-	const { loading: getLoading } = useRequest(
+	const { runAsync: loadMoreData, loading: getLoading } = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.api.v1MomentsListList({
 				id: props.robotId,
@@ -132,8 +134,15 @@ const Moments = (props: IProps) => {
 				if (resp.data.data?.ObjectList?.length) {
 					nextState.max_id = resp.data.data.ObjectList[len - 1].IdStr!;
 				}
+				if (len < 10) {
+					nextState.done = true; // 没有更多数据了
+				} else {
+					nextState.done = false; // 还有更多数据
+				}
 
 				setPrevState(nextState);
+			} else {
+				setPrevState({ done: true });
 			}
 		},
 		{
@@ -166,130 +175,148 @@ const Moments = (props: IProps) => {
 						icon={<SettingOutlined />}
 						ghost
 						onClick={async () => {
-							//
+							loadMoreData();
 						}}
 					>
 						朋友圈设置
 					</Button>
 				</Flex>
 				<div
+					id="moments-list"
 					style={{
+						// height: 'calc(100vh - 185px)',
+						height: 400,
+						overflowY: 'auto',
 						border: '1px solid rgba(5,5,5,0.06)',
 						borderRadius: 4,
 						marginRight: 2,
 					}}
 				>
-					<List
-						rowKey="IdStr"
-						itemLayout="horizontal"
-						dataSource={prevState.moments || []}
-						style={{ maxHeight: 'calc(100vh - 235px)', overflowY: 'auto' }}
-						renderItem={item => {
-							const items: MenuProps['items'] = [];
-							console.log('[DEBUG]', item);
-							return (
-								<List.Item>
-									<List.Item.Meta
-										avatar={
-											<Avatar
-												style={{ marginLeft: 8 }}
-												src={item.Avatar || DefaultAvatar}
-											/>
-										}
-										title={
-											<>
-												<span className="moment-nickname">{item.Nickname || item.Username}</span>
-											</>
-										}
-										description={
-											<>
-												{!!item.Moment?.TimelineObject?.contentDesc && (
-													<pre className="moment-content">{item.Moment.TimelineObject.contentDesc}</pre>
-												)}
-												{Array.isArray(item.Moment?.TimelineObject?.ContentObject?.mediaList?.media) ? (
-													<MediaList
-														key={item.IdStr}
-														className="moment-media-list"
-														dataSource={item.Moment.TimelineObject.ContentObject.mediaList.media}
-													/>
-												) : item.Moment?.TimelineObject?.ContentObject?.mediaList?.media?.id ? (
-													<>
-														{Number(item.Moment.TimelineObject.ContentObject.mediaList.media.type) === 6 ? (
-															<MediaVideo
-																dataSource={item.Moment.TimelineObject.ContentObject.mediaList.media}
-																videoDownloadUrl={`/api/v1/moments/down-media?id=${props.robotId}&url=${encodeURIComponent(item.Moment.TimelineObject.ContentObject.mediaList.media.url)}`}
-															/>
-														) : (
-															<MediaList
-																key={item.IdStr}
-																className="moment-media-list"
-																dataSource={[item.Moment.TimelineObject.ContentObject.mediaList.media]}
-															/>
-														)}
-													</>
-												) : null}
-												<Flex
-													justify="space-between"
-													align="middle"
-												>
-													<Space>
-														<span>{dayjs(Number(item.CreateTime) * 1000).fromNow()}</span>
+					<InfiniteScroll
+						dataLength={prevState.moments?.length || 0}
+						next={loadMoreData}
+						hasMore={!prevState.done}
+						loader={
+							<div style={{ padding: '0 8px' }}>
+								<Skeleton
+									avatar
+									paragraph={{ rows: 1 }}
+									active
+								/>
+							</div>
+						}
+						endMessage={<Divider plain>朋友圈加载完了...</Divider>}
+						scrollableTarget="scrollableDiv"
+					>
+						<List
+							rowKey="IdStr"
+							itemLayout="horizontal"
+							dataSource={prevState.moments || []}
+							renderItem={item => {
+								const items: MenuProps['items'] = [];
+								// console.log('[DEBUG]', item);
+								return (
+									<List.Item>
+										<List.Item.Meta
+											avatar={
+												<Avatar
+													style={{ marginLeft: 8 }}
+													src={item.Avatar || DefaultAvatar}
+												/>
+											}
+											title={
+												<>
+													<span className="moment-nickname">{item.Nickname || item.Username}</span>
+												</>
+											}
+											description={
+												<>
+													{!!item.Moment?.TimelineObject?.contentDesc && (
+														<pre className="moment-content">{item.Moment.TimelineObject.contentDesc}</pre>
+													)}
+													{Array.isArray(item.Moment?.TimelineObject?.ContentObject?.mediaList?.media) ? (
+														<MediaList
+															className="moment-media-list"
+															dataSource={item.Moment.TimelineObject.ContentObject.mediaList.media}
+														/>
+													) : item.Moment?.TimelineObject?.ContentObject?.mediaList?.media?.id ? (
 														<>
-															{item.Username === props.robot.wechat_id && (
-																<Button
-																	key="left"
-																	type="text"
-																	size="small"
-																	icon={
-																		<Tooltip title="删除">
-																			<DeleteFilled className="moment-delete" />
-																		</Tooltip>
-																	}
-																	onClick={() => {
-																		modal.confirm({
-																			title: '朋友圈删除确认',
-																			content: <>确定要删除这条朋友圈吗？</>,
-																			okText: '删除',
-																			cancelText: '取消',
-																		});
-																	}}
+															{Number(item.Moment.TimelineObject.ContentObject.mediaList.media.type) === 6 ? (
+																<MediaVideo
+																	dataSource={item.Moment.TimelineObject.ContentObject.mediaList.media}
+																	videoDownloadUrl={`/api/v1/moments/down-media?id=${props.robotId}&url=${encodeURIComponent(item.Moment.TimelineObject.ContentObject.mediaList.media.url)}`}
+																/>
+															) : (
+																<MediaList
+																	className="moment-media-list"
+																	dataSource={[item.Moment.TimelineObject.ContentObject.mediaList.media]}
 																/>
 															)}
 														</>
-													</Space>
-													<div style={{ marginRight: 8 }}>
-														<Dropdown.Button
-															menu={{
-																items,
-																onClick: () => {
-																	//
-																},
-															}}
-															buttonsRender={() => {
-																return [
-																	null,
+													) : null}
+													<Flex
+														justify="space-between"
+														align="middle"
+													>
+														<Space>
+															<span>{dayjs(Number(item.CreateTime) * 1000).fromNow()}</span>
+															<>
+																{item.Username === props.robot.wechat_id && (
 																	<Button
-																		key="right"
-																		type="primary"
+																		key="left"
+																		type="text"
 																		size="small"
-																		ghost
-																		icon={<EllipsisOutlined />}
-																	/>,
-																];
-															}}
-															onClick={() => {
-																//
-															}}
-														/>
-													</div>
-												</Flex>
-											</>
-										}
-									/>
-								</List.Item>
-							);
-						}}
-					/>
+																		icon={
+																			<Tooltip title="删除">
+																				<DeleteFilled className="moment-delete" />
+																			</Tooltip>
+																		}
+																		onClick={() => {
+																			modal.confirm({
+																				title: '朋友圈删除确认',
+																				content: <>确定要删除这条朋友圈吗？</>,
+																				okText: '删除',
+																				cancelText: '取消',
+																			});
+																		}}
+																	/>
+																)}
+															</>
+														</Space>
+														<div style={{ marginRight: 8 }}>
+															<Dropdown.Button
+																menu={{
+																	items,
+																	onClick: () => {
+																		//
+																	},
+																}}
+																buttonsRender={() => {
+																	return [
+																		null,
+																		<Button
+																			key="right"
+																			type="primary"
+																			size="small"
+																			ghost
+																			icon={<EllipsisOutlined />}
+																		/>,
+																	];
+																}}
+																onClick={() => {
+																	//
+																}}
+															/>
+														</div>
+													</Flex>
+												</>
+											}
+										/>
+									</List.Item>
+								);
+							}}
+						/>
+					</InfiniteScroll>
 				</div>
 			</Spin>
 		</Container>
