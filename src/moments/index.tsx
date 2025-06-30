@@ -1,4 +1,4 @@
-import { DeleteFilled, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
+import { ArrowUpOutlined, DeleteFilled, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import { useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Dropdown, Flex, List, Row, Skeleton, Space, Spin, Tooltip } from 'antd';
 import type { MenuProps } from 'antd';
@@ -22,6 +22,8 @@ interface IPrevState {
 	done?: boolean;
 	frist_page_md5?: string;
 	max_id?: string;
+	current_md5?: string;
+	current_id?: string;
 	moments?: IMoment[];
 }
 
@@ -49,6 +51,12 @@ const Container = styled.div`
 
 	.moment-delete {
 		color: #4683d0;
+	}
+
+	.moment-likes {
+	}
+
+	.moment-comments {
 	}
 `;
 
@@ -81,11 +89,11 @@ const Moments = (props: IProps) => {
 	);
 
 	const { runAsync: loadMoreData, loading: getLoading } = useRequest(
-		async () => {
+		async (md5?: string, id?: string) => {
 			const resp = await window.wechatRobotClient.api.v1MomentsListList({
 				id: props.robotId,
-				frist_page_md5: prevState.frist_page_md5,
-				max_id: prevState.max_id,
+				frist_page_md5: md5 !== undefined ? md5 : prevState.frist_page_md5,
+				max_id: id !== undefined ? id : prevState.max_id,
 			});
 			if (resp.data.data?.ObjectList?.length) {
 				const nextState: IPrevState = { moments: [...(prevState.moments || [])] };
@@ -127,6 +135,8 @@ const Moments = (props: IProps) => {
 				});
 
 				const len = resp.data.data.ObjectList.length;
+				nextState.current_id = id !== undefined ? id : nextState.max_id;
+				nextState.current_md5 = md5 !== undefined ? md5 : nextState.frist_page_md5;
 				if (resp.data.data?.FirstPageMd5) {
 					nextState.frist_page_md5 = resp.data.data.FirstPageMd5;
 				}
@@ -168,17 +178,32 @@ const Moments = (props: IProps) => {
 						<Col flex="0 0 300px"></Col>
 						<Col flex="0 0 260px"></Col>
 					</Row>
-					<Button
-						type="primary"
-						style={{ marginRight: 8 }}
-						icon={<SettingOutlined />}
-						ghost
-						onClick={async () => {
-							loadMoreData();
-						}}
-					>
-						朋友圈设置
-					</Button>
+					<Space>
+						<Button
+							type="primary"
+							icon={<ArrowUpOutlined />}
+							ghost
+							onClick={() => {
+								setPrevState({ done: false, max_id: '0', frist_page_md5: '', moments: [] });
+								setTimeout(() => {
+									loadMoreData();
+								}, 60);
+							}}
+						>
+							返回朋友圈首页
+						</Button>
+						<Button
+							type="primary"
+							style={{ marginRight: 8 }}
+							icon={<SettingOutlined />}
+							ghost
+							onClick={async () => {
+								//
+							}}
+						>
+							朋友圈设置
+						</Button>
+					</Space>
 				</Flex>
 				<div
 					id="moments-list"
@@ -203,22 +228,7 @@ const Moments = (props: IProps) => {
 								/>
 							</div>
 						}
-						endMessage={
-							<div style={{ textAlign: 'center', padding: '12px 8px' }}>
-								<Button
-									type="primary"
-									block
-									onClick={() => {
-										setPrevState({ done: false, max_id: '0', frist_page_md5: '', moments: [] });
-										setTimeout(() => {
-											loadMoreData();
-										}, 60);
-									}}
-								>
-									加载完了，返回朋友圈首页
-								</Button>
-							</div>
-						}
+						endMessage={<div style={{ textAlign: 'center', padding: '12px 8px' }}>加载完了...</div>}
 						scrollableTarget="moments-list"
 					>
 						<List
@@ -324,6 +334,12 @@ const Moments = (props: IProps) => {
 															/>
 														</div>
 													</Flex>
+													{/* 只有点赞数据 */}
+													{!!item.LikeCount && !item.CommentCount && <div className="moment-likes"></div>}
+													{/* 只有评论数据 */}
+													{!item.LikeCount && !!item.CommentCount && <div className="moment-comments"></div>}
+													{/* 有评论、点赞数据 */}
+													{!!item.LikeCount && !!item.CommentCount && null}
 												</>
 											}
 										/>
