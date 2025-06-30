@@ -215,7 +215,10 @@ const Moments = (props: IProps) => {
 												) : item.Moment?.TimelineObject?.ContentObject?.mediaList?.media?.id ? (
 													<>
 														{Number(item.Moment.TimelineObject.ContentObject.mediaList.media.type) === 6 ? (
-															<MediaVideo dataSource={item.Moment.TimelineObject.ContentObject.mediaList.media} />
+															<MediaVideo
+																dataSource={item.Moment.TimelineObject.ContentObject.mediaList.media}
+																videoDownloadUrl={`/api/v1/moments/down-media?id=${props.robotId}&url=${encodeURIComponent(item.Moment.TimelineObject.ContentObject.mediaList.media.url)}`}
+															/>
 														) : (
 															<MediaList
 																key={item.IdStr}

@@ -132,6 +132,7 @@ interface IMediaVideoProps {
 	className?: string;
 	style?: React.CSSProperties;
 	dataSource: Media;
+	videoDownloadUrl: string;
 }
 
 export const MediaVideo = (props: IMediaVideoProps) => {
@@ -151,7 +152,7 @@ export const MediaVideo = (props: IMediaVideoProps) => {
 						muted
 						width="600px"
 						controls
-						src="https://mdn.alipayobjects.com/huamei_iwk9zp/afts/file/A*uYT7SZwhJnUAAAAAAAAAAAAADgCCAQ"
+						src={props.videoDownloadUrl}
 					/>
 				),
 				toolbarRender: () => null,
