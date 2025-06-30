@@ -122,9 +122,9 @@ const Contact = (props: IProps) => {
 			<Flex
 				justify="space-between"
 				align="middle"
+				style={{ marginBottom: 16 }}
 			>
 				<Row
-					style={{ marginBottom: 16 }}
 					align="middle"
 					wrap={false}
 					gutter={8}

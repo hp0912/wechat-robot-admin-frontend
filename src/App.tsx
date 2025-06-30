@@ -1,6 +1,8 @@
 import { Skeleton } from 'antd';
 import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { Suspense } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import App404 from './404';
@@ -11,6 +13,7 @@ import Login from './login';
 import { Init } from './utils/appInit';
 
 dayjs.extend(customParseFormat);
+dayjs.extend(relativeTime);
 
 Init();
 

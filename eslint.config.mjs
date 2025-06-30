@@ -25,6 +25,14 @@ export default [
 		rules: {
 			'react/react-in-jsx-scope': ['off'],
 			'@typescript-eslint/consistent-type-imports': ['warn'],
+			'no-unused-vars': 'off',
+			'@typescript-eslint/no-unused-vars': [
+				'error',
+				{
+					varsIgnorePattern: '^_',
+					argsIgnorePattern: '^_',
+				},
+			],
 		},
 	},
 ];

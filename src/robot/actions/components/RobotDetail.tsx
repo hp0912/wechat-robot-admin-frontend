@@ -213,7 +213,7 @@ const RobotDetail = (props: IProps) => {
 					}}
 				>
 					<Tabs
-						destroyInactiveTabPane
+						destroyOnHidden
 						items={items}
 					/>
 				</Col>
