@@ -1,6 +1,8 @@
 import {
 	DownloadOutlined,
+	EyeOutlined,
 	LeftOutlined,
+	PlayCircleFilled,
 	RightOutlined,
 	RotateLeftOutlined,
 	RotateRightOutlined,
@@ -12,6 +14,7 @@ import {
 import { Image, Space } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { ImageFallback } from '@/constant';
 import type { Media } from './types';
 
 interface IProps {
@@ -92,18 +95,68 @@ const MediaList = (props: IProps) => {
 				style={props.style}
 				className={props.className}
 			>
-				{props.dataSource.map(item => (
-					<Image
-						key={item.id}
-						src={item.thumb}
-						referrerPolicy="no-referrer"
-						width={props.dataSource.length === 1 ? undefined : 168}
-						height={props.dataSource.length === 1 ? undefined : 168}
-					/>
-				))}
+				{props.dataSource.map(item => {
+					const width = props.dataSource.length === 1 ? undefined : 168;
+					const height = props.dataSource.length === 1 ? undefined : 168;
+					const src = item.hd || item.uhd || item.url || item.thumb;
+
+					return (
+						<Image
+							key={item.id}
+							src={item.thumb?.replace('http://', 'https://')}
+							referrerPolicy="no-referrer"
+							width={width}
+							height={height}
+							fallback={ImageFallback}
+							preview={{
+								destroyOnHidden: true,
+								mask: (
+									<span style={{ color: '#fff' }}>
+										<EyeOutlined style={{ marginRight: 8 }} />
+										<span>查看高清大图</span>
+									</span>
+								),
+								src: src?.replace('http://', 'https://'),
+							}}
+						/>
+					);
+				})}
 			</ImageGroupContainer>
 		</Image.PreviewGroup>
 	);
 };
 
 export default React.memo(MediaList);
+
+interface IMediaVideoProps {
+	className?: string;
+	style?: React.CSSProperties;
+	dataSource: Media;
+}
+
+export const MediaVideo = (props: IMediaVideoProps) => {
+	const src = props.dataSource.thumb?.replace('http://', 'https://');
+	return (
+		<Image
+			preview={{
+				destroyOnHidden: true,
+				mask: (
+					<span style={{ color: '#fff' }}>
+						<PlayCircleFilled style={{ marginRight: 8 }} />
+						<span>播放</span>
+					</span>
+				),
+				imageRender: () => (
+					<video
+						muted
+						width="600px"
+						controls
+						src="https://mdn.alipayobjects.com/huamei_iwk9zp/afts/file/A*uYT7SZwhJnUAAAAAAAAAAAAADgCCAQ"
+					/>
+				),
+				toolbarRender: () => null,
+			}}
+			src={src}
+		/>
+	);
+};

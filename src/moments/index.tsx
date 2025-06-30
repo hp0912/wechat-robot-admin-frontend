@@ -8,7 +8,7 @@ import React from 'react';
 import styled from 'styled-components';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
-import MediaList from './MediaList';
+import MediaList, { MediaVideo } from './MediaList';
 import type { IMoment, ITimeline } from './types';
 
 interface IProps {
@@ -208,14 +208,22 @@ const Moments = (props: IProps) => {
 												)}
 												{Array.isArray(item.Moment?.TimelineObject?.ContentObject?.mediaList?.media) ? (
 													<MediaList
+														key={item.IdStr}
 														className="moment-media-list"
 														dataSource={item.Moment.TimelineObject.ContentObject.mediaList.media}
 													/>
 												) : item.Moment?.TimelineObject?.ContentObject?.mediaList?.media?.id ? (
-													<MediaList
-														className="moment-media-list"
-														dataSource={[item.Moment.TimelineObject.ContentObject.mediaList.media]}
-													/>
+													<>
+														{Number(item.Moment.TimelineObject.ContentObject.mediaList.media.type) === 6 ? (
+															<MediaVideo dataSource={item.Moment.TimelineObject.ContentObject.mediaList.media} />
+														) : (
+															<MediaList
+																key={item.IdStr}
+																className="moment-media-list"
+																dataSource={[item.Moment.TimelineObject.ContentObject.mediaList.media]}
+															/>
+														)}
+													</>
 												) : null}
 												<Flex
 													justify="space-between"
