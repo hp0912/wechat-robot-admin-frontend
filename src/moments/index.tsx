@@ -1,14 +1,14 @@
-import { ArrowUpOutlined, DeleteFilled, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
+import { ArrowUpOutlined, DeleteFilled, EllipsisOutlined, HeartOutlined, SettingOutlined } from '@ant-design/icons';
 import { useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Dropdown, Flex, List, Row, Skeleton, Space, Spin, Tooltip } from 'antd';
 import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import styled from 'styled-components';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import MediaList, { MediaVideo } from './MediaList';
+import { Container } from './styled';
 
 interface IProps {
 	robotId: number;
@@ -27,39 +27,6 @@ interface IPrevState {
 	moments?: IMoment[];
 }
 
-const Container = styled.div`
-	.moment-nickname {
-		color: #4683d0;
-	}
-
-	.moment-content {
-		margin: 0;
-		padding: 0;
-		white-space: pre-wrap;
-		word-break: break-all;
-		color: #090909;
-		margin-bottom: 3px;
-	}
-
-	.moment-media-list {
-		margin-bottom: 3px;
-	}
-
-	.moment-location {
-		color: #4683d0;
-	}
-
-	.moment-delete {
-		color: #4683d0;
-	}
-
-	.moment-likes {
-	}
-
-	.moment-comments {
-	}
-`;
-
 const Moments = (props: IProps) => {
 	const { message, modal } = App.useApp();
 
@@ -68,6 +35,7 @@ const Moments = (props: IProps) => {
 
 	// 记录一下朋友圈ID，避免重复了
 	const momentIds = new Set<string>();
+	const commentUserMap = new Map<string, string>();
 
 	const { runAsync: getContacts } = useRequest(
 		async (contactIds: string[]) => {
@@ -162,6 +130,47 @@ const Moments = (props: IProps) => {
 		},
 	);
 
+	const renderLikes = (item: IMoment) => {
+		return (
+			<>
+				<HeartOutlined className="like" />
+				{item.LikeUserList!.map((user, index) => {
+					return (
+						<span key={user.Username}>
+							<b className="user">{user.Nickname}</b>
+							{index === item.LikeUserList!.length - 1 ? null : <span style={{ marginRight: 3 }}>,</span>}
+						</span>
+					);
+				})}
+			</>
+		);
+	};
+
+	const renderComments = (item: IMoment) => {
+		return item.CommentUserList!.map(item => {
+			commentUserMap.set(item.Username!, item.Nickname!);
+			if (item.DeleteFlag === 1) {
+				return null;
+			}
+			return (
+				<p
+					className="comment-item"
+					key={`${item.CommentFlag}-${item.CommentId}-${item.CommentId2}`}
+				>
+					<b className="user">{commentUserMap.get(item.Username!) || item.Username}</b>
+					{!!item.ReplyUsername && (
+						<span>
+							{' '}
+							@ <b className="user">{commentUserMap.get(item.ReplyUsername) || item.ReplyUsername}</b>
+						</span>
+					)}
+					<span>: </span>
+					<span className="comment">{item.Content}</span>
+				</p>
+			);
+		});
+	};
+
 	return (
 		<Container>
 			<Spin spinning={getLoading}>
@@ -239,7 +248,7 @@ const Moments = (props: IProps) => {
 								const items: MenuProps['items'] = [];
 								const media = item.TimelineObject?.ContentObject?.MediaList?.Media;
 								const momentLocation = item.TimelineObject?.Location;
-								console.log('[DEBUG]', item);
+								// console.log('[DEBUG]', item);
 								return (
 									<List.Item>
 										<List.Item.Meta
@@ -335,11 +344,20 @@ const Moments = (props: IProps) => {
 														</div>
 													</Flex>
 													{/* 只有点赞数据 */}
-													{!!item.LikeCount && !item.CommentCount && <div className="moment-likes"></div>}
+													{!!item.LikeUserList?.length && !item.CommentUserList?.length && (
+														<div className="moment-likes">{renderLikes(item)}</div>
+													)}
 													{/* 只有评论数据 */}
-													{!item.LikeCount && !!item.CommentCount && <div className="moment-comments"></div>}
+													{!item.LikeUserList?.length && !!item.CommentUserList?.length && (
+														<div className="moment-comments">{renderComments(item)}</div>
+													)}
 													{/* 有评论、点赞数据 */}
-													{!!item.LikeCount && !!item.CommentCount && null}
+													{!!item.LikeUserList?.length && !!item.CommentUserList?.length && (
+														<div className="moment-actions">
+															<div className="likes">{renderLikes(item)}</div>
+															<div className="comments">{renderComments(item)}</div>
+														</div>
+													)}
 												</>
 											}
 										/>
