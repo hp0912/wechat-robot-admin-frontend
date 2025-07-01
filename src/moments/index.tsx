@@ -1,4 +1,12 @@
-import { ArrowUpOutlined, DeleteFilled, EllipsisOutlined, HeartOutlined, SettingOutlined } from '@ant-design/icons';
+import {
+	ArrowUpOutlined,
+	CloseCircleFilled,
+	DeleteFilled,
+	EllipsisOutlined,
+	HeartFilled,
+	HeartOutlined,
+	SettingOutlined,
+} from '@ant-design/icons';
 import { useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Dropdown, Flex, List, Row, Skeleton, Space, Spin, Tooltip } from 'antd';
 import type { MenuProps } from 'antd';
@@ -7,6 +15,8 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
+import CommentFilled from '@/icons/CommentFilled';
+import CommentOutlined from '@/icons/CommentOutlined';
 import MediaList, { MediaVideo } from './MediaList';
 import { Container } from './styled';
 
@@ -166,6 +176,21 @@ const Moments = (props: IProps) => {
 					)}
 					<span>: </span>
 					<span className="comment">{item.Content}</span>
+					{item.Username === props.robot.wechat_id ? (
+						<CloseCircleFilled
+							className="delete-comment"
+							onClick={() => {
+								message.success('开发中，敬请期待');
+							}}
+						/>
+					) : (
+						<CommentFilled
+							className="reply-comment"
+							onClick={() => {
+								message.success('开发中，敬请期待');
+							}}
+						/>
+					)}
 				</p>
 			);
 		});
@@ -245,7 +270,38 @@ const Moments = (props: IProps) => {
 							itemLayout="horizontal"
 							dataSource={prevState.moments || []}
 							renderItem={item => {
-								const items: MenuProps['items'] = [];
+								const items: MenuProps['items'] = [
+									{
+										label: (
+											<>
+												<CommentOutlined style={{ marginRight: 8 }} />
+												评论
+											</>
+										),
+										key: 'comment',
+									},
+								];
+								if (item.LikeFlag === 1) {
+									items.unshift({
+										label: (
+											<>
+												<HeartFilled style={{ color: '#ff4d4f', marginRight: 8 }} />
+												取消点赞
+											</>
+										),
+										key: 'unlike',
+									});
+								} else {
+									items.unshift({
+										label: (
+											<>
+												<HeartOutlined style={{ marginRight: 8 }} />
+												点赞
+											</>
+										),
+										key: 'like',
+									});
+								}
 								const media = item.TimelineObject?.ContentObject?.MediaList?.Media;
 								const momentLocation = item.TimelineObject?.Location;
 								// console.log('[DEBUG]', item);
@@ -321,8 +377,18 @@ const Moments = (props: IProps) => {
 															<Dropdown.Button
 																menu={{
 																	items,
-																	onClick: () => {
-																		//
+																	onClick: ev => {
+																		switch (ev.key) {
+																			case 'like':
+																				message.success('开发中，敬请期待');
+																				break;
+																			case 'unlike':
+																				message.success('开发中，敬请期待');
+																				break;
+																			case 'comment':
+																				message.success('开发中，敬请期待');
+																				break;
+																		}
 																	},
 																}}
 																buttonsRender={() => {
