@@ -66,6 +66,29 @@ export const Container = styled.div`
 				color: #353434;
 				font-size: 13px;
 			}
+
+			.delete-comment {
+				display: none;
+				margin-left: 8px;
+				color: #ad5454;
+				cursor: pointer;
+				font-size: 13px;
+			}
+
+			.reply-comment {
+				display: none;
+				margin-left: 8px;
+				color: #4683d0;
+				cursor: pointer;
+				font-size: 13px;
+			}
+		}
+
+		.comment-item:hover {
+			.delete-comment,
+			.reply-comment {
+				display: inline-block;
+			}
 		}
 
 		.comment-item:first-child {
