@@ -5587,6 +5587,268 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-315079670-run",
 				"security": []
 			}
+		},
+		"/api/v1/system-messages": {
+			"get": {
+				"summary": "获取系统消息",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": {
+														"type": "number"
+													},
+													"msg_id": {
+														"type": "number"
+													},
+													"client_msg_id": {
+														"type": "number"
+													},
+													"type": {
+														"type": "number"
+													},
+													"image_url": {
+														"type": "string"
+													},
+													"description": {
+														"type": "string"
+													},
+													"status": {
+														"type": "number"
+													},
+													"is_read": {
+														"type": "number"
+													},
+													"created_at": {
+														"type": "number"
+													},
+													"updated_at": {
+														"type": "number"
+													}
+												},
+												"required": [
+													"id",
+													"msg_id",
+													"client_msg_id",
+													"type",
+													"image_url",
+													"description",
+													"status",
+													"is_read",
+													"created_at",
+													"updated_at"
+												],
+												"x-apifox-orders": [
+													"id",
+													"msg_id",
+													"client_msg_id",
+													"type",
+													"image_url",
+													"description",
+													"status",
+													"is_read",
+													"created_at",
+													"updated_at"
+												],
+												"x-apifox-ignore-properties": []
+											}
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								},
+								"examples": {
+									"1": {
+										"summary": "成功示例",
+										"value": {
+											"code": 0,
+											"message": "",
+											"data": {
+												"FirstPageMd5": "abcdef1234567890",
+												"ObjectCount": 1,
+												"ObjectList": [
+													{
+														"Id": 123456789,
+														"Username": "user1",
+														"Nickname": "昵称1",
+														"CreateTime": 1718000000,
+														"ObjectDesc": {
+															"iLen": 5,
+															"buffer": "描述内容"
+														},
+														"LikeFlag": 1,
+														"LikeCount": 1,
+														"LikeUserListCount": 1,
+														"LikeUserList": [
+															{
+																"Username": "likeuser1",
+																"Nickname": "点赞者昵称",
+																"Source": 1,
+																"Type": 1,
+																"Content": "点赞内容",
+																"CreateTime": 1718000001,
+																"CommentId": 1001,
+																"ReplyCommentId": 1000,
+																"ReplyUsername": "replyuser1",
+																"IsNotRichText": 0,
+																"ReplyCommentId2": 1000001,
+																"CommentId2": 1000002,
+																"DeleteFlag": 0,
+																"CommentFlag": 1
+															}
+														],
+														"CommentCount": 1,
+														"CommentUserListCount": 1,
+														"CommentUserList": [
+															{
+																"Username": "commentuser1",
+																"Nickname": "评论者昵称",
+																"Source": 2,
+																"Type": 2,
+																"Content": "评论内容",
+																"CreateTime": 1718000002,
+																"CommentId": 2001,
+																"ReplyCommentId": 2000,
+																"ReplyUsername": "replycommentuser1",
+																"IsNotRichText": 0,
+																"ReplyCommentId2": 2000001,
+																"CommentId2": 2000002,
+																"DeleteFlag": 0,
+																"CommentFlag": 1
+															}
+														],
+														"WithUserCount": 1,
+														"WithUserListCount": 1,
+														"WithUserList": [
+															{
+																"Username": "withuser1",
+																"Nickname": "提及者昵称",
+																"Source": 3,
+																"Type": 3,
+																"Content": "提及内容",
+																"CreateTime": 1718000003,
+																"CommentId": 3001,
+																"ReplyCommentId": 3000,
+																"ReplyUsername": "replywithuser1",
+																"IsNotRichText": 0,
+																"ReplyCommentId2": 3000001,
+																"CommentId2": 3000002,
+																"DeleteFlag": 0,
+																"CommentFlag": 1
+															}
+														],
+														"ExtFlag": 0,
+														"NoChange": 0,
+														"GroupCount": 1,
+														"GroupList": [
+															{
+																"GroupId": 10001
+															}
+														],
+														"IsNotRichText": 0,
+														"ReferUsername": "referuser1",
+														"ReferId": 987654321,
+														"BlackListCount": 1,
+														"BlackList": [
+															{
+																"iLen": 4,
+																"buffer": "黑名单用户"
+															}
+														],
+														"DeleteFlag": 0,
+														"GroupUserCount": 1,
+														"GroupUser": [
+															{
+																"iLen": 4,
+																"buffer": "分组用户"
+															}
+														],
+														"ObjectOperations": [
+															{
+																"iLen": 6,
+																"buffer": "操作描述"
+															}
+														],
+														"SnsRedEnvelops": {
+															"RewardCount": 1,
+															"RewardUserList": "rewarduser1",
+															"ReportId": 101,
+															"ReportKey": 202,
+															"ResourceId": 303
+														},
+														"PreDownloadInfo": {
+															"PreDownloadPercent": 80,
+															"PreDownloadNetType": 2,
+															"NoPreDownloadRange": "4G"
+														},
+														"WeAppInfo": {
+															"MapPoiId": "poi12345",
+															"AppId": 1234,
+															"UserName": "weappuser",
+															"RedirectUrl": "https://redirect.example.com",
+															"ShowType": 1,
+															"RScore": 5
+														}
+													}
+												],
+												"NewRequestTime": 1718000004,
+												"ObjectCountForSameMd5": 1,
+												"ControlFlag": 1,
+												"ServerConfig": {
+													"PostMentionLimit": 10,
+													"CopyAndPasteWordLimit": 100
+												},
+												"AdvertiseCount": 1,
+												"AdvertiseList": "广告内容1",
+												"Session": {
+													"iLen": 8,
+													"buffer": "session1"
+												},
+												"RecCount": 1,
+												"RecList": 1
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-317969145-run",
+				"security": []
+			}
 		}
 	},
 	"components": {

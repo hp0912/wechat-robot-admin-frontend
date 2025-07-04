@@ -1,6 +1,6 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
-import { App, Avatar, Button, Col, Dropdown, Flex, Input, List, Pagination, Radio, Row, Skeleton } from 'antd';
+import { App, Avatar, Button, Col, Dropdown, Flex, Input, List, Pagination, Radio, Row, Skeleton, Space } from 'antd';
 import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
@@ -15,6 +15,7 @@ import GroupFilled from '@/icons/GroupFilled';
 import MaleFilled from '@/icons/MaleFilled';
 import ChatRoomSettings from '@/settings/ChatRoomSettings';
 import FriendSettings from '@/settings/FriendSettings';
+import SystemMessage from '@/system-message';
 import ChatRoomAnnouncementChange from './ChatRoomAnnouncementChange';
 import ChatRoomNameChange from './ChatRoomNameChange';
 import ChatRoomQuit from './ChatRoomQuit';
@@ -158,19 +159,22 @@ const Contact = (props: IProps) => {
 						</Radio.Group>
 					</Col>
 				</Row>
-				<Button
-					type="primary"
-					style={{ marginRight: 8 }}
-					loading={syncLoading}
-					ghost
-					onClick={async () => {
-						await runAsync();
-						setSearch({ pageIndex: 1 });
-						message.success('同步成功');
-					}}
-				>
-					同步联系人
-				</Button>
+				<Space>
+					<SystemMessage robotId={props.robotId} />
+					<Button
+						type="primary"
+						style={{ marginRight: 8 }}
+						loading={syncLoading}
+						ghost
+						onClick={async () => {
+							await runAsync();
+							setSearch({ pageIndex: 1 });
+							message.success('同步成功');
+						}}
+					>
+						同步联系人
+					</Button>
+				</Space>
 			</Flex>
 			<div
 				style={{

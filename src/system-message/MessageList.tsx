@@ -1,0 +1,184 @@
+import { useSetState } from 'ahooks';
+import { Avatar, Button, Col, Drawer, Row, Space, Table, Tag, theme } from 'antd';
+import type { TableProps } from 'antd';
+import dayjs from 'dayjs';
+import React from 'react';
+import type { Api } from '@/api/wechat-robot/wechat-robot';
+import { DefaultAvatar } from '@/constant';
+
+type IDataSource = Api.V1SystemMessagesList.ResponseBody['data'][number];
+
+interface IProps {
+	open: boolean;
+	dataSource: IDataSource[];
+	onClose: () => void;
+}
+
+const MessageList = (props: IProps) => {
+	const { token } = theme.useToken();
+
+	const [selectedState, setSelectedState] = useSetState<{ keys: number[]; rows: IDataSource[] }>({
+		keys: [],
+		rows: [],
+	});
+
+	const columns: TableProps<IDataSource>['columns'] = [
+		{
+			title: '类型',
+			width: 100,
+			dataIndex: 'type',
+			ellipsis: true,
+			render: (value: IDataSource['type']) => {
+				switch (value) {
+					case 37:
+						return '好友添加';
+					case 38:
+						return '邀请入群';
+					default:
+						return '未知的消息类型';
+				}
+			},
+		},
+		{
+			title: '描述',
+			width: 300,
+			dataIndex: 'description',
+			ellipsis: true,
+			render: (value: IDataSource['description'], record) => {
+				return (
+					<Row
+						align="middle"
+						wrap={false}
+					>
+						<Col flex="0 0 auto">
+							<Avatar
+								size="small"
+								style={{ marginRight: 3 }}
+								src={record.image_url || DefaultAvatar}
+							/>
+						</Col>
+						<Col
+							flex="1 1 auto"
+							className="ellipsis"
+						>
+							{value || '无描述'}
+						</Col>
+					</Row>
+				);
+			},
+		},
+		{
+			title: '已读',
+			width: 100,
+			dataIndex: 'is_read',
+			ellipsis: true,
+			render: (value: IDataSource['is_read']) => {
+				return value ? <Tag color={token.colorSuccess}>是</Tag> : <Tag color="gray">否</Tag>;
+			},
+		},
+		{
+			title: '处理状态',
+			width: 100,
+			dataIndex: 'status',
+			ellipsis: true,
+			render: (value: IDataSource['status'], record) => {
+				switch (record.type) {
+					case 37:
+						return value ? <Tag color={token.colorSuccess}>已通过</Tag> : <Tag color="gray">待验证</Tag>;
+					case 38:
+						return value ? <Tag color={token.colorSuccess}>已同意</Tag> : <Tag color="gray">待同意</Tag>;
+					default:
+						return <Tag color="gray">未知状态</Tag>;
+				}
+			},
+		},
+		{
+			title: '创建时间',
+			width: 180,
+			dataIndex: 'created_at',
+			ellipsis: true,
+			render: (value: IDataSource['created_at']) => {
+				return dayjs(value).format('YYYY-MM-DD HH:mm:ss');
+			},
+		},
+		{
+			title: '处理时间',
+			width: 180,
+			dataIndex: 'updated_at',
+			ellipsis: true,
+			render: (value: IDataSource['updated_at']) => {
+				return dayjs(value).format('YYYY-MM-DD HH:mm:ss');
+			},
+		},
+		{
+			title: '操作',
+			width: 180,
+			dataIndex: 'action',
+			render: (_, record) => {
+				switch (record.type) {
+					case 37:
+						return (
+							<Button
+								type="link"
+								size="small"
+							>
+								通过好友验证
+							</Button>
+						);
+					case 38:
+						return (
+							<Button
+								type="link"
+								size="small"
+							>
+								同意进群
+							</Button>
+						);
+					default:
+						return null;
+				}
+			},
+		},
+	];
+
+	return (
+		<Drawer
+			title="系统消息"
+			open={props.open}
+			onClose={props.onClose}
+			width="75%"
+			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { paddingTop: 16, paddingBottom: 0 } }}
+			extra={
+				<Space>
+					<Button
+						type="primary"
+						ghost
+					>
+						批量标记为已读
+					</Button>
+				</Space>
+			}
+			footer={null}
+		>
+			<Table
+				dataSource={props.dataSource}
+				scroll={{ x: 'max-content', y: 'calc(100vh - 210px)' }}
+				columns={columns}
+				pagination={{
+					pageSize: 20,
+					total: props.dataSource.length,
+					showTotal: (total, range) => `${range[0]}-${range[1]} 条，共 ${total} 条`,
+				}}
+				rowSelection={{
+					type: 'checkbox',
+					selectedRowKeys: selectedState.keys,
+					onChange: (selectedRowKeys: React.Key[], selectedRows: IDataSource[]) => {
+						setSelectedState({ keys: selectedRowKeys as number[], rows: selectedRows });
+					},
+				}}
+			/>
+		</Drawer>
+	);
+};
+
+export default React.memo(MessageList);
