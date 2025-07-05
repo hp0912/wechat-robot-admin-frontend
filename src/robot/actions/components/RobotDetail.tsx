@@ -1,4 +1,4 @@
-import { FileTextFilled, OpenAIFilled, SettingFilled, WechatFilled } from '@ant-design/icons';
+import { FileTextFilled, FundFilled, OpenAIFilled, WechatFilled } from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Spin, Tabs, Tag, theme } from 'antd';
 import type { TabsProps } from 'antd';
@@ -137,7 +137,7 @@ const RobotDetail = (props: IProps) => {
 		},
 		{
 			key: 'system-overview',
-			icon: <SettingFilled />,
+			icon: <FundFilled />,
 			label: '系统概览',
 			children: (
 				<Suspense fallback={<Spin />}>

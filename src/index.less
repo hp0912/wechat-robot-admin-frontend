@@ -52,3 +52,18 @@ body {
 .pagination {
 	margin-top: 16px;
 }
+
+.new-message {
+  animation: flash 0.8s infinite alternate;
+}
+
+@keyframes flash {
+  from {
+    background-color: transparent;
+  }
+
+  to {
+    background-color: #f5a104cc;
+    border-color: #f5a104cc;
+  }
+}
