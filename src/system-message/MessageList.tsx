@@ -1,5 +1,5 @@
-import { useSetState } from 'ahooks';
-import { Avatar, Button, Col, Drawer, Row, Space, Table, Tag, theme } from 'antd';
+import { useRequest, useSetState } from 'ahooks';
+import { App, Avatar, Button, Col, Drawer, Row, Space, Table, Tag, theme } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
@@ -20,11 +20,33 @@ interface IProps {
 
 const MessageList = (props: IProps) => {
 	const { token } = theme.useToken();
+	const { message, modal } = App.useApp();
 
 	const [selectedState, setSelectedState] = useSetState<{ keys: number[]; rows: IDataSource[] }>({
 		keys: [],
 		rows: [],
 	});
+
+	const { runAsync, loading } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1SystemMessagesMarkAsReadCreate(
+				{ id: props.robotId, system_message_ids: selectedState.keys },
+				{ id: props.robotId },
+			);
+			return resp.data;
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('已成功标记为已读');
+				setSelectedState({ keys: [], rows: [] });
+				props.onRefresh();
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
 
 	const columns: TableProps<IDataSource>['columns'] = [
 		{
@@ -161,6 +183,17 @@ const MessageList = (props: IProps) => {
 					<Button
 						type="primary"
 						ghost
+						loading={loading}
+						disabled={selectedState.keys.length === 0}
+						onClick={() => {
+							modal.confirm({
+								title: '批量标记为已读',
+								content: `确定将选中的 ${selectedState.keys.length} 条消息标记为已读吗？`,
+								onOk: async () => {
+									await runAsync();
+								},
+							});
+						}}
 					>
 						批量标记为已读
 					</Button>
