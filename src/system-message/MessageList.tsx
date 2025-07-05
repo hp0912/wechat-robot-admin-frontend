@@ -5,12 +5,15 @@ import dayjs from 'dayjs';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
+import FriendPassVerify from './FriendPassVerify';
 
 type IDataSource = Api.V1SystemMessagesList.ResponseBody['data'][number];
 
 interface IProps {
 	open: boolean;
+	robotId: number;
 	dataSource: IDataSource[];
+	onRefresh: () => void;
 	onClose: () => void;
 }
 
@@ -98,7 +101,7 @@ const MessageList = (props: IProps) => {
 			dataIndex: 'created_at',
 			ellipsis: true,
 			render: (value: IDataSource['created_at']) => {
-				return dayjs(value).format('YYYY-MM-DD HH:mm:ss');
+				return dayjs(value * 1000).format('YYYY-MM-DD HH:mm:ss');
 			},
 		},
 		{
@@ -106,8 +109,11 @@ const MessageList = (props: IProps) => {
 			width: 180,
 			dataIndex: 'updated_at',
 			ellipsis: true,
-			render: (value: IDataSource['updated_at']) => {
-				return dayjs(value).format('YYYY-MM-DD HH:mm:ss');
+			render: (value: IDataSource['updated_at'], record) => {
+				if (!record.status) {
+					return '-';
+				}
+				return dayjs(value * 1000).format('YYYY-MM-DD HH:mm:ss');
 			},
 		},
 		{
@@ -118,12 +124,11 @@ const MessageList = (props: IProps) => {
 				switch (record.type) {
 					case 37:
 						return (
-							<Button
-								type="link"
-								size="small"
-							>
-								通过好友验证
-							</Button>
+							<FriendPassVerify
+								robotId={props.robotId}
+								dataSource={record}
+								onRefresh={props.onRefresh}
+							/>
 						);
 					case 38:
 						return (
@@ -161,6 +166,7 @@ const MessageList = (props: IProps) => {
 			footer={null}
 		>
 			<Table
+				rowKey="id"
 				dataSource={props.dataSource}
 				scroll={{ x: 'max-content', y: 'calc(100vh - 210px)' }}
 				columns={columns}

@@ -13,7 +13,7 @@ const SystemMessage = (props: IProps) => {
 
 	const [open, setOpen] = useBoolean(false);
 
-	const { data, loading } = useRequest(
+	const { data, loading, refresh } = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.api.v1SystemMessagesList({
 				id: props.robotId,
@@ -33,7 +33,7 @@ const SystemMessage = (props: IProps) => {
 	return (
 		<div style={{ display: 'inline-block' }}>
 			<Button
-				className={data && data.length > 0 ? 'new-message' : undefined}
+				className={data && data.filter(item => item.is_read === 0).length > 0 ? 'new-message' : undefined}
 				type="primary"
 				ghost
 				disabled={loading || data === undefined}
@@ -43,7 +43,9 @@ const SystemMessage = (props: IProps) => {
 			{open && (
 				<MessageList
 					open={open}
+					robotId={props.robotId}
 					dataSource={data || []}
+					onRefresh={refresh}
 					onClose={setOpen.setFalse}
 				/>
 			)}
