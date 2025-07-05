@@ -1,6 +1,6 @@
 import { BellOutlined } from '@ant-design/icons';
 import { useBoolean, useMemoizedFn, useRequest } from 'ahooks';
-import { App, Button, Tooltip } from 'antd';
+import { Button, Tooltip } from 'antd';
 import React from 'react';
 import MessageList from './MessageList';
 
@@ -10,8 +10,6 @@ interface IProps {
 }
 
 const SystemMessage = (props: IProps) => {
-	const { message } = App.useApp();
-
 	const [open, setOpen] = useBoolean(false);
 
 	const { data, loading, refresh } = useRequest(
@@ -23,10 +21,10 @@ const SystemMessage = (props: IProps) => {
 		},
 		{
 			manual: false,
-			pollingInterval: 10000, // 每10秒请求一次
+			pollingInterval: 60000, // 每60秒请求一次
 			pollingWhenHidden: false, // 当页面不可见时不请求
-			onError: reason => {
-				message.error(reason.message);
+			onError: () => {
+				// message.error(reason.message);
 			},
 		},
 	);
