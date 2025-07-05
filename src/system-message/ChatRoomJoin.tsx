@@ -13,13 +13,13 @@ interface IProps {
 	onRefresh: () => void;
 }
 
-const FriendPassVerify = (props: IProps) => {
+const ChatRoomJoin = (props: IProps) => {
 	const { token } = theme.useToken();
 	const { message, modal } = App.useApp();
 
 	const { runAsync } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ContactFriendPassVerifyCreate(
+			const resp = await window.wechatRobotClient.api.v1ChatRoomJoinCreate(
 				{
 					id: props.robotId,
 					system_message_id: props.dataSource.id,
@@ -32,7 +32,7 @@ const FriendPassVerify = (props: IProps) => {
 		{
 			manual: true,
 			onSuccess: () => {
-				message.success('已通过好友验证');
+				message.success('已成功加入群聊');
 				props.onRefresh();
 			},
 			onError: reason => {
@@ -48,7 +48,7 @@ const FriendPassVerify = (props: IProps) => {
 				size="small"
 				disabled
 			>
-				已通过
+				已同意
 			</Button>
 		);
 	}
@@ -66,21 +66,21 @@ const FriendPassVerify = (props: IProps) => {
 								style={{ marginRight: 3 }}
 								src={props.dataSource.image_url || DefaultAvatar}
 							/>{' '}
-							通过好友验证
+							加入群聊
 						</>
 					),
 					icon: <SmileOutlined style={{ color: token.colorSuccess }} />,
 					content: <>{props.dataSource.description || '这个家伙什么也没说'}</>,
-					okText: '通过',
+					okText: '同意',
 					onOk: async () => {
 						await runAsync();
 					},
 				});
 			}}
 		>
-			通过好友验证
+			加入群聊
 		</Button>
 	);
 };
 
-export default React.memo(FriendPassVerify);
+export default React.memo(ChatRoomJoin);

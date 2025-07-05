@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
+import ChatRoomJoin from './ChatRoomJoin';
 import FriendPassVerify from './FriendPassVerify';
 
 type IDataSource = Api.V1SystemMessagesList.ResponseBody['data'][number];
@@ -28,8 +29,9 @@ const MessageList = (props: IProps) => {
 	const columns: TableProps<IDataSource>['columns'] = [
 		{
 			title: '类型',
-			width: 100,
+			width: 80,
 			dataIndex: 'type',
+			fixed: 'left',
 			ellipsis: true,
 			render: (value: IDataSource['type']) => {
 				switch (value) {
@@ -44,7 +46,7 @@ const MessageList = (props: IProps) => {
 		},
 		{
 			title: '描述',
-			width: 300,
+			width: 200,
 			dataIndex: 'description',
 			ellipsis: true,
 			render: (value: IDataSource['description'], record) => {
@@ -72,7 +74,7 @@ const MessageList = (props: IProps) => {
 		},
 		{
 			title: '已读',
-			width: 100,
+			width: 75,
 			dataIndex: 'is_read',
 			ellipsis: true,
 			render: (value: IDataSource['is_read']) => {
@@ -81,7 +83,7 @@ const MessageList = (props: IProps) => {
 		},
 		{
 			title: '处理状态',
-			width: 100,
+			width: 90,
 			dataIndex: 'status',
 			ellipsis: true,
 			render: (value: IDataSource['status'], record) => {
@@ -118,8 +120,10 @@ const MessageList = (props: IProps) => {
 		},
 		{
 			title: '操作',
-			width: 180,
+			width: 150,
 			dataIndex: 'action',
+			align: 'center',
+			fixed: 'right',
 			render: (_, record) => {
 				switch (record.type) {
 					case 37:
@@ -132,12 +136,11 @@ const MessageList = (props: IProps) => {
 						);
 					case 38:
 						return (
-							<Button
-								type="link"
-								size="small"
-							>
-								同意进群
-							</Button>
+							<ChatRoomJoin
+								robotId={props.robotId}
+								dataSource={record}
+								onRefresh={props.onRefresh}
+							/>
 						);
 					default:
 						return null;

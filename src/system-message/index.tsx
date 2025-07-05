@@ -1,11 +1,12 @@
 import { BellOutlined } from '@ant-design/icons';
-import { useBoolean, useRequest } from 'ahooks';
-import { App, Button } from 'antd';
+import { useBoolean, useMemoizedFn, useRequest } from 'ahooks';
+import { App, Button, Tooltip } from 'antd';
 import React from 'react';
 import MessageList from './MessageList';
 
 interface IProps {
 	robotId: number;
+	onRefresh: () => void;
 }
 
 const SystemMessage = (props: IProps) => {
@@ -30,22 +31,29 @@ const SystemMessage = (props: IProps) => {
 		},
 	);
 
+	const onRefresh = useMemoizedFn(() => {
+		refresh();
+		props.onRefresh();
+	});
+
 	return (
 		<div style={{ display: 'inline-block' }}>
-			<Button
-				className={data && data.filter(item => item.is_read === 0).length > 0 ? 'new-message' : undefined}
-				type="primary"
-				ghost
-				disabled={loading || data === undefined}
-				icon={<BellOutlined />}
-				onClick={() => setOpen.setTrue()}
-			/>
+			<Tooltip title="消息通知">
+				<Button
+					className={data && data.filter(item => !item.is_read).length > 0 ? 'new-message' : undefined}
+					type="primary"
+					ghost
+					disabled={loading || data === undefined}
+					icon={<BellOutlined />}
+					onClick={() => setOpen.setTrue()}
+				/>
+			</Tooltip>
 			{open && (
 				<MessageList
 					open={open}
 					robotId={props.robotId}
 					dataSource={data || []}
-					onRefresh={refresh}
+					onRefresh={onRefresh}
 					onClose={setOpen.setFalse}
 				/>
 			)}

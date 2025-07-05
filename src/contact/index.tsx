@@ -20,6 +20,7 @@ import ChatRoomAnnouncementChange from './ChatRoomAnnouncementChange';
 import ChatRoomNameChange from './ChatRoomNameChange';
 import ChatRoomQuit from './ChatRoomQuit';
 import ChatRoomRemarkChange from './ChatRoomRemarkChange';
+import FriendDelete from './FriendDelete';
 
 interface IProps {
 	robotId: number;
@@ -28,6 +29,7 @@ interface IProps {
 
 type IContact = Api.V1ContactListList.ResponseBody['data']['items'][number];
 type ChatRoomAction = 'change-name' | 'change-remark' | 'change-announcement' | 'quit';
+type FriendAction = 'change-remark' | 'delete';
 
 interface IChatRoomActionState {
 	open?: boolean;
@@ -36,11 +38,19 @@ interface IChatRoomActionState {
 	action?: ChatRoomAction;
 }
 
+interface IFriendActionState {
+	open?: boolean;
+	contactId?: string;
+	contactName?: string;
+	action?: FriendAction;
+}
+
 const Contact = (props: IProps) => {
 	const { message } = App.useApp();
 
 	const [search, setSearch] = useSetState({ keyword: '', type: 'chat_room', pageIndex: 1 });
 	const [chatRoomAction, setChatRoomAction] = useSetState<IChatRoomActionState>({});
+	const [friendAction, setFriendAction] = useSetState<IFriendActionState>({});
 	const [groupMemberState, setGroupMemberState] = useState<{ open?: boolean; chatRoom?: IContact }>({});
 	const [sendMessageState, setSendMessageState] = useState<{ open?: boolean; contact?: IContact }>({});
 	const [friendSettingsState, setFriendSettingsState] = useState<{ open?: boolean; contact?: IContact }>({});
@@ -71,6 +81,10 @@ const Contact = (props: IProps) => {
 
 	const onChatRoomActionClose = useMemoizedFn(() => {
 		setChatRoomAction({ open: false, chatRoomId: undefined, chatRoomName: undefined, action: undefined });
+	});
+
+	const onFriendActionClose = useMemoizedFn(() => {
+		setFriendAction({ open: false, contactId: undefined, contactName: undefined, action: undefined });
 	});
 
 	// 手动同步联系人
@@ -160,7 +174,10 @@ const Contact = (props: IProps) => {
 					</Col>
 				</Row>
 				<Space>
-					<SystemMessage robotId={props.robotId} />
+					<SystemMessage
+						robotId={props.robotId}
+						onRefresh={refresh}
+					/>
 					<Button
 						type="primary"
 						style={{ marginRight: 8 }}
@@ -192,7 +209,7 @@ const Contact = (props: IProps) => {
 						const items: MenuProps['items'] = [{ label: '发送消息', key: 'send-message' }];
 						if (item.type === 'friend') {
 							items.push({ label: '好友设置', key: 'friend-settings' });
-							items.push({ label: '删除好友', key: 'delete', danger: true });
+							items.push({ label: '删除好友', key: 'delete-friend', danger: true });
 						} else {
 							items.push({ label: '群聊设置', key: 'chat-room-settings' });
 							items.push({ label: '查看群成员', key: 'chat-room-member' });
@@ -261,6 +278,14 @@ const Contact = (props: IProps) => {
 															break;
 														case 'friend-settings':
 															setFriendSettingsState({ open: true, contact: item });
+															break;
+														case 'delete-friend':
+															setFriendAction({
+																open: true,
+																contactId: item.wechat_id,
+																contactName: item.remark || item.nickname || item.alias || item.wechat_id,
+																action: 'delete',
+															});
 															break;
 														case 'chat-room-settings':
 															setChatRoomSettingsState({ open: true, chatRoom: item });
@@ -421,6 +446,16 @@ const Contact = (props: IProps) => {
 					chatRoomId={chatRoomAction.chatRoomId!}
 					chatRoomName={chatRoomAction.chatRoomName!}
 					onClose={onChatRoomActionClose}
+					onRefresh={refresh}
+				/>
+			)}
+			{friendAction.open && friendAction.action === 'delete' && (
+				<FriendDelete
+					open={friendAction.open}
+					robotId={props.robotId}
+					contactId={friendAction.contactId!}
+					contactName={friendAction.contactName!}
+					onClose={onFriendActionClose}
 					onRefresh={refresh}
 				/>
 			)}
