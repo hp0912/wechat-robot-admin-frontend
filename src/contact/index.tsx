@@ -1,6 +1,22 @@
-import { SearchOutlined } from '@ant-design/icons';
+import { CloudSyncOutlined, SearchOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
-import { App, Avatar, Button, Col, Dropdown, Flex, Input, List, Pagination, Radio, Row, Skeleton, Space } from 'antd';
+import {
+	App,
+	Avatar,
+	Button,
+	Col,
+	Dropdown,
+	Flex,
+	Input,
+	List,
+	Pagination,
+	Radio,
+	Row,
+	Skeleton,
+	Space,
+	Tag,
+	Tooltip,
+} from 'antd';
 import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
@@ -17,6 +33,7 @@ import ChatRoomSettings from '@/settings/ChatRoomSettings';
 import FriendSettings from '@/settings/FriendSettings';
 import SystemMessage from '@/system-message';
 import ChatRoomAnnouncementChange from './ChatRoomAnnouncementChange';
+import ChatRoomInvite from './ChatRoomInvite';
 import ChatRoomNameChange from './ChatRoomNameChange';
 import ChatRoomQuit from './ChatRoomQuit';
 import ChatRoomRemarkChange from './ChatRoomRemarkChange';
@@ -28,7 +45,7 @@ interface IProps {
 }
 
 type IContact = Api.V1ContactListList.ResponseBody['data']['items'][number];
-type ChatRoomAction = 'change-name' | 'change-remark' | 'change-announcement' | 'quit';
+type ChatRoomAction = 'change-name' | 'change-remark' | 'change-announcement' | 'invite' | 'quit';
 type FriendAction = 'change-remark' | 'delete';
 
 interface IChatRoomActionState {
@@ -178,19 +195,20 @@ const Contact = (props: IProps) => {
 						robotId={props.robotId}
 						onRefresh={refresh}
 					/>
-					<Button
-						type="primary"
-						style={{ marginRight: 8 }}
-						loading={syncLoading}
-						ghost
-						onClick={async () => {
-							await runAsync();
-							setSearch({ pageIndex: 1 });
-							message.success('同步成功');
-						}}
-					>
-						同步联系人
-					</Button>
+					<Tooltip title="同步联系人">
+						<Button
+							type="primary"
+							style={{ marginRight: 8 }}
+							loading={syncLoading}
+							ghost
+							icon={<CloudSyncOutlined />}
+							onClick={async () => {
+								await runAsync();
+								setSearch({ pageIndex: 1 });
+								message.success('同步成功');
+							}}
+						/>
+					</Tooltip>
 				</Space>
 			</Flex>
 			<div
@@ -212,6 +230,7 @@ const Contact = (props: IProps) => {
 							items.push({ label: '删除好友', key: 'delete-friend', danger: true });
 						} else {
 							items.push({ label: '群聊设置', key: 'chat-room-settings' });
+							items.push({ label: '邀请入群', key: 'invite-to-group' });
 							items.push({ label: '查看群成员', key: 'chat-room-member' });
 							items.push({ label: '修改群名称', key: 'change-name' });
 							items.push({ label: '修改群备注', key: 'change-remark' });
@@ -224,15 +243,26 @@ const Contact = (props: IProps) => {
 									avatar={
 										<Avatar
 											style={{ marginLeft: 8 }}
-											src={item.avatar || DefaultAvatar}
+											src={item.wechat_id === props.robot.wechat_id ? props.robot.avatar : item.avatar || DefaultAvatar}
 										/>
 									}
 									title={
 										<>
-											<span>{item.remark || item.nickname || item.alias || item.wechat_id}</span>
+											<span>
+												{item.wechat_id === props.robot.wechat_id
+													? props.robot.nickname
+													: item.remark || item.nickname || item.alias || item.wechat_id}
+											</span>
 											{item.type === 'friend' ? (
 												<>
-													{item.sex === 1 ? (
+													{item.wechat_id === props.robot.wechat_id ? (
+														<Tag
+															style={{ marginLeft: 8 }}
+															color="#3d4c87"
+														>
+															自己
+														</Tag>
+													) : item.sex === 1 ? (
 														<MaleFilled style={{ color: '#08c0ed', marginLeft: 8 }} />
 													) : item.sex === 2 ? (
 														<FemaleFilled style={{ color: '#f86363', marginLeft: 8 }} />
@@ -285,6 +315,14 @@ const Contact = (props: IProps) => {
 																contactId: item.wechat_id,
 																contactName: item.remark || item.nickname || item.alias || item.wechat_id,
 																action: 'delete',
+															});
+															break;
+														case 'invite-to-group':
+															setChatRoomAction({
+																open: true,
+																chatRoomId: item.wechat_id,
+																chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
+																action: 'invite',
 															});
 															break;
 														case 'chat-room-settings':
@@ -437,6 +475,15 @@ const Contact = (props: IProps) => {
 					chatRoomName={chatRoomAction.chatRoomName!}
 					onClose={onChatRoomActionClose}
 					onRefresh={refresh}
+				/>
+			)}
+			{chatRoomAction.open && chatRoomAction.action === 'invite' && (
+				<ChatRoomInvite
+					open={chatRoomAction.open}
+					robotId={props.robotId}
+					chatRoomId={chatRoomAction.chatRoomId!}
+					chatRoomName={chatRoomAction.chatRoomName!}
+					onClose={onChatRoomActionClose}
 				/>
 			)}
 			{chatRoomAction.open && chatRoomAction.action === 'quit' && (

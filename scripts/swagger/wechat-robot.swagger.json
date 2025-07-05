@@ -6116,6 +6116,216 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-318045543-run",
 				"security": []
 			}
+		},
+		"/api/v1/chat-room/not-left-members": {
+			"get": {
+				"summary": "获取所有未离开的群成员",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					},
+					{
+						"name": "chat_room_id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "keyword",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": {
+														"type": "number"
+													},
+													"chat_room_id": {
+														"type": "string"
+													},
+													"wechat_id": {
+														"type": "string"
+													},
+													"alias": {
+														"type": "string"
+													},
+													"nickname": {
+														"type": "string"
+													},
+													"avatar": {
+														"type": "string"
+													},
+													"inviter_wechat_id": {
+														"type": "string"
+													},
+													"is_admin": {
+														"type": "boolean"
+													},
+													"is_leaved": {
+														"type": "boolean"
+													},
+													"score": {
+														"type": "number"
+													},
+													"remark": {
+														"type": "string"
+													},
+													"joined_at": {
+														"type": "number"
+													},
+													"last_active_at": {
+														"type": "number"
+													},
+													"leaved_at": {
+														"type": "string"
+													}
+												},
+												"x-apifox-orders": [
+													"id",
+													"chat_room_id",
+													"wechat_id",
+													"alias",
+													"nickname",
+													"avatar",
+													"inviter_wechat_id",
+													"is_admin",
+													"is_leaved",
+													"score",
+													"remark",
+													"joined_at",
+													"last_active_at",
+													"leaved_at"
+												],
+												"required": ["chat_room_id", "leaved_at"],
+												"x-apifox-ignore-properties": []
+											}
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-318101613-run",
+				"security": []
+			}
+		},
+		"/api/v1/chat-room/invite": {
+			"post": {
+				"summary": "邀请进群",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"chat_room_id": {
+										"type": "string"
+									},
+									"contact_ids": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
+									}
+								},
+								"x-apifox-orders": ["id", "chat_room_id", "contact_ids"],
+								"required": ["id", "chat_room_id", "contact_ids"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-318107810-run",
+				"security": []
+			}
 		}
 	},
 	"components": {
