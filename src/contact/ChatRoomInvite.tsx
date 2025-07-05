@@ -84,6 +84,7 @@ const ChatRoomInvite = (props: IProps) => {
 					id: props.robotId,
 				},
 			);
+			await new Promise(resolve => setTimeout(resolve, 6000)); // 等待6秒，确保邀请请求已处理
 			return resp.data?.data;
 		},
 		{
