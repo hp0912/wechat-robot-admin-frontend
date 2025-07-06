@@ -29,10 +29,13 @@ import { DefaultAvatar } from '@/constant';
 import FemaleFilled from '@/icons/FemaleFilled';
 import GroupFilled from '@/icons/GroupFilled';
 import MaleFilled from '@/icons/MaleFilled';
+import WechatWork from '@/icons/WechatWork';
 import ChatRoomSettings from '@/settings/ChatRoomSettings';
 import FriendSettings from '@/settings/FriendSettings';
 import SystemMessage from '@/system-message';
+import AddFriends from './AddFriends';
 import ChatRoomAnnouncementChange from './ChatRoomAnnouncementChange';
+import ChatRoomCreate from './ChatRoomCreate';
 import ChatRoomInvite from './ChatRoomInvite';
 import ChatRoomNameChange from './ChatRoomNameChange';
 import ChatRoomQuit from './ChatRoomQuit';
@@ -195,6 +198,16 @@ const Contact = (props: IProps) => {
 						robotId={props.robotId}
 						onRefresh={refresh}
 					/>
+					<AddFriends
+						robotId={props.robotId}
+						robot={props.robot}
+						onRefresh={refresh}
+					/>
+					<ChatRoomCreate
+						robotId={props.robotId}
+						robot={props.robot}
+						onRefresh={refresh}
+					/>
 					<Tooltip title="同步联系人">
 						<Button
 							type="primary"
@@ -271,7 +284,10 @@ const Contact = (props: IProps) => {
 													)}
 												</>
 											) : item.type === 'official_account' ? null : (
-												<GroupFilled style={{ color: '#08db3a', marginLeft: 8 }} />
+												<>
+													<GroupFilled style={{ color: '#3470B2', marginLeft: 8 }} />
+													{item.chat_room_owner?.endsWith('@openim') && <WechatWork style={{ marginLeft: 8 }} />}
+												</>
 											)}
 										</>
 									}

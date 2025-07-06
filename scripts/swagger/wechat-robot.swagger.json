@@ -1281,6 +1281,9 @@
 															"sns_background": {
 																"type": "string"
 															},
+															"chat_room_owner": {
+																"type": "string"
+															},
 															"created_at": {
 																"type": "number"
 															},
@@ -1308,6 +1311,7 @@
 															"city",
 															"signature",
 															"sns_background",
+															"chat_room_owner",
 															"created_at",
 															"last_active_at",
 															"updated_at"
@@ -6324,6 +6328,78 @@
 					}
 				},
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-318107810-run",
+				"security": []
+			}
+		},
+		"/api/v1/chat-room/create": {
+			"post": {
+				"summary": "创建群聊",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"contact_ids": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
+									}
+								},
+								"x-apifox-orders": ["id", "contact_ids"],
+								"required": ["id", "contact_ids"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "string"
+										}
+									},
+									"required": ["code", "message"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-318156888-run",
 				"security": []
 			}
 		}
