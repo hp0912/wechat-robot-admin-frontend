@@ -41,6 +41,7 @@ import ChatRoomNameChange from './ChatRoomNameChange';
 import ChatRoomQuit from './ChatRoomQuit';
 import ChatRoomRemarkChange from './ChatRoomRemarkChange';
 import FriendDelete from './FriendDelete';
+import FriendRemarkChange from './FriendRemarkChange';
 
 interface IProps {
 	robotId: number;
@@ -240,6 +241,7 @@ const Contact = (props: IProps) => {
 						const items: MenuProps['items'] = [{ label: '发送消息', key: 'send-message' }];
 						if (item.type === 'friend') {
 							items.push({ label: '好友设置', key: 'friend-settings' });
+							items.push({ label: '修改备注', key: 'change-remark' });
 							items.push({ label: '删除好友', key: 'delete-friend', danger: true });
 						} else {
 							items.push({ label: '群聊设置', key: 'chat-room-settings' });
@@ -353,12 +355,22 @@ const Contact = (props: IProps) => {
 															});
 															break;
 														case 'change-remark':
-															setChatRoomAction({
-																open: true,
-																chatRoomId: item.wechat_id,
-																chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
-																action: 'change-remark',
-															});
+															if (item.type === 'friend') {
+																setFriendAction({
+																	open: true,
+																	contactId: item.wechat_id,
+																	contactName: item.remark || item.nickname || item.alias || item.wechat_id,
+																	action: 'change-remark',
+																});
+															}
+															if (item.type === 'chat_room') {
+																setChatRoomAction({
+																	open: true,
+																	chatRoomId: item.wechat_id,
+																	chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
+																	action: 'change-remark',
+																});
+															}
 															break;
 														case 'change-announcement':
 															setChatRoomAction({
@@ -470,6 +482,16 @@ const Contact = (props: IProps) => {
 					chatRoomId={chatRoomAction.chatRoomId!}
 					chatRoomName={chatRoomAction.chatRoomName!}
 					onClose={onChatRoomActionClose}
+					onRefresh={refresh}
+				/>
+			)}
+			{friendAction.open && friendAction.action === 'change-remark' && (
+				<FriendRemarkChange
+					open={friendAction.open}
+					robotId={props.robotId}
+					wechatId={friendAction.contactId!}
+					nickname={friendAction.contactName!}
+					onClose={onFriendActionClose}
 					onRefresh={refresh}
 				/>
 			)}

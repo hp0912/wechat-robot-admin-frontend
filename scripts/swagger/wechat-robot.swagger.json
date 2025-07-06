@@ -6402,6 +6402,332 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-318156888-run",
 				"security": []
 			}
+		},
+		"/api/v1/contact/friend/search": {
+			"post": {
+				"summary": "搜索联系人",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"to_username": {
+										"type": "string"
+									},
+									"from_scene": {
+										"type": "number"
+									},
+									"search_scene": {
+										"type": "number"
+									}
+								},
+								"x-apifox-orders": ["id", "to_username", "from_scene", "search_scene"],
+								"required": ["id", "to_username"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"username": {
+													"type": "string"
+												},
+												"nickname": {
+													"type": "string"
+												},
+												"avatar": {
+													"type": "string"
+												},
+												"antispam_ticket": {
+													"type": "string"
+												}
+											},
+											"x-apifox-orders": ["username", "nickname", "avatar", "antispam_ticket"],
+											"required": ["username", "nickname", "avatar"],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-318184897-run",
+				"security": []
+			}
+		},
+		"/api/v1/contact/friend/add": {
+			"post": {
+				"summary": "发送添加好友请求",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"v1": {
+										"type": "string"
+									},
+									"v2": {
+										"type": "string"
+									},
+									"opcode": {
+										"type": "number"
+									},
+									"scene": {
+										"type": "number"
+									},
+									"verify_content": {
+										"type": "string"
+									}
+								},
+								"x-apifox-orders": ["id", "v1", "v2", "opcode", "scene", "verify_content"],
+								"required": ["id", "v1", "v2"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {},
+											"x-apifox-orders": [],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-318184902-run",
+				"security": []
+			}
+		},
+		"/api/v1/contact/friend/remark": {
+			"post": {
+				"summary": "设置好友备注",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"to_wxid": {
+										"type": "string"
+									},
+									"remarks": {
+										"type": "string"
+									}
+								},
+								"x-apifox-orders": ["id", "to_wxid", "remarks"],
+								"required": ["id", "to_wxid", "remarks"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {},
+											"x-apifox-orders": [],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-318184907-run",
+				"security": []
+			}
+		},
+		"/api/v1/contact/friend/add-from-chat-room": {
+			"post": {
+				"summary": "从群里添加好友",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"chat_room_member_id": {
+										"type": "number"
+									},
+									"verify_content": {
+										"type": "string"
+									}
+								},
+								"x-apifox-orders": ["id", "chat_room_member_id", "verify_content"],
+								"required": ["id", "chat_room_member_id"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {},
+											"x-apifox-orders": [],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-318186575-run",
+				"security": []
+			}
 		}
 	},
 	"components": {
