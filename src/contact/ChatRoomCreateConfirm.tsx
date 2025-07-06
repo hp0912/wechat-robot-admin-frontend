@@ -128,11 +128,12 @@ const ChatRoomCreateConfirm = (props: IProps) => {
 						loading={createLoading}
 						onClick={async () => {
 							const contactIds = selectedState.rows.map(item => item.wechat_id!);
-							if (!contactIds.includes(props.robot.wechat_id)) {
-								contactIds.push(props.robot.wechat_id);
+							if (contactIds.includes(props.robot.wechat_id)) {
+								message.error('不能将自己添加到群聊中');
+								return;
 							}
-							if (contactIds.length < 3) {
-								message.error('发起群聊至少需要3人');
+							if (contactIds.length < 2) {
+								message.error('发起群聊至少需要2人');
 								return;
 							}
 							await createChatRoom(contactIds);
