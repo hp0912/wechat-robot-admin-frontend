@@ -29,6 +29,7 @@ const ChatRoomCreate = (props: IProps) => {
 					open={open}
 					robotId={props.robotId}
 					robot={props.robot}
+					onRefresh={props.onRefresh}
 					onClose={setOpen.setFalse}
 				/>
 			)}

@@ -49,11 +49,15 @@ const ChatRoomCreateConfirm = (props: IProps) => {
 
 	// 创建群聊
 	const { runAsync: createChatRoom, loading: createLoading } = useRequest(
-		async () => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomCreateCreate({
-				id: props.robotId,
-				contact_ids: [],
-			});
+		async (contactIds: string[]) => {
+			const resp = await window.wechatRobotClient.api.v1ChatRoomCreateCreate(
+				{
+					id: props.robotId,
+					contact_ids: contactIds,
+				},
+				{ id: props.robotId },
+			);
+			await new Promise(resolve => setTimeout(resolve, 6000)); // 等待6秒，确保群聊创建成功
 			return resp.data?.data;
 		},
 		{
@@ -131,7 +135,7 @@ const ChatRoomCreateConfirm = (props: IProps) => {
 								message.error('发起群聊至少需要3人');
 								return;
 							}
-							await createChatRoom();
+							await createChatRoom(contactIds);
 						}}
 					>
 						发起群聊
