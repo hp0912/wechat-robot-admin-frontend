@@ -6464,8 +6464,22 @@
 										},
 										"data": {
 											"type": "object",
-											"properties": {},
-											"x-apifox-orders": [],
+											"properties": {
+												"username": {
+													"type": "string"
+												},
+												"nickname": {
+													"type": "string"
+												},
+												"avatar": {
+													"type": "string"
+												},
+												"antispam_ticket": {
+													"type": "string"
+												}
+											},
+											"x-apifox-orders": ["username", "nickname", "avatar", "antispam_ticket"],
+											"required": ["username", "nickname", "avatar"],
 											"x-apifox-ignore-properties": []
 										}
 									},

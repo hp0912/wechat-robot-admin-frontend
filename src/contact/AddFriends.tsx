@@ -3,7 +3,7 @@ import { Button, Tooltip } from 'antd';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import AddFriendsOutlined from '@/icons/AddFriendsOutlined';
-import ChatRoomCreateConfirm from './ChatRoomCreateConfirm';
+import SearchFriends from './SearchFriends';
 
 interface IProps {
 	robotId: number;
@@ -21,13 +21,11 @@ const AddFriends = (props: IProps) => {
 					type="primary"
 					ghost
 					icon={<AddFriendsOutlined />}
-					onClick={() => {
-						//
-					}}
+					onClick={setOpen.setTrue}
 				/>
 			</Tooltip>
 			{open && (
-				<ChatRoomCreateConfirm
+				<SearchFriends
 					open={open}
 					robotId={props.robotId}
 					robot={props.robot}
