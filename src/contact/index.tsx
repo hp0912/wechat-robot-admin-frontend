@@ -33,6 +33,7 @@ import WechatWork from '@/icons/WechatWork';
 import ChatRoomSettings from '@/settings/ChatRoomSettings';
 import FriendSettings from '@/settings/FriendSettings';
 import SystemMessage from '@/system-message';
+import AddFriends from './AddFriends';
 import ChatRoomAnnouncementChange from './ChatRoomAnnouncementChange';
 import ChatRoomCreate from './ChatRoomCreate';
 import ChatRoomInvite from './ChatRoomInvite';
@@ -195,6 +196,11 @@ const Contact = (props: IProps) => {
 				<Space>
 					<SystemMessage
 						robotId={props.robotId}
+						onRefresh={refresh}
+					/>
+					<AddFriends
+						robotId={props.robotId}
+						robot={props.robot}
 						onRefresh={refresh}
 					/>
 					<ChatRoomCreate
