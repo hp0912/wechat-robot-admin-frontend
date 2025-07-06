@@ -10,14 +10,13 @@ type IDataSource = Api.V1ContactListList.ResponseBody['data']['items'][number];
 
 interface IProps {
 	robotId: number;
-	chatRoomId: string;
-	chatRoomName: string;
+	robot: Api.V1RobotViewList.ResponseBody['data'];
 	open: boolean;
 	onRefresh?: () => void;
 	onClose: () => void;
 }
 
-const ChatRoomInvite = (props: IProps) => {
+const ChatRoomCreateConfirm = (props: IProps) => {
 	const { token } = theme.useToken();
 	const { message } = App.useApp();
 
@@ -27,7 +26,8 @@ const ChatRoomInvite = (props: IProps) => {
 		rows: [],
 	});
 
-	const { data, loading, refreshAsync } = useRequest(
+	// 获取联系人
+	const { data, loading } = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.api.v1ContactListList({
 				id: props.robotId,
@@ -47,50 +47,21 @@ const ChatRoomInvite = (props: IProps) => {
 		},
 	);
 
-	const {
-		data: chatRoomMembers,
-		loading: loadingChatRoomMembers,
-		refreshAsync: refreshChatRoomMembers,
-	} = useRequest(
+	// 创建群聊
+	const { runAsync: createChatRoom, loading: createLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomNotLeftMembersList({
+			const resp = await window.wechatRobotClient.api.v1ChatRoomCreateCreate({
 				id: props.robotId,
-				chat_room_id: props.chatRoomId,
+				contact_ids: [],
 			});
-			const members = resp.data?.data || [];
-			const memberMap = new Map<string, Api.V1ChatRoomNotLeftMembersList.ResponseBody['data'][number]>();
-			members.forEach(item => {
-				memberMap.set(item.wechat_id!, item);
-			});
-			return memberMap;
-		},
-		{
-			manual: false,
-			onError: reason => {
-				message.error(reason.message);
-			},
-		},
-	);
-
-	const { runAsync: invite, loading: inviteLoading } = useRequest(
-		async () => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomInviteCreate(
-				{
-					id: props.robotId,
-					chat_room_id: props.chatRoomId,
-					contact_ids: selectedState.rows.map(item => item.wechat_id!),
-				},
-				{
-					id: props.robotId,
-				},
-			);
 			return resp.data?.data;
 		},
 		{
 			manual: true,
 			onSuccess: () => {
-				message.success('邀请成功');
-				setSelectedState({ keys: [], rows: [] });
+				message.success('你已经成功创建群聊');
+				props.onRefresh?.();
+				props.onClose();
 			},
 			onError: reason => {
 				message.error(reason.message);
@@ -113,20 +84,22 @@ const ChatRoomInvite = (props: IProps) => {
 							<Avatar
 								size="small"
 								style={{ marginRight: 3 }}
-								src={record.avatar || DefaultAvatar}
+								src={props.robot.wechat_id === record.wechat_id ? props.robot.avatar : record.avatar || DefaultAvatar}
 							/>
 						</Col>
 						<Col
 							flex="1 1 auto"
 							className="ellipsis"
 						>
-							{record.remark || record.nickname || record.alias || record.wechat_id}
-							{chatRoomMembers?.has(record.wechat_id!) && (
+							{props.robot.wechat_id === record.wechat_id
+								? props.robot.nickname
+								: record.remark || record.nickname || record.alias || record.wechat_id}
+							{props.robot.wechat_id === record.wechat_id && (
 								<Tag
 									color={token.colorSuccess}
-									style={{ marginLeft: 16 }}
+									style={{ marginLeft: 3 }}
 								>
-									已添加
+									自己
 								</Tag>
 							)}
 						</Col>
@@ -138,7 +111,7 @@ const ChatRoomInvite = (props: IProps) => {
 
 	return (
 		<Drawer
-			title={`邀请新成员加入${props.chatRoomName}群聊`}
+			title="创建新的群聊"
 			open={props.open}
 			onClose={props.onClose}
 			width="760px"
@@ -147,15 +120,21 @@ const ChatRoomInvite = (props: IProps) => {
 				<Space>
 					<Button
 						type="primary"
-						disabled={!selectedState.keys.length || !chatRoomMembers?.size || loading || loadingChatRoomMembers}
-						loading={inviteLoading}
+						disabled={!selectedState.keys.length || loading}
+						loading={createLoading}
 						onClick={async () => {
-							await invite();
-							await refreshAsync();
-							await refreshChatRoomMembers();
+							const contactIds = selectedState.rows.map(item => item.wechat_id!);
+							if (!contactIds.includes(props.robot.wechat_id)) {
+								contactIds.push(props.robot.wechat_id);
+							}
+							if (contactIds.length < 3) {
+								message.error('创建群聊至少需要3人');
+								return;
+							}
+							await createChatRoom();
 						}}
 					>
-						邀请
+						创建群聊
 					</Button>
 				</Space>
 			}
@@ -209,7 +188,7 @@ const ChatRoomInvite = (props: IProps) => {
 					selectedRowKeys: selectedState.keys,
 					getCheckboxProps: record => {
 						return {
-							disabled: chatRoomMembers?.has(record.wechat_id!) || !chatRoomMembers?.size,
+							disabled: props.robot.wechat_id === record.wechat_id,
 						};
 					},
 					onChange: (selectedRowKeys: React.Key[], rows: IDataSource[]) => {
@@ -221,4 +200,4 @@ const ChatRoomInvite = (props: IProps) => {
 	);
 };
 
-export default React.memo(ChatRoomInvite);
+export default React.memo(ChatRoomCreateConfirm);
