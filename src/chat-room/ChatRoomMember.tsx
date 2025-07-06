@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
+import ChatRoomMemberFriend from './ChatRoomMemberFriend';
 import ChatRoomMemberRemove from './ChatRoomMemberRemove';
 
 interface IProps {
@@ -12,6 +13,12 @@ interface IProps {
 	chatRoom: Api.V1ContactListList.ResponseBody['data']['items'][number];
 	open: boolean;
 	onClose: () => void;
+}
+
+interface IAddFriendState {
+	chatRoomMemberId?: number;
+	chatRoomMemberName?: string;
+	open?: boolean;
 }
 
 interface IMemberRemoveState {
@@ -27,6 +34,7 @@ const GroupMember = (props: IProps) => {
 	const { chatRoom } = props;
 
 	const [search, setSearch] = useSetState({ keyword: '', pageIndex: 1 });
+	const [addFriendState, setAddFriendState] = useSetState<IAddFriendState>({});
 	const [memberRemoveState, setMemberRemoveState] = useSetState<IMemberRemoveState>({});
 
 	// 手动同步群成员
@@ -189,9 +197,17 @@ const GroupMember = (props: IProps) => {
 									<div style={{ marginRight: 8 }}>
 										<Dropdown.Button
 											menu={{
-												items: [],
-												onClick: () => {
-													//
+												items: [{ label: '添加为好友', key: 'add-friend' }],
+												onClick: ev => {
+													switch (ev.key) {
+														case 'add-friend':
+															setAddFriendState({
+																open: true,
+																chatRoomMemberId: item.id,
+																chatRoomMemberName: item.remark || item.nickname || item.alias || item.wechat_id,
+															});
+															break;
+													}
 												},
 											}}
 											buttonsRender={() => {
@@ -226,6 +242,17 @@ const GroupMember = (props: IProps) => {
 							);
 						}}
 					/>
+					{addFriendState.open && (
+						<ChatRoomMemberFriend
+							robotId={props.robotId}
+							chatRoomId={chatRoom.wechat_id!}
+							chatRoomName={chatRoom.remark! || chatRoom.nickname! || chatRoom.alias! || chatRoom.wechat_id!}
+							chatRoomMemberId={addFriendState.chatRoomMemberId!}
+							chatRoomMemberName={addFriendState.chatRoomMemberName!}
+							open={addFriendState.open}
+							onClose={onChatRoomMemberRemoveClose}
+						/>
+					)}
 					{memberRemoveState.open && (
 						<ChatRoomMemberRemove
 							robotId={props.robotId}
