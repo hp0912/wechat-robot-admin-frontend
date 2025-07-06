@@ -128,13 +128,13 @@ const ChatRoomCreateConfirm = (props: IProps) => {
 								contactIds.push(props.robot.wechat_id);
 							}
 							if (contactIds.length < 3) {
-								message.error('创建群聊至少需要3人');
+								message.error('发起群聊至少需要3人');
 								return;
 							}
 							await createChatRoom();
 						}}
 					>
-						创建群聊
+						发起群聊
 					</Button>
 				</Space>
 			}

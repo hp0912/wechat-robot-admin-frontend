@@ -16,7 +16,7 @@ const ChatRoomCreate = (props: IProps) => {
 
 	return (
 		<div style={{ display: 'inline-block' }}>
-			<Tooltip title="创建群聊">
+			<Tooltip title="发起群聊">
 				<Button
 					type="primary"
 					ghost
