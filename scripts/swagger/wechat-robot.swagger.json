@@ -6728,6 +6728,72 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-318186575-run",
 				"security": []
 			}
+		},
+		"/api/v1/wxapp/qrcode-auth-login": {
+			"post": {
+				"summary": "授权APP登录",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"url": {
+										"type": "string"
+									}
+								},
+								"x-apifox-orders": ["id", "url"],
+								"required": ["id"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": ["code", "message"],
+									"x-apifox-orders": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-318752884-run",
+				"security": []
+			}
 		}
 	},
 	"components": {
