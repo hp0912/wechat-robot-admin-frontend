@@ -42,6 +42,7 @@ import ChatRoomQuit from './ChatRoomQuit';
 import ChatRoomRemarkChange from './ChatRoomRemarkChange';
 import FriendDelete from './FriendDelete';
 import FriendRemarkChange from './FriendRemarkChange';
+import OAuth from './OAuth';
 
 interface IProps {
 	robotId: number;
@@ -198,6 +199,10 @@ const Contact = (props: IProps) => {
 					<SystemMessage
 						robotId={props.robotId}
 						onRefresh={refresh}
+					/>
+					<OAuth
+						robotId={props.robotId}
+						robot={props.robot}
 					/>
 					<AddFriends
 						robotId={props.robotId}
