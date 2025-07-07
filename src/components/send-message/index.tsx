@@ -155,7 +155,7 @@ const SendMessage = (props: IProps) => {
 					path = '/api/v1/message/send/voice?id=' + props.robotId;
 					break;
 			}
-			await axios.post(path, formData, {
+			const resp = await axios.post(path, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},
@@ -166,6 +166,9 @@ const SendMessage = (props: IProps) => {
 					}
 				},
 			});
+			if (resp.data.code !== 200) {
+				throw new Error(resp.data.message || '发送失败');
+			}
 		},
 		{
 			manual: true,
