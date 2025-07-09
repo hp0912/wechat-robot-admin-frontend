@@ -67,3 +67,32 @@ body {
     border-color: #f5a104cc;
   }
 }
+
+.cards-container {
+  display: grid;
+  gap: 16px;
+}
+
+@media (max-width: 599px) {
+  .cards-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+@media (min-width: 600px) and (max-width: 959px) {
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 960px) and (max-width: 1279px) {
+  .cards-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .cards-container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}

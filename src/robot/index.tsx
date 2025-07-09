@@ -1,6 +1,6 @@
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { useBoolean, useMemoizedFn, useRequest, useSetState } from 'ahooks';
-import { App, Breadcrumb, Button, Col, Empty, Flex, Input, notification, Pagination, Radio, Row, Spin } from 'antd';
+import { App, Breadcrumb, Button, Col, Empty, Input, notification, Pagination, Radio, Row, Spin } from 'antd';
 import chatRoomQRCode from 'public/chat-room.jpg';
 import { useEffect } from 'react';
 import NewRobot from './NewRobot';
@@ -117,7 +117,7 @@ const RobotList = () => {
 							}}
 						/>
 					</Col>
-					<Col flex="0 0 270px">
+					<Col flex="0 0 auto">
 						<Radio.Group
 							size="large"
 							optionType="button"
@@ -141,12 +141,7 @@ const RobotList = () => {
 			>
 				<Spin spinning={loading}>
 					{data?.items?.length ? (
-						<Flex
-							gap="middle"
-							align="start"
-							justify="start"
-							wrap="wrap"
-						>
+						<div className="cards-container">
 							{data.items.map(item => {
 								return (
 									<Robot
@@ -156,7 +151,7 @@ const RobotList = () => {
 									/>
 								);
 							})}
-						</Flex>
+						</div>
 					) : (
 						<>
 							{!search.keyword && search.status === 'all' ? (
