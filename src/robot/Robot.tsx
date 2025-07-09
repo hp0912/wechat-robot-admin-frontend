@@ -75,7 +75,7 @@ const Robot = (props: IProps) => {
 					onRefresh={props.onRefresh}
 				/>,
 			]}
-			style={{ width: 310 }}
+			style={{ width: '100%' }}
 			key={robot.id}
 		>
 			<Card.Meta

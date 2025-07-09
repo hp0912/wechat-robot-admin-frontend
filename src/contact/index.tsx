@@ -45,6 +45,7 @@ import FriendRemarkChange from './FriendRemarkChange';
 import OAuth from './OAuth';
 
 interface IProps {
+	isSmallScreen: boolean;
 	robotId: number;
 	robot: Api.V1RobotViewList.ResponseBody['data'];
 }
@@ -166,19 +167,21 @@ const Contact = (props: IProps) => {
 					wrap={false}
 					gutter={8}
 				>
-					<Col flex="0 0 300px">
-						<Input
-							placeholder="搜索联系人"
-							style={{ width: '100%' }}
-							prefix={<SearchOutlined />}
-							allowClear
-							onKeyDown={ev => {
-								if (ev.key === 'Enter') {
-									setSearch({ keyword: ev.currentTarget.value, pageIndex: 1 });
-								}
-							}}
-						/>
-					</Col>
+					{props.isSmallScreen ? null : (
+						<Col flex="0 0 300px">
+							<Input
+								placeholder="搜索联系人"
+								style={{ width: '100%' }}
+								prefix={<SearchOutlined />}
+								allowClear
+								onKeyDown={ev => {
+									if (ev.key === 'Enter') {
+										setSearch({ keyword: ev.currentTarget.value, pageIndex: 1 });
+									}
+								}}
+							/>
+						</Col>
+					)}
 					<Col flex="0 0 260px">
 						<Radio.Group
 							optionType="button"
@@ -204,30 +207,34 @@ const Contact = (props: IProps) => {
 						robotId={props.robotId}
 						robot={props.robot}
 					/>
-					<AddFriends
-						robotId={props.robotId}
-						robot={props.robot}
-						onRefresh={refresh}
-					/>
-					<ChatRoomCreate
-						robotId={props.robotId}
-						robot={props.robot}
-						onRefresh={refresh}
-					/>
-					<Tooltip title="同步联系人">
-						<Button
-							type="primary"
-							style={{ marginRight: 8 }}
-							loading={syncLoading}
-							ghost
-							icon={<CloudSyncOutlined />}
-							onClick={async () => {
-								await runAsync();
-								setSearch({ pageIndex: 1 });
-								message.success('同步成功');
-							}}
-						/>
-					</Tooltip>
+					{props.isSmallScreen ? null : (
+						<>
+							<AddFriends
+								robotId={props.robotId}
+								robot={props.robot}
+								onRefresh={refresh}
+							/>
+							<ChatRoomCreate
+								robotId={props.robotId}
+								robot={props.robot}
+								onRefresh={refresh}
+							/>
+							<Tooltip title="同步联系人">
+								<Button
+									type="primary"
+									style={{ marginRight: 8 }}
+									loading={syncLoading}
+									ghost
+									icon={<CloudSyncOutlined />}
+									onClick={async () => {
+										await runAsync();
+										setSearch({ pageIndex: 1 });
+										message.success('同步成功');
+									}}
+								/>
+							</Tooltip>
+						</>
+					)}
 				</Space>
 			</Flex>
 			<div
