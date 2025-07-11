@@ -800,6 +800,9 @@
 												"nickName": {
 													"type": "string"
 												},
+												"ticket": {
+													"type": "string"
+												},
 												"acctSectResp": {
 													"type": "object",
 													"properties": {
@@ -831,6 +834,7 @@
 												"expiredTime",
 												"headImgUrl",
 												"nickName",
+												"ticket",
 												"acctSectResp"
 											],
 											"required": [

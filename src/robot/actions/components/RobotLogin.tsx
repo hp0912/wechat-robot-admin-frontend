@@ -1,6 +1,6 @@
 import { CheckCircleFilled, CloseCircleFilled, ReloadOutlined } from '@ant-design/icons';
-import { useRequest, useSetState } from 'ahooks';
-import { App, Button, Modal, Progress, QRCode, Space, Spin, theme } from 'antd';
+import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
+import { App, Button, Input, Modal, Progress, QRCode, Space, Spin, theme } from 'antd';
 import type { QRCodeProps } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
@@ -21,6 +21,13 @@ interface IState {
 	strokeColor?: string;
 }
 
+interface ILogin2FAState {
+	open?: boolean;
+	uuid: string;
+	code: string;
+	ticket: string;
+}
+
 const Container = styled.div`
 	p {
 		color: rgba(54, 181, 27, 1);
@@ -37,6 +44,7 @@ const RobotLogin = (props: IProps) => {
 	const { open, onClose } = props;
 
 	const [scanState, setScanState] = useSetState<IState>({ uuid: '', qrcode: '等待二维码生成', status: 'loading' });
+	const [login2FAState, setLogin2FAState] = useSetState<ILogin2FAState>({ uuid: '', code: '', ticket: '' });
 
 	const { data: qrData, refreshAsync } = useRequest(
 		async () => {
@@ -81,7 +89,7 @@ const RobotLogin = (props: IProps) => {
 		},
 	);
 
-	const { cancel } = useRequest(
+	const { runAsync, cancel } = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.api.v1RobotLoginCheckCreate(
 				{
@@ -99,6 +107,11 @@ const RobotLogin = (props: IProps) => {
 			refreshDeps: [qrData?.uuid],
 			pollingInterval: 3000,
 			onSuccess: resp => {
+				if (resp?.ticket) {
+					setLogin2FAState({ open: true, uuid: resp.uuid, ticket: resp.ticket, code: '' });
+					cancel();
+					return;
+				}
 				if (resp?.acctSectResp?.userName) {
 					props.onRefresh();
 					props.onClose();
@@ -141,6 +154,11 @@ const RobotLogin = (props: IProps) => {
 			},
 		},
 	);
+
+	const on2FAClose = useMemoizedFn(() => {
+		setLogin2FAState({ open: false, uuid: '', code: '', ticket: '' });
+		props.onClose();
+	});
 
 	const customStatusRender: QRCodeProps['statusRender'] = info => {
 		switch (info.status) {
@@ -215,6 +233,32 @@ const RobotLogin = (props: IProps) => {
 							showInfo={false}
 						/>
 					</>
+				)}
+				{!!login2FAState.open && (
+					<Modal
+						title="双重认证"
+						open={login2FAState.open}
+						onCancel={on2FAClose}
+						width={256}
+						maskClosable={false}
+						footer={null}
+					>
+						<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+							<p style={{ margin: '0 0 16px 0', textAlign: 'center' }}>请输入手机微信收到的6位安全码</p>
+							<Input.OTP
+								value={login2FAState.code}
+								onChange={value => {
+									setLogin2FAState({ code: value });
+									if (value?.length && value.length >= 6) {
+										setLogin2FAState({ open: false });
+										setTimeout(() => {
+											runAsync();
+										}, 1500);
+									}
+								}}
+							/>
+						</div>
+					</Modal>
 				)}
 			</Container>
 		</Modal>
