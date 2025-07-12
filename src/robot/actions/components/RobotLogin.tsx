@@ -155,6 +155,29 @@ const RobotLogin = (props: IProps) => {
 		},
 	);
 
+	const { runAsync: run2FA, loading: loading2FA } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1RobotLogin2FaCreate(
+				{
+					id: props.robotId,
+					uuid: login2FAState.uuid,
+					code: login2FAState.code,
+					ticket: login2FAState.ticket,
+				},
+				{
+					id: props.robotId,
+				},
+			);
+			return resp.data;
+		},
+		{
+			manual: true,
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
 	const on2FAClose = useMemoizedFn(() => {
 		setLogin2FAState({ open: false, uuid: '', code: '', ticket: '' });
 		props.onClose();
@@ -243,21 +266,27 @@ const RobotLogin = (props: IProps) => {
 						maskClosable={false}
 						footer={null}
 					>
-						<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-							<p style={{ margin: '0 0 16px 0', textAlign: 'center' }}>请输入手机微信收到的6位安全码</p>
-							<Input.OTP
-								value={login2FAState.code}
-								onChange={value => {
-									setLogin2FAState({ code: value });
-									if (value?.length && value.length >= 6) {
-										setLogin2FAState({ open: false });
-										setTimeout(() => {
-											runAsync();
-										}, 1500);
-									}
-								}}
-							/>
-						</div>
+						<Spin
+							spinning={loading2FA}
+							tip="正在验证..."
+						>
+							<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+								<p style={{ margin: '0 0 16px 0', textAlign: 'center' }}>请输入手机微信收到的6位安全码</p>
+								<Input.OTP
+									value={login2FAState.code}
+									onChange={async value => {
+										setLogin2FAState({ code: value });
+										if (value?.length && value.length >= 6) {
+											await run2FA();
+											setLogin2FAState({ open: false });
+											setTimeout(() => {
+												runAsync();
+											}, 1500);
+										}
+									}}
+								/>
+							</div>
+						</Spin>
 					</Modal>
 				)}
 			</Container>

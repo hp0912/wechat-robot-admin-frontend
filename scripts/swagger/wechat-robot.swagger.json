@@ -6798,6 +6798,78 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-318752884-run",
 				"security": []
 			}
+		},
+		"/api/v1/robot/login/2fa": {
+			"post": {
+				"summary": "微信登陆2FA",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"uuid": {
+										"type": "string"
+									},
+									"code": {
+										"type": "string"
+									},
+									"ticket": {
+										"type": "string"
+									}
+								},
+								"x-apifox-orders": ["id", "uuid", "code", "ticket"],
+								"required": ["id", "uuid", "code", "ticket"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": ["code", "message"],
+									"x-apifox-orders": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-321179972-run",
+				"security": []
+			}
 		}
 	},
 	"components": {
