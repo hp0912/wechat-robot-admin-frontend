@@ -1,5 +1,6 @@
 import {
 	ArrowUpOutlined,
+	CameraOutlined,
 	CloseCircleFilled,
 	DeleteFilled,
 	EllipsisOutlined,
@@ -7,7 +8,7 @@ import {
 	HeartOutlined,
 	SettingOutlined,
 } from '@ant-design/icons';
-import { useRequest, useSetState } from 'ahooks';
+import { useBoolean, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Dropdown, Flex, List, Row, Skeleton, Space, Spin, Tooltip } from 'antd';
 import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
@@ -18,6 +19,7 @@ import { DefaultAvatar } from '@/constant';
 import CommentFilled from '@/icons/CommentFilled';
 import CommentOutlined from '@/icons/CommentOutlined';
 import MediaList, { MediaVideo } from './MediaList';
+import PostMoment from './PostMoment';
 import { Container } from './styled';
 
 interface IProps {
@@ -42,6 +44,7 @@ const Moments = (props: IProps) => {
 
 	// 单词拼写原本是协议拼错了
 	const [prevState, setPrevState] = useSetState<IPrevState>({ frist_page_md5: '', max_id: '0', moments: [] });
+	const [newPostMomentOpen, setNewPostMomentOpen] = useBoolean(false);
 
 	// 记录一下朋友圈ID，避免重复了
 	const momentIds = new Set<string>();
@@ -225,6 +228,14 @@ const Moments = (props: IProps) => {
 							}}
 						>
 							返回朋友圈首页
+						</Button>
+						<Button
+							type="primary"
+							icon={<CameraOutlined />}
+							ghost
+							onClick={setNewPostMomentOpen.setTrue}
+						>
+							发朋友圈
 						</Button>
 						<Button
 							type="primary"
@@ -432,6 +443,14 @@ const Moments = (props: IProps) => {
 							}}
 						/>
 					</InfiniteScroll>
+					{newPostMomentOpen && (
+						<PostMoment
+							open={newPostMomentOpen}
+							robotId={props.robotId}
+							robot={props.robot}
+							onClose={setNewPostMomentOpen.setFalse}
+						/>
+					)}
 				</div>
 			</Spin>
 		</Container>
