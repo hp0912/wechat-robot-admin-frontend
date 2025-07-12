@@ -114,7 +114,7 @@ const AppLayout: React.FC = () => {
 				<Header style={headerStyle}>
 					<Logo>
 						<div className="icon" />
-						{isSmallScreen ? null : <div className="title">微信机器人管理后台</div>}
+						<div className="title">微信机器人管理后台</div>
 					</Logo>
 					<Dropdown
 						menu={{ items }}
@@ -128,7 +128,9 @@ const AppLayout: React.FC = () => {
 								src={user.avatar_url}
 								alt={user.display_name}
 							/>
-							<span style={{ color: '#ffffff', marginLeft: 5, fontSize: 15 }}>{user.display_name}</span>
+							{isSmallScreen ? null : (
+								<span style={{ color: '#ffffff', marginLeft: 5, fontSize: 15 }}>{user.display_name}</span>
+							)}
 						</div>
 					</Dropdown>
 				</Header>
