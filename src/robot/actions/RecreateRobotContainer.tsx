@@ -9,7 +9,8 @@ import {
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Button, Dropdown, Modal, theme } from 'antd';
 import type { MenuProps } from 'antd';
-import React from 'react';
+import React, { useContext } from 'react';
+import { GlobalContext } from '@/context/global';
 
 interface IProps {
 	robotId: number;
@@ -37,6 +38,8 @@ interface ImagePullState {
 }
 
 const Progress = (props: { open?: boolean; progress: ImagePullRender[] }) => {
+	const globalContext = useContext(GlobalContext);
+
 	return (
 		<Modal
 			open={props.open}
@@ -44,7 +47,7 @@ const Progress = (props: { open?: boolean; progress: ImagePullRender[] }) => {
 			maskClosable={false}
 			title="更新机器人镜像"
 			footer={null}
-			width={900}
+			width={globalContext.global?.isSmallScreen ? '100%' : 900}
 		>
 			{(props.progress || []).map(item => {
 				return (

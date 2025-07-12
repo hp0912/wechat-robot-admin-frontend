@@ -2,9 +2,10 @@ import { SearchOutlined } from '@ant-design/icons';
 import { useRequest, useSetState } from 'ahooks';
 import { Alert, App, Avatar, Button, Col, Drawer, Input, Row, Space, Table, Tag, theme } from 'antd';
 import type { TableProps } from 'antd';
-import React from 'react';
+import React, { useContext } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
+import { GlobalContext } from '@/context/global';
 
 type IDataSource = Api.V1ContactListList.ResponseBody['data']['items'][number];
 
@@ -19,6 +20,8 @@ interface IProps {
 const ChatRoomCreateConfirm = (props: IProps) => {
 	const { token } = theme.useToken();
 	const { message } = App.useApp();
+
+	const globalContext = useContext(GlobalContext);
 
 	const [search, setSearch] = useSetState({ keyword: '', pageIndex: 1 });
 	const [selectedState, setSelectedState] = useSetState<{ keys: number[]; rows: IDataSource[] }>({
@@ -118,7 +121,7 @@ const ChatRoomCreateConfirm = (props: IProps) => {
 			title="创建新的群聊"
 			open={props.open}
 			onClose={props.onClose}
-			width="760px"
+			width={globalContext.global?.isSmallScreen ? '99%' : '760px'}
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { paddingTop: 16, paddingBottom: 0 } }}
 			extra={
 				<Space>

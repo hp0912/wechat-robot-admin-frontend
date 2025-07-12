@@ -1,6 +1,7 @@
 import { useRequest } from 'ahooks';
 import { App, Form, Input, Modal } from 'antd';
-import React from 'react';
+import React, { useContext } from 'react';
+import { GlobalContext } from '@/context/global';
 
 interface IProps {
 	robotId: number;
@@ -14,6 +15,8 @@ interface IProps {
 
 const ChatRoomMemberFriend = (props: IProps) => {
 	const { message } = App.useApp();
+
+	const globalContext = useContext(GlobalContext);
 
 	const [form] = Form.useForm<{ verify_content: string }>();
 
@@ -41,7 +44,7 @@ const ChatRoomMemberFriend = (props: IProps) => {
 	return (
 		<Modal
 			title="添加好友"
-			width={550}
+			width={globalContext.global?.isSmallScreen ? '100%' : 550}
 			open={props.open}
 			confirmLoading={loading}
 			onOk={async () => {

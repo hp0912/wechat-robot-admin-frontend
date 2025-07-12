@@ -15,12 +15,13 @@ import {
 	Spin,
 	Switch,
 } from 'antd';
-import React from 'react';
+import React, { useContext } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import ImageModel from '@/components/ImageModel';
 import ParamsGroup from '@/components/ParamsGroup';
 import { DefaultAvatar } from '@/constant';
 import { AiModels } from '@/constant/ai';
+import { GlobalContext } from '@/context/global';
 import { ObjectToString, onTTSEnabledChange } from './utils';
 
 interface IProps {
@@ -34,6 +35,8 @@ type IFormValue = Api.V1FriendSettingsCreate.RequestBody;
 
 const FriendSettings = (props: IProps) => {
 	const { message } = App.useApp();
+
+	const globalContext = useContext(GlobalContext);
 
 	const { contact } = props;
 
@@ -220,7 +223,7 @@ const FriendSettings = (props: IProps) => {
 			}
 			open={props.open}
 			onClose={props.onClose}
-			width="900px"
+			width={globalContext.global?.isSmallScreen ? '99%' : '900px'}
 			styles={{
 				header: { paddingTop: 12, paddingBottom: 12 },
 				body: { paddingTop: 16, paddingBottom: 0 },

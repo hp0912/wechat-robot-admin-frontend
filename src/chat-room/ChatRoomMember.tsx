@@ -2,9 +2,10 @@ import { DownOutlined, SearchOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Dropdown, Input, List, Pagination, Row, Space, Tag, theme } from 'antd';
 import dayjs from 'dayjs';
-import React from 'react';
+import React, { useContext } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
+import { GlobalContext } from '@/context/global';
 import ChatRoomMemberFriend from './ChatRoomMemberFriend';
 import ChatRoomMemberRemove from './ChatRoomMemberRemove';
 
@@ -30,6 +31,8 @@ interface IMemberRemoveState {
 const GroupMember = (props: IProps) => {
 	const { token } = theme.useToken();
 	const { message } = App.useApp();
+
+	const globalContext = useContext(GlobalContext);
 
 	const { chatRoom } = props;
 
@@ -113,7 +116,7 @@ const GroupMember = (props: IProps) => {
 			}
 			open={props.open}
 			onClose={props.onClose}
-			width="calc(100vw - 300px)"
+			width={globalContext.global?.isSmallScreen ? '99%' : 'calc(100vw - 300px)'}
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { paddingTop: 16, paddingBottom: 0 } }}
 			footer={null}
 		>

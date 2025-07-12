@@ -1,6 +1,7 @@
 import { useRequest } from 'ahooks';
 import { Alert, App, Modal } from 'antd';
-import React from 'react';
+import React, { useContext } from 'react';
+import { GlobalContext } from '@/context/global';
 
 interface IProps {
 	robotId: number;
@@ -15,6 +16,8 @@ interface IProps {
 
 const ChatRoomMemberRemove = (props: IProps) => {
 	const { message } = App.useApp();
+
+	const globalContext = useContext(GlobalContext);
 
 	const { runAsync, loading } = useRequest(
 		async () => {
@@ -42,7 +45,7 @@ const ChatRoomMemberRemove = (props: IProps) => {
 	return (
 		<Modal
 			title={`${props.chatRoomName}`}
-			width={390}
+			width={globalContext.global?.isSmallScreen ? '100%' : 390}
 			open={props.open}
 			confirmLoading={loading}
 			onOk={async () => {

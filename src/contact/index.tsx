@@ -19,13 +19,14 @@ import {
 } from 'antd';
 import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import ChatHistory from '@/chat';
 import ChatRoomMember from '@/chat-room/ChatRoomMember';
 import SendMessage from '@/components/send-message';
 import { DefaultAvatar } from '@/constant';
+import { GlobalContext } from '@/context/global';
 import FemaleFilled from '@/icons/FemaleFilled';
 import GroupFilled from '@/icons/GroupFilled';
 import MaleFilled from '@/icons/MaleFilled';
@@ -45,7 +46,6 @@ import FriendRemarkChange from './FriendRemarkChange';
 import OAuth from './OAuth';
 
 interface IProps {
-	isSmallScreen: boolean;
 	robotId: number;
 	robot: Api.V1RobotViewList.ResponseBody['data'];
 }
@@ -70,6 +70,8 @@ interface IFriendActionState {
 
 const Contact = (props: IProps) => {
 	const { message } = App.useApp();
+
+	const globalContext = useContext(GlobalContext);
 
 	const [search, setSearch] = useSetState({ keyword: '', type: 'chat_room', pageIndex: 1 });
 	const [chatRoomAction, setChatRoomAction] = useSetState<IChatRoomActionState>({});
@@ -167,7 +169,7 @@ const Contact = (props: IProps) => {
 					wrap={false}
 					gutter={8}
 				>
-					{props.isSmallScreen ? null : (
+					{globalContext.global?.isSmallScreen ? null : (
 						<Col flex="0 0 300px">
 							<Input
 								placeholder="搜索联系人"
@@ -207,7 +209,7 @@ const Contact = (props: IProps) => {
 						robotId={props.robotId}
 						robot={props.robot}
 					/>
-					{props.isSmallScreen ? null : (
+					{globalContext.global?.isSmallScreen ? null : (
 						<>
 							<AddFriends
 								robotId={props.robotId}

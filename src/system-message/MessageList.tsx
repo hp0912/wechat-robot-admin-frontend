@@ -2,9 +2,10 @@ import { useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Row, Space, Table, Tag, theme } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
-import React from 'react';
+import React, { useContext } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
+import { GlobalContext } from '@/context/global';
 import ChatRoomJoin from './ChatRoomJoin';
 import FriendPassVerify from './FriendPassVerify';
 
@@ -21,6 +22,8 @@ interface IProps {
 const MessageList = (props: IProps) => {
 	const { token } = theme.useToken();
 	const { message, modal } = App.useApp();
+
+	const globalContext = useContext(GlobalContext);
 
 	const [selectedState, setSelectedState] = useSetState<{ keys: number[]; rows: IDataSource[] }>({
 		keys: [],
@@ -176,7 +179,7 @@ const MessageList = (props: IProps) => {
 			title="系统消息"
 			open={props.open}
 			onClose={props.onClose}
-			width="75%"
+			width={globalContext.global?.isSmallScreen ? '99%' : '75%'}
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { paddingTop: 16, paddingBottom: 0 } }}
 			extra={
 				<Space>
