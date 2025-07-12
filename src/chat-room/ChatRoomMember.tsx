@@ -76,6 +76,10 @@ const GroupMember = (props: IProps) => {
 		},
 	);
 
+	const onAddFriendClose = useMemoizedFn(() => {
+		setAddFriendState({ open: false, chatRoomMemberId: undefined, chatRoomMemberName: undefined });
+	});
+
 	const onChatRoomMemberRemoveClose = useMemoizedFn(() => {
 		setMemberRemoveState({ open: false, chatRoomMemberId: undefined, chatRoomMemberName: undefined });
 	});
@@ -253,7 +257,7 @@ const GroupMember = (props: IProps) => {
 							chatRoomMemberId={addFriendState.chatRoomMemberId!}
 							chatRoomMemberName={addFriendState.chatRoomMemberName!}
 							open={addFriendState.open}
-							onClose={onChatRoomMemberRemoveClose}
+							onClose={onAddFriendClose}
 						/>
 					)}
 					{memberRemoveState.open && (
