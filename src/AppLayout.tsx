@@ -1,12 +1,14 @@
 import { LogoutOutlined } from '@ant-design/icons';
-import { useRequest } from 'ahooks';
+import { useRequest, useSize } from 'ahooks';
 import { App, Avatar, Dropdown, Layout, Skeleton, Watermark } from 'antd';
 import type { MenuProps } from 'antd';
 import logo from 'public/logo.svg';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import { UrlLogin } from './constant/redirect-url';
+import { GlobalContext } from './context/global';
+import type { IGlobalContext } from './context/global';
 import { UserContext } from './context/user';
 
 const { Header } = Layout;
@@ -51,6 +53,13 @@ const Logo = styled.div`
 
 const AppLayout: React.FC = () => {
 	const { message } = App.useApp();
+
+	const bodySize = useSize(document.body);
+	const isSmallScreen = (bodySize?.width || 0) < 1280;
+
+	const globalState = useMemo<IGlobalContext>(() => {
+		return { global: { isSmallScreen } };
+	}, [isSmallScreen]);
 
 	// 获取用户详情
 	const { data: user, loading: userLoading } = useRequest(
@@ -105,7 +114,7 @@ const AppLayout: React.FC = () => {
 				<Header style={headerStyle}>
 					<Logo>
 						<div className="icon" />
-						<div className="title">微信机器人管理后台</div>
+						{isSmallScreen ? null : <div className="title">微信机器人管理后台</div>}
 					</Logo>
 					<Dropdown
 						menu={{ items }}
@@ -124,11 +133,13 @@ const AppLayout: React.FC = () => {
 					</Dropdown>
 				</Header>
 				<Layout>
-					<UserContext.Provider value={{ user: user, signOut }}>
-						<Layout style={{ padding: '10px 10px 0 10px' }}>
-							<Outlet />
-						</Layout>
-					</UserContext.Provider>
+					<GlobalContext.Provider value={globalState}>
+						<UserContext.Provider value={{ user: user, signOut }}>
+							<Layout style={{ padding: '10px 10px 0 10px' }}>
+								<Outlet />
+							</Layout>
+						</UserContext.Provider>
+					</GlobalContext.Provider>
 				</Layout>
 			</Layout>
 		</Watermark>

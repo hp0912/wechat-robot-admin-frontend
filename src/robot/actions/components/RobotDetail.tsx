@@ -1,11 +1,12 @@
 import { FileTextFilled, FundFilled, OpenAIFilled, WechatFilled } from '@ant-design/icons';
-import { useMemoizedFn, useRequest, useSize } from 'ahooks';
+import { useMemoizedFn, useRequest } from 'ahooks';
 import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Spin, Tabs, Tag, theme } from 'antd';
 import type { TabsProps } from 'antd';
 import dayjs from 'dayjs';
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import Contact from '@/contact';
+import { GlobalContext } from '@/context/global';
 import MomentsFilled from '@/icons/MomentsFilled';
 import GlobalSettings from '@/settings';
 import RecreateRobotContainer from '../RecreateRobotContainer';
@@ -53,8 +54,7 @@ const RobotDetail = (props: IProps) => {
 	const { message } = App.useApp();
 	const { token } = theme.useToken();
 
-	const bodySize = useSize(document.body);
-	const isSmallScreen = (bodySize?.width || 0) < 1280;
+	const globalContext = useContext(GlobalContext);
 
 	const { open, onClose } = props;
 
@@ -104,7 +104,6 @@ const RobotDetail = (props: IProps) => {
 			label: '联系人',
 			children: (
 				<Contact
-					isSmallScreen={isSmallScreen}
 					robotId={props.robotId}
 					robot={data}
 				/>
@@ -171,7 +170,7 @@ const RobotDetail = (props: IProps) => {
 				</Row>
 			}
 			extra={
-				isSmallScreen ? null : (
+				globalContext.global?.isSmallScreen ? null : (
 					<Space>
 						<RobotState
 							robotId={data.id}
@@ -202,7 +201,7 @@ const RobotDetail = (props: IProps) => {
 			}
 			open={open}
 			onClose={onClose}
-			width={isSmallScreen ? '99%' : 'calc(100vw - 300px)'}
+			width={globalContext.global?.isSmallScreen ? '99%' : 'calc(100vw - 300px)'}
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { padding: 0 } }}
 			footer={null}
 		>
@@ -223,7 +222,7 @@ const RobotDetail = (props: IProps) => {
 						items={items}
 					/>
 				</Col>
-				{isSmallScreen ? null : (
+				{globalContext.global?.isSmallScreen ? null : (
 					<Col
 						flex="0 0 350px"
 						style={{ width: 350, height: '100%' }}

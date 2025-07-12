@@ -19,13 +19,14 @@ import {
 } from 'antd';
 import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import ChatHistory from '@/chat';
 import ChatRoomMember from '@/chat-room/ChatRoomMember';
 import SendMessage from '@/components/send-message';
 import { DefaultAvatar } from '@/constant';
+import { GlobalContext } from '@/context/global';
 import FemaleFilled from '@/icons/FemaleFilled';
 import GroupFilled from '@/icons/GroupFilled';
 import MaleFilled from '@/icons/MaleFilled';
@@ -45,7 +46,6 @@ import FriendRemarkChange from './FriendRemarkChange';
 import OAuth from './OAuth';
 
 interface IProps {
-	isSmallScreen: boolean;
 	robotId: number;
 	robot: Api.V1RobotViewList.ResponseBody['data'];
 }
@@ -70,6 +70,8 @@ interface IFriendActionState {
 
 const Contact = (props: IProps) => {
 	const { message } = App.useApp();
+
+	const globalContext = useContext(GlobalContext);
 
 	const [search, setSearch] = useSetState({ keyword: '', type: 'chat_room', pageIndex: 1 });
 	const [chatRoomAction, setChatRoomAction] = useSetState<IChatRoomActionState>({});
@@ -167,7 +169,7 @@ const Contact = (props: IProps) => {
 					wrap={false}
 					gutter={8}
 				>
-					{props.isSmallScreen ? null : (
+					{globalContext.global?.isSmallScreen ? null : (
 						<Col flex="0 0 300px">
 							<Input
 								placeholder="搜索联系人"
@@ -207,7 +209,7 @@ const Contact = (props: IProps) => {
 						robotId={props.robotId}
 						robot={props.robot}
 					/>
-					{props.isSmallScreen ? null : (
+					{globalContext.global?.isSmallScreen ? null : (
 						<>
 							<AddFriends
 								robotId={props.robotId}
@@ -255,6 +257,8 @@ const Contact = (props: IProps) => {
 							items.push({ label: '好友设置', key: 'friend-settings' });
 							items.push({ label: '修改备注', key: 'change-remark' });
 							items.push({ label: '删除好友', key: 'delete-friend', danger: true });
+						} else if (item.type === 'official_account') {
+							items.push({ label: '公众号设置', key: 'official-account-settings' });
 						} else {
 							items.push({ label: '群聊设置', key: 'chat-room-settings' });
 							items.push({ label: '邀请入群', key: 'invite-to-group' });
@@ -323,106 +327,105 @@ const Contact = (props: IProps) => {
 										</>
 									}
 								/>
-								{item.type === 'official_account' ? null : (
-									<div style={{ marginRight: 8 }}>
-										<Dropdown.Button
-											menu={{
-												items,
-												onClick: ev => {
-													switch (ev.key) {
-														case 'chat-room-member':
-															setGroupMemberState({ open: true, chatRoom: item });
-															break;
-														case 'send-message':
-															setSendMessageState({ open: true, contact: item });
-															break;
-														case 'friend-settings':
-															setFriendSettingsState({ open: true, contact: item });
-															break;
-														case 'delete-friend':
+								<div style={{ marginRight: 8 }}>
+									<Dropdown.Button
+										menu={{
+											items,
+											onClick: ev => {
+												switch (ev.key) {
+													case 'chat-room-member':
+														setGroupMemberState({ open: true, chatRoom: item });
+														break;
+													case 'send-message':
+														setSendMessageState({ open: true, contact: item });
+														break;
+													case 'friend-settings':
+													case 'official-account-settings':
+														setFriendSettingsState({ open: true, contact: item });
+														break;
+													case 'delete-friend':
+														setFriendAction({
+															open: true,
+															contactId: item.wechat_id,
+															contactName: item.remark || item.nickname || item.alias || item.wechat_id,
+															action: 'delete',
+														});
+														break;
+													case 'invite-to-group':
+														setChatRoomAction({
+															open: true,
+															chatRoomId: item.wechat_id,
+															chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
+															action: 'invite',
+														});
+														break;
+													case 'chat-room-settings':
+														setChatRoomSettingsState({ open: true, chatRoom: item });
+														break;
+													case 'change-name':
+														setChatRoomAction({
+															open: true,
+															chatRoomId: item.wechat_id,
+															chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
+															action: 'change-name',
+														});
+														break;
+													case 'change-remark':
+														if (item.type === 'friend') {
 															setFriendAction({
 																open: true,
 																contactId: item.wechat_id,
 																contactName: item.remark || item.nickname || item.alias || item.wechat_id,
-																action: 'delete',
+																action: 'change-remark',
 															});
-															break;
-														case 'invite-to-group':
+														}
+														if (item.type === 'chat_room') {
 															setChatRoomAction({
 																open: true,
 																chatRoomId: item.wechat_id,
 																chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
-																action: 'invite',
+																action: 'change-remark',
 															});
-															break;
-														case 'chat-room-settings':
-															setChatRoomSettingsState({ open: true, chatRoom: item });
-															break;
-														case 'change-name':
-															setChatRoomAction({
-																open: true,
-																chatRoomId: item.wechat_id,
-																chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
-																action: 'change-name',
-															});
-															break;
-														case 'change-remark':
-															if (item.type === 'friend') {
-																setFriendAction({
-																	open: true,
-																	contactId: item.wechat_id,
-																	contactName: item.remark || item.nickname || item.alias || item.wechat_id,
-																	action: 'change-remark',
-																});
-															}
-															if (item.type === 'chat_room') {
-																setChatRoomAction({
-																	open: true,
-																	chatRoomId: item.wechat_id,
-																	chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
-																	action: 'change-remark',
-																});
-															}
-															break;
-														case 'change-announcement':
-															setChatRoomAction({
-																open: true,
-																chatRoomId: item.wechat_id,
-																chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
-																action: 'change-announcement',
-															});
-															break;
-														case 'quit':
-															setChatRoomAction({
-																open: true,
-																chatRoomId: item.wechat_id,
-																chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
-																action: 'quit',
-															});
-															break;
-													}
-												},
-											}}
-											onClick={() => {
-												if (item.type === 'friend') {
-													setChatHistoryState({
-														open: true,
-														contact: item,
-														title: `我与${item.remark || item.nickname || item.alias || item.wechat_id} 的聊天记录`,
-													});
-												} else {
-													setChatHistoryState({
-														open: true,
-														contact: item,
-														title: `${item.remark || item.nickname || item.alias || item.wechat_id} 的聊天记录`,
-													});
+														}
+														break;
+													case 'change-announcement':
+														setChatRoomAction({
+															open: true,
+															chatRoomId: item.wechat_id,
+															chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
+															action: 'change-announcement',
+														});
+														break;
+													case 'quit':
+														setChatRoomAction({
+															open: true,
+															chatRoomId: item.wechat_id,
+															chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
+															action: 'quit',
+														});
+														break;
 												}
-											}}
-										>
-											聊天记录
-										</Dropdown.Button>
-									</div>
-								)}
+											},
+										}}
+										onClick={() => {
+											if (item.type === 'friend') {
+												setChatHistoryState({
+													open: true,
+													contact: item,
+													title: `我与${item.remark || item.nickname || item.alias || item.wechat_id} 的聊天记录`,
+												});
+											} else {
+												setChatHistoryState({
+													open: true,
+													contact: item,
+													title: `${item.remark || item.nickname || item.alias || item.wechat_id} 的聊天记录`,
+												});
+											}
+										}}
+									>
+										聊天记录
+									</Dropdown.Button>
+								</div>
 							</List.Item>
 						);
 					}}
