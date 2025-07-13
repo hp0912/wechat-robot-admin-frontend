@@ -11,7 +11,7 @@ import {
 	ZoomInOutlined,
 	ZoomOutOutlined,
 } from '@ant-design/icons';
-import { Image, Space } from 'antd';
+import { App, Image, Space } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
@@ -35,7 +35,10 @@ const ImageGroupContainer = styled.div`
 `;
 
 const MediaList = (props: IProps) => {
+	const { message } = App.useApp();
+
 	const [current, setCurrent] = useState(0);
+
 	const onDownload = () => {
 		let url = props.dataSource[current].URL?.Value;
 		if (props.dataSource[current].HD?.Value) {
@@ -46,6 +49,11 @@ const MediaList = (props: IProps) => {
 		url = url?.replace('http://', 'https://');
 		const suffix = url!.slice(url!.lastIndexOf('.'));
 		const filename = Date.now() + suffix;
+
+		if (url) {
+			message.warning('暂不支持图片下载，请右击图片另存为');
+			return;
+		}
 
 		fetch(url!)
 			.then(response => response.blob())

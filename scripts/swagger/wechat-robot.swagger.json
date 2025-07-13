@@ -6870,6 +6870,154 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-321179972-run",
 				"security": []
 			}
+		},
+		"/api/v1/moments/post": {
+			"post": {
+				"summary": "发布朋友圈",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"content": {
+										"type": "string"
+									},
+									"media_list": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"StartPos": {
+													"type": "number"
+												},
+												"TotalLen": {
+													"type": "number"
+												},
+												"ClientId": {
+													"type": "string"
+												},
+												"BufferUrl": {
+													"type": "object",
+													"properties": {
+														"Url": {
+															"type": "string"
+														},
+														"Type": {
+															"type": "number"
+														}
+													},
+													"x-apifox-orders": ["Url", "Type"],
+													"x-apifox-ignore-properties": []
+												},
+												"ThumbUrlCount": {
+													"type": "number"
+												},
+												"ThumbUrls": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"Url": {
+																"type": "string"
+															},
+															"Type": {
+																"type": "number"
+															}
+														},
+														"x-apifox-orders": ["Url", "Type"],
+														"x-apifox-ignore-properties": []
+													}
+												},
+												"Id": {
+													"type": "number"
+												},
+												"IdStr": {
+													"type": "string"
+												},
+												"Type": {
+													"type": "number"
+												}
+											},
+											"x-apifox-orders": [
+												"StartPos",
+												"TotalLen",
+												"ClientId",
+												"BufferUrl",
+												"ThumbUrlCount",
+												"ThumbUrls",
+												"Id",
+												"IdStr",
+												"Type"
+											],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"share_type": {
+										"type": "string"
+									},
+									"range": {
+										"type": "string"
+									},
+									"share_with": {
+										"type": "string"
+									},
+									"donot_share": {
+										"type": "string"
+									}
+								},
+								"x-apifox-orders": ["id", "content", "media_list", "share_type", "range", "share_with", "donot_share"],
+								"required": ["id", "share_type"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": ["code", "message"],
+									"x-apifox-orders": ["code", "message"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-321253802-run",
+				"security": []
+			}
 		}
 	},
 	"components": {
