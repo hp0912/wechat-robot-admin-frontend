@@ -1,11 +1,15 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Form, Image, Input, Modal, Segmented, Select, Upload } from 'antd';
+import { useRequest } from 'ahooks';
+import { App, Avatar, Col, Form, Image, Input, Modal, Row, Segmented, Select, Upload } from 'antd';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 import React, { useContext, useState } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
+import { DefaultAvatar } from '@/constant';
 import { GlobalContext } from '@/context/global';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+
+type IMomentBody = Api.V1MomentsPostCreate.RequestBody;
 
 interface IProps {
 	open: boolean;
@@ -24,13 +28,53 @@ const getBase64 = (file: FileType): Promise<string> => {
 };
 
 const PostMoment = (props: IProps) => {
+	const { message } = App.useApp();
+
 	const globalContext = useContext(GlobalContext);
 
-	const [form] = Form.useForm<{ verify_content: string; share_type: string }>();
+	const [form] = Form.useForm<IMomentBody & { media_type?: string }>();
 
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
 	const [mediaList, setMediaList] = useState<UploadFile[]>([]);
+
+	const {
+		data: contacts,
+		runAsync: getContacts,
+		loading: contactsLoading,
+	} = useRequest(
+		async (keyword = '') => {
+			const resp = await window.wechatRobotClient.api.v1ContactListList({
+				id: props.robotId,
+				keyword,
+				type: 'friend',
+				page_index: 1,
+				page_size: 20,
+			});
+			return resp.data?.data;
+		},
+		{
+			manual: false,
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	const { runAsync: postMoment, loading: postMomentLoading } = useRequest(
+		async (moment: IMomentBody) => {
+			const resp = await window.wechatRobotClient.api.v1MomentsPostCreate(moment, {
+				id: props.robotId,
+			});
+			return resp.data;
+		},
+		{
+			manual: true,
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
 
 	const onPreview = async (file: UploadFile) => {
 		if (!file.url && !file.preview) {
@@ -45,8 +89,12 @@ const PostMoment = (props: IProps) => {
 			title="发布朋友圈"
 			width={globalContext.global?.isSmallScreen ? '100%' : 550}
 			open={props.open}
-			confirmLoading={false}
+			confirmLoading={postMomentLoading}
 			onOk={async () => {
+				const values = await form.validateFields();
+				values.id = props.robotId;
+				delete values.media_type;
+				await postMoment(values);
 				props.onClose();
 			}}
 			onCancel={props.onClose}
@@ -58,7 +106,7 @@ const PostMoment = (props: IProps) => {
 				autoComplete="off"
 			>
 				<Form.Item
-					name="verify_content"
+					name="content"
 					rules={[{ max: 2000, message: '朋友圈内容不能超过2000个字符' }]}
 				>
 					<Input.TextArea
@@ -141,8 +189,37 @@ const PostMoment = (props: IProps) => {
 														rules={[{ required: true, message: '请选择分享好友' }]}
 													>
 														<Select
+															showSearch
+															labelInValue
+															filterOption={false}
+															loading={contactsLoading}
 															mode="multiple"
 															placeholder="请选择分享好友"
+															onSearch={value => {
+																getContacts(value);
+															}}
+															options={contacts?.items?.map(contact => {
+																return {
+																	label: (
+																		<Row
+																			align="middle"
+																			wrap={false}
+																		>
+																			<Col flex="0 0 auto">
+																				<Avatar
+																					size="small"
+																					src={contact.avatar || DefaultAvatar}
+																				/>
+																			</Col>
+																			<Col flex="1 1 auto">
+																				{contact.remark || contact.nickname || contact.alias || contact.wechat_id}
+																			</Col>
+																		</Row>
+																	),
+																	value: contact.wechat_id,
+																	disabled: contact.wechat_id === props.robot.wechat_id,
+																};
+															})}
 														/>
 													</Form.Item>
 												);
@@ -154,8 +231,37 @@ const PostMoment = (props: IProps) => {
 														rules={[{ required: true, message: '请选择不给谁看的好友' }]}
 													>
 														<Select
+															showSearch
+															labelInValue
+															filterOption={false}
+															loading={contactsLoading}
 															mode="multiple"
 															placeholder="请选择不给谁看的好友"
+															onSearch={value => {
+																getContacts(value);
+															}}
+															options={contacts?.items?.map(contact => {
+																return {
+																	label: (
+																		<Row
+																			align="middle"
+																			wrap={false}
+																		>
+																			<Col flex="0 0 auto">
+																				<Avatar
+																					size="small"
+																					src={contact.avatar || DefaultAvatar}
+																				/>
+																			</Col>
+																			<Col flex="1 1 auto">
+																				{contact.remark || contact.nickname || contact.alias || contact.wechat_id}
+																			</Col>
+																		</Row>
+																	),
+																	value: contact.wechat_id,
+																	disabled: contact.wechat_id === props.robot.wechat_id,
+																};
+															})}
 														/>
 													</Form.Item>
 												);

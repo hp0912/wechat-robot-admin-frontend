@@ -37,7 +37,6 @@ export const Container = styled.div`
 	.moment-likes,
 	.moment-actions .likes {
 		padding: 8px 10px;
-		border-block-end: 1px solid rgba(5, 5, 5, 0.06);
 
 		.like {
 			color: #4683d0;
@@ -48,6 +47,10 @@ export const Container = styled.div`
 			color: #4683d0;
 			font-size: 13px;
 		}
+	}
+
+	.moment-actions .likes {
+		border-block-end: 1px solid rgba(5, 5, 5, 0.06);
 	}
 
 	.moment-comments,
