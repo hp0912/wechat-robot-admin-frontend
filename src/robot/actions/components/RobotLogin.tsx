@@ -156,12 +156,12 @@ const RobotLogin = (props: IProps) => {
 	);
 
 	const { runAsync: run2FA, loading: loading2FA } = useRequest(
-		async () => {
+		async (code: string) => {
 			const resp = await window.wechatRobotClient.api.v1RobotLogin2FaCreate(
 				{
 					id: props.robotId,
 					uuid: login2FAState.uuid,
-					code: login2FAState.code,
+					code,
 					ticket: login2FAState.ticket,
 				},
 				{
@@ -277,7 +277,7 @@ const RobotLogin = (props: IProps) => {
 									onChange={async value => {
 										setLogin2FAState({ code: value });
 										if (value?.length && value.length >= 6) {
-											await run2FA();
+											await run2FA(value);
 											setLogin2FAState({ open: false });
 											setTimeout(() => {
 												runAsync();
