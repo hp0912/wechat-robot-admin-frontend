@@ -13,7 +13,6 @@ interface IProps {
 }
 
 interface IState {
-	uuid: string;
 	qrcode: string;
 	status?: QRCodeProps['status'];
 	avatar?: string;
@@ -43,7 +42,7 @@ const RobotLogin = (props: IProps) => {
 
 	const { open, onClose } = props;
 
-	const [scanState, setScanState] = useSetState<IState>({ uuid: '', qrcode: '等待二维码生成', status: 'loading' });
+	const [scanState, setScanState] = useSetState<IState>({ qrcode: '等待二维码生成', status: 'loading' });
 	const [login2FAState, setLogin2FAState] = useSetState<ILogin2FAState>({ uuid: '', code: '', ticket: '' });
 
 	const { data: qrData, refreshAsync } = useRequest(
@@ -67,7 +66,6 @@ const RobotLogin = (props: IProps) => {
 
 				if (resp?.uuid && resp.awken_login) {
 					setScanState({
-						uuid: resp.uuid,
 						qrcode: `http://weixin.qq.com/x/${resp.uuid}`,
 						status: 'scanned',
 					});
@@ -75,7 +73,6 @@ const RobotLogin = (props: IProps) => {
 				}
 				if (resp?.uuid) {
 					setScanState({
-						uuid: resp.uuid,
 						qrcode: `http://weixin.qq.com/x/${resp.uuid}`,
 						status: 'active',
 					});
@@ -161,6 +158,7 @@ const RobotLogin = (props: IProps) => {
 				{
 					id: props.robotId,
 					uuid: login2FAState.uuid,
+					data62: qrData?.data62 || '',
 					code,
 					ticket: login2FAState.ticket,
 				},

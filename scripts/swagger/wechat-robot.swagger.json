@@ -706,6 +706,9 @@
 												"uuid": {
 													"type": "string"
 												},
+												"data62": {
+													"type": "string"
+												},
 												"awken_login": {
 													"type": "boolean"
 												},
@@ -713,7 +716,8 @@
 													"type": "boolean"
 												}
 											},
-											"x-apifox-orders": ["uuid", "awken_login", "auto_login"],
+											"x-apifox-orders": ["uuid", "data62", "awken_login", "auto_login"],
+											"required": ["data62", "uuid"],
 											"x-apifox-ignore-properties": []
 										}
 									},
@@ -6830,6 +6834,9 @@
 									"uuid": {
 										"type": "string"
 									},
+									"data62": {
+										"type": "string"
+									},
 									"code": {
 										"type": "string"
 									},
@@ -6837,8 +6844,8 @@
 										"type": "string"
 									}
 								},
-								"x-apifox-orders": ["id", "uuid", "code", "ticket"],
-								"required": ["id", "uuid", "code", "ticket"],
+								"x-apifox-orders": ["id", "uuid", "data62", "code", "ticket"],
+								"required": ["id", "uuid", "code", "ticket", "data62"],
 								"x-apifox-ignore-properties": []
 							}
 						}
