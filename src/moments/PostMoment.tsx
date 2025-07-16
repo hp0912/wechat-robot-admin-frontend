@@ -1,15 +1,30 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { FileImageOutlined, PlusOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { App, Avatar, Col, Form, Image, Input, Modal, Row, Segmented, Select, Upload } from 'antd';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 import React, { useContext, useState } from 'react';
+import styled from 'styled-components';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import { GlobalContext } from '@/context/global';
+import MentionOutlined from '@/icons/MentionOutlined';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 type IMomentBody = Api.V1MomentsPostCreate.RequestBody;
+
+interface ILabelInValue {
+	value: string;
+}
+
+interface IFormValue {
+	content?: string;
+	media_type?: string;
+	mention_with?: ILabelInValue[];
+	share_type: string;
+	share_with?: ILabelInValue[];
+	donot_share?: ILabelInValue[];
+}
 
 interface IProps {
 	open: boolean;
@@ -27,12 +42,19 @@ const getBase64 = (file: FileType): Promise<string> => {
 	});
 };
 
+const UploadContainer = styled.div`
+	margin-bottom: 24px;
+	.ant-upload-wrapper {
+		width: 330px;
+	}
+`;
+
 const PostMoment = (props: IProps) => {
 	const { message } = App.useApp();
 
 	const globalContext = useContext(GlobalContext);
 
-	const [form] = Form.useForm<IMomentBody & { media_type?: string }>();
+	const [form] = Form.useForm<IFormValue>();
 
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
@@ -84,6 +106,45 @@ const PostMoment = (props: IProps) => {
 		setPreviewOpen(true);
 	};
 
+	const getContactSelect = (placeholder: React.ReactNode) => {
+		return (
+			<Select
+				showSearch
+				labelInValue
+				filterOption={false}
+				loading={contactsLoading}
+				mode="multiple"
+				placeholder={placeholder}
+				onSearch={value => {
+					getContacts(value);
+				}}
+				options={contacts?.items
+					?.filter(contact => {
+						return contact.wechat_id !== props.robot.wechat_id;
+					})
+					?.map(contact => {
+						return {
+							label: (
+								<Row
+									align="middle"
+									wrap={false}
+								>
+									<Col flex="0 0 auto">
+										<Avatar
+											size="small"
+											src={contact.avatar || DefaultAvatar}
+										/>
+									</Col>
+									<Col flex="1 1 auto">{contact.remark || contact.nickname || contact.alias || contact.wechat_id}</Col>
+								</Row>
+							),
+							value: contact.wechat_id,
+						};
+					})}
+			/>
+		);
+	};
+
 	return (
 		<Modal
 			title="发布朋友圈"
@@ -92,9 +153,15 @@ const PostMoment = (props: IProps) => {
 			confirmLoading={postMomentLoading}
 			onOk={async () => {
 				const values = await form.validateFields();
-				values.id = props.robotId;
-				delete values.media_type;
-				await postMoment(values);
+				await postMoment({
+					id: props.robotId,
+					content: values.content,
+					media_list: [],
+					with_user_list: (values.mention_with || []).map(item => item.value),
+					share_type: values.share_type,
+					share_with: (values.share_with || []).map(item => item.value),
+					donot_share: (values.donot_share || []).map(item => item.value),
+				});
 				props.onClose();
 			}}
 			onCancel={props.onClose}
@@ -122,32 +189,49 @@ const PostMoment = (props: IProps) => {
 					<Segmented
 						shape="round"
 						options={[
-							{ value: 'image', label: '图片' },
-							{ value: 'video', label: '视频' },
+							{ value: 'image', label: '图片', icon: <FileImageOutlined /> },
+							{ value: 'video', label: '视频', icon: <VideoCameraOutlined /> },
 						]}
 					/>
 				</Form.Item>
-				<Upload
-					style={{ marginBottom: 24 }}
-					listType="picture-card"
-					fileList={mediaList}
-					onPreview={onPreview}
-					beforeUpload={file => {
-						setMediaList([...mediaList, file]);
-						return false;
-					}}
+				<UploadContainer>
+					<Upload
+						listType="picture-card"
+						fileList={mediaList}
+						onPreview={onPreview}
+						beforeUpload={async file => {
+							const uploadFile = file as UploadFile;
+							if (!uploadFile.thumbUrl) {
+								uploadFile.thumbUrl = await getBase64(file);
+							}
+							setMediaList([...mediaList, uploadFile]);
+							return false;
+						}}
+					>
+						{mediaList.length >= 9 ? null : <PlusOutlined style={{ fontSize: 28 }} />}
+					</Upload>
+				</UploadContainer>
+				<Form.Item
+					name="mention"
+					initialValue="mention"
 				>
-					{mediaList.length >= 9 ? null : <PlusOutlined style={{ fontSize: 28 }} />}
-				</Upload>
+					<Segmented
+						shape="round"
+						options={[{ value: 'mention', label: '提醒谁看', icon: <MentionOutlined /> }]}
+					/>
+				</Form.Item>
+				<Form.Item name="mention_with">{getContactSelect('请选择提醒好友')}</Form.Item>
 				<Form.Item
 					name="share_type"
-					initialValue="all"
+					initialValue="public"
 				>
 					<Segmented
 						shape="round"
 						options={[
-							{ value: 'all', label: '分享给所有人' },
-							{ value: 'range', label: '分享给指定的人' },
+							{ value: 'public', label: '公开' },
+							{ value: 'private', label: '隐私' },
+							{ value: 'share_with', label: '部分可见' },
+							{ value: 'donot_share', label: '不给谁看' },
 						]}
 					/>
 				</Form.Item>
@@ -159,117 +243,24 @@ const PostMoment = (props: IProps) => {
 				>
 					{({ getFieldValue }) => {
 						const shareType = getFieldValue('share_type');
-						if (shareType === 'range') {
+						if (shareType === 'share_with') {
 							return (
-								<>
-									<Form.Item
-										name="range"
-										initialValue="share_with"
-									>
-										<Segmented
-											shape="round"
-											options={[
-												{ value: 'share_with', label: '谁可以看' },
-												{ value: 'donot_share', label: '不给谁看' },
-											]}
-										/>
-									</Form.Item>
-									<Form.Item
-										noStyle
-										shouldUpdate={(preValues: { range: string }, nextValues: { range: string }) => {
-											return preValues.range !== nextValues.range;
-										}}
-									>
-										{({ getFieldValue }) => {
-											const range = getFieldValue('range');
-											if (range === 'share_with') {
-												return (
-													<Form.Item
-														name="share_with"
-														rules={[{ required: true, message: '请选择分享好友' }]}
-													>
-														<Select
-															showSearch
-															labelInValue
-															filterOption={false}
-															loading={contactsLoading}
-															mode="multiple"
-															placeholder="请选择分享好友"
-															onSearch={value => {
-																getContacts(value);
-															}}
-															options={contacts?.items?.map(contact => {
-																return {
-																	label: (
-																		<Row
-																			align="middle"
-																			wrap={false}
-																		>
-																			<Col flex="0 0 auto">
-																				<Avatar
-																					size="small"
-																					src={contact.avatar || DefaultAvatar}
-																				/>
-																			</Col>
-																			<Col flex="1 1 auto">
-																				{contact.remark || contact.nickname || contact.alias || contact.wechat_id}
-																			</Col>
-																		</Row>
-																	),
-																	value: contact.wechat_id,
-																	disabled: contact.wechat_id === props.robot.wechat_id,
-																};
-															})}
-														/>
-													</Form.Item>
-												);
-											}
-											if (range === 'donot_share') {
-												return (
-													<Form.Item
-														name="donot_share"
-														rules={[{ required: true, message: '请选择不给谁看的好友' }]}
-													>
-														<Select
-															showSearch
-															labelInValue
-															filterOption={false}
-															loading={contactsLoading}
-															mode="multiple"
-															placeholder="请选择不给谁看的好友"
-															onSearch={value => {
-																getContacts(value);
-															}}
-															options={contacts?.items?.map(contact => {
-																return {
-																	label: (
-																		<Row
-																			align="middle"
-																			wrap={false}
-																		>
-																			<Col flex="0 0 auto">
-																				<Avatar
-																					size="small"
-																					src={contact.avatar || DefaultAvatar}
-																				/>
-																			</Col>
-																			<Col flex="1 1 auto">
-																				{contact.remark || contact.nickname || contact.alias || contact.wechat_id}
-																			</Col>
-																		</Row>
-																	),
-																	value: contact.wechat_id,
-																	disabled: contact.wechat_id === props.robot.wechat_id,
-																};
-															})}
-														/>
-													</Form.Item>
-												);
-											}
-											return null;
-										}}
-									</Form.Item>
-								</>
+								<Form.Item
+									name="share_with"
+									rules={[{ required: true, message: '请选择分享好友' }]}
+								>
+									{getContactSelect('请选择分享好友')}
+								</Form.Item>
+							);
+						}
+						if (shareType === 'donot_share') {
+							return (
+								<Form.Item
+									name="donot_share"
+									rules={[{ required: true, message: '请选择不给看的好友' }]}
+								>
+									{getContactSelect('请选择不给看的好友')}
+								</Form.Item>
 							);
 						}
 						return null;
