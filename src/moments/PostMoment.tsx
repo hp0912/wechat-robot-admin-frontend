@@ -3,6 +3,7 @@ import { useRequest } from 'ahooks';
 import { App, Avatar, Col, Form, Image, Input, Modal, Row, Segmented, Select, Upload } from 'antd';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 import React, { useContext, useState } from 'react';
+import styled from 'styled-components';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import { GlobalContext } from '@/context/global';
@@ -40,6 +41,13 @@ const getBase64 = (file: FileType): Promise<string> => {
 		reader.onerror = error => reject(error);
 	});
 };
+
+const UploadContainer = styled.div`
+	margin-bottom: 24px;
+	.ant-upload-wrapper {
+		width: 330px;
+	}
+`;
 
 const PostMoment = (props: IProps) => {
 	const { message } = App.useApp();
@@ -186,18 +194,23 @@ const PostMoment = (props: IProps) => {
 						]}
 					/>
 				</Form.Item>
-				<Upload
-					style={{ marginBottom: 24 }}
-					listType="picture-card"
-					fileList={mediaList}
-					onPreview={onPreview}
-					beforeUpload={file => {
-						setMediaList([...mediaList, file]);
-						return false;
-					}}
-				>
-					{mediaList.length >= 9 ? null : <PlusOutlined style={{ fontSize: 28 }} />}
-				</Upload>
+				<UploadContainer>
+					<Upload
+						listType="picture-card"
+						fileList={mediaList}
+						onPreview={onPreview}
+						beforeUpload={async file => {
+							const uploadFile = file as UploadFile;
+							if (!uploadFile.thumbUrl) {
+								uploadFile.thumbUrl = await getBase64(file);
+							}
+							setMediaList([...mediaList, uploadFile]);
+							return false;
+						}}
+					>
+						{mediaList.length >= 9 ? null : <PlusOutlined style={{ fontSize: 28 }} />}
+					</Upload>
+				</UploadContainer>
 				<Form.Item
 					name="mention"
 					initialValue="mention"
