@@ -12,6 +12,19 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 type IMomentBody = Api.V1MomentsPostCreate.RequestBody;
 
+interface ILabelInValue {
+	value: string;
+}
+
+interface IFormValue {
+	content?: string;
+	media_type?: string;
+	mention_with?: ILabelInValue[];
+	share_type: string;
+	share_with?: ILabelInValue[];
+	donot_share?: ILabelInValue[];
+}
+
 interface IProps {
 	open: boolean;
 	robotId: number;
@@ -33,7 +46,7 @@ const PostMoment = (props: IProps) => {
 
 	const globalContext = useContext(GlobalContext);
 
-	const [form] = Form.useForm<IMomentBody & { media_type?: string }>();
+	const [form] = Form.useForm<IFormValue>();
 
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
@@ -132,9 +145,15 @@ const PostMoment = (props: IProps) => {
 			confirmLoading={postMomentLoading}
 			onOk={async () => {
 				const values = await form.validateFields();
-				values.id = props.robotId;
-				delete values.media_type;
-				await postMoment(values);
+				await postMoment({
+					id: props.robotId,
+					content: values.content,
+					media_list: [],
+					with_user_list: (values.mention_with || []).map(item => item.value),
+					share_type: values.share_type,
+					share_with: (values.share_with || []).map(item => item.value),
+					donot_share: (values.donot_share || []).map(item => item.value),
+				});
 				props.onClose();
 			}}
 			onCancel={props.onClose}

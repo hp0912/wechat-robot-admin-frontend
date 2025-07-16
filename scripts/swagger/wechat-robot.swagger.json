@@ -6979,20 +6979,37 @@
 											"x-apifox-ignore-properties": []
 										}
 									},
+									"with_user_list": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
+									},
 									"share_type": {
 										"type": "string"
 									},
-									"range": {
-										"type": "string"
-									},
 									"share_with": {
-										"type": "string"
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
 									},
 									"donot_share": {
-										"type": "string"
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
 									}
 								},
-								"x-apifox-orders": ["id", "content", "media_list", "share_type", "range", "share_with", "donot_share"],
+								"x-apifox-orders": [
+									"id",
+									"content",
+									"media_list",
+									"with_user_list",
+									"share_type",
+									"share_with",
+									"donot_share"
+								],
 								"required": ["id", "share_type"],
 								"x-apifox-ignore-properties": []
 							}
