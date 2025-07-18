@@ -1,7 +1,6 @@
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { useBoolean, useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Breadcrumb, Button, Col, Empty, Input, notification, Pagination, Radio, Row, Spin } from 'antd';
-import chatRoomQRCode from 'public/chat-room.jpg';
 import { useEffect } from 'react';
 import NewRobot from './NewRobot';
 import Robot from './Robot';
@@ -29,7 +28,7 @@ const RobotList = () => {
 				<>
 					<p>欢迎加入我们</p>
 					<img
-						src={chatRoomQRCode}
+						src="https://img.houhoukang.com/char-room-qrcode-1.jpg"
 						style={{ width: 300, height: 450, display: 'block' }}
 						alt="微信群二维码"
 					/>
