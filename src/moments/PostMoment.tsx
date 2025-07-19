@@ -211,6 +211,8 @@ const PostMoment = (props: IProps) => {
 						donot_share: (values.donot_share || []).map(item => item.value),
 					});
 
+					message.success('朋友圈发布成功');
+					props.onRefresh();
 					props.onClose();
 				} finally {
 					setPostMomentLoading(false);
