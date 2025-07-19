@@ -4,11 +4,11 @@ import { App, Avatar, Col, Form, Image, Input, Modal, Row, Segmented, Select, Sp
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 import axios from 'axios';
 import React, { useContext, useState } from 'react';
-import styled from 'styled-components';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import { GlobalContext } from '@/context/global';
 import MentionOutlined from '@/icons/MentionOutlined';
+import { UploadContainer } from './styled';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -33,6 +33,7 @@ interface IProps {
 	open: boolean;
 	robotId: number;
 	robot: Api.V1RobotViewList.ResponseBody['data'];
+	onRefresh: () => void;
 	onClose: () => void;
 }
 
@@ -44,13 +45,6 @@ const getBase64 = (file: FileType): Promise<string> => {
 		reader.onerror = error => reject(error);
 	});
 };
-
-const UploadContainer = styled.div`
-	margin-bottom: 24px;
-	.ant-upload-wrapper {
-		width: 330px;
-	}
-`;
 
 const PostMoment = (props: IProps) => {
 	const { message } = App.useApp();

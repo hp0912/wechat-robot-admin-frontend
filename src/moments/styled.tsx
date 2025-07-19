@@ -103,3 +103,20 @@ export const Container = styled.div`
 		}
 	}
 `;
+
+export const UploadContainer = styled.div`
+	margin-bottom: 24px;
+	.ant-upload-wrapper {
+		width: 330px;
+	}
+
+	.ant-upload-wrapper.ant-upload-picture-card-wrapper
+		.ant-upload-list.ant-upload-list-picture-card
+		.ant-upload-list-item-thumbnail,
+	.ant-upload-wrapper.ant-upload-picture-card-wrapper
+		.ant-upload-list.ant-upload-list-picture-card
+		.ant-upload-list-item-thumbnail
+		img {
+		object-fit: cover;
+	}
+`;

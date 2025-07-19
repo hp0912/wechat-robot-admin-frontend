@@ -7203,6 +7203,189 @@
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-324072271-run",
 				"security": []
 			}
+		},
+		"/api/v1/moments/operate": {
+			"post": {
+				"summary": "朋友圈操作",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"MomentID": {
+										"type": "string"
+									},
+									"Type": {
+										"type": "number"
+									},
+									"CommentId": {
+										"type": "number"
+									}
+								},
+								"x-apifox-orders": ["id", "MomentID", "Type", "CommentId"],
+								"required": ["id", "MomentID", "Type"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"OpCount": {
+													"type": "number"
+												},
+												"OpRetList": {
+													"type": "array",
+													"items": {
+														"type": "number"
+													}
+												}
+											},
+											"x-apifox-orders": ["OpCount", "OpRetList"],
+											"required": ["OpCount", "OpRetList"],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-324204688-run",
+				"security": []
+			}
+		},
+		"/api/v1/moments/privacy-settings": {
+			"post": {
+				"summary": "朋友圈权限设置",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"Function": {
+										"type": "number"
+									},
+									"Value": {
+										"type": "number"
+									}
+								},
+								"x-apifox-orders": ["id", "Function", "Value"],
+								"required": ["id"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"ret": {
+													"type": "number"
+												},
+												"OplogRet": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"Count": {
+																"type": "number"
+															}
+														},
+														"x-apifox-orders": ["Count"],
+														"required": ["Count"],
+														"x-apifox-ignore-properties": []
+													}
+												}
+											},
+											"x-apifox-orders": ["ret", "OplogRet"],
+											"required": ["ret", "OplogRet"],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-324205273-run",
+				"security": []
+			}
 		}
 	},
 	"components": {
