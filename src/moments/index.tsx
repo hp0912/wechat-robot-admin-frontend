@@ -8,7 +8,7 @@ import {
 	HeartOutlined,
 	SettingOutlined,
 } from '@ant-design/icons';
-import { useBoolean, useRequest, useSetState } from 'ahooks';
+import { useBoolean, useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Dropdown, Flex, List, Row, Skeleton, Space, Spin, Tooltip } from 'antd';
 import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
@@ -143,6 +143,13 @@ const Moments = (props: IProps) => {
 		},
 	);
 
+	const goToTop = useMemoizedFn(() => {
+		setPrevState({ done: false, max_id: '0', frist_page_md5: '', moments: [] });
+		setTimeout(() => {
+			loadMoreData();
+		}, 90);
+	});
+
 	const renderLikes = (item: IMoment) => {
 		return (
 			<>
@@ -220,12 +227,7 @@ const Moments = (props: IProps) => {
 							type="primary"
 							icon={<ArrowUpOutlined />}
 							ghost
-							onClick={() => {
-								setPrevState({ done: false, max_id: '0', frist_page_md5: '', moments: [] });
-								setTimeout(() => {
-									loadMoreData();
-								}, 60);
-							}}
+							onClick={goToTop}
 						>
 							返回朋友圈首页
 						</Button>
@@ -448,6 +450,7 @@ const Moments = (props: IProps) => {
 							open={newPostMomentOpen}
 							robotId={props.robotId}
 							robot={props.robot}
+							onRefresh={goToTop}
 							onClose={setNewPostMomentOpen.setFalse}
 						/>
 					)}

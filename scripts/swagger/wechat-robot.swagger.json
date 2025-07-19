@@ -4593,7 +4593,7 @@
 																						"items": {
 																							"type": "object",
 																							"properties": {
-																								"ID": {
+																								"IDStr": {
 																									"type": "string"
 																								},
 																								"Type": {
@@ -4713,7 +4713,7 @@
 																									"x-apifox-orders": ["Width", "Height", "TotalSize"],
 																									"x-apifox-ignore-properties": []
 																								},
-																								"VideoDuration": {
+																								"VideoDurationStr": {
 																									"type": "string"
 																								},
 																								"VideoColdDLRule": {
@@ -4728,7 +4728,7 @@
 																								}
 																							},
 																							"x-apifox-orders": [
-																								"ID",
+																								"IDStr",
 																								"Type",
 																								"Title",
 																								"Description",
@@ -4741,7 +4741,7 @@
 																								"URL",
 																								"Thumb",
 																								"Size",
-																								"VideoDuration",
+																								"VideoDurationStr",
 																								"VideoColdDLRule"
 																							],
 																							"required": ["HD", "UHD"],
@@ -6914,12 +6914,6 @@
 										"items": {
 											"type": "object",
 											"properties": {
-												"StartPos": {
-													"type": "number"
-												},
-												"TotalLen": {
-													"type": "number"
-												},
 												"ClientId": {
 													"type": "string"
 												},
@@ -6955,27 +6949,44 @@
 														"x-apifox-ignore-properties": []
 													}
 												},
-												"Id": {
-													"type": "number"
-												},
 												"IdStr": {
 													"type": "string"
 												},
 												"Type": {
 													"type": "number"
+												},
+												"Size": {
+													"type": "object",
+													"properties": {
+														"Width": {
+															"type": "string"
+														},
+														"Height": {
+															"type": "string"
+														},
+														"TotalSize": {
+															"type": "string"
+														}
+													},
+													"x-apifox-orders": ["Width", "Height", "TotalSize"],
+													"required": ["Width", "Height", "TotalSize"],
+													"x-apifox-ignore-properties": []
+												},
+												"VideoDurationStr": {
+													"type": "string"
 												}
 											},
 											"x-apifox-orders": [
-												"StartPos",
-												"TotalLen",
 												"ClientId",
 												"BufferUrl",
 												"ThumbUrlCount",
 												"ThumbUrls",
-												"Id",
 												"IdStr",
-												"Type"
+												"Type",
+												"Size",
+												"VideoDurationStr"
 											],
+											"required": ["Size", "VideoDurationStr"],
 											"x-apifox-ignore-properties": []
 										}
 									},
@@ -7040,6 +7051,339 @@
 					}
 				},
 				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-321253802-run",
+				"security": []
+			}
+		},
+		"/api/v1/moments/upload-media": {
+			"post": {
+				"summary": "上传朋友圈视频/视频",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"media": {
+										"type": "string",
+										"format": "binary"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"ClientId": {
+													"type": "string"
+												},
+												"BufferUrl": {
+													"type": "object",
+													"properties": {
+														"Url": {
+															"type": "string"
+														},
+														"Type": {
+															"type": "number"
+														}
+													},
+													"x-apifox-orders": ["Url", "Type"],
+													"required": ["Url", "Type"],
+													"x-apifox-ignore-properties": []
+												},
+												"ThumbUrlCount": {
+													"type": "number"
+												},
+												"ThumbUrls": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"Url": {
+																"type": "string"
+															},
+															"Type": {
+																"type": "number"
+															}
+														},
+														"x-apifox-orders": ["Url", "Type"],
+														"required": ["Url", "Type"],
+														"x-apifox-ignore-properties": []
+													}
+												},
+												"IdStr": {
+													"type": "string"
+												},
+												"Type": {
+													"type": "number"
+												},
+												"Size": {
+													"type": "object",
+													"properties": {
+														"Width": {
+															"type": "string"
+														},
+														"Height": {
+															"type": "string"
+														},
+														"TotalSize": {
+															"type": "string"
+														}
+													},
+													"x-apifox-orders": ["Width", "Height", "TotalSize"],
+													"required": ["Width", "Height", "TotalSize"],
+													"x-apifox-ignore-properties": []
+												},
+												"VideoDurationStr": {
+													"type": "string"
+												}
+											},
+											"x-apifox-orders": [
+												"ClientId",
+												"BufferUrl",
+												"ThumbUrlCount",
+												"ThumbUrls",
+												"IdStr",
+												"Type",
+												"Size",
+												"VideoDurationStr"
+											],
+											"required": [
+												"ClientId",
+												"BufferUrl",
+												"ThumbUrlCount",
+												"ThumbUrls",
+												"IdStr",
+												"Type",
+												"Size",
+												"VideoDurationStr"
+											],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-324072271-run",
+				"security": []
+			}
+		},
+		"/api/v1/moments/operate": {
+			"post": {
+				"summary": "朋友圈操作",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"MomentID": {
+										"type": "string"
+									},
+									"Type": {
+										"type": "number"
+									},
+									"CommentId": {
+										"type": "number"
+									}
+								},
+								"x-apifox-orders": ["id", "MomentID", "Type", "CommentId"],
+								"required": ["id", "MomentID", "Type"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"OpCount": {
+													"type": "number"
+												},
+												"OpRetList": {
+													"type": "array",
+													"items": {
+														"type": "number"
+													}
+												}
+											},
+											"x-apifox-orders": ["OpCount", "OpRetList"],
+											"required": ["OpCount", "OpRetList"],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-324204688-run",
+				"security": []
+			}
+		},
+		"/api/v1/moments/privacy-settings": {
+			"post": {
+				"summary": "朋友圈权限设置",
+				"x-apifox-folder": "",
+				"x-apifox-status": "released",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"Function": {
+										"type": "number"
+									},
+									"Value": {
+										"type": "number"
+									}
+								},
+								"x-apifox-orders": ["id", "Function", "Value"],
+								"required": ["id"],
+								"x-apifox-ignore-properties": []
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "成功",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"ret": {
+													"type": "number"
+												},
+												"OplogRet": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"Count": {
+																"type": "number"
+															}
+														},
+														"x-apifox-orders": ["Count"],
+														"required": ["Count"],
+														"x-apifox-ignore-properties": []
+													}
+												}
+											},
+											"x-apifox-orders": ["ret", "OplogRet"],
+											"required": ["ret", "OplogRet"],
+											"x-apifox-ignore-properties": []
+										}
+									},
+									"required": ["code", "message", "data"],
+									"x-apifox-orders": ["code", "message", "data"],
+									"x-apifox-ignore-properties": []
+								}
+							}
+						}
+					}
+				},
+				"x-run-in-apifox": "https://apifox.com/web/project/6207006/apis/api-324205273-run",
 				"security": []
 			}
 		}
