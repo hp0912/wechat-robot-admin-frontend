@@ -120,7 +120,7 @@ const MediaList = (props: IProps) => {
 
 					return (
 						<Image
-							key={item.ID}
+							key={item.IDStr}
 							src={item.Thumb?.Value?.replace('http://', 'https://')}
 							referrerPolicy="no-referrer"
 							width={width}
