@@ -269,7 +269,7 @@ const RobotLogin = (props: IProps) => {
 							tip="正在验证..."
 						>
 							<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-								<p style={{ margin: '0 0 16px 0', textAlign: 'center' }}>请输入手机微信收到的6位安全码</p>
+								<p style={{ margin: '0 0 16px 0', textAlign: 'center' }}>请输入微信安全码</p>
 								<Input.OTP
 									value={login2FAState.code}
 									onChange={async value => {
