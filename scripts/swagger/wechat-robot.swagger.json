@@ -4442,7 +4442,7 @@
 																		"type": "integer"
 																	},
 																	"Private": {
-																		"type": "string"
+																		"type": "number"
 																	},
 																	"SightFolded": {
 																		"type": "integer"

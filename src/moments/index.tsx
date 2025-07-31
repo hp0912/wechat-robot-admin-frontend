@@ -18,6 +18,7 @@ import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import CommentFilled from '@/icons/CommentFilled';
 import CommentOutlined from '@/icons/CommentOutlined';
+import GroupFilled from '@/icons/GroupFilled';
 import MediaList, { MediaVideo } from './MediaList';
 import PostMoment from './PostMoment';
 import { Container } from './styled';
@@ -63,6 +64,47 @@ const Moments = (props: IProps) => {
 		},
 		{
 			manual: true,
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	const { runAsync: momentOp } = useRequest(
+		async (type: number, momentId: string, commentId?: number) => {
+			const resp = await window.wechatRobotClient.api.v1MomentsOperateCreate(
+				{
+					id: props.robotId,
+					Type: type,
+					MomentID: momentId,
+					CommentId: commentId,
+				},
+				{
+					id: props.robotId,
+				},
+			);
+			return resp.data?.data;
+		},
+		{
+			manual: true,
+			onSuccess: (_, params) => {
+				switch (params[0]) {
+					case 1: // 点赞
+						message.success('点赞成功');
+						break;
+					case 2: // 取消点赞
+						message.success('取消点赞成功');
+						break;
+					case 3: // 评论
+						message.success('评论成功');
+						break;
+					case 4: // 删除评论
+						message.success('删除评论成功');
+						break;
+					default:
+					//
+				}
+			},
 			onError: reason => {
 				message.error(reason.message);
 			},
@@ -204,6 +246,10 @@ const Moments = (props: IProps) => {
 				</p>
 			);
 		});
+	};
+
+	const getPrivateText = (item: IMoment) => {
+		return !item.TimelineObject?.Private ? '设为隐私' : '设为公开';
 	};
 
 	return (
@@ -356,35 +402,63 @@ const Moments = (props: IProps) => {
 														justify="space-between"
 														align="middle"
 													>
-														<Space>
+														<Space size="small">
 															<span>{dayjs(Number(item.CreateTime) * 1000).fromNow()}</span>
 															{(momentLocation?.PoiName || momentLocation?.City || momentLocation?.PoiAddress) && (
 																<span className="moment-location">
 																	{momentLocation?.PoiName || momentLocation?.City || momentLocation?.PoiAddress}
 																</span>
 															)}
-															<>
-																{item.Username === props.robot.wechat_id && (
-																	<Button
-																		key="left"
-																		type="text"
-																		size="small"
-																		icon={
-																			<Tooltip title="删除">
-																				<DeleteFilled className="moment-delete" />
-																			</Tooltip>
-																		}
+															{item.Username === props.robot.wechat_id && (
+																<Tooltip title={getPrivateText(item)}>
+																	<GroupFilled
+																		className="moment-privacy"
+																		style={!item.TimelineObject?.Private ? {} : { color: '#5c5959' }}
+																		onClick={() => {
+																			modal.confirm({
+																				title: getPrivateText(item),
+																				width: 330,
+																				content: <>确定要将这条朋友圈{getPrivateText(item)}吗？</>,
+																				okText: getPrivateText(item),
+																				onOk: async () => {
+																					// 当前公开，设为隐私
+																					if (!item.TimelineObject?.Private) {
+																						await momentOp(2, item.IdStr!);
+																						// 刷新列表
+																						await loadMoreData(prevState.current_md5, prevState.current_id);
+																						return;
+																					}
+																					// 设为公开
+																					await momentOp(3, item.IdStr!);
+																					// 刷新列表
+																					await loadMoreData(prevState.current_md5, prevState.current_id);
+																				},
+																				cancelText: '取消',
+																			});
+																		}}
+																	/>
+																</Tooltip>
+															)}
+															{item.Username === props.robot.wechat_id && (
+																<Tooltip title="删除">
+																	<DeleteFilled
+																		className="moment-delete"
 																		onClick={() => {
 																			modal.confirm({
 																				title: '朋友圈删除确认',
 																				content: <>确定要删除这条朋友圈吗？</>,
 																				okText: '删除',
+																				onOk: async () => {
+																					await momentOp(1, item.IdStr!);
+																					// 刷新列表
+																					await loadMoreData(prevState.current_md5, prevState.current_id);
+																				},
 																				cancelText: '取消',
 																			});
 																		}}
 																	/>
-																)}
-															</>
+																</Tooltip>
+															)}
 														</Space>
 														<div style={{ marginRight: 8 }}>
 															<Dropdown.Button
