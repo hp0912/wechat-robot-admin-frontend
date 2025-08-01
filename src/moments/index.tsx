@@ -89,17 +89,20 @@ const Moments = (props: IProps) => {
 			manual: true,
 			onSuccess: (_, params) => {
 				switch (params[0]) {
-					case 1: // 点赞
-						message.success('点赞成功');
+					case 1:
+						message.success('删除朋友圈成功');
 						break;
-					case 2: // 取消点赞
-						message.success('取消点赞成功');
+					case 2:
+						message.success('设为隐私成功');
 						break;
-					case 3: // 评论
-						message.success('评论成功');
+					case 3:
+						message.success('设为公开成功');
 						break;
-					case 4: // 删除评论
+					case 4:
 						message.success('删除评论成功');
+						break;
+					case 5:
+						message.success('取消点赞成功');
 						break;
 					default:
 					//
@@ -209,30 +212,33 @@ const Moments = (props: IProps) => {
 	};
 
 	const renderComments = (item: IMoment) => {
-		return item.CommentUserList!.map(item => {
-			commentUserMap.set(item.Username!, item.Nickname!);
-			if (item.DeleteFlag === 1) {
+		return item.CommentUserList!.map(item2 => {
+			commentUserMap.set(item2.Username!, item2.Nickname!);
+			if (item2.DeleteFlag === 1) {
 				return null;
 			}
 			return (
 				<p
 					className="comment-item"
-					key={`${item.CommentFlag}-${item.CommentId}-${item.CommentId2}`}
+					key={`${item2.CommentFlag}-${item2.CommentId}-${item2.CommentId2}`}
 				>
-					<b className="user">{commentUserMap.get(item.Username!) || item.Username}</b>
-					{!!item.ReplyUsername && (
+					<b className="user">{commentUserMap.get(item2.Username!) || item2.Username}</b>
+					{!!item2.ReplyUsername && (
 						<span>
 							{' '}
-							@ <b className="user">{commentUserMap.get(item.ReplyUsername) || item.ReplyUsername}</b>
+							@ <b className="user">{commentUserMap.get(item2.ReplyUsername) || item2.ReplyUsername}</b>
 						</span>
 					)}
 					<span>: </span>
-					<span className="comment">{item.Content}</span>
-					{item.Username === props.robot.wechat_id ? (
+					<span className="comment">{item2.Content}</span>
+					{item2.Username === props.robot.wechat_id ? (
 						<CloseCircleFilled
 							className="delete-comment"
-							onClick={() => {
-								message.success('开发中，敬请期待');
+							onClick={async () => {
+								// 设为公开
+								await momentOp(4, item.IdStr!, item2.CommentId);
+								// 刷新列表
+								await loadMoreData(prevState.current_md5, prevState.current_id);
 							}}
 						/>
 					) : (
@@ -363,7 +369,7 @@ const Moments = (props: IProps) => {
 								}
 								const media = item.TimelineObject?.ContentObject?.MediaList?.Media;
 								const momentLocation = item.TimelineObject?.Location;
-								// console.log('[DEBUG]', item);
+
 								return (
 									<List.Item>
 										<List.Item.Meta
@@ -464,13 +470,16 @@ const Moments = (props: IProps) => {
 															<Dropdown.Button
 																menu={{
 																	items,
-																	onClick: ev => {
+																	onClick: async ev => {
 																		switch (ev.key) {
 																			case 'like':
 																				message.success('开发中，敬请期待');
 																				break;
 																			case 'unlike':
-																				message.success('开发中，敬请期待');
+																				// 设为公开
+																				await momentOp(5, item.IdStr!);
+																				// 刷新列表
+																				await loadMoreData(prevState.current_md5, prevState.current_id);
 																				break;
 																			case 'comment':
 																				message.success('开发中，敬请期待');
