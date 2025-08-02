@@ -1,4 +1,4 @@
-import { useRequest, useSetState } from 'ahooks';
+import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Col, Drawer, List, Row, Skeleton, Spin } from 'antd';
 import dayjs from 'dayjs';
 import React, { useContext } from 'react';
@@ -7,6 +7,7 @@ import type { Api, SnsObject } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import { GlobalContext } from '@/context/global';
 import MediaList, { MediaVideo } from './MediaList';
+import SpecifiContactMomentDetail from './SpecifiContactMomentDetail';
 import { Container } from './styled';
 
 interface IProps {
@@ -35,11 +36,16 @@ const SpecifiContactMomentList = (props: IProps) => {
 
 	// frist_page_md5 单词拼写原本是协议拼错了
 	const [prevState, setPrevState] = useSetState<IState>({ frist_page_md5: '', max_id: '0', moments: [] });
+	const [momentDetailState, setMomentDetailState] = useSetState<{ open: boolean; momentId?: string }>({ open: false });
 
 	// 记录一下朋友圈ID，避免重复了
 	const momentIds = new Set<string>();
 
-	const { runAsync: loadMoreData, loading: getLoading } = useRequest(
+	const {
+		data,
+		runAsync: loadMoreData,
+		loading: getLoading,
+	} = useRequest(
 		async (md5?: string, id?: string) => {
 			const resp = await window.wechatRobotClient.api.v1MomentsGetDetailList({
 				id: props.robotId,
@@ -93,6 +99,14 @@ const SpecifiContactMomentList = (props: IProps) => {
 		},
 	);
 
+	const onDetailRefresh = useMemoizedFn(() => {
+		loadMoreData('', '0');
+	});
+
+	const onDetailClose = () => {
+		setMomentDetailState({ open: false, momentId: undefined });
+	};
+
 	return (
 		<Drawer
 			title={
@@ -118,7 +132,9 @@ const SpecifiContactMomentList = (props: IProps) => {
 			footer={null}
 		>
 			<Container>
-				<Spin spinning={getLoading}>
+				{!data && getLoading ? (
+					<Spin spinning={getLoading} />
+				) : (
 					<div
 						id="specifi-moments-list"
 						style={{
@@ -143,7 +159,7 @@ const SpecifiContactMomentList = (props: IProps) => {
 									/>
 								</div>
 							}
-							endMessage={<div style={{ textAlign: 'center', padding: '12px 8px' }}>加载完了...</div>}
+							endMessage={null}
 							scrollableTarget="specifi-moments-list"
 						>
 							<List
@@ -158,7 +174,7 @@ const SpecifiContactMomentList = (props: IProps) => {
 									return (
 										<List.Item
 											onClick={() => {
-												message.info('点击了朋友圈');
+												setMomentDetailState({ open: true, momentId: item.IdStr! });
 											}}
 										>
 											<Row
@@ -185,7 +201,7 @@ const SpecifiContactMomentList = (props: IProps) => {
 													)}
 												</Col>
 												<Col
-													flex="0 0 auto"
+													flex="0 0 528px"
 													style={{ backgroundColor: '#eeeeee' }}
 													onClick={ev => ev.stopPropagation()}
 												>
@@ -216,8 +232,21 @@ const SpecifiContactMomentList = (props: IProps) => {
 								}}
 							/>
 						</InfiniteScroll>
+						{momentDetailState.open && (
+							<SpecifiContactMomentDetail
+								open={momentDetailState.open}
+								robotId={props.robotId}
+								robot={props.robot}
+								contactAvatar={props.contactAvatar}
+								contactId={props.contactId}
+								contactName={props.contactName}
+								momentId={momentDetailState.momentId!}
+								onRefresh={onDetailRefresh}
+								onClose={onDetailClose}
+							/>
+						)}
 					</div>
-				</Spin>
+				)}
 			</Container>
 		</Drawer>
 	);

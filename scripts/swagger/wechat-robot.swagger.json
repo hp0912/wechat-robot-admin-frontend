@@ -1330,11 +1330,11 @@
 										"data": {
 											"type": "object",
 											"properties": {
-												"Object": {
+												"object": {
 													"$ref": "#/components/schemas/SnsObject"
 												}
 											},
-											"required": ["Object"]
+											"required": ["object"]
 										}
 									},
 									"required": ["code", "message", "data"]
