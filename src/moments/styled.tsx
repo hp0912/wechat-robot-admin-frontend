@@ -1,6 +1,16 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+	.sns-bgimg {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: scale-down;
+		z-index: 1;
+	}
+
 	.moment-nickname {
 		color: #4683d0;
 	}

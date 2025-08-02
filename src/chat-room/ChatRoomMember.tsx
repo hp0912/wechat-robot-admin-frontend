@@ -32,6 +32,7 @@ interface IMemberRemoveState {
 
 interface IMomentState {
 	open?: boolean;
+	contactAvatar?: string;
 	contactId?: string;
 	contactName?: string;
 }
@@ -233,6 +234,7 @@ const GroupMember = (props: IProps) => {
 														case 'moments':
 															setMomentState({
 																open: true,
+																contactAvatar: item.avatar,
 																contactId: item.wechat_id,
 																contactName: item.remark || item.nickname || item.alias || item.wechat_id,
 															});
@@ -300,6 +302,7 @@ const GroupMember = (props: IProps) => {
 							open={momentState.open}
 							robotId={props.robotId}
 							robot={props.robot}
+							contactAvatar={momentState.contactAvatar}
 							contactId={momentState.contactId}
 							contactName={momentState.contactName}
 							onClose={onMomentClose}

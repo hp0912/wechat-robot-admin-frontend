@@ -1,15 +1,19 @@
 import { useRequest, useSetState } from 'ahooks';
-import { App, Drawer, Skeleton, Spin } from 'antd';
+import { App, Avatar, Col, Drawer, List, Row, Skeleton, Spin } from 'antd';
+import dayjs from 'dayjs';
 import React, { useContext } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { Api, SnsObject } from '@/api/wechat-robot/wechat-robot';
+import { DefaultAvatar } from '@/constant';
 import { GlobalContext } from '@/context/global';
+import MediaList, { MediaVideo } from './MediaList';
 import { Container } from './styled';
 
 interface IProps {
 	open?: boolean;
 	robotId: number;
 	robot: Api.V1RobotViewList.ResponseBody['data'];
+	contactAvatar?: string;
 	contactId?: string;
 	contactName?: string;
 	onClose: () => void;
@@ -35,11 +39,7 @@ const SpecifiContactMomentList = (props: IProps) => {
 	// 记录一下朋友圈ID，避免重复了
 	const momentIds = new Set<string>();
 
-	const {
-		data,
-		runAsync: loadMoreData,
-		loading: getLoading,
-	} = useRequest(
+	const { runAsync: loadMoreData, loading: getLoading } = useRequest(
 		async (md5?: string, id?: string) => {
 			const resp = await window.wechatRobotClient.api.v1MomentsGetDetailList({
 				id: props.robotId,
@@ -95,7 +95,23 @@ const SpecifiContactMomentList = (props: IProps) => {
 
 	return (
 		<Drawer
-			title={`${props.contactName}的朋友圈`}
+			title={
+				<Row
+					align="middle"
+					wrap={false}
+				>
+					<Col flex="0 0 32px">
+						<Avatar src={props.contactAvatar || DefaultAvatar} />
+					</Col>
+					<Col
+						flex="0 1 auto"
+						className="ellipsis"
+						style={{ padding: '0 3px' }}
+					>
+						{props.contactName}的朋友圈
+					</Col>
+				</Row>
+			}
 			width={globalContext.global?.isSmallScreen ? '100%' : '80%'}
 			open={props.open}
 			onClose={props.onClose}
@@ -106,12 +122,12 @@ const SpecifiContactMomentList = (props: IProps) => {
 					<div
 						id="specifi-moments-list"
 						style={{
+							position: 'relative',
 							height: 'calc(100vh - 115px)',
 							overflowY: 'auto',
 							border: '1px solid rgba(5,5,5,0.06)',
 							borderRadius: 4,
 							marginRight: 2,
-							backgroundImage: data?.SnsUserInfo?.SnsBgimgId ? `url(${data.SnsUserInfo.SnsBgimgId})` : undefined,
 						}}
 					>
 						<InfiniteScroll
@@ -130,7 +146,75 @@ const SpecifiContactMomentList = (props: IProps) => {
 							endMessage={<div style={{ textAlign: 'center', padding: '12px 8px' }}>加载完了...</div>}
 							scrollableTarget="specifi-moments-list"
 						>
-							<div></div>
+							<List
+								rowKey="IdStr"
+								itemLayout="horizontal"
+								split={false}
+								dataSource={prevState.moments || []}
+								renderItem={item => {
+									const media = item.TimelineObject?.ContentObject?.MediaList?.Media;
+									const momentLocation = item.TimelineObject?.Location;
+
+									return (
+										<List.Item
+											onClick={() => {
+												message.info('点击了朋友圈');
+											}}
+										>
+											<Row
+												align="top"
+												wrap={false}
+												style={{ padding: '0 16px' }}
+												gutter={[8, 8]}
+											>
+												<Col flex="0 0 125px">
+													<p style={{ margin: 0 }}>
+														<b>{dayjs(item.CreateTime! * 1000).format('YYYY年M月D日')}</b>
+													</p>
+													<p style={{ margin: 0 }}>
+														<span style={{ fontSize: 12, color: '#3a3a3a' }}>
+															{dayjs(item.CreateTime! * 1000).format('HH:mm')}
+														</span>
+													</p>
+													{(momentLocation?.PoiName || momentLocation?.City || momentLocation?.PoiAddress) && (
+														<p style={{ marginTop: 16 }}>
+															<span className="moment-location">
+																{momentLocation?.PoiName || momentLocation?.City || momentLocation?.PoiAddress}
+															</span>
+														</p>
+													)}
+												</Col>
+												<Col
+													flex="0 0 auto"
+													style={{ backgroundColor: '#eeeeee' }}
+													onClick={ev => ev.stopPropagation()}
+												>
+													{Array.isArray(media) ? (
+														<>
+															{media.length === 1 && Number(media[0].Type) === 6 ? (
+																<MediaVideo
+																	dataSource={media[0]}
+																	videoDownloadUrl={`/api/v1/moments/down-media?id=${props.robotId}&url=${encodeURIComponent(media[0]!.URL!.Value!)}`}
+																/>
+															) : (
+																<MediaList
+																	className="moment-media-list"
+																	dataSource={media}
+																/>
+															)}
+														</>
+													) : null}
+												</Col>
+												<Col flex="1 1 auto">
+													{!!item.TimelineObject?.ContentDesc && (
+														<pre className="moment-content">{item.TimelineObject.ContentDesc}</pre>
+													)}
+												</Col>
+											</Row>
+										</List.Item>
+									);
+								}}
+							/>
 						</InfiniteScroll>
 					</div>
 				</Spin>

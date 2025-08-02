@@ -64,6 +64,7 @@ interface IChatRoomActionState {
 
 interface IFriendActionState {
 	open?: boolean;
+	contactAvatar?: string;
 	contactId?: string;
 	contactName?: string;
 	action?: FriendAction;
@@ -348,6 +349,7 @@ const Contact = (props: IProps) => {
 													case 'moments':
 														setFriendAction({
 															open: true,
+															contactAvatar: item.avatar,
 															contactId: item.wechat_id,
 															contactName: item.remark || item.nickname || item.alias || item.wechat_id,
 															action: 'moments',
@@ -579,6 +581,7 @@ const Contact = (props: IProps) => {
 					open={friendAction.open}
 					robotId={props.robotId}
 					robot={props.robot}
+					contactAvatar={friendAction.contactAvatar}
 					contactId={friendAction.contactId}
 					contactName={friendAction.contactName}
 					onClose={onMomentClose}
