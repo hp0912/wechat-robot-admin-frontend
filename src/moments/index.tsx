@@ -14,7 +14,7 @@ import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type { Api, SnsObject } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import CommentFilled from '@/icons/CommentFilled';
 import CommentOutlined from '@/icons/CommentOutlined';
@@ -70,6 +70,42 @@ const Moments = (props: IProps) => {
 		},
 	);
 
+	const removeMomentCallback = (moments: SnsObject[], momentId: string): SnsObject[] => {
+		const nextMoments = [...moments];
+		const targetMomentIndex = nextMoments.findIndex(m => m.IdStr === momentId);
+		if (targetMomentIndex === -1) {
+			return nextMoments;
+		}
+		nextMoments.splice(targetMomentIndex, 1);
+		return nextMoments;
+	};
+
+	const removeCommentCallback = (moments: SnsObject[], momentId: string, commentId?: number): SnsObject[] => {
+		const nextMoments = [...moments];
+		const targetMomentIndex = nextMoments.findIndex(m => m.IdStr === momentId);
+		if (targetMomentIndex === -1) {
+			return nextMoments;
+		}
+		const targetMoment = structuredClone(nextMoments[targetMomentIndex]);
+		targetMoment.CommentUserList = targetMoment.CommentUserList?.filter(c => c.CommentId !== commentId);
+		targetMoment.CommentCount = targetMoment.CommentUserList?.length || 0;
+		nextMoments[targetMomentIndex] = targetMoment;
+		return nextMoments;
+	};
+
+	const unlikeCommentCallback = (moments: SnsObject[], momentId: string): SnsObject[] => {
+		const nextMoments = [...moments];
+		const targetMomentIndex = nextMoments.findIndex(m => m.IdStr === momentId);
+		if (targetMomentIndex === -1) {
+			return nextMoments;
+		}
+		const targetMoment = structuredClone(nextMoments[targetMomentIndex]);
+		targetMoment.LikeUserList = targetMoment.LikeUserList?.filter(c => c.Username !== props.robot.wechat_id);
+		targetMoment.LikeUserListCount = targetMoment.LikeUserList?.length || 0;
+		nextMoments[targetMomentIndex] = targetMoment;
+		return nextMoments;
+	};
+
 	const { runAsync: momentOp } = useRequest(
 		async (type: number, momentId: string, commentId?: number) => {
 			const resp = await window.wechatRobotClient.api.v1MomentsOperateCreate(
@@ -91,18 +127,29 @@ const Moments = (props: IProps) => {
 				switch (params[0]) {
 					case 1:
 						message.success('删除朋友圈成功');
+						setPrevState({
+							moments: removeMomentCallback(prevState.moments || [], params[1]),
+						});
 						break;
 					case 2:
 						message.success('设为隐私成功');
+						goToTop();
 						break;
 					case 3:
 						message.success('设为公开成功');
+						goToTop();
 						break;
 					case 4:
 						message.success('删除评论成功');
+						setPrevState({
+							moments: removeCommentCallback(prevState.moments || [], params[1], params[2]),
+						});
 						break;
 					case 5:
 						message.success('取消点赞成功');
+						setPrevState({
+							moments: unlikeCommentCallback(prevState.moments || [], params[1]),
+						});
 						break;
 					default:
 					//
@@ -235,10 +282,20 @@ const Moments = (props: IProps) => {
 						<CloseCircleFilled
 							className="delete-comment"
 							onClick={async () => {
-								// 设为公开
-								await momentOp(4, item.IdStr!, item2.CommentId);
-								// 刷新列表
-								await loadMoreData(prevState.current_md5, prevState.current_id);
+								modal.confirm({
+									title: '删除评论',
+									content: (
+										<>
+											<p style={{ color: '#5c5c5c' }}>{item2.Content}</p>
+											<p>确定要删除这条评论吗？</p>
+										</>
+									),
+									okText: '删除',
+									onOk: async () => {
+										// 删除评论
+										await momentOp(4, item.IdStr!, item2.CommentId);
+									},
+								});
 							}}
 						/>
 					) : (
@@ -456,8 +513,6 @@ const Moments = (props: IProps) => {
 																				okText: '删除',
 																				onOk: async () => {
 																					await momentOp(1, item.IdStr!);
-																					// 刷新列表
-																					await loadMoreData(prevState.current_md5, prevState.current_id);
 																				},
 																				cancelText: '取消',
 																			});
@@ -478,8 +533,6 @@ const Moments = (props: IProps) => {
 																			case 'unlike':
 																				// 设为公开
 																				await momentOp(5, item.IdStr!);
-																				// 刷新列表
-																				await loadMoreData(prevState.current_md5, prevState.current_id);
 																				break;
 																			case 'comment':
 																				message.success('开发中，敬请期待');
