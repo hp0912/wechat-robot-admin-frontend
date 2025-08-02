@@ -19,6 +19,7 @@ import { DefaultAvatar } from '@/constant';
 import CommentFilled from '@/icons/CommentFilled';
 import CommentOutlined from '@/icons/CommentOutlined';
 import GroupFilled from '@/icons/GroupFilled';
+import CommentMoment from './CommentMoment';
 import MediaList, { MediaVideo } from './MediaList';
 import PostMoment from './PostMoment';
 import { Container } from './styled';
@@ -40,11 +41,18 @@ interface IPrevState {
 	moments?: IMoment[];
 }
 
+interface ICommentState {
+	open?: boolean;
+	momentId?: string;
+	replyCommnetId?: number;
+}
+
 const Moments = (props: IProps) => {
 	const { message, modal } = App.useApp();
 
 	// 单词拼写原本是协议拼错了
 	const [prevState, setPrevState] = useSetState<IPrevState>({ frist_page_md5: '', max_id: '0', moments: [] });
+	const [commentState, setCommentState] = useSetState<ICommentState>({});
 	const [newPostMomentOpen, setNewPostMomentOpen] = useBoolean(false);
 
 	// 记录一下朋友圈ID，避免重复了
@@ -69,6 +77,17 @@ const Moments = (props: IProps) => {
 			},
 		},
 	);
+
+	const onCommentMomentRefresh = useMemoizedFn((snsObject: SnsObject) => {
+		const nextMoments = [...(prevState.moments || [])];
+		const targetMomentIndex = nextMoments.findIndex(m => m.IdStr === snsObject.IdStr);
+		if (targetMomentIndex === -1) {
+			return;
+		}
+		snsObject.Avatar = nextMoments[targetMomentIndex].Avatar;
+		nextMoments[targetMomentIndex] = snsObject;
+		setPrevState({ moments: nextMoments });
+	});
 
 	const removeMomentCallback = (moments: SnsObject[], momentId: string): SnsObject[] => {
 		const nextMoments = [...moments];
@@ -105,6 +124,48 @@ const Moments = (props: IProps) => {
 		nextMoments[targetMomentIndex] = targetMoment;
 		return nextMoments;
 	};
+
+	const { runAsync: momentComment } = useRequest(
+		async (type: number, momentId: string, content?: string, replyCommnetId?: number) => {
+			const resp = await window.wechatRobotClient.api.v1MomentsCommentCreate(
+				{
+					id: props.robotId,
+				},
+				{
+					id: props.robotId,
+					MomentId: momentId,
+					Type: type,
+					ReplyCommnetId: replyCommnetId as number,
+					Content: content,
+				},
+			);
+			return resp.data?.data;
+		},
+		{
+			manual: true,
+			onSuccess: (resp, params) => {
+				switch (params[0]) {
+					case 1:
+						message.success('点赞成功');
+						onCommentMomentRefresh(resp);
+						break;
+					case 2:
+						break;
+					case 3:
+						break;
+					case 4:
+						break;
+					case 5:
+						break;
+					default:
+					//
+				}
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
 
 	const { runAsync: momentOp } = useRequest(
 		async (type: number, momentId: string, commentId?: number) => {
@@ -242,6 +303,10 @@ const Moments = (props: IProps) => {
 		}, 90);
 	});
 
+	const onCommentMomentClose = useMemoizedFn(() => {
+		setCommentState({ open: false, momentId: undefined, replyCommnetId: undefined });
+	});
+
 	const renderLikes = (item: IMoment) => {
 		return (
 			<>
@@ -302,7 +367,7 @@ const Moments = (props: IProps) => {
 						<CommentFilled
 							className="reply-comment"
 							onClick={() => {
-								message.success('开发中，敬请期待');
+								setCommentState({ open: true, momentId: item.IdStr!, replyCommnetId: item2.CommentId });
 							}}
 						/>
 					)}
@@ -487,14 +552,12 @@ const Moments = (props: IProps) => {
 																					// 当前公开，设为隐私
 																					if (!item.TimelineObject?.Private) {
 																						await momentOp(2, item.IdStr!);
-																						// 刷新列表
-																						await loadMoreData(prevState.current_md5, prevState.current_id);
+																						goToTop();
 																						return;
 																					}
 																					// 设为公开
 																					await momentOp(3, item.IdStr!);
-																					// 刷新列表
-																					await loadMoreData(prevState.current_md5, prevState.current_id);
+																					goToTop();
 																				},
 																				cancelText: '取消',
 																			});
@@ -528,14 +591,18 @@ const Moments = (props: IProps) => {
 																	onClick: async ev => {
 																		switch (ev.key) {
 																			case 'like':
-																				message.success('开发中，敬请期待');
+																				await momentComment(1, item.IdStr!);
 																				break;
 																			case 'unlike':
 																				// 设为公开
 																				await momentOp(5, item.IdStr!);
 																				break;
 																			case 'comment':
-																				message.success('开发中，敬请期待');
+																				setCommentState({
+																					open: true,
+																					momentId: item.IdStr!,
+																					replyCommnetId: undefined,
+																				});
 																				break;
 																		}
 																	},
@@ -588,6 +655,16 @@ const Moments = (props: IProps) => {
 							robot={props.robot}
 							onRefresh={goToTop}
 							onClose={setNewPostMomentOpen.setFalse}
+						/>
+					)}
+					{commentState.open && (
+						<CommentMoment
+							open={commentState.open}
+							robotId={props.robotId}
+							momentId={commentState.momentId!}
+							replyCommnetId={commentState.replyCommnetId}
+							onRefresh={onCommentMomentRefresh}
+							onClose={onCommentMomentClose}
 						/>
 					)}
 				</div>
