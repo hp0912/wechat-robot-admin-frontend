@@ -6,6 +6,7 @@ import React, { useContext } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import { GlobalContext } from '@/context/global';
+import SpecifiContactMomentList from '@/moments/SpecifiContactMomentList';
 import ChatRoomMemberFriend from './ChatRoomMemberFriend';
 import ChatRoomMemberRemove from './ChatRoomMemberRemove';
 
@@ -28,6 +29,12 @@ interface IMemberRemoveState {
 	open?: boolean;
 }
 
+interface IMomentState {
+	open?: boolean;
+	contactId?: string;
+	contactName?: string;
+}
+
 const GroupMember = (props: IProps) => {
 	const { token } = theme.useToken();
 	const { message } = App.useApp();
@@ -38,6 +45,7 @@ const GroupMember = (props: IProps) => {
 
 	const [search, setSearch] = useSetState({ keyword: '', pageIndex: 1 });
 	const [addFriendState, setAddFriendState] = useSetState<IAddFriendState>({});
+	const [momentState, setMomentState] = useSetState<IMomentState>({});
 	const [memberRemoveState, setMemberRemoveState] = useSetState<IMemberRemoveState>({});
 
 	// 手动同步群成员
@@ -82,6 +90,10 @@ const GroupMember = (props: IProps) => {
 
 	const onChatRoomMemberRemoveClose = useMemoizedFn(() => {
 		setMemberRemoveState({ open: false, chatRoomMemberId: undefined, chatRoomMemberName: undefined });
+	});
+
+	const onMomentClose = useMemoizedFn(() => {
+		setMomentState({ open: false, contactId: undefined, contactName: undefined });
 	});
 
 	return (
@@ -204,7 +216,10 @@ const GroupMember = (props: IProps) => {
 									<div style={{ marginRight: 8 }}>
 										<Dropdown.Button
 											menu={{
-												items: [{ label: '添加为好友', key: 'add-friend' }],
+												items: [
+													{ label: '添加为好友', key: 'add-friend' },
+													{ label: '朋友圈', key: 'moments' },
+												],
 												onClick: ev => {
 													switch (ev.key) {
 														case 'add-friend':
@@ -212,6 +227,13 @@ const GroupMember = (props: IProps) => {
 																open: true,
 																chatRoomMemberId: item.id,
 																chatRoomMemberName: item.remark || item.nickname || item.alias || item.wechat_id,
+															});
+															break;
+														case 'moments':
+															setMomentState({
+																open: true,
+																contactId: item.wechat_id,
+																contactName: item.remark || item.nickname || item.alias || item.wechat_id,
 															});
 															break;
 													}
@@ -270,6 +292,14 @@ const GroupMember = (props: IProps) => {
 							open={memberRemoveState.open}
 							onRefresh={refresh}
 							onClose={onChatRoomMemberRemoveClose}
+						/>
+					)}
+					{momentState.open && (
+						<SpecifiContactMomentList
+							open={momentState.open}
+							contactId={momentState.contactId}
+							contactName={momentState.contactName}
+							onClose={onMomentClose}
 						/>
 					)}
 				</div>

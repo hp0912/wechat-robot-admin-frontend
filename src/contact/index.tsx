@@ -31,6 +31,7 @@ import FemaleFilled from '@/icons/FemaleFilled';
 import GroupFilled from '@/icons/GroupFilled';
 import MaleFilled from '@/icons/MaleFilled';
 import WechatWork from '@/icons/WechatWork';
+import SpecifiContactMomentList from '@/moments/SpecifiContactMomentList';
 import ChatRoomSettings from '@/settings/ChatRoomSettings';
 import FriendSettings from '@/settings/FriendSettings';
 import SystemMessage from '@/system-message';
@@ -52,7 +53,7 @@ interface IProps {
 
 type IContact = Api.V1ContactListList.ResponseBody['data']['items'][number];
 type ChatRoomAction = 'change-name' | 'change-remark' | 'change-announcement' | 'invite' | 'quit';
-type FriendAction = 'change-remark' | 'delete';
+type FriendAction = 'change-remark' | 'delete' | 'moments';
 
 interface IChatRoomActionState {
 	open?: boolean;
@@ -109,6 +110,10 @@ const Contact = (props: IProps) => {
 	});
 
 	const onFriendActionClose = useMemoizedFn(() => {
+		setFriendAction({ open: false, contactId: undefined, contactName: undefined, action: undefined });
+	});
+
+	const onMomentClose = useMemoizedFn(() => {
 		setFriendAction({ open: false, contactId: undefined, contactName: undefined, action: undefined });
 	});
 
@@ -255,6 +260,7 @@ const Contact = (props: IProps) => {
 						const items: MenuProps['items'] = [{ label: '发送消息', key: 'send-message' }];
 						if (item.type === 'friend') {
 							items.push({ label: '好友设置', key: 'friend-settings' });
+							items.push({ label: '朋友圈', key: 'moments' });
 							items.push({ label: '修改备注', key: 'change-remark' });
 							items.push({ label: '删除好友', key: 'delete-friend', danger: true });
 						} else if (item.type === 'official_account') {
@@ -338,6 +344,14 @@ const Contact = (props: IProps) => {
 														break;
 													case 'send-message':
 														setSendMessageState({ open: true, contact: item });
+														break;
+													case 'moments':
+														setFriendAction({
+															open: true,
+															contactId: item.wechat_id,
+															contactName: item.remark || item.nickname || item.alias || item.wechat_id,
+															action: 'moments',
+														});
 														break;
 													case 'friend-settings':
 													case 'official-account-settings':
@@ -557,6 +571,14 @@ const Contact = (props: IProps) => {
 					contactName={friendAction.contactName!}
 					onClose={onFriendActionClose}
 					onRefresh={refresh}
+				/>
+			)}
+			{friendAction.open && friendAction.action === 'moments' && (
+				<SpecifiContactMomentList
+					open={friendAction.open}
+					contactId={friendAction.contactId}
+					contactName={friendAction.contactName}
+					onClose={onMomentClose}
 				/>
 			)}
 		</div>
