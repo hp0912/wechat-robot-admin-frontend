@@ -12,6 +12,7 @@ import ChatRoomMemberRemove from './ChatRoomMemberRemove';
 
 interface IProps {
 	robotId: number;
+	robot: Api.V1RobotViewList.ResponseBody['data'];
 	chatRoom: Api.V1ContactListList.ResponseBody['data']['items'][number];
 	open: boolean;
 	onClose: () => void;
@@ -297,6 +298,8 @@ const GroupMember = (props: IProps) => {
 					{momentState.open && (
 						<SpecifiContactMomentList
 							open={momentState.open}
+							robotId={props.robotId}
+							robot={props.robot}
 							contactId={momentState.contactId}
 							contactName={momentState.contactName}
 							onClose={onMomentClose}

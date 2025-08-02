@@ -465,6 +465,7 @@ const Contact = (props: IProps) => {
 				<ChatRoomMember
 					open={groupMemberState.open}
 					robotId={props.robotId}
+					robot={props.robot}
 					chatRoom={groupMemberState.chatRoom!}
 					onClose={onGroupMemberClose}
 				/>
@@ -576,6 +577,8 @@ const Contact = (props: IProps) => {
 			{friendAction.open && friendAction.action === 'moments' && (
 				<SpecifiContactMomentList
 					open={friendAction.open}
+					robotId={props.robotId}
+					robot={props.robot}
 					contactId={friendAction.contactId}
 					contactName={friendAction.contactName}
 					onClose={onMomentClose}

@@ -50,7 +50,7 @@ interface ICommentState {
 const Moments = (props: IProps) => {
 	const { message, modal } = App.useApp();
 
-	// 单词拼写原本是协议拼错了
+	// frist_page_md5 单词拼写原本是协议拼错了
 	const [prevState, setPrevState] = useSetState<IPrevState>({ frist_page_md5: '', max_id: '0', moments: [] });
 	const [commentState, setCommentState] = useSetState<ICommentState>({});
 	const [newPostMomentOpen, setNewPostMomentOpen] = useBoolean(false);
