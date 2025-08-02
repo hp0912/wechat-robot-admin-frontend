@@ -172,6 +172,7 @@ export const MediaVideo = (props: IMediaVideoProps) => {
 				toolbarRender: () => null,
 			}}
 			src={src}
+			fallback={ImageFallback}
 		/>
 	);
 };

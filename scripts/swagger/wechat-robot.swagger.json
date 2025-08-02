@@ -1076,7 +1076,10 @@
 													}
 												},
 												"SnsUserInfo": {
-													"$ref": "#/components/schemas/SnsUserInfo"
+													"type": "array",
+													"items": {
+														"$ref": "#/components/schemas/SnsUserInfo"
+													}
 												},
 												"NewRequestTime": {
 													"type": "array",
@@ -1327,11 +1330,11 @@
 										"data": {
 											"type": "object",
 											"properties": {
-												"Object": {
+												"object": {
 													"$ref": "#/components/schemas/SnsObject"
 												}
 											},
-											"required": ["Object"]
+											"required": ["object"]
 										}
 									},
 									"required": ["code", "message", "data"]

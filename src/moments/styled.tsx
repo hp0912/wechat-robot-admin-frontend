@@ -1,6 +1,16 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+	.sns-bgimg {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: scale-down;
+		z-index: 1;
+	}
+
 	.moment-nickname {
 		color: #4683d0;
 	}
@@ -58,6 +68,16 @@ export const Container = styled.div`
 	.moment-actions .comments {
 		padding: 8px 10px;
 
+		.comment {
+			color: #4683d0;
+			margin-right: 5px;
+		}
+
+		.specific-contact-comment-item {
+			padding-bottom: 8px;
+			border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+		}
+
 		.comment-item {
 			margin: 8px 0;
 
@@ -101,6 +121,8 @@ export const Container = styled.div`
 
 		.comment-item:last-child {
 			margin-bottom: 0;
+			padding-bottom: 0;
+			border-bottom: none;
 		}
 	}
 `;

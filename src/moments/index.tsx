@@ -45,12 +45,13 @@ interface ICommentState {
 	open?: boolean;
 	momentId?: string;
 	replyCommnetId?: number;
+	replyContent?: string;
 }
 
 const Moments = (props: IProps) => {
 	const { message, modal } = App.useApp();
 
-	// 单词拼写原本是协议拼错了
+	// frist_page_md5 单词拼写原本是协议拼错了
 	const [prevState, setPrevState] = useSetState<IPrevState>({ frist_page_md5: '', max_id: '0', moments: [] });
 	const [commentState, setCommentState] = useSetState<ICommentState>({});
 	const [newPostMomentOpen, setNewPostMomentOpen] = useBoolean(false);
@@ -367,7 +368,12 @@ const Moments = (props: IProps) => {
 						<CommentFilled
 							className="reply-comment"
 							onClick={() => {
-								setCommentState({ open: true, momentId: item.IdStr!, replyCommnetId: item2.CommentId });
+								setCommentState({
+									open: true,
+									momentId: item.IdStr!,
+									replyCommnetId: item2.CommentId,
+									replyContent: item2.Content,
+								});
 							}}
 						/>
 					)}
@@ -449,7 +455,7 @@ const Moments = (props: IProps) => {
 								/>
 							</div>
 						}
-						endMessage={<div style={{ textAlign: 'center', padding: '12px 8px' }}>加载完了...</div>}
+						endMessage={null}
 						scrollableTarget="moments-list"
 					>
 						<List
@@ -602,6 +608,7 @@ const Moments = (props: IProps) => {
 																					open: true,
 																					momentId: item.IdStr!,
 																					replyCommnetId: undefined,
+																					replyContent: undefined,
 																				});
 																				break;
 																		}
@@ -663,6 +670,7 @@ const Moments = (props: IProps) => {
 							robotId={props.robotId}
 							momentId={commentState.momentId!}
 							replyCommnetId={commentState.replyCommnetId}
+							replyContent={commentState.replyContent}
 							onRefresh={onCommentMomentRefresh}
 							onClose={onCommentMomentClose}
 						/>

@@ -7,6 +7,7 @@ interface IProps {
 	open: boolean;
 	robotId: number;
 	momentId: string;
+	replyContent?: string;
 	replyCommnetId?: number;
 	onRefresh: (snsObject: SnsObject) => void;
 	onClose: () => void;
@@ -62,6 +63,7 @@ const CommentMoment = (props: IProps) => {
 				form={form}
 				autoComplete="off"
 			>
+				{!!props.replyContent && <p style={{ color: '#999' }}>{props.replyContent}</p>}
 				<Form.Item
 					name="content"
 					rules={[
