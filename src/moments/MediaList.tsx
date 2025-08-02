@@ -14,12 +14,8 @@ import {
 import { App, Image, Space } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type { Media } from '@/api/wechat-robot/wechat-robot';
 import { ImageFallback } from '@/constant';
-
-type ContentObject =
-	Api.V1MomentsListList.ResponseBody['data']['ObjectList'][number]['TimelineObject']['ContentObject'];
-type Media = NonNullable<NonNullable<NonNullable<ContentObject>['MediaList']>['Media']>[number];
 
 interface IProps {
 	className?: string;

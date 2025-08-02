@@ -22,6 +22,7 @@ export const Container = styled.div`
 		color: #4683d0;
 	}
 
+	.moment-privacy,
 	.moment-delete {
 		color: #4683d0;
 	}
