@@ -277,7 +277,7 @@ const SpecifiContactMomentDetail = (props: IProps) => {
 				</Col>
 				<Col flex="1 1 auto">
 					{item.CommentUserList!.map(item2 => {
-						commentUserMap.set(item2.Username!, item2.Nickname!);
+						commentUserMap.set(item2.Username!, contactMap.current[item2.Username!]?.remark || item2.Nickname!);
 						if (item2.DeleteFlag === 1) {
 							return null;
 						}

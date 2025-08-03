@@ -21,6 +21,7 @@ import CommentOutlined from '@/icons/CommentOutlined';
 import GroupFilled from '@/icons/GroupFilled';
 import CommentMoment from './CommentMoment';
 import MediaList, { MediaVideo } from './MediaList';
+import MomentSettings from './MomentSettings';
 import PostMoment from './PostMoment';
 import { Container } from './styled';
 
@@ -54,6 +55,7 @@ const Moments = (props: IProps) => {
 	// frist_page_md5 单词拼写原本是协议拼错了
 	const [prevState, setPrevState] = useSetState<IPrevState>({ frist_page_md5: '', max_id: '0', moments: [] });
 	const [commentState, setCommentState] = useSetState<ICommentState>({});
+	const [momentSettingsOpen, setMomentSettingsOpen] = useBoolean(false);
 	const [newPostMomentOpen, setNewPostMomentOpen] = useBoolean(false);
 
 	// 记录一下朋友圈ID，避免重复了
@@ -425,7 +427,7 @@ const Moments = (props: IProps) => {
 							icon={<SettingOutlined />}
 							ghost
 							onClick={async () => {
-								//
+								setMomentSettingsOpen.setTrue();
 							}}
 						>
 							朋友圈设置
@@ -673,6 +675,13 @@ const Moments = (props: IProps) => {
 							replyContent={commentState.replyContent}
 							onRefresh={onCommentMomentRefresh}
 							onClose={onCommentMomentClose}
+						/>
+					)}
+					{momentSettingsOpen && (
+						<MomentSettings
+							open={momentSettingsOpen}
+							robotId={props.robotId}
+							onClose={setMomentSettingsOpen.setFalse}
 						/>
 					)}
 				</div>
