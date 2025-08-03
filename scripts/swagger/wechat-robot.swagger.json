@@ -1495,6 +1495,197 @@
 				"security": []
 			}
 		},
+		"/api/v1//moments/settings": {
+			"get": {
+				"summary": "获取朋友圈设置",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "ID 编号",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "number",
+													"description": "ID 编号"
+												},
+												"auto_like": {
+													"type": "boolean"
+												},
+												"auto_comment": {
+													"type": "boolean"
+												},
+												"whitelist": {
+													"type": "string"
+												},
+												"blacklist": {
+													"type": "string"
+												},
+												"ai_base_url": {
+													"type": "string"
+												},
+												"ai_api_key": {
+													"type": "string"
+												},
+												"workflow_model": {
+													"type": "string"
+												},
+												"comment_model": {
+													"type": "string"
+												},
+												"comment_prompt": {
+													"type": "string"
+												},
+												"max_completion_tokens": {
+													"type": "number"
+												}
+											},
+											"required": [
+												"auto_like",
+												"auto_comment",
+												"ai_base_url",
+												"ai_api_key",
+												"workflow_model",
+												"comment_model",
+												"comment_prompt",
+												"max_completion_tokens"
+											]
+										}
+									},
+									"required": ["code", "message", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			},
+			"post": {
+				"summary": "保存朋友圈设置",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "ID 编号",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number",
+										"description": "ID 编号"
+									},
+									"auto_like": {
+										"type": "boolean"
+									},
+									"auto_comment": {
+										"type": "boolean"
+									},
+									"whitelist": {
+										"type": "string"
+									},
+									"blacklist": {
+										"type": "string"
+									},
+									"ai_base_url": {
+										"type": "string"
+									},
+									"ai_api_key": {
+										"type": "string"
+									},
+									"workflow_model": {
+										"type": "string"
+									},
+									"comment_model": {
+										"type": "string"
+									},
+									"comment_prompt": {
+										"type": "string"
+									},
+									"max_completion_tokens": {
+										"type": "number"
+									}
+								},
+								"required": [
+									"auto_like",
+									"auto_comment",
+									"ai_base_url",
+									"ai_api_key",
+									"workflow_model",
+									"comment_model",
+									"comment_prompt",
+									"max_completion_tokens"
+								]
+							},
+							"examples": {}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {}
+										}
+									},
+									"required": ["code", "message"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
 		"/api/v1/chat-room-settings": {
 			"get": {
 				"summary": "获取群聊配置",
