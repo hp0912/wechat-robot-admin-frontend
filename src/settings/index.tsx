@@ -15,7 +15,13 @@ import {
 	parseMonthlyCronExpression,
 	toCronExpression,
 } from '@/utils';
-import { ObjectToString, onTTSEnabledChange } from './utils';
+import {
+	chatBaseURLTips,
+	imageRecognitionModelTips,
+	ObjectToString,
+	onTTSEnabledChange,
+	workflowModelTips,
+} from './utils';
 
 interface IProps {
 	robotId: number;
@@ -208,6 +214,7 @@ const GlobalSettings = (props: IProps) => {
 							<Form.Item
 								name="chat_ai_enabled"
 								label="聊天AI"
+								labelCol={{ flex: '0 0 130px' }}
 								valuePropName="checked"
 							>
 								<Switch
@@ -226,6 +233,7 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="chat_ai_trigger"
 													label="AI触发词"
+													labelCol={{ flex: '0 0 130px' }}
 													tooltip="唤醒AI的关键词，以关键词开头的消息会被AI处理，而不用手动@AI"
 												>
 													<Input
@@ -236,19 +244,9 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="chat_base_url"
 													label="API地址"
+													labelCol={{ flex: '0 0 130px' }}
 													rules={[{ required: true, message: 'API地址不能为空' }]}
-													tooltip={
-														<>
-															示例:{' '}
-															<a
-																href="https://ai-api.houhoukang.com/"
-																target="_blank"
-																rel="noreferrer"
-															>
-																https://ai-api.houhoukang.com/
-															</a>
-														</>
-													}
+													tooltip={chatBaseURLTips}
 												>
 													<Input
 														placeholder="请输入API地址"
@@ -258,6 +256,7 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="chat_api_key"
 													label="API密钥"
+													labelCol={{ flex: '0 0 130px' }}
 													rules={[{ required: true, message: 'API密钥不能为空' }]}
 													tooltip={
 														<>
@@ -279,8 +278,22 @@ const GlobalSettings = (props: IProps) => {
 													/>
 												</Form.Item>
 												<Form.Item
+													name="workflow_model"
+													label="工作流模型"
+													labelCol={{ flex: '0 0 130px' }}
+													rules={[{ required: true, message: '工作流模型不能为空' }]}
+													tooltip={workflowModelTips}
+												>
+													<AutoComplete
+														placeholder="请选择或者手动输入工作流模型"
+														style={{ width: '100%' }}
+														options={AiModels}
+													/>
+												</Form.Item>
+												<Form.Item
 													name="chat_model"
 													label="聊天模型"
+													labelCol={{ flex: '0 0 130px' }}
 													rules={[{ required: true, message: '聊天模型不能为空' }]}
 												>
 													<AutoComplete
@@ -290,8 +303,22 @@ const GlobalSettings = (props: IProps) => {
 													/>
 												</Form.Item>
 												<Form.Item
+													name="image_recognition_model"
+													label="图像识别模型"
+													labelCol={{ flex: '0 0 130px' }}
+													rules={[{ required: true, message: '图像识别模型不能为空' }]}
+													tooltip={imageRecognitionModelTips}
+												>
+													<AutoComplete
+														placeholder="请选择或者手动输入图像识别模型"
+														style={{ width: '100%' }}
+														options={AiModels}
+													/>
+												</Form.Item>
+												<Form.Item
 													name="max_completion_tokens"
 													label="最大回复"
+													labelCol={{ flex: '0 0 130px' }}
 													rules={[{ required: true, message: '最大回复不能为空' }]}
 												>
 													<InputNumber
@@ -304,6 +331,7 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="chat_prompt"
 													label="人设"
+													labelCol={{ flex: '0 0 130px' }}
 													rules={[{ required: true, message: '人设不能为空' }]}
 													tooltip="人设是指在与AI进行对话时，系统会自动添加的提示信息，用于引导AI的回答方向和风格。"
 												>
@@ -765,6 +793,9 @@ const GlobalSettings = (props: IProps) => {
 								description={
 									<>
 										群聊排行榜设置<b>不会</b>自动应用于每一个群聊，需要在<b>群聊设置</b>里面手动开启。
+										<span style={{ color: '#ff5722', fontSize: 12 }}>
+											温馨提示: 排行榜发布的是前一天、上一周、上个月的数据
+										</span>
 									</>
 								}
 							/>
@@ -846,6 +877,7 @@ const GlobalSettings = (props: IProps) => {
 								description={
 									<>
 										群聊总结设置<b>不会</b>自动应用于每一个群聊，需要在<b>群聊设置</b>里面手动开启。
+										<span style={{ color: '#ff5722', fontSize: 12 }}>温馨提示: 群聊总结，总结的是前一天的聊天记录</span>
 									</>
 								}
 							/>
@@ -913,6 +945,7 @@ const GlobalSettings = (props: IProps) => {
 								description={
 									<>
 										每日早报设置<b>不会</b>自动应用于每一个群聊，需要在<b>群聊设置</b>里面手动开启。
+										<span style={{ color: '#ff5722', fontSize: 12 }}>温馨提示: 每日早报报道的是前一天的新闻</span>
 									</>
 								}
 							/>
@@ -981,6 +1014,7 @@ const GlobalSettings = (props: IProps) => {
 								description={
 									<>
 										每日早安设置<b>不会</b>自动应用于每一个群聊，需要在<b>群聊设置</b>里面手动开启。
+										<span style={{ color: '#ff5722', fontSize: 12 }}>温馨提示: 每日早安是对前一天的总结</span>
 									</>
 								}
 							/>

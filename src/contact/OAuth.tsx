@@ -77,7 +77,21 @@ const OAuth = (props: IProps) => {
 
 	return (
 		<div style={{ display: 'inline-block' }}>
-			<Tooltip title="授权APP登录，点击会读取剪切板中的二维码图片，进行授权登录">
+			<Tooltip
+				title={
+					<>
+						授权APP登录，点击会读取剪切板中的二维码图片，进行授权登录。需要配合
+						<a
+							href="https://txapp.houhoukang.com/"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							腾讯APP登录神器
+						</a>
+						使用
+					</>
+				}
+			>
 				<Button
 					type="primary"
 					ghost

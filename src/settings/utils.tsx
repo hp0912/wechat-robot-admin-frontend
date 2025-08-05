@@ -80,3 +80,32 @@ export const ObjectToString = <T extends { image_ai_settings: object; tts_settin
 		data.ltts_settings = JSON.stringify(data.ltts_settings, null, 2) as unknown as object;
 	}
 };
+
+export const chatBaseURLTips = (
+	<>
+		示例:{' '}
+		<a
+			href="https://ai-api.houhoukang.com/"
+			target="_blank"
+			rel="noreferrer"
+		>
+			https://ai-api.houhoukang.com/
+		</a>
+		，或者 https://ai-api.houhoukang.com/v1 或者
+		https://ai-api.houhoukang.com/v2，如果不是以版本号结尾，会自动补全一个/v1
+	</>
+);
+
+export const workflowModelTips = (
+	<>
+		<p>工作流模型是用来识别用户聊天意图的。</p>
+		<p>工作流模型必须支持JSON Schema结构化输出，性能不用太好，要求速度快，推荐使用gpt-4o-mini或者gpt-4.1-mini。</p>
+	</>
+);
+
+export const imageRecognitionModelTips = (
+	<>
+		<p>图像识别模型是用来识别用户上传的图片内容的。</p>
+		<p>解决某些大模型文字输出效果很好，但是不支持图像识别的问题</p>
+	</>
+);

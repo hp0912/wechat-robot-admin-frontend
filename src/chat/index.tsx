@@ -4,6 +4,7 @@ import { App, Avatar, Button, Col, Drawer, Input, List, Pagination, Row, Space, 
 import dayjs from 'dayjs';
 import React, { useContext } from 'react';
 import type { ReactNode } from 'react';
+import styled from 'styled-components';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import SendMessage from '@/components/send-message';
 import { AppMessageTypeMap, DefaultAvatar, MessageTypeMap } from '@/constant';
@@ -23,6 +24,17 @@ interface IProps {
 	title: ReactNode;
 	onClose: () => void;
 }
+
+const MessageContentContainer = styled.div`
+	.recalled {
+		margin: 0px;
+		padding: 0px;
+		white-space: pre-wrap;
+		word-break: break-all;
+		color: #010101;
+		display: inline;
+	}
+`;
 
 const ChatHistory = (props: IProps) => {
 	const { token } = theme.useToken();
@@ -61,11 +73,7 @@ const ChatHistory = (props: IProps) => {
 		const subType = msg.app_msg_type as AppMessageType;
 		switch (msgType) {
 			case MessageType.Text:
-				return (
-					<pre style={{ margin: 0, padding: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-all', color: '#010101' }}>
-						{msg.content}
-					</pre>
-				);
+				return <pre className="recalled">{msg.content}</pre>;
 			case MessageType.App:
 				if (msg.display_full_content) {
 					return msg.display_full_content;
@@ -223,7 +231,7 @@ const ChatHistory = (props: IProps) => {
 											</span>
 										}
 										description={
-											<div>
+											<MessageContentContainer>
 												{item.is_recalled ? (
 													<>
 														<Tag
@@ -237,7 +245,7 @@ const ChatHistory = (props: IProps) => {
 												) : (
 													<span>{messageContentRender(item)}</span>
 												)}
-											</div>
+											</MessageContentContainer>
 										}
 									/>
 									<div style={{ marginRight: 8 }}>
