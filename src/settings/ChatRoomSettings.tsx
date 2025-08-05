@@ -23,7 +23,7 @@ import ParamsGroup from '@/components/ParamsGroup';
 import { DefaultAvatar } from '@/constant';
 import { AiModels } from '@/constant/ai';
 import { GlobalContext } from '@/context/global';
-import { ObjectToString, onTTSEnabledChange } from './utils';
+import { imageRecognitionModelTips, ObjectToString, onTTSEnabledChange, workflowModelTips } from './utils';
 
 interface IProps {
 	robotId: number;
@@ -58,7 +58,7 @@ const ChatRoomSettings = (props: IProps) => {
 	);
 
 	// 加载群聊设置
-	const { loading } = useRequest(
+	const { data, loading } = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.api.v1ChatRoomSettingsList({
 				id: props.robotId,
@@ -251,6 +251,9 @@ const ChatRoomSettings = (props: IProps) => {
 						style={{ padding: '0 3px' }}
 					>
 						{chatRoom.remark || chatRoom.alias || chatRoom.nickname || chatRoom.wechat_id} 聊天设置
+						{data?.data?.id === 0 && (
+							<span style={{ fontSize: 12, color: '#ff5722' }}>(当前群聊未进行过任何设置，运行时会继承全局设置)</span>
+						)}
 					</Col>
 				</Row>
 			}
@@ -324,6 +327,7 @@ const ChatRoomSettings = (props: IProps) => {
 						<Form.Item
 							name="chat_ai_enabled"
 							label="聊天AI"
+							labelCol={{ flex: '0 0 130px' }}
 							valuePropName="checked"
 						>
 							<Switch
@@ -342,6 +346,7 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="chat_ai_trigger"
 												label="AI触发词"
+												labelCol={{ flex: '0 0 130px' }}
 												tooltip="唤醒AI的关键词，以关键词开头的消息会被AI处理，而不用手动@AI"
 											>
 												<Input
@@ -352,6 +357,7 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="chat_base_url"
 												label="API地址"
+												labelCol={{ flex: '0 0 130px' }}
 												tooltip={
 													<>
 														示例:{' '}
@@ -373,6 +379,7 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="chat_api_key"
 												label="API密钥"
+												labelCol={{ flex: '0 0 130px' }}
 												tooltip={
 													<>
 														可前往
@@ -393,8 +400,33 @@ const ChatRoomSettings = (props: IProps) => {
 												/>
 											</Form.Item>
 											<Form.Item
+												name="workflow_model"
+												label="工作流模型"
+												labelCol={{ flex: '0 0 130px' }}
+												tooltip={workflowModelTips}
+											>
+												<AutoComplete
+													placeholder="不填则使用全局配置"
+													style={{ width: '100%' }}
+													options={AiModels}
+												/>
+											</Form.Item>
+											<Form.Item
 												name="chat_model"
 												label="聊天模型"
+												labelCol={{ flex: '0 0 130px' }}
+											>
+												<AutoComplete
+													placeholder="不填则使用全局配置"
+													style={{ width: '100%' }}
+													options={AiModels}
+												/>
+											</Form.Item>
+											<Form.Item
+												name="image_recognition_model"
+												label="图像识别模型"
+												labelCol={{ flex: '0 0 130px' }}
+												tooltip={imageRecognitionModelTips}
 											>
 												<AutoComplete
 													placeholder="不填则使用全局配置"
@@ -405,6 +437,7 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="max_completion_tokens"
 												label="最大回复"
+												labelCol={{ flex: '0 0 130px' }}
 											>
 												<InputNumber
 													placeholder="请输入最大回复，为0则表示不限制"
@@ -416,6 +449,7 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="chat_prompt"
 												label="人设"
+												labelCol={{ flex: '0 0 130px' }}
 												tooltip="人设是指在与AI进行对话时，系统会自动添加的提示信息，用于引导AI的回答方向和风格。"
 											>
 												<Input.TextArea

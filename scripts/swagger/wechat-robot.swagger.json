@@ -1744,7 +1744,13 @@
 												"chat_api_key": {
 													"type": "string"
 												},
+												"workflow_model": {
+													"type": "string"
+												},
 												"chat_model": {
+													"type": "string"
+												},
+												"image_recognition_model": {
 													"type": "string"
 												},
 												"chat_prompt": {
@@ -1868,7 +1874,9 @@
 												"pat_enabled",
 												"pat_type",
 												"pat_text",
-												"pat_voice_timbre"
+												"pat_voice_timbre",
+												"workflow_model",
+												"image_recognition_model"
 											]
 										}
 									},
@@ -1927,7 +1935,13 @@
 									"chat_api_key": {
 										"type": "string"
 									},
+									"workflow_model": {
+										"type": "string"
+									},
 									"chat_model": {
+										"type": "string"
+									},
+									"image_recognition_model": {
 										"type": "string"
 									},
 									"chat_prompt": {
@@ -2051,7 +2065,9 @@
 									"pat_enabled",
 									"pat_type",
 									"pat_text",
-									"pat_voice_timbre"
+									"pat_voice_timbre",
+									"workflow_model",
+									"image_recognition_model"
 								]
 							},
 							"example": {
@@ -3512,7 +3528,13 @@
 												"chat_api_key": {
 													"type": "string"
 												},
+												"workflow_model": {
+													"type": "string"
+												},
 												"chat_model": {
+													"type": "string"
+												},
+												"image_recognition_model": {
 													"type": "string"
 												},
 												"chat_prompt": {
@@ -3557,7 +3579,9 @@
 												"tts_enabled",
 												"tts_settings",
 												"ltts_settings",
-												"max_completion_tokens"
+												"max_completion_tokens",
+												"workflow_model",
+												"image_recognition_model"
 											]
 										}
 									},
@@ -3616,7 +3640,13 @@
 									"chat_api_key": {
 										"type": "string"
 									},
+									"workflow_model": {
+										"type": "string"
+									},
 									"chat_model": {
+										"type": "string"
+									},
+									"image_recognition_model": {
 										"type": "string"
 									},
 									"chat_prompt": {
@@ -3663,7 +3693,9 @@
 									"tts_enabled",
 									"tts_settings",
 									"ltts_settings",
-									"max_completion_tokens"
+									"max_completion_tokens",
+									"workflow_model",
+									"image_recognition_model"
 								]
 							},
 							"example": {
@@ -5803,7 +5835,13 @@
 												"chat_api_key": {
 													"type": "string"
 												},
+												"workflow_model": {
+													"type": "string"
+												},
 												"chat_model": {
+													"type": "string"
+												},
+												"image_recognition_model": {
 													"type": "string"
 												},
 												"chat_prompt": {
@@ -5955,7 +5993,9 @@
 												"pat_enabled",
 												"pat_type",
 												"pat_text",
-												"pat_voice_timbre"
+												"pat_voice_timbre",
+												"workflow_model",
+												"image_recognition_model"
 											]
 										}
 									},
@@ -6010,7 +6050,13 @@
 									"chat_api_key": {
 										"type": "string"
 									},
+									"workflow_model": {
+										"type": "string"
+									},
 									"chat_model": {
+										"type": "string"
+									},
+									"image_recognition_model": {
 										"type": "string"
 									},
 									"chat_prompt": {
@@ -6161,7 +6207,9 @@
 									"pat_enabled",
 									"pat_type",
 									"pat_text",
-									"pat_voice_timbre"
+									"pat_voice_timbre",
+									"workflow_model",
+									"image_recognition_model"
 								]
 							},
 							"example": {
