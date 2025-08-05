@@ -158,7 +158,9 @@ const ChatRoomSettings = (props: IProps) => {
 			chat_ai_trigger: globalSettings.data.chat_ai_trigger,
 			chat_base_url: globalSettings.data.chat_base_url,
 			chat_api_key: globalSettings.data.chat_api_key,
+			workflow_model: globalSettings.data.workflow_model,
 			chat_model: globalSettings.data.chat_model,
+			image_recognition_model: globalSettings.data.image_recognition_model,
 			max_completion_tokens: globalSettings.data.max_completion_tokens,
 			chat_prompt: globalSettings.data.chat_prompt,
 		};
@@ -828,7 +830,10 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="pat_text"
 												label="文字"
-												rules={[{ required: true, message: '文本语言不能为空' }]}
+												rules={[
+													{ required: true, message: '文本语言不能为空' },
+													{ max: 255, message: '文字不能超过255个字符' },
+												]}
 											>
 												<Input
 													placeholder="请输入文字，为语音的时候，则是文字转语音"

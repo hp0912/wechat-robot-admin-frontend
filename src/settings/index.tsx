@@ -711,7 +711,10 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="pat_text"
 													label="文字"
-													rules={[{ required: true, message: '文字不能为空' }]}
+													rules={[
+														{ required: true, message: '文字不能为空' },
+														{ max: 255, message: '文字不能超过255个字符' },
+													]}
 												>
 													<Input
 														placeholder="请输入文字，为语音的时候，则是文字转语音"
