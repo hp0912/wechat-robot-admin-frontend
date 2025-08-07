@@ -1495,7 +1495,7 @@
 				"security": []
 			}
 		},
-		"/api/v1//moments/settings": {
+		"/api/v1/moments/settings": {
 			"get": {
 				"summary": "获取朋友圈设置",
 				"deprecated": false,
