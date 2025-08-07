@@ -753,7 +753,7 @@ const GlobalSettings = (props: IProps) => {
 									onChange={(checked: boolean) => {
 										if (checked && !form.getFieldValue('leave_chat_room_alert_text')) {
 											form.setFieldsValue({
-												leave_chat_room_alert_text: '阿拉蕾，{placeholder}',
+												leave_chat_room_alert_text: '阿拉蕾，{placeholder}退出了群聊',
 											});
 										}
 									}}
