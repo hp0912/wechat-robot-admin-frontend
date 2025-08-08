@@ -6,6 +6,8 @@ export const AiModels: Array<{ value: string }> = [
 	{ value: 'doubao-seed-1-6-thinking-250615' },
 	{ value: 'qwen-plus' },
 	{ value: 'qwen-vl-plus' },
+	{ value: 'qwen3-235b-a22b-instruct-2507' },
+	{ value: 'qwen3-235b-a22b-thinking-2507' },
 	{ value: 'SparkDesk-v4.0' },
 	{ value: 'gemini-2.5-pro-exp-03-25' },
 	{ value: 'deepseek-chat' },
