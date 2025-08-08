@@ -6682,6 +6682,185 @@
 				},
 				"security": []
 			}
+		},
+		"/api/v1/system-settings": {
+			"get": {
+				"summary": "获取系统设置",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "ID 编号",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "number",
+													"description": "ID 编号"
+												},
+												"offline_notification_enabled": {
+													"type": "boolean"
+												},
+												"notification_type": {
+													"type": "string",
+													"enum": ["push_plus", "email"]
+												},
+												"push_plus_url": {
+													"type": "string"
+												},
+												"push_plus_token": {
+													"type": "string"
+												},
+												"auto_verify_user": {
+													"type": "boolean"
+												},
+												"verify_user_delay": {
+													"type": "number"
+												},
+												"auto_chatroom_invite": {
+													"type": "boolean"
+												}
+											},
+											"required": [
+												"id",
+												"offline_notification_enabled",
+												"notification_type",
+												"push_plus_url",
+												"push_plus_token",
+												"auto_verify_user",
+												"verify_user_delay",
+												"auto_chatroom_invite"
+											]
+										}
+									},
+									"required": ["code", "message", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			},
+			"post": {
+				"summary": "保存系统设置",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "ID 编号",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number",
+										"description": "ID 编号"
+									},
+									"system_settings_id": {
+										"type": "number"
+									},
+									"offline_notification_enabled": {
+										"type": "boolean"
+									},
+									"notification_type": {
+										"type": "string",
+										"enum": ["push_plus", "email"]
+									},
+									"push_plus_url": {
+										"type": "string"
+									},
+									"push_plus_token": {
+										"type": "string"
+									},
+									"auto_verify_user": {
+										"type": "boolean"
+									},
+									"verify_user_delay": {
+										"type": "number"
+									},
+									"auto_chatroom_invite": {
+										"type": "boolean"
+									}
+								},
+								"required": [
+									"id",
+									"system_settings_id",
+									"offline_notification_enabled",
+									"notification_type",
+									"push_plus_url",
+									"push_plus_token",
+									"auto_verify_user",
+									"verify_user_delay",
+									"auto_chatroom_invite"
+								]
+							},
+							"examples": {}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {}
+										}
+									},
+									"required": ["code", "message", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
 		}
 	},
 	"components": {
