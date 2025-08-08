@@ -1,4 +1,4 @@
-import { FileTextFilled, FundFilled, OpenAIFilled, WechatFilled } from '@ant-design/icons';
+import { FileTextFilled, FundFilled, MacCommandFilled, OpenAIFilled, WechatFilled } from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Spin, Tabs, Tag, theme } from 'antd';
 import type { TabsProps } from 'antd';
@@ -26,6 +26,7 @@ interface IProps {
 
 const ContainerLog = React.lazy(() => import(/* webpackChunkName: "container-log" */ '@/container-log'));
 const Moments = React.lazy(() => import(/* webpackChunkName: "moments" */ '@/moments'));
+const SystemSettings = React.lazy(() => import(/* webpackChunkName: "system-settings" */ '@/system-settings'));
 const SystemOverview = React.lazy(() => import(/* webpackChunkName: "system-overview" */ '@/system-overview'));
 
 const BaseContainer = styled.div`
@@ -127,6 +128,16 @@ const RobotDetail = (props: IProps) => {
 			icon: <OpenAIFilled />,
 			label: '全局设置',
 			children: <GlobalSettings robotId={props.robotId} />,
+		},
+		{
+			key: 'system-settings',
+			icon: <MacCommandFilled />,
+			label: '系统设置',
+			children: (
+				<Suspense fallback={<Spin />}>
+					<SystemSettings robotId={props.robotId} />
+				</Suspense>
+			),
 		},
 		{
 			key: 'logs',
