@@ -1,6 +1,6 @@
-import { LogoutOutlined } from '@ant-design/icons';
+import { GithubOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useRequest, useSize } from 'ahooks';
-import { App, Avatar, Dropdown, Layout, Skeleton, Watermark } from 'antd';
+import { App, Avatar, Divider, Dropdown, Layout, Skeleton, Space, Watermark } from 'antd';
 import type { MenuProps } from 'antd';
 import logo from 'public/logo.svg';
 import React, { useMemo } from 'react';
@@ -23,6 +23,7 @@ const headerStyle: React.CSSProperties = {
 	justifyContent: 'space-between',
 	alignItems: 'center',
 	paddingRight: 40,
+	backgroundColor: '#bfb68b',
 };
 
 const Logo = styled.div`
@@ -43,7 +44,7 @@ const Logo = styled.div`
 		width: 180px;
 		height: 32px;
 		margin-inline-end: 24px;
-		color: #fff;
+		color: #000000;
 		font-weight: 600;
 		font-size: 18px;
 		line-height: 32px;
@@ -116,23 +117,31 @@ const AppLayout: React.FC = () => {
 						<div className="icon" />
 						<div className="title">微信机器人管理后台</div>
 					</Logo>
-					<Dropdown
-						menu={{ items }}
-						placement="bottomRight"
-					>
-						<div>
-							<Avatar
-								style={{ verticalAlign: 'middle', backgroundColor: 'rgb(132, 132, 131)' }}
-								size="default"
-								gap={4}
-								src={user.avatar_url}
-								alt={user.display_name}
-							/>
-							{isSmallScreen ? null : (
-								<span style={{ color: '#ffffff', marginLeft: 5, fontSize: 15 }}>{user.display_name}</span>
-							)}
-						</div>
-					</Dropdown>
+					<Space split={<Divider type="vertical" />}>
+						<GithubOutlined
+							className="github-icon"
+							onClick={() => {
+								window.open('https://github.com/hp0912/wechat-robot-client', '_blank');
+							}}
+						/>
+						<Dropdown
+							menu={{ items }}
+							placement="bottomRight"
+						>
+							<div>
+								<Avatar
+									style={{ verticalAlign: 'middle', backgroundColor: 'rgb(132, 132, 131)' }}
+									size="default"
+									gap={4}
+									src={user.avatar_url}
+									alt={user.display_name}
+								/>
+								{isSmallScreen ? null : (
+									<span style={{ color: '#000000', marginLeft: 5, fontSize: 15 }}>{user.display_name}</span>
+								)}
+							</div>
+						</Dropdown>
+					</Space>
 				</Header>
 				<Layout>
 					<GlobalContext.Provider value={globalState}>

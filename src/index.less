@@ -54,45 +54,51 @@ body {
 }
 
 .new-message {
-  animation: flash 0.8s infinite alternate;
+	animation: flash 0.8s infinite alternate;
+}
+
+.github-icon, .wechat-icon {
+	font-size: 32px;
+	vertical-align: middle;
+	color: #4d4c4c;
 }
 
 @keyframes flash {
-  from {
-    background-color: transparent;
-  }
+	from {
+		background-color: transparent;
+	}
 
-  to {
-    background-color: #f5a104cc;
-    border-color: #f5a104cc;
-  }
+	to {
+		background-color: #f5a104cc;
+		border-color: #f5a104cc;
+	}
 }
 
 .cards-container {
-  display: grid;
-  gap: 16px;
+	display: grid;
+	gap: 16px;
 }
 
 @media (max-width: 599px) {
-  .cards-container {
-    grid-template-columns: repeat(1, 1fr);
-  }
+	.cards-container {
+		grid-template-columns: repeat(1, 1fr);
+	}
 }
 
 @media (min-width: 600px) and (max-width: 959px) {
-  .cards-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
+	.cards-container {
+		grid-template-columns: repeat(2, 1fr);
+	}
 }
 
 @media (min-width: 960px) and (max-width: 1279px) {
-  .cards-container {
-    grid-template-columns: repeat(4, 1fr);
-  }
+	.cards-container {
+		grid-template-columns: repeat(4, 1fr);
+	}
 }
 
 @media (min-width: 1280px) {
-  .cards-container {
-    grid-template-columns: repeat(5, 1fr);
-  }
+	.cards-container {
+		grid-template-columns: repeat(5, 1fr);
+	}
 }
