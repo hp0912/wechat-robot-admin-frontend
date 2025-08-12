@@ -1,6 +1,7 @@
+import { LoadingOutlined, RedoOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { Alert, App, Button, Form, Input, InputNumber, Select, Spin, Switch } from 'antd';
-import React from 'react';
+import { Alert, App, Button, Form, Input, InputNumber, Popconfirm, Select, Spin, Switch, Tooltip } from 'antd';
+import React, { useState } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 
@@ -8,12 +9,16 @@ interface IProps {
 	robotId: number;
 }
 
+type IFormValues = Api.V1SystemSettingsCreate.RequestBody;
+
 const SystemSettings = (props: IProps) => {
 	const { message } = App.useApp();
 
-	const [form] = Form.useForm<Api.V1SystemSettingsCreate.RequestBody>();
+	const [form] = Form.useForm<IFormValues>();
 
-	const { loading } = useRequest(
+	const [apiToken, setApiToken] = useState('');
+
+	const { loading, refresh } = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.api.v1SystemSettingsList({
 				id: props.robotId,
@@ -25,6 +30,26 @@ const SystemSettings = (props: IProps) => {
 			onSuccess: data => {
 				if (data?.id) {
 					form.setFieldsValue(data);
+				}
+				setApiToken(data?.api_token || '');
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	const { runAsync: refreshApiToken, loading: refreshLoading } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1UserApiTokenRefreshCreate();
+			return resp.data?.data;
+		},
+		{
+			manual: true,
+			onSuccess: data => {
+				if (data) {
+					message.success('Api密钥刷新成功');
+					setApiToken(data);
 				}
 			},
 			onError: reason => {
@@ -51,6 +76,7 @@ const SystemSettings = (props: IProps) => {
 			manual: true,
 			onSuccess: () => {
 				message.success('保存成功');
+				refresh();
 			},
 			onError: reason => {
 				message.error(reason.message);
@@ -77,6 +103,43 @@ const SystemSettings = (props: IProps) => {
 						hidden
 					>
 						<Input />
+					</Form.Item>
+					<Form.Item
+						name="api_token_enabled"
+						label="Api密钥调用接口"
+						valuePropName="checked"
+						initialValue={false}
+					>
+						<Switch
+							unCheckedChildren="关闭"
+							checkedChildren="开启"
+						/>
+					</Form.Item>
+					<Form.Item
+						label="Api密钥"
+						hidden={!apiToken}
+						tooltip="Api密钥用于调用接口，刷新后以前的Api密钥将失效，支持Authorization Header、X-API-Token Header、api_token Query参数三种方式调用接口"
+					>
+						<Input
+							value={apiToken}
+							readOnly
+							suffix={
+								<Tooltip title="刷新 Api 密钥">
+									{refreshLoading ? (
+										<LoadingOutlined />
+									) : (
+										<Popconfirm
+											title="刷新Api密钥"
+											description="刷新后以前的Api密钥将失效，是否继续？"
+											onConfirm={refreshApiToken}
+											okText="刷新"
+										>
+											<RedoOutlined />
+										</Popconfirm>
+									)}
+								</Tooltip>
+							}
+						/>
 					</Form.Item>
 					<Form.Item
 						name="offline_notification_enabled"

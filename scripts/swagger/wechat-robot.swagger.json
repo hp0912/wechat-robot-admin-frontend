@@ -5460,6 +5460,41 @@
 				"security": []
 			}
 		},
+		"/api/v1/user/api-token/refresh": {
+			"post": {
+				"summary": "刷新用户Api Token",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "string"
+										}
+									},
+									"required": ["code", "message", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
 		"/api/v1/robot/login": {
 			"post": {
 				"summary": "机器人登陆",
@@ -6721,6 +6756,12 @@
 													"type": "number",
 													"description": "ID 编号"
 												},
+												"api_token_enabled": {
+													"type": "boolean"
+												},
+												"api_token": {
+													"type": "string"
+												},
 												"offline_notification_enabled": {
 													"type": "boolean"
 												},
@@ -6793,6 +6834,9 @@
 									},
 									"system_settings_id": {
 										"type": "number"
+									},
+									"api_token_enabled": {
+										"type": "boolean"
 									},
 									"offline_notification_enabled": {
 										"type": "boolean"
