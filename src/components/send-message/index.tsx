@@ -4,10 +4,12 @@ import { App, Avatar, Button, Col, Flex, Input, Modal, Progress, Row, Select, Sp
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 import axios from 'axios';
 import React, { useState } from 'react';
+import SparkMD5 from 'spark-md5';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 import { maxTagPlaceholder } from '@/common/maxTagPlaceholder';
 import { DefaultAvatar } from '@/constant';
+import { EMessageType, type StoredUploadMeta } from './types';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -19,14 +21,7 @@ interface IProps {
 	onClose: () => void;
 }
 
-enum EMessageType {
-	Text = 'text',
-	Image = 'image',
-	Video = 'video',
-	Voice = 'voice',
-	AITTS = 'aitts',
-	File = 'file',
-}
+const CHUNK_SIZE = 50000; // 文件分片上传的分片大小
 
 const SendMessage = (props: IProps) => {
 	const { message, modal } = App.useApp();
@@ -39,6 +34,10 @@ const SendMessage = (props: IProps) => {
 	// 文件相关
 	const [attach, setAttach] = useState<UploadFile>();
 	const [percent, setPercent] = useState(0);
+	// 文件分片上传相关
+	const [fileUploading, setFileUploading] = useState(false);
+	const [computingHash, setComputingHash] = useState(false);
+	const [fileHash, setFileHash] = useState<string | undefined>();
 
 	const { data, loading } = useRequest(
 		async () => {
@@ -187,6 +186,109 @@ const SendMessage = (props: IProps) => {
 		},
 	);
 
+	// 分片发送普通文件（非图片/视频/音频）
+	// 计算文件哈希 (MD5)，用于去重与断点续传标识
+	const computeFileHash = async (file: File): Promise<string> => {
+		setComputingHash(true);
+		try {
+			// 增量读取，避免一次性加载超大文件
+			const chunkSize = 2 * 1024 * 1024; // 2MB 计算哈希分片（独立于上传分片，可更大减少开销）
+			const spark = new SparkMD5.ArrayBuffer();
+			let offset = 0;
+			while (offset < file.size) {
+				const slice = file.slice(offset, offset + chunkSize);
+				const buf = await slice.arrayBuffer();
+				spark.append(buf);
+				offset += chunkSize;
+			}
+			return spark.end();
+		} finally {
+			setComputingHash(false);
+		}
+	};
+
+	const buildStorageKey = (hash: string, file: File) =>
+		`file_upload_${props.robotId}_${props.contact.wechat_id}_${hash}_${file.size}_${file.name}`;
+
+	const loadMeta = (key: string): StoredUploadMeta | undefined => {
+		try {
+			const raw = localStorage.getItem(key);
+			if (!raw) return undefined;
+			return JSON.parse(raw) as StoredUploadMeta;
+		} catch {
+			return undefined;
+		}
+	};
+
+	const saveMeta = (key: string, meta: StoredUploadMeta) => {
+		try {
+			localStorage.setItem(key, JSON.stringify(meta));
+		} catch {
+			// ignore quota errors
+		}
+	};
+
+	const sendFileInChunks = async () => {
+		if (!attach) return;
+		const file = attach as FileType;
+		setFileUploading(true);
+		try {
+			// 1. Hash
+			const hash = fileHash || (await computeFileHash(file));
+			setFileHash(hash);
+			const storageKey = buildStorageKey(hash, file);
+			const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+			let meta = loadMeta(storageKey);
+			// 初始化或校验 meta
+			if (!meta || meta.totalChunks !== totalChunks || meta.fileSize !== file.size) {
+				meta = {
+					completed: false,
+					lastChunk: -1,
+					totalChunks,
+					fileName: file.name,
+					fileSize: file.size,
+					updatedAt: Date.now(),
+				};
+				saveMeta(storageKey, meta);
+			}
+			// 2. 断点：从 lastChunk+1 继续
+			const startIndex = meta.lastChunk + 1;
+			setPercent(Math.round(((meta.lastChunk + 1) / totalChunks) * 100));
+			for (let index = startIndex; index < totalChunks; index++) {
+				const start = index * CHUNK_SIZE;
+				const end = Math.min(start + CHUNK_SIZE, file.size);
+				const blob = file.slice(start, end);
+				const formData = new FormData();
+				formData.append('id', props.robotId.toString());
+				formData.append('to_wxid', props.contact.wechat_id!);
+				formData.append('filename', file.name);
+				formData.append('file_hash', hash);
+				formData.append('chunk_index', index.toString());
+				formData.append('total_chunks', totalChunks.toString());
+				formData.append('chunk', blob, file.name + '.part' + index);
+				await axios.post('/api/v1/message/send/file?id=' + props.robotId, formData, {
+					headers: { 'Content-Type': 'multipart/form-data' },
+				});
+				meta.lastChunk = index;
+				meta.updatedAt = Date.now();
+				saveMeta(storageKey, meta);
+				setPercent(Math.round(((index + 1) / totalChunks) * 100));
+			}
+			meta.completed = true;
+			meta.updatedAt = Date.now();
+			saveMeta(storageKey, meta);
+			message.success('发送成功');
+			setAttach(undefined);
+		} catch (ex: unknown) {
+			if (ex instanceof Error) {
+				modal.error({ title: '发送失败', content: ex.message || '未知错误' });
+			}
+		} finally {
+			setFileUploading(false);
+			setPercent(0);
+		}
+	};
+
 	const getContent = () => {
 		switch (messageType) {
 			case EMessageType.Text:
@@ -292,7 +394,42 @@ const SendMessage = (props: IProps) => {
 					</React.Fragment>
 				);
 			case EMessageType.File:
-				return null;
+				return (
+					<React.Fragment key="file">
+						<Upload.Dragger
+							name="file"
+							maxCount={1}
+							multiple={false}
+							// 不限制 accept，让用户可选所有，再在 beforeUpload 中排除图片/视频/音频
+							beforeUpload={file => {
+								const forbiddenPrefixes = ['image/', 'video/', 'audio/'];
+								if (forbiddenPrefixes.some(p => file.type.startsWith(p))) {
+									message.error('图片、视频、音频类型文件请选择对应的发送方式，不要通过文件方式发送');
+									return Upload.LIST_IGNORE;
+								}
+								setAttach(file);
+								return false; // 手动上传
+							}}
+							onRemove={() => {
+								setAttach(undefined);
+							}}
+						>
+							<p className="ant-upload-drag-icon">
+								<InboxOutlined />
+							</p>
+							<p className="ant-upload-text">单击或将文件拖到此区域进行上传</p>
+							<p className="ant-upload-hint">
+								支持断点续传，图片/视频/音频类型请使用对应的发送方式，不要通过文件方式发送
+							</p>
+						</Upload.Dragger>
+						{(fileUploading || computingHash || percent > 0) && (
+							<Progress
+								percent={computingHash ? 0 : percent}
+								status={computingHash ? 'active' : percent >= 100 && fileUploading ? 'active' : undefined}
+							/>
+						)}
+					</React.Fragment>
+				);
 			default:
 				return null;
 		}
@@ -304,6 +441,9 @@ const SendMessage = (props: IProps) => {
 		}
 		if (messageType === EMessageType.AITTS) {
 			return !textMessageContent || !speaker;
+		}
+		if (messageType === EMessageType.File) {
+			return attach === undefined || fileUploading;
 		}
 		return attach === undefined;
 	};
@@ -325,6 +465,9 @@ const SendMessage = (props: IProps) => {
 			}
 			if (messageType === EMessageType.Voice) {
 				await sendAttach('voice');
+			}
+			if (messageType === EMessageType.File) {
+				await sendFileInChunks();
 			}
 		} finally {
 			setSubmitLoading(false);
@@ -362,7 +505,7 @@ const SendMessage = (props: IProps) => {
 							{ label: '视频消息', value: EMessageType.Video },
 							{ label: '语音消息', value: EMessageType.Voice },
 							{ label: 'AI文本转语音消息', value: EMessageType.AITTS },
-							{ label: '文件消息 (暂不支持)', value: EMessageType.File, disabled: true },
+							{ label: '文件消息', value: EMessageType.File },
 						]}
 						onChange={value => {
 							setMessageType(value);
