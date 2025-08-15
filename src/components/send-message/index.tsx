@@ -263,6 +263,7 @@ const SendMessage = (props: IProps) => {
 				formData.append('to_wxid', props.contact.wechat_id!);
 				formData.append('filename', file.name);
 				formData.append('file_hash', hash);
+				formData.append('file_size', file.size.toString());
 				formData.append('chunk_index', index.toString());
 				formData.append('total_chunks', totalChunks.toString());
 				formData.append('chunk', blob, file.name + '.part' + index);
