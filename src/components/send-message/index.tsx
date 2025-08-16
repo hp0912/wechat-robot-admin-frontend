@@ -37,7 +37,6 @@ const SendMessage = (props: IProps) => {
 	// 文件分片上传相关
 	const [fileUploading, setFileUploading] = useState(false);
 	const [computingHash, setComputingHash] = useState(false);
-	const [fileHash, setFileHash] = useState<string | undefined>();
 
 	const { data, loading } = useRequest(
 		async () => {
@@ -243,8 +242,7 @@ const SendMessage = (props: IProps) => {
 		setFileUploading(true);
 		try {
 			// 1. Hash
-			const hash = fileHash || (await computeFileHash(file));
-			setFileHash(hash);
+			const hash = await computeFileHash(file);
 			const storageKey = buildStorageKey(hash, file);
 			const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
 			let meta = loadMeta(storageKey);
