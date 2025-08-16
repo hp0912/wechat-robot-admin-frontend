@@ -228,9 +228,18 @@ const SendMessage = (props: IProps) => {
 		}
 	};
 
+	const removeMeta = (key: string) => {
+		try {
+			localStorage.removeItem(key);
+		} catch {
+			// ignore quota errors
+		}
+	};
+
 	const sendFileInChunks = async () => {
 		if (!attach) return;
 		const file = attach as FileType;
+		const clientAppDataId = `${props.robot.wechat_id}_${Math.floor(Date.now() / 1000)}_UploadFile`;
 		setFileUploading(true);
 		try {
 			// 1. Hash
@@ -243,6 +252,7 @@ const SendMessage = (props: IProps) => {
 			if (!meta || meta.totalChunks !== totalChunks || meta.fileSize !== file.size) {
 				meta = {
 					completed: false,
+					clientAppDataId,
 					lastChunk: -1,
 					totalChunks,
 					fileName: file.name,
@@ -261,15 +271,23 @@ const SendMessage = (props: IProps) => {
 				const formData = new FormData();
 				formData.append('id', props.robotId.toString());
 				formData.append('to_wxid', props.contact.wechat_id!);
+				formData.append('client_app_data_id', meta.clientAppDataId);
 				formData.append('filename', file.name);
 				formData.append('file_hash', hash);
 				formData.append('file_size', file.size.toString());
 				formData.append('chunk_index', index.toString());
 				formData.append('total_chunks', totalChunks.toString());
 				formData.append('chunk', blob, file.name + '.part' + index);
-				await axios.post('/api/v1/message/send/file?id=' + props.robotId, formData, {
-					headers: { 'Content-Type': 'multipart/form-data' },
-				});
+				const resp = await axios.post<{ code: number; message: string }>(
+					'/api/v1/message/send/file?id=' + props.robotId,
+					formData,
+					{
+						headers: { 'Content-Type': 'multipart/form-data' },
+					},
+				);
+				if (resp.data.code !== 200) {
+					throw new Error(resp.data.message);
+				}
 				meta.lastChunk = index;
 				meta.updatedAt = Date.now();
 				saveMeta(storageKey, meta);
@@ -277,7 +295,7 @@ const SendMessage = (props: IProps) => {
 			}
 			meta.completed = true;
 			meta.updatedAt = Date.now();
-			saveMeta(storageKey, meta);
+			removeMeta(storageKey);
 			message.success('发送成功');
 			setAttach(undefined);
 		} catch (ex: unknown) {
