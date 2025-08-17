@@ -301,6 +301,10 @@ const RobotLogin = (props: IProps) => {
 								setSecurityVerifyState({ secOpen: false, tfaOpen: true });
 							} else {
 								await newDeviceVerify();
+								setSecurityVerifyState({ secOpen: false });
+								setTimeout(() => {
+									runAsync();
+								}, 1500);
 							}
 						}}
 					>
