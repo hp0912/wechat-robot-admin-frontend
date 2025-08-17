@@ -1,6 +1,6 @@
 import { CheckCircleFilled, CloseCircleFilled, ReloadOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
-import { App, Button, Input, Modal, Progress, QRCode, Space, Spin, theme } from 'antd';
+import { App, Button, Col, Input, Modal, Progress, QRCode, Radio, Row, Space, Spin, theme } from 'antd';
 import type { QRCodeProps } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
@@ -20,8 +20,10 @@ interface IState {
 	strokeColor?: string;
 }
 
-interface ILogin2FAState {
-	open?: boolean;
+interface ISecurityVerify {
+	type?: 'slider' | '2fa' | undefined;
+	secOpen?: boolean;
+	tfaOpen?: boolean;
 	uuid: string;
 	code: string;
 	ticket: string;
@@ -43,7 +45,11 @@ const RobotLogin = (props: IProps) => {
 	const { open, onClose } = props;
 
 	const [scanState, setScanState] = useSetState<IState>({ qrcode: '等待二维码生成', status: 'loading' });
-	const [login2FAState, setLogin2FAState] = useSetState<ILogin2FAState>({ uuid: '', code: '', ticket: '' });
+	const [securityVerifyState, setSecurityVerifyState] = useSetState<ISecurityVerify>({
+		uuid: '',
+		code: '',
+		ticket: '',
+	});
 
 	const { data: qrData, refreshAsync } = useRequest(
 		async () => {
@@ -105,7 +111,7 @@ const RobotLogin = (props: IProps) => {
 			pollingInterval: 3000,
 			onSuccess: resp => {
 				if (resp?.ticket) {
-					setLogin2FAState({ open: true, uuid: resp.uuid, ticket: resp.ticket, code: '' });
+					setSecurityVerifyState({ secOpen: true, type: undefined, uuid: resp.uuid, ticket: resp.ticket, code: '' });
 					cancel();
 					return;
 				}
@@ -157,10 +163,10 @@ const RobotLogin = (props: IProps) => {
 			const resp = await window.wechatRobotClient.api.v1RobotLogin2FaCreate(
 				{
 					id: props.robotId,
-					uuid: login2FAState.uuid,
+					uuid: securityVerifyState.uuid,
 					data62: qrData?.data62 || '',
 					code,
-					ticket: login2FAState.ticket,
+					ticket: securityVerifyState.ticket,
 				},
 				{
 					id: props.robotId,
@@ -176,8 +182,33 @@ const RobotLogin = (props: IProps) => {
 		},
 	);
 
+	const { runAsync: newDeviceVerify, loading: newDeviceVerifyLoading } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1RobotLoginNewDeviceVerifyCreate(
+				{
+					ticket: securityVerifyState.ticket,
+				},
+				{
+					id: props.robotId,
+				},
+			);
+			return resp.data;
+		},
+		{
+			manual: true,
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	const onSecClose = useMemoizedFn(() => {
+		setSecurityVerifyState({ secOpen: false, type: undefined, uuid: '', code: '', ticket: '' });
+		props.onClose();
+	});
+
 	const on2FAClose = useMemoizedFn(() => {
-		setLogin2FAState({ open: false, uuid: '', code: '', ticket: '' });
+		setSecurityVerifyState({ tfaOpen: false, type: undefined, uuid: '', code: '', ticket: '' });
 		props.onClose();
 	});
 
@@ -255,10 +286,56 @@ const RobotLogin = (props: IProps) => {
 						/>
 					</>
 				)}
-				{!!login2FAState.open && (
+				{!!securityVerifyState.secOpen && (
+					<Modal
+						title="安全验证"
+						open={securityVerifyState.secOpen}
+						onCancel={onSecClose}
+						width={365}
+						maskClosable={false}
+						okText="下一步"
+						okButtonProps={{ disabled: !securityVerifyState.type }}
+						confirmLoading={newDeviceVerifyLoading}
+						onOk={async () => {
+							if (securityVerifyState.type === '2fa') {
+								setSecurityVerifyState({ secOpen: false, tfaOpen: true });
+							} else {
+								await newDeviceVerify();
+							}
+						}}
+					>
+						<p style={{ margin: '0 0 16px 0', fontSize: 13, color: '#3324e0' }}>
+							如果手机微信扫码确认登录界面出现6位验证码，则选择安全码验证，否则选择新设备滑块验证。
+						</p>
+						<Row
+							align="middle"
+							wrap={false}
+						>
+							<Col
+								flex="0 0 auto"
+								style={{ marginRight: 3 }}
+							>
+								验证方式：
+							</Col>
+							<Col flex="1 1 auto">
+								<Radio.Group
+									value={securityVerifyState.type}
+									onChange={ev => {
+										setSecurityVerifyState({ type: ev.target.value });
+									}}
+									options={[
+										{ value: '2fa', label: '安全码验证' },
+										{ value: 'slider', label: '新设备滑块验证' },
+									]}
+								/>
+							</Col>
+						</Row>
+					</Modal>
+				)}
+				{!!securityVerifyState.tfaOpen && (
 					<Modal
 						title="双重认证"
-						open={login2FAState.open}
+						open={securityVerifyState.tfaOpen}
 						onCancel={on2FAClose}
 						width={256}
 						maskClosable={false}
@@ -269,14 +346,14 @@ const RobotLogin = (props: IProps) => {
 							tip="正在验证..."
 						>
 							<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-								<p style={{ margin: '0 0 16px 0', textAlign: 'center' }}>请输入微信安全码</p>
+								<p style={{ margin: '0 0 16px 0', textAlign: 'center', color: '#3324e0' }}>请输入微信安全码</p>
 								<Input.OTP
-									value={login2FAState.code}
+									value={securityVerifyState.code}
 									onChange={async value => {
-										setLogin2FAState({ code: value });
+										setSecurityVerifyState({ code: value });
 										if (value?.length && value.length >= 6) {
 											await run2FA(value);
-											setLogin2FAState({ open: false });
+											setSecurityVerifyState({ tfaOpen: false });
 											setTimeout(() => {
 												runAsync();
 											}, 1500);
