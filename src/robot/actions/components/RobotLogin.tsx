@@ -7,6 +7,7 @@ import styled from 'styled-components';
 
 interface IProps {
 	robotId: number;
+	loginType: 'ipad' | 'win' | 'car' | 'mac';
 	open: boolean;
 	onClose: () => void;
 	onRefresh: () => void;
@@ -53,9 +54,29 @@ const RobotLogin = (props: IProps) => {
 
 	const { data: qrData, refreshAsync } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1RobotLoginCreate({
-				id: props.robotId,
-			});
+			let loginType = '';
+			switch (props.loginType) {
+				case 'ipad':
+					loginType = '0';
+					break;
+				case 'win':
+					loginType = '1';
+					break;
+				case 'car':
+					loginType = '2';
+					break;
+				case 'mac':
+					loginType = '3';
+					break;
+			}
+			const resp = await window.wechatRobotClient.api.v1RobotLoginCreate(
+				{
+					login_type: loginType,
+				},
+				{
+					id: props.robotId,
+				},
+			);
 			return resp.data?.data;
 		},
 		{

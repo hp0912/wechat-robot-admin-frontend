@@ -5512,6 +5512,22 @@
 						}
 					}
 				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"login_type": {
+										"type": "string"
+									}
+								},
+								"required": ["login_type"]
+							},
+							"examples": {}
+						}
+					}
+				},
 				"responses": {
 					"200": {
 						"description": "",
