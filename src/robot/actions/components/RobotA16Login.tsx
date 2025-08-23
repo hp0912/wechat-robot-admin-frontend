@@ -45,7 +45,7 @@ const RobotA16Login = (props: IProps) => {
 
 	return (
 		<Modal
-			title="登录安卓 Pad 设备"
+			title="登录安卓手机设备"
 			width={globalContext.global?.isSmallScreen ? '100%' : 475}
 			open={props.open}
 			confirmLoading={loading}
