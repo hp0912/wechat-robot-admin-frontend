@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 interface IProps {
 	robotId: number;
-	loginType: 'ipad' | 'win' | 'car' | 'mac';
+	loginType: 'ipad' | 'win' | 'car' | 'mac' | 'iphone' | 'android-pad';
 	open: boolean;
 	onClose: () => void;
 	onRefresh: () => void;
@@ -39,7 +39,7 @@ const Container = styled.div`
 	}
 `;
 
-const RobotLogin = (props: IProps) => {
+const RobotScanLogin = (props: IProps) => {
 	const { message } = App.useApp();
 	const { token } = theme.useToken();
 
@@ -54,24 +54,9 @@ const RobotLogin = (props: IProps) => {
 
 	const { data: qrData, refreshAsync } = useRequest(
 		async () => {
-			let loginType = '';
-			switch (props.loginType) {
-				case 'ipad':
-					loginType = '0';
-					break;
-				case 'win':
-					loginType = '1';
-					break;
-				case 'car':
-					loginType = '2';
-					break;
-				case 'mac':
-					loginType = '3';
-					break;
-			}
 			const resp = await window.wechatRobotClient.api.v1RobotLoginCreate(
 				{
-					login_type: loginType,
+					login_type: props.loginType,
 				},
 				{
 					id: props.robotId,
@@ -394,4 +379,4 @@ const RobotLogin = (props: IProps) => {
 	);
 };
 
-export default React.memo(RobotLogin);
+export default React.memo(RobotScanLogin);

@@ -2,14 +2,14 @@ import { ScanOutlined } from '@ant-design/icons';
 import { useBoolean, useMemoizedFn, useSetState } from 'ahooks';
 import { Button, Modal, Radio, Tooltip } from 'antd';
 import React, { useState } from 'react';
-import RobotLogin from './components/RobotLogin';
+import RobotScanLogin from './components/RobotScanLogin';
 
 interface IProps {
 	robotId: number;
 	onRefresh: () => void;
 }
 
-type ILoginType = 'ipad' | 'win' | 'car' | 'mac';
+type ILoginType = 'ipad' | 'win' | 'car' | 'mac' | 'iphone' | 'android-pad';
 
 const LoginType = (props: { open: boolean; onOK: (type: ILoginType) => void; onClose: () => void }) => {
 	const [loginType, setLoginType] = useState<ILoginType>('ipad');
@@ -39,6 +39,8 @@ const LoginType = (props: { open: boolean; onOK: (type: ILoginType) => void; onC
 						{ value: 'win', label: 'Windows微信' },
 						{ value: 'mac', label: 'Mac微信' },
 						{ value: 'car', label: '车载微信' },
+						{ value: 'iphone', label: 'iPhone (当前机器人曾经通过其他设备成功登录过成功率高)' },
+						{ value: 'android-pad', label: 'Android平板 (A16强制登录，需要当前机器人通过其他设备成功登录过)' },
 					]}
 				/>
 			</div>
@@ -53,7 +55,13 @@ const Login = (props: IProps) => {
 
 	const onLoginTypeOK = useMemoizedFn((type: ILoginType) => {
 		setLoginType({ open: false, type });
-		setOnScanOpen.setTrue();
+		if (type === 'iphone') {
+			//
+		} else if (type === 'android-pad') {
+			//
+		} else {
+			setOnScanOpen.setTrue();
+		}
 	});
 
 	const onLoginTypeClose = useMemoizedFn(() => {
@@ -91,7 +99,7 @@ const Login = (props: IProps) => {
 					/>
 				)}
 				{onScanOpen && (
-					<RobotLogin
+					<RobotScanLogin
 						robotId={props.robotId}
 						loginType={loginType.type}
 						open={onScanOpen}
