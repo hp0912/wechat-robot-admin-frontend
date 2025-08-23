@@ -56,7 +56,7 @@ const LoginType = (props: { open: boolean; onOK: (type: ILoginType) => void; onC
 							value: 'android-pad',
 							label: (
 								<span>
-									Android平板{' '}
+									Android手机{' '}
 									<span style={{ fontSize: 12, color: '#797979' }}>
 										(A16强制登录，需要当前机器人通过其他设备成功登录过)
 									</span>
