@@ -1,0 +1,92 @@
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { useRequest } from 'ahooks';
+import { App, Form, Input, Modal } from 'antd';
+import React, { useContext } from 'react';
+import type { Api } from '@/api/wechat-robot/wechat-robot';
+import { GlobalContext } from '@/context/global';
+
+interface IProps {
+	robotId: number;
+	open: boolean;
+	onClose: () => void;
+	onRefresh: () => void;
+}
+
+const RobotA16Login = (props: IProps) => {
+	const { message } = App.useApp();
+
+	const globalContext = useContext(GlobalContext);
+
+	const [form] = Form.useForm<Api.V1RobotLoginA16Create.RequestBody>();
+
+	const { runAsync, loading } = useRequest(
+		async (data: Api.V1RobotLoginA16Create.RequestBody) => {
+			const resp = await window.wechatRobotClient.api.v1RobotLoginA16Create(data, {
+				id: props.robotId,
+			});
+			return resp.data?.data;
+		},
+		{
+			manual: true,
+			onSuccess: resp => {
+				if (resp.authSectResp?.uin) {
+					message.success(`登录成功`);
+					props.onRefresh();
+					props.onClose();
+				} else {
+					message.error(`登录失败，原因未知`);
+				}
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	return (
+		<Modal
+			title="登录安卓 Pad 设备"
+			width={globalContext.global?.isSmallScreen ? '100%' : 475}
+			open={props.open}
+			confirmLoading={loading}
+			onOk={async () => {
+				const values = await form.validateFields();
+				await runAsync(values);
+			}}
+			okText="登录"
+			onCancel={props.onClose}
+		>
+			<Form
+				form={form}
+				labelCol={{ flex: '0 0 110px' }}
+				wrapperCol={{ flex: '1 1 auto' }}
+				autoComplete="off"
+			>
+				<Form.Item
+					name="username"
+					label=""
+					rules={[{ required: true, message: '请输入微信ID' }]}
+				>
+					<Input
+						prefix={<UserOutlined />}
+						placeholder="请输入微信ID"
+						allowClear
+					/>
+				</Form.Item>
+				<Form.Item
+					name="password"
+					label=""
+					rules={[{ required: true, message: '请输入密码' }]}
+				>
+					<Input.Password
+						prefix={<LockOutlined />}
+						placeholder="请输入密码"
+						allowClear
+					/>
+				</Form.Item>
+			</Form>
+		</Modal>
+	);
+};
+
+export default React.memo(RobotA16Login);
