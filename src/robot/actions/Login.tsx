@@ -2,18 +2,22 @@ import { ScanOutlined } from '@ant-design/icons';
 import { useBoolean, useMemoizedFn, useSetState } from 'ahooks';
 import { Button, Modal, Radio, Tooltip } from 'antd';
 import React, { useState } from 'react';
+import type { Api } from '@/api/wechat-robot/wechat-robot';
 import RobotA16Login from './components/RobotA16Login';
 import RobotData62Login from './components/RobotData62Login';
 import RobotScanLogin from './components/RobotScanLogin';
 
 interface IProps {
 	robotId: number;
+	robot: IRobot;
 	onRefresh: () => void;
 }
 
+type IRobot = Api.V1RobotListList.ResponseBody['data']['items'][number];
+
 type ILoginType = 'ipad' | 'win' | 'car' | 'mac' | 'iphone' | 'android-pad';
 
-const LoginType = (props: { open: boolean; onOK: (type: ILoginType) => void; onClose: () => void }) => {
+const LoginType = (props: { open: boolean; robot: IRobot; onOK: (type: ILoginType) => void; onClose: () => void }) => {
 	const [loginType, setLoginType] = useState<ILoginType>('ipad');
 
 	return (
@@ -54,6 +58,7 @@ const LoginType = (props: { open: boolean; onOK: (type: ILoginType) => void; onC
 						},
 						{
 							value: 'android-pad',
+							disabled: !props.robot.wechat_id,
 							label: (
 								<span>
 									Android手机{' '}
@@ -118,6 +123,7 @@ const Login = (props: IProps) => {
 				{loginType.open && (
 					<LoginType
 						open={loginType.open}
+						robot={props.robot}
 						onOK={onLoginTypeOK}
 						onClose={onLoginTypeClose}
 					/>
@@ -134,6 +140,7 @@ const Login = (props: IProps) => {
 				{onData62Open && (
 					<RobotData62Login
 						robotId={props.robotId}
+						robot={props.robot}
 						open={onData62Open}
 						onClose={setOnData62Open.setFalse}
 						onRefresh={props.onRefresh}
@@ -142,6 +149,7 @@ const Login = (props: IProps) => {
 				{onA16Open && (
 					<RobotA16Login
 						robotId={props.robotId}
+						robot={props.robot}
 						open={onA16Open}
 						onClose={setOnA16Open.setFalse}
 						onRefresh={props.onRefresh}

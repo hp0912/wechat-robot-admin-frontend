@@ -102,6 +102,7 @@ const Robot = (props: IProps) => {
 								</div>
 								<Login
 									robotId={robot.id}
+									robot={props.robot}
 									onRefresh={refresh}
 								/>
 							</>
