@@ -5,8 +5,11 @@ import React, { useContext, useEffect } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { GlobalContext } from '@/context/global';
 
+type IRobot = Api.V1RobotListList.ResponseBody['data']['items'][number];
+
 interface IProps {
 	robotId: number;
+	robot: IRobot;
 	open: boolean;
 	onClose: () => void;
 	onRefresh: () => void;
@@ -126,6 +129,7 @@ const RobotData62Login = (props: IProps) => {
 					name="username"
 					label=""
 					rules={[{ required: true, message: '请输入微信ID' }]}
+					initialValue={props.robot.wechat_id || ''}
 				>
 					<Input
 						prefix={<UserOutlined />}
