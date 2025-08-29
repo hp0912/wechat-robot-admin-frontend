@@ -4594,9 +4594,18 @@
 										},
 										"message": {
 											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"login_method": {
+													"type": "string"
+												}
+											},
+											"required": ["login_method"]
 										}
 									},
-									"required": ["code", "message"]
+									"required": ["code", "message", "data"]
 								}
 							}
 						},
@@ -5486,6 +5495,63 @@
 										}
 									},
 									"required": ["code", "message", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
+		"/api/v1/login": {
+			"post": {
+				"summary": "登录密钥登录",
+				"deprecated": false,
+				"description": "微信登陆",
+				"tags": [],
+				"parameters": [],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"token": {
+										"type": "string"
+									}
+								},
+								"required": ["token"]
+							},
+							"examples": {}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"success": {
+													"type": "boolean"
+												}
+											},
+											"required": ["success"]
+										}
+									},
+									"required": ["message", "code", "data"]
 								}
 							}
 						},
