@@ -72,7 +72,6 @@ const AppLayout: React.FC = () => {
 			manual: false,
 			onError: reason => {
 				message.error(reason.message);
-				window.location.href = `${UrlLogin}?redirect=${encodeURIComponent(window.location.href)}`;
 			},
 		},
 	);
@@ -80,7 +79,8 @@ const AppLayout: React.FC = () => {
 	// 用户登出
 	const { runAsync: signOut } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1UserLogoutDelete();
+			const resp = await window.wechatRobotClient.api.v1UserLogoutDelete();
+			return resp?.data;
 		},
 		{
 			manual: true,
@@ -96,8 +96,8 @@ const AppLayout: React.FC = () => {
 			label: '登出',
 			icon: <LogoutOutlined />,
 			onClick: async () => {
-				await signOut();
-				window.location.href = `${UrlLogin}?redirect=${encodeURIComponent(window.location.href)}`;
+				const resp = await signOut();
+				window.location.href = `${UrlLogin}?login_method=${resp?.data?.login_method}&redirect=${encodeURIComponent(window.location.href)}`;
 			},
 		},
 	];

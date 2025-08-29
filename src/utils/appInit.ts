@@ -17,12 +17,12 @@ export const Init = () => {
 	};
 
 	const respInterceptor = (response: AxiosResponse<AnyType, AnyType>) => {
-		const data = response.data as { code: number; error: string };
+		const data = response.data as { code: number; error: string; data: { login_method: 'scan' | 'token' } };
 		switch (data.code) {
 			case 200:
 				return response;
 			case 401:
-				window.location.href = `${UrlLogin}?redirect=${encodeURIComponent(window.location.href)}`;
+				window.location.href = `${UrlLogin}?login_method=${data.data.login_method}&redirect=${encodeURIComponent(window.location.href)}`;
 				return;
 			default:
 				return Promise.reject(errorWrapper(data));

@@ -5,12 +5,18 @@ type IUser = Api.V1UserSelfList.ResponseBody['data'];
 
 interface IContext {
 	user?: IUser;
-	signOut: () => Promise<void>;
+	signOut: () => Promise<Api.V1UserLogoutDelete.ResponseBody>;
 }
 
 export const UserContext = React.createContext<IContext>({
 	user: undefined,
 	signOut: () => {
-		return Promise.resolve();
+		return Promise.resolve({
+			code: 200,
+			message: '',
+			data: {
+				login_method: '',
+			},
+		});
 	},
 });
