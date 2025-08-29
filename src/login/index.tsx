@@ -118,7 +118,7 @@ const Login = () => {
 
 	const onSignIn = async () => {
 		const values = await form.validateFields();
-		let resp: Api.V1OauthWechatCreate.ResponseBody | undefined;
+		let resp: { code: number; message: string; data?: { success: boolean } } | undefined;
 		if (loginMethod === 'scan') {
 			resp = await runAsync(values);
 		} else {

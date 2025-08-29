@@ -97,7 +97,7 @@ const AppLayout: React.FC = () => {
 			icon: <LogoutOutlined />,
 			onClick: async () => {
 				const resp = await signOut();
-				window.location.href = `${UrlLogin}?login_method=${resp?.data?.login_method}&redirect=${encodeURIComponent(window.location.href)}`;
+				window.location.href = `${UrlLogin}?login_method=${resp?.data?.login_method ?? 'scan'}&redirect=${encodeURIComponent(window.location.href)}`;
 			},
 		},
 	];
