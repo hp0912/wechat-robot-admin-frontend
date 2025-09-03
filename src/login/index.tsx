@@ -1,7 +1,7 @@
 import { LockOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { App, Button, Form, Input } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
@@ -72,7 +72,7 @@ const Container = styled.div`
 `;
 
 const Login = () => {
-	const { message } = App.useApp();
+	const { message, modal } = App.useApp();
 	const navigate = useNavigate();
 
 	const params = new URLSearchParams(window.location.search);
@@ -81,6 +81,18 @@ const Login = () => {
 	const [form] = Form.useForm<{ code: string; token: string }>();
 
 	const [className, setClassName] = useState('');
+
+	useEffect(() => {
+		// 除了 127.0.0.1 和 localhost，其他域名必须使用 https 访问
+		if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+			if (window.location.protocol !== 'https:') {
+				modal.warning({
+					title: '安全提示',
+					content: '为了您的信息安全，除了 127.0.0.1 和 localhost，其他域名必须使用 https 访问',
+				});
+			}
+		}
+	}, []);
 
 	const { runAsync, loading } = useRequest(
 		async (data: Api.V1OauthWechatCreate.RequestBody) => {
