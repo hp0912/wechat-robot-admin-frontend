@@ -210,7 +210,9 @@ const FriendSettings = (props: IProps) => {
 					>
 						{contact.remark || contact.alias || contact.nickname || contact.wechat_id} 聊天设置
 						{data?.data?.id === 0 && (
-							<span style={{ fontSize: 12, color: '#ff5722' }}>(该好友未进行过任何设置，运行时会继承全局设置)</span>
+							<span style={{ fontSize: 12, color: '#ff5722' }}>
+								(该好友未进行过任何设置{props.contact.type === 'official_account' ? null : '，运行时会继承全局设置'})
+							</span>
 						)}
 					</Col>
 				</Row>
