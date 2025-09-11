@@ -44,7 +44,7 @@ const LoginType = (props: { open: boolean; robot: IRobot; onOK: (type: ILoginTyp
 						{ value: 'ipad', label: 'iPad' },
 						{ value: 'win', label: 'Windows微信' },
 						{ value: 'mac', label: 'Mac微信' },
-						{ value: 'car', label: '车载微信' },
+						{ value: 'car', disabled: true, label: '车载微信 (车载最近封号严重，先禁用)' },
 						{
 							value: 'iphone',
 							label: (
