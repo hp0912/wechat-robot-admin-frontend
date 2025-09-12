@@ -79,7 +79,7 @@ const RobotScanLogin = (props: IProps) => {
 				if (resp?.uuid && resp.awken_login) {
 					setScanState({
 						qrcode: `http://weixin.qq.com/x/${resp.uuid}`,
-						status: 'scanned',
+						status: 'active',
 					});
 					return;
 				}
