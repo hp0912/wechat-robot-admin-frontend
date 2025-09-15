@@ -1,7 +1,7 @@
 {
 	"openapi": "3.0.1",
 	"info": {
-		"title": "微信机器人管理后台",
+		"title": "默认模块",
 		"description": "",
 		"version": "1.0.0"
 	},
@@ -5903,9 +5903,9 @@
 				"security": []
 			}
 		},
-		"/api/v1/robot/login/new-device-verify": {
+		"/api/v1/robot/login/slider": {
 			"post": {
-				"summary": "微信登陆新设备验证",
+				"summary": "微信登陆滑块验证",
 				"deprecated": false,
 				"description": "",
 				"tags": [],
@@ -5926,11 +5926,14 @@
 							"schema": {
 								"type": "object",
 								"properties": {
+									"data62": {
+										"type": "string"
+									},
 									"ticket": {
 										"type": "string"
 									}
 								},
-								"required": ["ticket"]
+								"required": ["ticket", "data62"]
 							},
 							"examples": {}
 						}
@@ -5951,31 +5954,7 @@
 											"type": "string"
 										},
 										"data": {
-											"type": "object",
-											"properties": {
-												"flag": {
-													"type": "number"
-												},
-												"data": {
-													"type": "string"
-												},
-												"code": {
-													"type": "number"
-												},
-												"message": {
-													"type": "string"
-												},
-												"url": {
-													"type": "string"
-												},
-												"remark": {
-													"type": "string"
-												},
-												"Success": {
-													"type": "boolean"
-												}
-											},
-											"required": ["flag", "data", "code", "message", "url", "remark", "Success"]
+											"type": "string"
 										}
 									},
 									"required": ["code", "message", "data"]

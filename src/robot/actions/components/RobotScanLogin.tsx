@@ -4,6 +4,7 @@ import { App, Button, Col, Input, Modal, Progress, QRCode, Radio, Row, Space, Sp
 import type { QRCodeProps } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
+import SliderVerify from './SliderVerify';
 
 interface IProps {
 	robotId: number;
@@ -25,6 +26,8 @@ interface ISecurityVerify {
 	type?: 'slider' | '2fa' | undefined;
 	secOpen?: boolean;
 	tfaOpen?: boolean;
+	sliderOpen?: boolean;
+	sliderHtml?: string;
 	uuid: string;
 	code: string;
 	ticket: string;
@@ -188,10 +191,11 @@ const RobotScanLogin = (props: IProps) => {
 		},
 	);
 
-	const { runAsync: newDeviceVerify, loading: newDeviceVerifyLoading } = useRequest(
+	const { runAsync: sliderVerify, loading: sliderVerifyLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1RobotLoginNewDeviceVerifyCreate(
+			const resp = await window.wechatRobotClient.api.v1RobotLoginSliderCreate(
 				{
+					data62: qrData?.data62 || '',
 					ticket: securityVerifyState.ticket,
 				},
 				{
@@ -202,6 +206,9 @@ const RobotScanLogin = (props: IProps) => {
 		},
 		{
 			manual: true,
+			onSuccess: resp => {
+				setSecurityVerifyState({ sliderOpen: true, sliderHtml: resp.data || '' });
+			},
 			onError: reason => {
 				message.error(reason.message);
 			},
@@ -216,6 +223,16 @@ const RobotScanLogin = (props: IProps) => {
 	const on2FAClose = useMemoizedFn(() => {
 		setSecurityVerifyState({ tfaOpen: false, type: undefined, uuid: '', code: '', ticket: '' });
 		props.onClose();
+	});
+
+	const onSliderClose = useMemoizedFn(() => {
+		setSecurityVerifyState({ sliderOpen: false, sliderHtml: '', type: undefined, uuid: '', code: '', ticket: '' });
+		props.onClose();
+	});
+
+	const onSliderSuccess = useMemoizedFn(() => {
+		onSliderClose();
+		runAsync();
 	});
 
 	const customStatusRender: QRCodeProps['statusRender'] = info => {
@@ -301,16 +318,13 @@ const RobotScanLogin = (props: IProps) => {
 						maskClosable={false}
 						okText="下一步"
 						okButtonProps={{ disabled: !securityVerifyState.type }}
-						confirmLoading={newDeviceVerifyLoading}
+						confirmLoading={sliderVerifyLoading}
 						onOk={async () => {
 							if (securityVerifyState.type === '2fa') {
 								setSecurityVerifyState({ secOpen: false, tfaOpen: true });
 							} else {
-								await newDeviceVerify();
+								await sliderVerify();
 								setSecurityVerifyState({ secOpen: false });
-								setTimeout(() => {
-									runAsync();
-								}, 1500);
 							}
 						}}
 					>
@@ -373,6 +387,14 @@ const RobotScanLogin = (props: IProps) => {
 							</div>
 						</Spin>
 					</Modal>
+				)}
+				{!!securityVerifyState.sliderOpen && (
+					<SliderVerify
+						open={securityVerifyState.sliderOpen}
+						html={securityVerifyState.sliderHtml || ''}
+						onClose={onSliderClose}
+						onSuccess={onSliderSuccess}
+					/>
 				)}
 			</Container>
 		</Modal>
