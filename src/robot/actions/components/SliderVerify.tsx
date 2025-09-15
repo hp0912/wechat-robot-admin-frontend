@@ -1,37 +1,16 @@
 import { Button, Modal } from 'antd';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 interface IProps {
 	open: boolean;
-	html: string;
+	robotId: number;
+	data62: string;
+	ticket: string;
 	onClose: () => void;
-	onSuccess: (value: string) => void;
+	onSuccess: () => void;
 }
 
 const SliderVerify = (props: IProps) => {
-	const container = useRef<HTMLDivElement>(null);
-
-	useEffect(() => {
-		const iframe = document.createElement('iframe');
-		iframe.style.width = '100%';
-		iframe.style.height = '300px';
-		iframe.style.border = 'none';
-		iframe.style.margin = '0 auto';
-
-		iframe.onload = () => {
-			const doc = iframe.contentDocument;
-			if (!doc) {
-				return;
-			}
-			doc.body.innerHTML = '';
-			doc.body.innerHTML = props.html || '获取滑块失败';
-		};
-
-		if (container.current) {
-			container.current.appendChild(iframe);
-		}
-	}, []);
-
 	return (
 		<Modal
 			title="滑块验证"
@@ -43,12 +22,24 @@ const SliderVerify = (props: IProps) => {
 				<Button
 					key="ok"
 					type="primary"
+					onClick={props.onSuccess}
 				>
 					滑块已经验证通过且已经在手机上点了确认
 				</Button>,
 			]}
 		>
-			<div ref={container} />
+			<div style={{ width: '100%', height: '400px' }}>
+				<iframe
+					src={`/api/v1/robot/login/slider?id=${props.robotId}&data62=${props.data62}&ticket=${props.ticket}`}
+					style={{
+						width: '100%',
+						height: '100%',
+						border: 'none',
+						borderRadius: '4px',
+					}}
+					title="滑块验证"
+				/>
+			</div>
 		</Modal>
 	);
 };

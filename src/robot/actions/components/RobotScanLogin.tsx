@@ -27,7 +27,6 @@ interface ISecurityVerify {
 	secOpen?: boolean;
 	tfaOpen?: boolean;
 	sliderOpen?: boolean;
-	sliderHtml?: string;
 	uuid: string;
 	code: string;
 	ticket: string;
@@ -191,30 +190,6 @@ const RobotScanLogin = (props: IProps) => {
 		},
 	);
 
-	const { runAsync: sliderVerify, loading: sliderVerifyLoading } = useRequest(
-		async () => {
-			const resp = await window.wechatRobotClient.api.v1RobotLoginSliderCreate(
-				{
-					data62: qrData?.data62 || '',
-					ticket: securityVerifyState.ticket,
-				},
-				{
-					id: props.robotId,
-				},
-			);
-			return resp.data;
-		},
-		{
-			manual: true,
-			onSuccess: resp => {
-				setSecurityVerifyState({ sliderOpen: true, sliderHtml: resp.data || '' });
-			},
-			onError: reason => {
-				message.error(reason.message);
-			},
-		},
-	);
-
 	const onSecClose = useMemoizedFn(() => {
 		setSecurityVerifyState({ secOpen: false, type: undefined, uuid: '', code: '', ticket: '' });
 		props.onClose();
@@ -226,7 +201,7 @@ const RobotScanLogin = (props: IProps) => {
 	});
 
 	const onSliderClose = useMemoizedFn(() => {
-		setSecurityVerifyState({ sliderOpen: false, sliderHtml: '', type: undefined, uuid: '', code: '', ticket: '' });
+		setSecurityVerifyState({ sliderOpen: false, type: undefined, uuid: '', code: '', ticket: '' });
 		props.onClose();
 	});
 
@@ -318,13 +293,11 @@ const RobotScanLogin = (props: IProps) => {
 						maskClosable={false}
 						okText="下一步"
 						okButtonProps={{ disabled: !securityVerifyState.type }}
-						confirmLoading={sliderVerifyLoading}
 						onOk={async () => {
 							if (securityVerifyState.type === '2fa') {
 								setSecurityVerifyState({ secOpen: false, tfaOpen: true });
 							} else {
-								await sliderVerify();
-								setSecurityVerifyState({ secOpen: false });
+								setSecurityVerifyState({ secOpen: false, sliderOpen: true });
 							}
 						}}
 					>
@@ -391,7 +364,9 @@ const RobotScanLogin = (props: IProps) => {
 				{!!securityVerifyState.sliderOpen && (
 					<SliderVerify
 						open={securityVerifyState.sliderOpen}
-						html={securityVerifyState.sliderHtml || ''}
+						robotId={props.robotId}
+						data62={qrData?.data62 || ''}
+						ticket={securityVerifyState.ticket}
 						onClose={onSliderClose}
 						onSuccess={onSliderSuccess}
 					/>
