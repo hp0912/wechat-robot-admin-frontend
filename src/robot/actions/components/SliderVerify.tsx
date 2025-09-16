@@ -1,5 +1,5 @@
-import { Button, Modal } from 'antd';
-import React from 'react';
+import { Button, message, Modal } from 'antd';
+import React, { useEffect, useState } from 'react';
 
 interface IProps {
 	open: boolean;
@@ -11,6 +11,26 @@ interface IProps {
 }
 
 const SliderVerify = (props: IProps) => {
+	const [isSliderVerified, setIsSliderVerified] = useState(false);
+
+	useEffect(() => {
+		const onComplete = (event: MessageEvent) => {
+			if (event.data.type === 'sliderResult') {
+				const result = event.data.data as { success: boolean; message: string };
+				if (result.success) {
+					setIsSliderVerified(true);
+					message.success('滑块验证成功，请在手机上点击确认登录');
+				} else {
+					message.error(`滑块验证失败: ${result.message}`);
+				}
+			}
+		};
+		window.addEventListener('message', onComplete);
+		return () => {
+			window.removeEventListener('message', onComplete);
+		};
+	}, []);
+
 	return (
 		<Modal
 			title="滑块验证"
@@ -22,6 +42,7 @@ const SliderVerify = (props: IProps) => {
 				<Button
 					key="ok"
 					type="primary"
+					disabled={!isSliderVerified}
 					onClick={props.onSuccess}
 				>
 					滑块已经验证通过且已经在手机上点了确认
