@@ -33,7 +33,12 @@ const SliderVerify = (props: IProps) => {
 
 	return (
 		<Modal
-			title="滑块验证"
+			title={
+				<>
+					滑块验证{' '}
+					<span style={{ color: 'red', fontSize: 12 }}>滑块验证通过之后请在手机上点击确认，再点击右下角的确认按钮</span>
+				</>
+			}
 			open={props.open}
 			onCancel={props.onClose}
 			width={680}
