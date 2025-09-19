@@ -302,7 +302,7 @@ const RobotScanLogin = (props: IProps) => {
 						}}
 					>
 						<p style={{ margin: '0 0 16px 0', fontSize: 13, color: '#3324e0' }}>
-							如果手机微信扫码确认登录界面出现6位验证码，则选择安全码验证，否则选择新设备滑块验证。
+							如果手机微信扫码确认登录界面出现6位验证码，则选择安全码验证，否则选择滑块验证。
 						</p>
 						<Row
 							align="middle"
@@ -322,7 +322,7 @@ const RobotScanLogin = (props: IProps) => {
 									}}
 									options={[
 										{ value: '2fa', label: '安全码验证' },
-										{ value: 'slider', label: '新设备滑块验证' },
+										{ value: 'slider', label: '滑块验证' },
 									]}
 								/>
 							</Col>
