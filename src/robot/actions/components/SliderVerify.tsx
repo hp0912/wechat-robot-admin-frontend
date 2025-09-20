@@ -41,7 +41,7 @@ const SliderVerify = (props: IProps) => {
 			}
 			open={props.open}
 			onCancel={props.onClose}
-			width={680}
+			width={500}
 			maskClosable={false}
 			footer={[
 				<Button
@@ -54,7 +54,7 @@ const SliderVerify = (props: IProps) => {
 				</Button>,
 			]}
 		>
-			<div style={{ width: '100%', height: '400px' }}>
+			<div style={{ width: '100%', height: '310px', margin: '0 auto', border: '1px solid #f0f0f0', borderRadius: 8 }}>
 				<iframe
 					src={`/api/v1/robot/login/slider?id=${props.robotId}&data62=${props.data62}&ticket=${props.ticket}`}
 					style={{
