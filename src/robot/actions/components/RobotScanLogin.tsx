@@ -42,7 +42,7 @@ const Container = styled.div`
 `;
 
 const RobotScanLogin = (props: IProps) => {
-	const { message } = App.useApp();
+	const { message, modal } = App.useApp();
 	const { token } = theme.useToken();
 
 	const { open, onClose } = props;
@@ -190,6 +190,32 @@ const RobotScanLogin = (props: IProps) => {
 		},
 	);
 
+	const { runAsync: autoSlider, loading: sliderLoading } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1RobotLoginSliderAutoCreate({
+				data62: qrData?.data62 || '',
+				ticket: securityVerifyState.ticket,
+			});
+			return resp.data;
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				modal.success({
+					title: '滑块验证通过',
+					content: <>滑块验证已经通过，请在手机上确认。</>,
+					okText: '我已经在手机上确认',
+					onOk: () => {
+						onSliderSuccess();
+					},
+				});
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
 	const onSecClose = useMemoizedFn(() => {
 		setSecurityVerifyState({ secOpen: false, type: undefined, uuid: '', code: '', ticket: '' });
 		props.onClose();
@@ -292,12 +318,12 @@ const RobotScanLogin = (props: IProps) => {
 						width={365}
 						maskClosable={false}
 						okText="下一步"
-						okButtonProps={{ disabled: !securityVerifyState.type }}
+						okButtonProps={{ disabled: !securityVerifyState.type, loading: sliderLoading }}
 						onOk={async () => {
 							if (securityVerifyState.type === '2fa') {
 								setSecurityVerifyState({ secOpen: false, tfaOpen: true });
 							} else {
-								setSecurityVerifyState({ secOpen: false, sliderOpen: true });
+								await autoSlider();
 							}
 						}}
 					>
