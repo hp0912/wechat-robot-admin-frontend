@@ -5909,17 +5909,7 @@
 				"deprecated": false,
 				"description": "",
 				"tags": [],
-				"parameters": [
-					{
-						"name": "id",
-						"in": "query",
-						"description": "",
-						"required": false,
-						"schema": {
-							"type": "number"
-						}
-					}
-				],
+				"parameters": [],
 				"requestBody": {
 					"content": {
 						"application/json": {
@@ -6247,6 +6237,61 @@
 										},
 										"data": {
 											"type": "string"
+										}
+									},
+									"required": ["code", "message", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
+		"/api/v1/robot/login/slider-auto": {
+			"post": {
+				"summary": "微信登陆自动滑块验证",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data62": {
+										"type": "string"
+									},
+									"ticket": {
+										"type": "string"
+									}
+								},
+								"required": ["ticket", "data62"]
+							},
+							"examples": {}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {}
 										}
 									},
 									"required": ["code", "message", "data"]
