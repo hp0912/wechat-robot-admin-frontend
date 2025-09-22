@@ -1,6 +1,6 @@
 import { ScanOutlined } from '@ant-design/icons';
 import { useBoolean, useMemoizedFn, useSetState } from 'ahooks';
-import { Button, Modal, Radio, Tooltip } from 'antd';
+import { Button, Checkbox, Modal, Radio, theme, Tooltip } from 'antd';
 import React, { useState } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import RobotA16Login from './components/RobotA16Login';
@@ -15,10 +15,22 @@ interface IProps {
 
 type IRobot = Api.V1RobotListList.ResponseBody['data']['items'][number];
 
-type ILoginType = 'ipad' | 'win' | 'car' | 'mac' | 'iphone' | 'android-pad';
+type ILoginType = 'ipad' | 'win' | 'car' | 'mac' | 'iphone' | 'android';
 
-const LoginType = (props: { open: boolean; robot: IRobot; onOK: (type: ILoginType) => void; onClose: () => void }) => {
+const LoginType = (props: {
+	open: boolean;
+	robot: IRobot;
+	onOK: (type: ILoginType, isPretender: boolean) => void;
+	onClose: () => void;
+}) => {
+	const { token } = theme.useToken();
+
 	const [loginType, setLoginType] = useState<ILoginType>('ipad');
+	const [isPretender, setIsPretender] = useState(false);
+
+	const isDisabledPretender = (type: ILoginType) => {
+		return type === 'ipad' || type === 'iphone' || type === 'android';
+	};
 
 	return (
 		<Modal
@@ -28,7 +40,7 @@ const LoginType = (props: { open: boolean; robot: IRobot; onOK: (type: ILoginTyp
 			onCancel={props.onClose}
 			okText="继续"
 			onOk={() => {
-				props.onOK(loginType);
+				props.onOK(loginType, isPretender);
 			}}
 		>
 			<p style={{ margin: '0 0 16px 0' }}>
@@ -39,12 +51,15 @@ const LoginType = (props: { open: boolean; robot: IRobot; onOK: (type: ILoginTyp
 					value={loginType}
 					onChange={ev => {
 						setLoginType(ev.target.value);
+						if (isDisabledPretender(ev.target.value)) {
+							setIsPretender(false);
+						}
 					}}
 					options={[
 						{ value: 'ipad', label: 'iPad' },
 						{ value: 'win', label: 'Windows微信' },
 						{ value: 'mac', label: 'Mac微信' },
-						{ value: 'car', disabled: true, label: '车载微信 (车载最近封号严重，先禁用)' },
+						{ value: 'car', label: '车载微信' },
 						{
 							value: 'iphone',
 							label: (
@@ -71,30 +86,56 @@ const LoginType = (props: { open: boolean; robot: IRobot; onOK: (type: ILoginTyp
 					]}
 				/>
 			</div>
+			<div style={{ marginTop: 16 }}>
+				<Checkbox
+					disabled={isDisabledPretender(loginType) || !props.robot.wechat_id}
+					checked={isPretender}
+					onChange={ev => {
+						setIsPretender(ev.target.checked);
+					}}
+				>
+					伪装成 iPad 登录
+				</Checkbox>
+				{isDisabledPretender(loginType) ? (
+					<span style={{ marginLeft: 3, color: token.colorWarning, fontSize: 12 }}>{`${loginType}登录不支持伪装`}</span>
+				) : !props.robot.wechat_id ? (
+					<span
+						style={{ marginLeft: 3, color: token.colorWarning, fontSize: 12 }}
+					>{`还未通过${loginType}成功登录过，不支持伪装`}</span>
+				) : (
+					<Tooltip title={`${loginType}登录成功后马上下线，再重新选择${loginType}登录，同时勾选【伪装成 iPad 登录】`}>
+						<a style={{ marginLeft: 3 }}>如何操作？</a>
+					</Tooltip>
+				)}
+			</div>
 		</Modal>
 	);
 };
 
 const Login = (props: IProps) => {
-	const [onScanOpen, setOnScanOpen] = useBoolean(false);
 	const [onData62Open, setOnData62Open] = useBoolean(false);
 	const [onA16Open, setOnA16Open] = useBoolean(false);
 	const [onTipOpen, setOnTipOpen] = useBoolean(false);
+	const [onScanOpen, setOnScanOpen] = useSetState({ open: false, isPretender: false });
 	const [loginType, setLoginType] = useSetState<{ open: boolean; type: ILoginType }>({ open: false, type: 'ipad' });
 
-	const onLoginTypeOK = useMemoizedFn((type: ILoginType) => {
+	const onLoginTypeOK = useMemoizedFn((type: ILoginType, isPretender: boolean) => {
 		setLoginType({ open: false, type });
 		if (type === 'iphone') {
 			setOnData62Open.setTrue();
-		} else if (type === 'android-pad') {
+		} else if (type === 'android') {
 			setOnA16Open.setTrue();
 		} else {
-			setOnScanOpen.setTrue();
+			setOnScanOpen({ open: true, isPretender });
 		}
 	});
 
 	const onLoginTypeClose = useMemoizedFn(() => {
 		setLoginType({ open: false, type: 'ipad' });
+	});
+
+	const onScanLoginClose = useMemoizedFn(() => {
+		setOnScanOpen({ open: false, isPretender: false });
 	});
 
 	return (
@@ -128,12 +169,13 @@ const Login = (props: IProps) => {
 						onClose={onLoginTypeClose}
 					/>
 				)}
-				{onScanOpen && (
+				{onScanOpen.open && (
 					<RobotScanLogin
 						robotId={props.robotId}
 						loginType={loginType.type}
-						open={onScanOpen}
-						onClose={setOnScanOpen.setFalse}
+						isPretender={onScanOpen.isPretender}
+						open={onScanOpen.open}
+						onClose={onScanLoginClose}
 						onRefresh={props.onRefresh}
 					/>
 				)}

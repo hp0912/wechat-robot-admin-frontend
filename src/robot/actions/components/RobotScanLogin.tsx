@@ -8,7 +8,8 @@ import SliderVerify from './SliderVerify';
 
 interface IProps {
 	robotId: number;
-	loginType: 'ipad' | 'win' | 'car' | 'mac' | 'iphone' | 'android-pad';
+	loginType: 'ipad' | 'win' | 'car' | 'mac' | 'iphone' | 'android';
+	isPretender: boolean;
 	open: boolean;
 	onClose: () => void;
 	onRefresh: () => void;
@@ -59,6 +60,7 @@ const RobotScanLogin = (props: IProps) => {
 			const resp = await window.wechatRobotClient.api.v1RobotLoginCreate(
 				{
 					login_type: props.loginType,
+					is_pretender: props.isPretender,
 				},
 				{
 					id: props.robotId,
@@ -282,7 +284,10 @@ const RobotScanLogin = (props: IProps) => {
 		<Modal
 			title={null}
 			open={open}
-			onCancel={onClose}
+			onCancel={() => {
+				cancel();
+				onClose();
+			}}
 			width={256}
 			maskClosable={false}
 			footer={null}

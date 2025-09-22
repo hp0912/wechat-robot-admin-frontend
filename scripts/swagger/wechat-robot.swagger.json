@@ -5586,6 +5586,9 @@
 								"properties": {
 									"login_type": {
 										"type": "string"
+									},
+									"is_pretender": {
+										"type": "boolean"
 									}
 								},
 								"required": ["login_type"]
