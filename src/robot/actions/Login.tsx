@@ -103,7 +103,9 @@ const LoginType = (props: {
 						style={{ marginLeft: 3, color: token.colorWarning, fontSize: 12 }}
 					>{`还未通过${loginType}成功登录过，不支持伪装`}</span>
 				) : (
-					<Tooltip title={`${loginType}登录成功后马上下线，再重新选择${loginType}登录，同时勾选【伪装成 iPad 登录】`}>
+					<Tooltip
+						title={`${loginType}登录成功后马上下线(手机上下线、机器人界面操作下线都可以)，再重新选择${loginType}登录，同时勾选【伪装成 iPad 登录】`}
+					>
 						<a style={{ marginLeft: 3 }}>如何操作？</a>
 					</Tooltip>
 				)}
