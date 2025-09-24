@@ -32,6 +32,14 @@ const LoginType = (props: {
 		return type === 'ipad' || type === 'iphone' || type === 'android';
 	};
 
+	const tips = (
+		<Tooltip
+			title={`${loginType}登录成功后马上下线(手机上下线、机器人界面操作下线都可以)，再重新选择${loginType}登录，同时勾选【伪装成 iPad 登录】`}
+		>
+			<a style={{ marginLeft: 3, fontSize: 12 }}>如何操作？</a>
+		</Tooltip>
+	);
+
 	return (
 		<Modal
 			title="请选择登录方式"
@@ -99,15 +107,14 @@ const LoginType = (props: {
 				{isDisabledPretender(loginType) ? (
 					<span style={{ marginLeft: 3, color: token.colorWarning, fontSize: 12 }}>{`${loginType}登录不支持伪装`}</span>
 				) : !props.robot.wechat_id ? (
-					<span
-						style={{ marginLeft: 3, color: token.colorWarning, fontSize: 12 }}
-					>{`还未通过${loginType}成功登录过，不支持伪装`}</span>
+					<>
+						<span
+							style={{ marginLeft: 3, color: token.colorWarning, fontSize: 12 }}
+						>{`还未通过${loginType}成功登录过，不支持伪装`}</span>
+						{tips}
+					</>
 				) : (
-					<Tooltip
-						title={`${loginType}登录成功后马上下线(手机上下线、机器人界面操作下线都可以)，再重新选择${loginType}登录，同时勾选【伪装成 iPad 登录】`}
-					>
-						<a style={{ marginLeft: 3 }}>如何操作？</a>
-					</Tooltip>
+					tips
 				)}
 			</div>
 		</Modal>
