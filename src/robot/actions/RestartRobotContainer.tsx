@@ -9,9 +9,9 @@ import {
 } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { App, Button, Dropdown, Upload } from 'antd';
-import type { RcFile } from 'antd/es/upload/interface';
 import type { MenuProps } from 'antd';
-import React, { useRef } from 'react';
+import type { RcFile } from 'antd/es/upload/interface';
+import React, { useEffect, useRef } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 
 type IRobot = Api.V1RobotListList.ResponseBody['data']['items'][number];
@@ -25,8 +25,13 @@ interface IProps {
 const RestartRobotContainer = (props: IProps) => {
 	const { message, modal } = App.useApp();
 
-	// 直接保存 RcFile，避免依赖 UploadFile.originFileObj（某些场景下可能为 undefined）
 	const loginDataFile = useRef<RcFile | undefined>(undefined);
+
+	useEffect(() => {
+		return () => {
+			loginDataFile.current = undefined;
+		};
+	}, []);
 
 	const { runAsync, loading } = useRequest(
 		async () => {
@@ -55,6 +60,7 @@ const RestartRobotContainer = (props: IProps) => {
 		{
 			manual: true,
 			onSuccess: resp => {
+				let url: string | null = null;
 				try {
 					const loginData = resp.data?.data;
 					if (!loginData) {
@@ -63,18 +69,21 @@ const RestartRobotContainer = (props: IProps) => {
 					}
 					const blob = new Blob([loginData], { type: 'application/json;charset=utf-8' });
 					const filename = `${props.robot?.wechat_id || 'logindata'}.json`;
-					const url = URL.createObjectURL(blob);
+					url = URL.createObjectURL(blob);
 					const a = document.createElement('a');
 					a.href = url;
 					a.download = filename;
 					document.body.appendChild(a);
 					a.click();
 					document.body.removeChild(a);
-					URL.revokeObjectURL(url);
 					message.success('导出成功');
 				} catch (ex) {
 					if (ex instanceof Error) {
 						message.error('导出失败: ' + ex.message);
+					}
+				} finally {
+					if (url) {
+						URL.revokeObjectURL(url);
 					}
 				}
 			},
@@ -187,7 +196,7 @@ const RestartRobotContainer = (props: IProps) => {
 								accept=".json"
 								beforeUpload={(file: RcFile) => {
 									loginDataFile.current = file;
-									return false; // 阻止自动上传，转为手动处理
+									return false;
 								}}
 								onRemove={() => {
 									loginDataFile.current = undefined;
@@ -203,31 +212,31 @@ const RestartRobotContainer = (props: IProps) => {
 					okText: '导入',
 					cancelText: '取消',
 					onOk: async () => {
-							if (!loginDataFile.current) {
-								message.error('请先选择要导入的 JSON 文件');
-								throw new Error('No file selected');
-							}
+						if (!loginDataFile.current) {
+							message.error('请先选择要导入的 JSON 文件');
+							throw new Error('No file selected');
+						}
+						try {
+							const fileObj = loginDataFile.current;
+							const text = await fileObj.text();
 							try {
-								const fileObj = loginDataFile.current;
-								// 基础校验：扩展名 & 类型（可选）
-								if (!/\.json$/i.test(fileObj.name)) {
-									message.error('文件扩展名不是 .json');
-									throw new Error('Invalid extension');
-								}
-								const text = await fileObj.text();
-								try {
-									JSON.parse(text);
-								} catch (ex) {
-									message.error('不是合法的 JSON 文件');
-									throw ex;
-								}
-								await importLoginData(text);
-								// 成功后清理状态
-								loginDataFile.current = undefined;
-								props.onRefresh();
+								JSON.parse(text);
 							} catch (ex) {
-								throw ex as Error;
+								message.error('不是合法的 JSON 文件');
+								throw ex;
 							}
+							await importLoginData(text);
+							// 成功后清理状态
+							loginDataFile.current = undefined;
+							props.onRefresh();
+						} catch (ex) {
+							// 失败时也要清理状态
+							loginDataFile.current = undefined;
+							throw ex as Error;
+						}
+					},
+					onCancel: () => {
+						loginDataFile.current = undefined;
 					},
 				});
 			},
