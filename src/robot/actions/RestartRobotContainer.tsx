@@ -1,8 +1,17 @@
-import { BulbFilled, DownOutlined, ExportOutlined, InteractionFilled, PlayCircleFilled } from '@ant-design/icons';
+import {
+	BulbFilled,
+	DownOutlined,
+	ExportOutlined,
+	ImportOutlined,
+	InboxOutlined,
+	InteractionFilled,
+	PlayCircleFilled,
+} from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { App, Button, Dropdown } from 'antd';
+import { App, Button, Dropdown, Upload } from 'antd';
+import type { RcFile } from 'antd/es/upload/interface';
 import type { MenuProps } from 'antd';
-import React from 'react';
+import React, { useRef } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 
 type IRobot = Api.V1RobotListList.ResponseBody['data']['items'][number];
@@ -15,6 +24,9 @@ interface IProps {
 
 const RestartRobotContainer = (props: IProps) => {
 	const { message, modal } = App.useApp();
+
+	// 直接保存 RcFile，避免依赖 UploadFile.originFileObj（某些场景下可能为 undefined）
+	const loginDataFile = useRef<RcFile | undefined>(undefined);
 
 	const { runAsync, loading } = useRequest(
 		async () => {
@@ -65,6 +77,28 @@ const RestartRobotContainer = (props: IProps) => {
 						message.error('导出失败: ' + ex.message);
 					}
 				}
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	const { runAsync: importLoginData, loading: importLoginDataLoading } = useRequest(
+		async (data: string) => {
+			return await window.wechatRobotClient.api.v1RobotImportLoginDataCreate(
+				{
+					id: props.robotId,
+				},
+				{
+					data,
+				},
+			);
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('导入成功');
 			},
 			onError: reason => {
 				message.error(reason.message);
@@ -135,25 +169,65 @@ const RestartRobotContainer = (props: IProps) => {
 		{
 			label: '导入登录数据',
 			key: 'import-login-data',
-			icon: <BulbFilled />,
+			icon: <ImportOutlined />,
 			onClick: () => {
-				if (restartClientLoading) {
-					message.warning('正在重启客户端容器，请稍后再试');
+				if (importLoginDataLoading) {
+					message.warning('正在导入登录数据，请稍后再试');
 					return;
 				}
 				modal.confirm({
-					title: '重启机器人客户端',
-					width: 335,
+					title: '导入机器人登录数据',
+					width: 460,
 					content: (
 						<>
-							确定要重启这个机器人的<b>客户端容器</b>吗？
+							<Upload.Dragger
+								name="file"
+								maxCount={1}
+								multiple={false}
+								accept=".json"
+								beforeUpload={(file: RcFile) => {
+									loginDataFile.current = file;
+									return false; // 阻止自动上传，转为手动处理
+								}}
+								onRemove={() => {
+									loginDataFile.current = undefined;
+								}}
+							>
+								<p className="ant-upload-drag-icon">
+									<InboxOutlined />
+								</p>
+								<p className="ant-upload-text">单击或将 JSON 文件拖到此区域进行上传</p>
+							</Upload.Dragger>
 						</>
 					),
-					okText: '重启',
+					okText: '导入',
 					cancelText: '取消',
 					onOk: async () => {
-						await restartClient();
-						props.onRefresh();
+							if (!loginDataFile.current) {
+								message.error('请先选择要导入的 JSON 文件');
+								throw new Error('No file selected');
+							}
+							try {
+								const fileObj = loginDataFile.current;
+								// 基础校验：扩展名 & 类型（可选）
+								if (!/\.json$/i.test(fileObj.name)) {
+									message.error('文件扩展名不是 .json');
+									throw new Error('Invalid extension');
+								}
+								const text = await fileObj.text();
+								try {
+									JSON.parse(text);
+								} catch (ex) {
+									message.error('不是合法的 JSON 文件');
+									throw ex;
+								}
+								await importLoginData(text);
+								// 成功后清理状态
+								loginDataFile.current = undefined;
+								props.onRefresh();
+							} catch (ex) {
+								throw ex as Error;
+							}
 					},
 				});
 			},

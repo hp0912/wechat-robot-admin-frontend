@@ -5622,6 +5622,68 @@
 				"security": []
 			}
 		},
+		"/api/v1/robot/import-login-data": {
+			"post": {
+				"summary": "导入机器人登录数据",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data": {
+										"type": "string"
+									}
+								},
+								"required": ["data"]
+							},
+							"examples": {}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {}
+										}
+									},
+									"required": ["code", "message"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
 		"/api/v1/robot/login": {
 			"post": {
 				"summary": "机器人登陆",
