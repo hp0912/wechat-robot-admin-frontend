@@ -107,7 +107,29 @@ const RestartRobotContainer = (props: IProps) => {
 		{
 			manual: true,
 			onSuccess: () => {
-				message.success('导入成功');
+				modal.success({
+					title: '导入成功',
+					content: '导入成功，需要重启机器人服务端和机器人客户端。',
+					okText: '立即重启',
+					cancelText: '稍后再说',
+					onOk: async () => {
+						try {
+							await restartServer();
+						} catch (ex) {
+							if (ex instanceof Error) {
+								message.error('重启服务端失败: ' + ex.message);
+							}
+						}
+						try {
+							await restartClient();
+						} catch (ex) {
+							if (ex instanceof Error) {
+								message.error('重启客户端端失败: ' + ex.message);
+							}
+						}
+						props.onRefresh();
+					},
+				});
 			},
 			onError: reason => {
 				message.error(reason.message);
