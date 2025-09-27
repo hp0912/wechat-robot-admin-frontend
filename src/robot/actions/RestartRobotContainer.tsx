@@ -159,6 +159,10 @@ const RestartRobotContainer = (props: IProps) => {
 					message.warning('正在导出登录数据，请稍后再试');
 					return;
 				}
+				if (!props.robot?.wechat_id) {
+					message.error('机器人没有成功登录过，无法导出登录数据');
+					return;
+				}
 				modal.confirm({
 					title: '导出机器人登录数据',
 					width: 335,
