@@ -11,9 +11,7 @@ import MomentsFilled from '@/icons/MomentsFilled';
 import GlobalSettings from '@/settings';
 import RecreateRobotContainer from '../RecreateRobotContainer';
 import Remove from '../Remove';
-import RestartClient from '../RestartClient';
-import RestartServer from '../RestartServer';
-import RobotState from '../RobotState';
+import RestartRobotContainer from '../RestartRobotContainer';
 
 interface IProps {
 	robotId: number;
@@ -183,20 +181,10 @@ const RobotDetail = (props: IProps) => {
 			extra={
 				globalContext.global?.isSmallScreen ? null : (
 					<Space>
-						<RobotState
+						<RestartRobotContainer
 							robotId={data.id}
+							robot={data}
 							onRefresh={onRefresh}
-							buttonText="刷新状态"
-						/>
-						<RestartClient
-							robotId={data.id}
-							onRefresh={onRefresh}
-							buttonText="重启客户端"
-						/>
-						<RestartServer
-							robotId={data.id}
-							onRefresh={onRefresh}
-							buttonText="重启服务端"
 						/>
 						<RecreateRobotContainer
 							robotId={data.id}
