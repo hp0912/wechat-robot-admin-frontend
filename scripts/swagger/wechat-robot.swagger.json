@@ -4746,6 +4746,12 @@
 															"device_name": {
 																"type": "string"
 															},
+															"device_type": {
+																"type": "string"
+															},
+															"wechat_version": {
+																"type": "string"
+															},
 															"wechat_id": {
 																"type": "string"
 															},
@@ -4784,7 +4790,9 @@
 															"redis_db",
 															"error_message",
 															"last_login_at",
-															"created_at"
+															"created_at",
+															"device_type",
+															"wechat_version"
 														]
 													}
 												}
@@ -4893,6 +4901,12 @@
 												"device_name": {
 													"type": "string"
 												},
+												"device_type": {
+													"type": "string"
+												},
+												"wechat_version": {
+													"type": "string"
+												},
 												"wechat_id": {
 													"type": "string"
 												},
@@ -4931,7 +4945,9 @@
 												"redis_db",
 												"error_message",
 												"last_login_at",
-												"created_at"
+												"created_at",
+												"device_type",
+												"wechat_version"
 											]
 										}
 									},

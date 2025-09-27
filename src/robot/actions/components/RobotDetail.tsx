@@ -380,6 +380,42 @@ const RobotDetail = (props: IProps) => {
 												flex="0 0 100px"
 												className="base-info-title"
 											>
+												设备类型
+											</Col>
+											<Col
+												flex="1 1 auto"
+												className="ellipsis  base-info-value"
+											>
+												{data.device_type}
+											</Col>
+										</Row>
+										<Row
+											className="base-info-item"
+											align="middle"
+											wrap={false}
+										>
+											<Col
+												flex="0 0 100px"
+												className="base-info-title"
+											>
+												微信版本
+											</Col>
+											<Col
+												flex="1 1 auto"
+												className="ellipsis  base-info-value"
+											>
+												{data.wechat_version}
+											</Col>
+										</Row>
+										<Row
+											className="base-info-item"
+											align="middle"
+											wrap={false}
+										>
+											<Col
+												flex="0 0 100px"
+												className="base-info-title"
+											>
 												RDS
 											</Col>
 											<Col
