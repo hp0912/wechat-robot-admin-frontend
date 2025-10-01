@@ -6430,6 +6430,194 @@
 				"security": []
 			}
 		},
+		"/api/v1/system-settings": {
+			"get": {
+				"summary": "获取系统设置",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "ID 编号",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "number",
+													"description": "ID 编号"
+												},
+												"api_token_enabled": {
+													"type": "boolean"
+												},
+												"api_token": {
+													"type": "string"
+												},
+												"offline_notification_enabled": {
+													"type": "boolean"
+												},
+												"notification_type": {
+													"type": "string",
+													"enum": ["push_plus", "email"]
+												},
+												"push_plus_url": {
+													"type": "string"
+												},
+												"push_plus_token": {
+													"type": "string"
+												},
+												"auto_verify_user": {
+													"type": "boolean"
+												},
+												"verify_user_delay": {
+													"type": "number"
+												},
+												"auto_chatroom_invite": {
+													"type": "boolean"
+												}
+											},
+											"required": [
+												"id",
+												"offline_notification_enabled",
+												"notification_type",
+												"push_plus_url",
+												"push_plus_token",
+												"auto_verify_user",
+												"verify_user_delay",
+												"auto_chatroom_invite"
+											]
+										}
+									},
+									"required": ["code", "message", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			},
+			"post": {
+				"summary": "保存系统设置",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "ID 编号",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number",
+										"description": "ID 编号"
+									},
+									"system_settings_id": {
+										"type": "number"
+									},
+									"api_token_enabled": {
+										"type": "boolean"
+									},
+									"offline_notification_enabled": {
+										"type": "boolean"
+									},
+									"notification_type": {
+										"type": "string",
+										"enum": ["push_plus", "email"]
+									},
+									"push_plus_url": {
+										"type": "string"
+									},
+									"push_plus_token": {
+										"type": "string"
+									},
+									"auto_verify_user": {
+										"type": "boolean"
+									},
+									"verify_user_delay": {
+										"type": "number"
+									},
+									"auto_chatroom_invite": {
+										"type": "boolean"
+									}
+								},
+								"required": [
+									"id",
+									"system_settings_id",
+									"offline_notification_enabled",
+									"notification_type",
+									"push_plus_url",
+									"push_plus_token",
+									"auto_verify_user",
+									"verify_user_delay",
+									"auto_chatroom_invite"
+								]
+							},
+							"examples": {}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {}
+										}
+									},
+									"required": ["code", "message", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
 		"/api/v1/global-settings": {
 			"get": {
 				"summary": "获取公共配置",
@@ -6916,6 +7104,217 @@
 				"security": []
 			}
 		},
+		"/api/v1/oss-settings": {
+			"get": {
+				"summary": "获取OSS设置",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "ID 编号",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "number",
+													"description": "ID 编号"
+												},
+												"auto_upload_image": {
+													"type": "boolean"
+												},
+												"auto_upload_image_mode": {
+													"type": "string",
+													"enum": ["all", "ai_only"],
+													"nullable": true
+												},
+												"auto_upload_video": {
+													"type": "boolean"
+												},
+												"auto_upload_video_mode": {
+													"type": "string",
+													"enum": ["all", "ai_only"]
+												},
+												"auto_upload_file": {
+													"type": "boolean"
+												},
+												"auto_upload_file_mode": {
+													"type": "string",
+													"enum": ["all", "ai_only"]
+												},
+												"oss_provider": {
+													"type": "string",
+													"enum": ["aliyun", "tencent_cloud", "cloudflare"]
+												},
+												"aliyun_oss_settings": {
+													"type": "object",
+													"properties": {}
+												},
+												"tencent_cloud_oss_settings": {
+													"type": "object",
+													"properties": {}
+												},
+												"cloudflare_r2_settings": {
+													"type": "object",
+													"properties": {}
+												}
+											},
+											"required": [
+												"id",
+												"auto_upload_video",
+												"auto_upload_video_mode",
+												"auto_upload_file",
+												"auto_upload_file_mode",
+												"oss_provider",
+												"aliyun_oss_settings",
+												"tencent_cloud_oss_settings",
+												"cloudflare_r2_settings",
+												"auto_upload_image_mode"
+											]
+										}
+									},
+									"required": ["code", "message", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			},
+			"post": {
+				"summary": "保存OSS设置",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "ID 编号",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number",
+										"description": "ID 编号"
+									},
+									"auto_upload_image": {
+										"type": "boolean"
+									},
+									"auto_upload_image_mode": {
+										"type": "string",
+										"enum": ["all", "ai_only"],
+										"nullable": true
+									},
+									"auto_upload_video": {
+										"type": "boolean"
+									},
+									"auto_upload_video_mode": {
+										"type": "string",
+										"enum": ["all", "ai_only"]
+									},
+									"auto_upload_file": {
+										"type": "boolean"
+									},
+									"auto_upload_file_mode": {
+										"type": "string",
+										"enum": ["all", "ai_only"]
+									},
+									"oss_provider": {
+										"type": "string",
+										"enum": ["aliyun", "tencent_cloud", "cloudflare"]
+									},
+									"aliyun_oss_settings": {
+										"type": "object",
+										"properties": {}
+									},
+									"tencent_cloud_oss_settings": {
+										"type": "object",
+										"properties": {}
+									},
+									"cloudflare_r2_settings": {
+										"type": "object",
+										"properties": {}
+									}
+								},
+								"required": [
+									"id",
+									"auto_upload_video",
+									"auto_upload_video_mode",
+									"auto_upload_file",
+									"auto_upload_file_mode",
+									"oss_provider",
+									"aliyun_oss_settings",
+									"tencent_cloud_oss_settings",
+									"cloudflare_r2_settings",
+									"auto_upload_image_mode"
+								]
+							},
+							"examples": {}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {}
+										}
+									},
+									"required": ["code", "message", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
 		"/api/v1/message/timbre": {
 			"get": {
 				"summary": "获取音色列表",
@@ -7326,194 +7725,6 @@
 				},
 				"security": []
 			}
-		},
-		"/api/v1/system-settings": {
-			"get": {
-				"summary": "获取系统设置",
-				"deprecated": false,
-				"description": "",
-				"tags": [],
-				"parameters": [
-					{
-						"name": "id",
-						"in": "query",
-						"description": "ID 编号",
-						"required": false,
-						"schema": {
-							"type": "number"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object",
-									"properties": {
-										"code": {
-											"type": "number"
-										},
-										"message": {
-											"type": "string"
-										},
-										"data": {
-											"type": "object",
-											"properties": {
-												"id": {
-													"type": "number",
-													"description": "ID 编号"
-												},
-												"api_token_enabled": {
-													"type": "boolean"
-												},
-												"api_token": {
-													"type": "string"
-												},
-												"offline_notification_enabled": {
-													"type": "boolean"
-												},
-												"notification_type": {
-													"type": "string",
-													"enum": ["push_plus", "email"]
-												},
-												"push_plus_url": {
-													"type": "string"
-												},
-												"push_plus_token": {
-													"type": "string"
-												},
-												"auto_verify_user": {
-													"type": "boolean"
-												},
-												"verify_user_delay": {
-													"type": "number"
-												},
-												"auto_chatroom_invite": {
-													"type": "boolean"
-												}
-											},
-											"required": [
-												"id",
-												"offline_notification_enabled",
-												"notification_type",
-												"push_plus_url",
-												"push_plus_token",
-												"auto_verify_user",
-												"verify_user_delay",
-												"auto_chatroom_invite"
-											]
-										}
-									},
-									"required": ["code", "message", "data"]
-								}
-							}
-						},
-						"headers": {}
-					}
-				},
-				"security": []
-			},
-			"post": {
-				"summary": "保存系统设置",
-				"deprecated": false,
-				"description": "",
-				"tags": [],
-				"parameters": [
-					{
-						"name": "id",
-						"in": "query",
-						"description": "ID 编号",
-						"required": false,
-						"schema": {
-							"type": "number"
-						}
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"type": "object",
-								"properties": {
-									"id": {
-										"type": "number",
-										"description": "ID 编号"
-									},
-									"system_settings_id": {
-										"type": "number"
-									},
-									"api_token_enabled": {
-										"type": "boolean"
-									},
-									"offline_notification_enabled": {
-										"type": "boolean"
-									},
-									"notification_type": {
-										"type": "string",
-										"enum": ["push_plus", "email"]
-									},
-									"push_plus_url": {
-										"type": "string"
-									},
-									"push_plus_token": {
-										"type": "string"
-									},
-									"auto_verify_user": {
-										"type": "boolean"
-									},
-									"verify_user_delay": {
-										"type": "number"
-									},
-									"auto_chatroom_invite": {
-										"type": "boolean"
-									}
-								},
-								"required": [
-									"id",
-									"system_settings_id",
-									"offline_notification_enabled",
-									"notification_type",
-									"push_plus_url",
-									"push_plus_token",
-									"auto_verify_user",
-									"verify_user_delay",
-									"auto_chatroom_invite"
-								]
-							},
-							"examples": {}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object",
-									"properties": {
-										"code": {
-											"type": "number"
-										},
-										"message": {
-											"type": "string"
-										},
-										"data": {
-											"type": "object",
-											"properties": {}
-										}
-									},
-									"required": ["code", "message", "data"]
-								}
-							}
-						},
-						"headers": {}
-					}
-				},
-				"security": []
-			}
 		}
 	},
 	"components": {
@@ -7607,29 +7818,6 @@
 					},
 					"NoPreDownloadRange": {
 						"type": "string"
-					}
-				}
-			},
-			"SnsWeAppInfo": {
-				"type": "object",
-				"properties": {
-					"MapPoiId": {
-						"type": "string"
-					},
-					"AppId": {
-						"type": "number"
-					},
-					"UserName": {
-						"type": "string"
-					},
-					"RedirectUrl": {
-						"type": "string"
-					},
-					"ShowType": {
-						"type": "number"
-					},
-					"RScore": {
-						"type": "number"
 					}
 				}
 			},
