@@ -1,9 +1,10 @@
 import { useRequest } from 'ahooks';
-import { App, Button, Form, Input, Select, Spin, Switch } from 'antd';
+import { Alert, App, Button, Form, Input, Select, Spin, Switch } from 'antd';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 import type { AnyType } from '@/common/types';
+import { AliyunOSSConfig, CloudflareR2Config, TencentCloudOSSConfig } from '@/constant/oss';
 
 interface IProps {
 	robotId: number;
@@ -111,9 +112,16 @@ const OSSSettings = (props: IProps) => {
 	return (
 		<Spin spinning={loading}>
 			<div style={{ maxHeight: 'calc(100vh - 180px)', overflow: 'auto' }}>
+				<Alert
+					type="info"
+					showIcon
+					closable
+					style={{ marginBottom: 24 }}
+					message="考虑到刚登录的时候可能历史图片消息较多，因此登录一分钟内不会自动上传图片。"
+				/>
 				<Form
 					form={form}
-					labelCol={{ flex: '0 0 130px' }}
+					labelCol={{ flex: '0 0 155px' }}
 					wrapperCol={{ flex: '1 1 auto' }}
 					autoComplete="off"
 				>
@@ -236,6 +244,12 @@ const OSSSettings = (props: IProps) => {
 					<Form.Item
 						name="aliyun_oss_settings"
 						label="阿里云 OSS 设置"
+						initialValue={JSON.stringify(AliyunOSSConfig, null, 2)}
+						tooltip={
+							<>
+								<pre>{JSON.stringify(AliyunOSSConfig, null, 2)}</pre>
+							</>
+						}
 					>
 						<Input.TextArea
 							placeholder="请输入阿里云 OSS 设置"
@@ -246,6 +260,12 @@ const OSSSettings = (props: IProps) => {
 					<Form.Item
 						name="tencent_cloud_oss_settings"
 						label="腾讯云 OSS 设置"
+						initialValue={JSON.stringify(TencentCloudOSSConfig, null, 2)}
+						tooltip={
+							<>
+								<pre>{JSON.stringify(TencentCloudOSSConfig, null, 2)}</pre>
+							</>
+						}
 					>
 						<Input.TextArea
 							placeholder="请输入腾讯云 OSS 设置"
@@ -256,6 +276,12 @@ const OSSSettings = (props: IProps) => {
 					<Form.Item
 						name="cloudflare_r2_settings"
 						label="Cloudflare R2 设置"
+						initialValue={JSON.stringify(CloudflareR2Config, null, 2)}
+						tooltip={
+							<>
+								<pre>{JSON.stringify(CloudflareR2Config, null, 2)}</pre>
+							</>
+						}
 					>
 						<Input.TextArea
 							placeholder="请输入 Cloudflare R2 设置"
