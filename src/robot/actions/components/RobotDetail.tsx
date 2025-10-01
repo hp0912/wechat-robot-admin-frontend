@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import Contact from '@/contact';
 import { GlobalContext } from '@/context/global';
 import MomentsFilled from '@/icons/MomentsFilled';
+import OSSFilled from '@/icons/OSSFilled';
 import GlobalSettings from '@/settings';
 import RecreateRobotContainer from '../RecreateRobotContainer';
 import Remove from '../Remove';
@@ -25,6 +26,7 @@ interface IProps {
 const ContainerLog = React.lazy(() => import(/* webpackChunkName: "container-log" */ '@/container-log'));
 const Moments = React.lazy(() => import(/* webpackChunkName: "moments" */ '@/moments'));
 const SystemSettings = React.lazy(() => import(/* webpackChunkName: "system-settings" */ '@/system-settings'));
+const OSSSettings = React.lazy(() => import(/* webpackChunkName: "oss-settings" */ '@/oss-settings'));
 const SystemOverview = React.lazy(() => import(/* webpackChunkName: "system-overview" */ '@/system-overview'));
 
 const BaseContainer = styled.div`
@@ -134,6 +136,16 @@ const RobotDetail = (props: IProps) => {
 			children: (
 				<Suspense fallback={<Spin />}>
 					<SystemSettings robotId={props.robotId} />
+				</Suspense>
+			),
+		},
+		{
+			key: 'oss-settings',
+			icon: <OSSFilled />,
+			label: 'OSS设置',
+			children: (
+				<Suspense fallback={<Spin />}>
+					<OSSSettings robotId={props.robotId} />
 				</Suspense>
 			),
 		},
