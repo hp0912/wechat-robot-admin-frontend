@@ -253,7 +253,7 @@ const OSSSettings = (props: IProps) => {
 					>
 						<Input.TextArea
 							placeholder="请输入阿里云 OSS 设置"
-							rows={5}
+							rows={8}
 							allowClear
 						/>
 					</Form.Item>
@@ -269,7 +269,7 @@ const OSSSettings = (props: IProps) => {
 					>
 						<Input.TextArea
 							placeholder="请输入腾讯云 OSS 设置"
-							rows={5}
+							rows={8}
 							allowClear
 						/>
 					</Form.Item>
@@ -285,7 +285,7 @@ const OSSSettings = (props: IProps) => {
 					>
 						<Input.TextArea
 							placeholder="请输入 Cloudflare R2 设置"
-							rows={5}
+							rows={8}
 							allowClear
 						/>
 					</Form.Item>
