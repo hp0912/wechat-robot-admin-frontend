@@ -1,6 +1,6 @@
 import { ScanOutlined } from '@ant-design/icons';
 import { useBoolean, useMemoizedFn, useSetState } from 'ahooks';
-import { Button, Checkbox, Modal, Radio, theme, Tooltip } from 'antd';
+import { Alert, Button, Checkbox, Modal, Radio, theme, Tooltip } from 'antd';
 import React, { useState } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import RobotA16Login from './components/RobotA16Login';
@@ -118,6 +118,27 @@ const LoginType = (props: {
 					tips
 				)}
 			</div>
+			<Alert
+				style={{ marginTop: 16 }}
+				type="info"
+				showIcon
+				closable
+				message={<b>风控小提示</b>}
+				description={
+					<>
+						<ul style={{ padding: 0 }}>
+							<li>
+								首次登录协议，<span style={{ color: token.colorWarning }}>24小时内会强制掉线一次</span>
+								，这是腾讯的风控策略，这是正常现象，重新扫码登录即可。
+							</li>
+							<li>首次登录协议，登录成功之后最好先挂机4小时。</li>
+							<li>高危操作(加好友、进群等)最好稳定三天后再进行操作。</li>
+							<li>如果是自己部署，最好部署在本地，让协议和扫码登录的手机处于同一网络环境下，不建议部署在云端。</li>
+							<li>扫码登录 Mac，最好在实体 Mac 电脑上挂机三天再登录协议。</li>
+						</ul>
+					</>
+				}
+			/>
 		</Modal>
 	);
 };
