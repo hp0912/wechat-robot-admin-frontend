@@ -118,7 +118,7 @@ const SystemSettings = (props: IProps) => {
 					<Form.Item
 						label="Api密钥"
 						hidden={!apiToken}
-						tooltip="Api密钥用于调用接口，刷新后以前的Api密钥将失效，支持Authorization Header、X-API-Token Header、api_token Query参数三种方式调用接口"
+						tooltip="Api密钥用于调用接口，刷新后以前的Api密钥将失效，支持Authorization Header、X-API-Token Header、api_token Query参数三种方式调用接口 (界面上所有需要登录态的接口均可使用Api密钥调用)"
 					>
 						<Input
 							value={apiToken}
