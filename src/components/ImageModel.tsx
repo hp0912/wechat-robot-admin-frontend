@@ -29,11 +29,9 @@ const ImageModel = (props: IProps) => {
 						image_ai_settings: JSON.stringify(
 							{
 								api_key: '',
-								model: 'doubao-seedream-3-0-t2i-250415',
+								model: 'doubao-seedream-4-0-250828',
 								response_format: 'url',
-								size: '1024x1024',
-								seed: -1,
-								guidance_scale: 2.5,
+								size: '2560x1440',
 								watermark: false,
 							},
 							null,
