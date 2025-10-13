@@ -26,6 +26,9 @@ dependencies:
   qs:
     specifier: ^6.14.0
     version: 6.14.0
+  rc-virtual-list:
+    specifier: ^3.19.2
+    version: 3.19.2(react-dom@19.0.0)(react@19.0.0)
   react:
     specifier: ^19.0.0
     version: 19.0.0
@@ -4867,7 +4870,7 @@ packages:
       rc-motion: 2.9.5(react-dom@19.0.0)(react@19.0.0)
       rc-overflow: 1.4.1(react-dom@19.0.0)(react@19.0.0)
       rc-util: 5.44.4(react-dom@19.0.0)(react@19.0.0)
-      rc-virtual-list: 3.18.1(react-dom@19.0.0)(react@19.0.0)
+      rc-virtual-list: 3.19.2(react-dom@19.0.0)(react@19.0.0)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
@@ -4921,7 +4924,7 @@ packages:
       classnames: 2.5.1
       rc-resize-observer: 1.4.3(react-dom@19.0.0)(react@19.0.0)
       rc-util: 5.44.4(react-dom@19.0.0)(react@19.0.0)
-      rc-virtual-list: 3.18.1(react-dom@19.0.0)(react@19.0.0)
+      rc-virtual-list: 3.19.2(react-dom@19.0.0)(react@19.0.0)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
@@ -4994,7 +4997,7 @@ packages:
       classnames: 2.5.1
       rc-motion: 2.9.5(react-dom@19.0.0)(react@19.0.0)
       rc-util: 5.44.4(react-dom@19.0.0)(react@19.0.0)
-      rc-virtual-list: 3.18.1(react-dom@19.0.0)(react@19.0.0)
+      rc-virtual-list: 3.19.2(react-dom@19.0.0)(react@19.0.0)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
@@ -5021,8 +5024,8 @@ packages:
       react-dom: 19.0.0(react@19.0.0)
       react-is: 18.3.1
 
-  /rc-virtual-list@3.18.1(react-dom@19.0.0)(react@19.0.0):
-    resolution: {integrity: sha512-ARSsD/dey/I4yNQHFYYUaKLUkD1wnD4lRZIvb3rCLMbTMmoFQJRVrWuSfbNt5P5MzMNooEBDvqrUPM4QN7BMNA==}
+  /rc-virtual-list@3.19.2(react-dom@19.0.0)(react@19.0.0):
+    resolution: {integrity: sha512-Ys6NcjwGkuwkeaWBDqfI3xWuZ7rDiQXlH1o2zLfFzATfEgXcqpk8CkgMfbJD81McqjcJVez25a3kPxCR807evA==}
     engines: {node: '>=8.x'}
     peerDependencies:
       react: '>=16.9.0'

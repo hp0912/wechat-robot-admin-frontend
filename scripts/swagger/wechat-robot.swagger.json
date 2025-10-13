@@ -7315,6 +7315,394 @@
 				"security": []
 			}
 		},
+		"/api/v1/mcp-server/list": {
+			"get": {
+				"summary": "获取MCP列表",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "array",
+											"items": {
+												"$ref": "#/components/schemas/MCPServer"
+											}
+										}
+									},
+									"required": ["code", "message", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
+		"/api/v1/mcp-server": {
+			"get": {
+				"summary": "获取 MCP 服务器",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"$ref": "#/components/schemas/MCPServer"
+										}
+									},
+									"required": ["code", "message", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			},
+			"post": {
+				"summary": "新增 MCP 服务器",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/MCPServer"
+							},
+							"examples": {}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {}
+										}
+									},
+									"required": ["code", "message"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			},
+			"put": {
+				"summary": "更新 MCP 服务器",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/MCPServer"
+							},
+							"examples": {}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {}
+										}
+									},
+									"required": ["code", "message"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			},
+			"delete": {
+				"summary": "删除 MCP 服务器",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"description": "mcp server id"
+									}
+								},
+								"required": ["id"]
+							},
+							"examples": {}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {}
+										}
+									},
+									"required": ["code", "message"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
+		"/api/v1/mcp-server/enable": {
+			"post": {
+				"summary": "启用 MCP 服务器",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"description": "mcp server id"
+									}
+								},
+								"required": ["id"]
+							},
+							"examples": {}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {}
+										}
+									},
+									"required": ["code", "message"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
+		"/api/v1/mcp-server/disable": {
+			"post": {
+				"summary": "禁用 MCP 服务器",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"description": "mcp server id"
+									}
+								},
+								"required": ["id"]
+							},
+							"examples": {}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {}
+										}
+									},
+									"required": ["code", "message"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
 		"/api/v1/message/timbre": {
 			"get": {
 				"summary": "获取音色列表",
@@ -8309,6 +8697,126 @@
 						"type": "string"
 					}
 				}
+			},
+			"MCPServer": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "integer"
+					},
+					"name": {
+						"type": "string"
+					},
+					"is_built_in": {
+						"type": "boolean"
+					},
+					"description": {
+						"type": "string"
+					},
+					"transport": {
+						"type": "string",
+						"enum": ["stdio", "sse", "http", "ws"]
+					},
+					"enabled": {
+						"type": "boolean"
+					},
+					"priority": {
+						"type": "integer"
+					},
+					"command": {
+						"type": "string"
+					},
+					"args": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"working_dir": {
+						"type": "string"
+					},
+					"env": {
+						"type": "object",
+						"properties": {}
+					},
+					"url": {
+						"type": "string"
+					},
+					"auth_type": {
+						"type": "string",
+						"enum": ["none", "bearer", "basic", "apikey"]
+					},
+					"auth_token": {
+						"type": "string"
+					},
+					"auth_username": {
+						"type": "string"
+					},
+					"auth_password": {
+						"type": "string"
+					},
+					"headers": {
+						"type": "object",
+						"properties": {}
+					},
+					"tls_skip_verify": {
+						"type": "boolean"
+					},
+					"connect_timeout": {
+						"type": "integer"
+					},
+					"read_timeout": {
+						"type": "integer"
+					},
+					"write_timeout": {
+						"type": "integer"
+					},
+					"max_retries": {
+						"type": "integer"
+					},
+					"retry_interval": {
+						"type": "integer"
+					},
+					"heartbeat_enable": {
+						"type": "boolean"
+					},
+					"heartbeat_interval": {
+						"type": "integer"
+					},
+					"capabilities": {
+						"type": "object",
+						"properties": {}
+					},
+					"custom_config": {
+						"type": "object",
+						"properties": {}
+					},
+					"tags": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"last_connected_at": {
+						"type": "string"
+					},
+					"last_error": {
+						"type": "string"
+					},
+					"connection_count": {
+						"type": "integer"
+					},
+					"error_count": {
+						"type": "integer"
+					},
+					"created_at": {
+						"type": "string"
+					},
+					"updated_at": {
+						"type": "string"
+					}
+				},
+				"required": ["name", "is_built_in", "transport", "enabled", "priority"]
 			},
 			"SKBuiltinString_S": {
 				"type": "object",
