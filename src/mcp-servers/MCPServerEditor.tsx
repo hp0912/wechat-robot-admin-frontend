@@ -1,5 +1,5 @@
 import Editor from '@monaco-editor/react';
-import { Drawer, Form, Input, InputNumber, Select } from 'antd';
+import { Drawer, Form, Input, InputNumber, Select, Switch } from 'antd';
 import React from 'react';
 import type { MCPServer } from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
@@ -45,9 +45,10 @@ const MCPServerEditor = (props: IProps) => {
 		>
 			<Form
 				form={form}
-				labelCol={{ flex: '0 0 110px' }}
+				labelCol={{ flex: '0 0 100px' }}
 				wrapperCol={{ flex: '1 1 auto' }}
 				autoComplete="off"
+				labelWrap
 			>
 				<Form.Item
 					name="id"
@@ -184,7 +185,210 @@ const MCPServerEditor = (props: IProps) => {
 							case 'sse':
 							case 'http':
 							case 'ws':
-								return null;
+								return (
+									<>
+										<Form.Item
+											name="url"
+											label="服务地址"
+											rules={[
+												{ required: true, message: '请输入MCP服务地址' },
+												{ max: 500, message: 'MCP服务地址不能超过500个字符' },
+											]}
+										>
+											<Input
+												placeholder="请输入MCP服务地址"
+												allowClear
+											/>
+										</Form.Item>
+										<Form.Item
+											name="auth_type"
+											label="认证方式"
+											rules={[{ required: true, message: '请选择MCP服务器认证方式' }]}
+											initialValue="none"
+										>
+											<Select
+												style={{ width: '100%' }}
+												placeholder="请选择认证方式"
+												showSearch
+												filterOption={filterOption}
+												options={[
+													{
+														label: '无认证',
+														value: 'none',
+														text: '无认证 none',
+													},
+													{ label: 'Bearer Token认证', value: 'bearer', text: 'Bearer Token认证 bearer' },
+													{ label: 'Basic认证', value: 'basic', text: 'Basic认证 basic' },
+													{ label: 'API Key认证', value: 'apikey', text: 'API Key认证 apikey' },
+												]}
+											/>
+										</Form.Item>
+										<Form.Item
+											noStyle
+											shouldUpdate={(prevValues: MCPServer, nextValues: MCPServer) =>
+												prevValues.auth_type !== nextValues.auth_type
+											}
+										>
+											{({ getFieldValue }) => {
+												const authType = getFieldValue('auth_type') as MCPServer['auth_type'];
+												switch (authType) {
+													case 'bearer':
+													case 'apikey':
+														return (
+															<Form.Item
+																name="auth_token"
+																label="认证密钥"
+																rules={[
+																	{ required: true, message: '请输入MCP服务器认证密钥' },
+																	{ max: 500, message: 'MCP服务器认证密钥不能超过500个字符' },
+																]}
+															>
+																<Input
+																	placeholder="请输入MCP服务器认证密钥"
+																	allowClear
+																/>
+															</Form.Item>
+														);
+													case 'basic':
+														return (
+															<>
+																<Form.Item
+																	name="auth_username"
+																	label="认证用户名"
+																	rules={[
+																		{ required: true, message: '请输入MCP服务器认证用户名' },
+																		{ max: 100, message: 'MCP服务器认证用户名不能超过100个字符' },
+																	]}
+																>
+																	<Input
+																		placeholder="请输入MCP服务器认证用户名"
+																		allowClear
+																	/>
+																</Form.Item>
+																<Form.Item
+																	name="auth_password"
+																	label="认证密码"
+																	rules={[
+																		{ required: true, message: '请输入MCP服务器认证密码' },
+																		{ max: 255, message: 'MCP服务器认证密码不能超过255个字符' },
+																	]}
+																>
+																	<Input
+																		placeholder="请输入MCP服务器认证密码"
+																		allowClear
+																	/>
+																</Form.Item>
+															</>
+														);
+													default:
+														return null;
+												}
+											}}
+										</Form.Item>
+										<Form.Item
+											style={{ flexWrap: 'nowrap' }}
+											name="headers"
+											label="请求头"
+											initialValue={'{\n    \n}'}
+										>
+											<JSONEditor />
+										</Form.Item>
+										<Form.Item
+											name="tls_skip_verify"
+											label="跳过TLS证书验证"
+											valuePropName="checked"
+											initialValue={false}
+										>
+											<Switch
+												checkedChildren="是"
+												unCheckedChildren="否"
+											/>
+										</Form.Item>
+										<Form.Item
+											name="connect_timeout"
+											label="连接超时时间"
+										>
+											<InputNumber
+												style={{ width: '100%' }}
+												placeholder="请输入连接超时时间"
+												min={0.1}
+												precision={1}
+												suffix="秒"
+											/>
+										</Form.Item>
+										<Form.Item
+											name="read_timeout"
+											label="读取超时时间"
+										>
+											<InputNumber
+												style={{ width: '100%' }}
+												placeholder="请输入读取超时时间"
+												min={0.1}
+												precision={1}
+												suffix="秒"
+											/>
+										</Form.Item>
+										<Form.Item
+											name="write_timeout"
+											label="写入超时时间"
+										>
+											<InputNumber
+												style={{ width: '100%' }}
+												placeholder="请输入写入超时时间"
+												min={0.1}
+												precision={1}
+												suffix="秒"
+											/>
+										</Form.Item>
+										<Form.Item
+											name="max_retries"
+											label="最大重试次数"
+										>
+											<InputNumber
+												style={{ width: '100%' }}
+												placeholder="请输入最大重试次数"
+												min={1}
+												precision={0}
+												suffix="次"
+											/>
+										</Form.Item>
+										<Form.Item
+											name="retry_interval"
+											label="重试时间间隔"
+										>
+											<InputNumber
+												style={{ width: '100%' }}
+												placeholder="请输入重试时间间隔"
+												min={0.1}
+												precision={1}
+												suffix="秒"
+											/>
+										</Form.Item>
+										<Form.Item
+											name="heartbeat_enable"
+											label="心跳检测"
+											valuePropName="checked"
+											initialValue={false}
+										>
+											<Switch
+												checkedChildren="是"
+												unCheckedChildren="否"
+											/>
+										</Form.Item>
+										<Form.Item
+											name="heartbeat_interval"
+											label="心跳检测间隔"
+										>
+											<InputNumber
+												style={{ width: '100%' }}
+												placeholder="请输入心跳检测间隔"
+												min={1}
+												precision={1}
+												suffix="秒"
+											/>
+										</Form.Item>
+									</>
+								);
 							default:
 								return null;
 						}
