@@ -1,10 +1,11 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { useRequest, useSize } from 'ahooks';
+import { useMemoizedFn, useRequest, useSetState, useSize } from 'ahooks';
 import { App, Button, Empty, List, Spin, Tag } from 'antd';
 import VirtualList from 'rc-virtual-list';
 import React, { useRef } from 'react';
 import type { MCPServer } from '@/api/wechat-robot/wechat-robot';
 import MCPServerActions from './MCPServerActions';
+import MCPServerEditor from './MCPServerEditor';
 
 interface IProps {
 	robotId: number;
@@ -12,6 +13,8 @@ interface IProps {
 
 const MCPServers = (props: IProps) => {
 	const { message } = App.useApp();
+
+	const [mcpServerState, setMCPServerState] = useSetState<{ open: boolean; id?: number }>({ open: false });
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	const containerSize = useSize(containerRef);
@@ -30,6 +33,10 @@ const MCPServers = (props: IProps) => {
 			},
 		},
 	);
+
+	const onMCPServerEditorClose = useMemoizedFn(() => {
+		setMCPServerState({ open: false, id: undefined });
+	});
 
 	const getTransportText = (type: MCPServer['transport']) => {
 		switch (type) {
@@ -70,6 +77,9 @@ const MCPServers = (props: IProps) => {
 					type="primary"
 					ghost
 					icon={<PlusOutlined />}
+					onClick={() => {
+						setMCPServerState({ open: true, id: undefined });
+					}}
 				>
 					添加MCP服务器
 				</Button>
@@ -118,6 +128,13 @@ const MCPServers = (props: IProps) => {
 							)}
 						</VirtualList>
 					</List>
+				)}
+				{mcpServerState.open && (
+					<MCPServerEditor
+						open={mcpServerState.open}
+						id={mcpServerState.id}
+						onClose={onMCPServerEditorClose}
+					/>
 				)}
 			</div>
 		</Spin>

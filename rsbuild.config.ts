@@ -5,6 +5,7 @@ import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginStyledComponents } from '@rsbuild/plugin-styled-components';
 import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import ReactRefreshPlugin from '@rspack/plugin-react-refresh';
+import MonacoWebpackPlugin from 'monaco-editor-webpack-plugin';
 import path from 'path';
 import { pluginLess } from '@rsbuild/plugin-less';
 
@@ -19,6 +20,9 @@ const config: RsbuildConfig = {
 			plugins: [
 				new rspack.ProgressPlugin({
 					prefix: 'Rspack已开始构建, 吼吼～ ',
+				}),
+				new MonacoWebpackPlugin({
+					languages: ['json'],
 				}),
 				// 生产模式会自动禁用
 				new ReactRefreshPlugin(),
@@ -91,6 +95,18 @@ if (isDev) {
 						test: /[\\/]node_modules[\\/]lodash[\\/]/,
 						chunks: 'all',
 						priority: 10,
+					},
+					'monaco-editor': {
+						name: 'monaco-editor',
+						test: /[\\/]node_modules[\\/]monaco-editor[\\/]/,
+						chunks: 'all',
+						priority: 30,
+					},
+					'monaco-react': {
+						name: 'monaco-react',
+						test: /[\\/]node_modules[\\/]@monaco-editor[\\/]react[\\/]/,
+						chunks: 'all',
+						priority: 20,
 					},
 				},
 			},
