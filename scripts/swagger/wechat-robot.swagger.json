@@ -5404,6 +5404,25 @@
 						}
 					}
 				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"pprof_enable": {
+										"type": "boolean"
+									}
+								},
+								"required": ["id", "pprof_enable"]
+							},
+							"examples": {}
+						}
+					}
+				},
 				"responses": {
 					"200": {
 						"description": "",

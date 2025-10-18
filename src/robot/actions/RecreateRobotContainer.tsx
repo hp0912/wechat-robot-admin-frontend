@@ -133,13 +133,35 @@ const RecreateRobotContainer = (props: IProps) => {
 	);
 
 	const { runAsync: createServerContainer, loading: createServerLoading } = useRequest(
-		async () => {
-			await window.wechatRobotClient.api.v1RobotDockerContainerServerStartCreate({ id: props.robotId });
+		async (pprofEnable: boolean) => {
+			await window.wechatRobotClient.api.v1RobotDockerContainerServerStartCreate(
+				{ id: props.robotId, pprof_enable: pprofEnable },
+				{ id: props.robotId },
+			);
 		},
 		{
 			manual: true,
-			onSuccess: () => {
-				message.success('创建服务端容器成功');
+			onSuccess: (_, params) => {
+				if (params[0]) {
+					modal.success({
+						title: '创建服务端容器成功',
+						content: (
+							<>
+								<p>
+									<a href={`/api/v1/pprof/debug/pprof/?id=${props.robotId}`}>查看pprof首页</a>
+								</p>
+								<p>
+									<a href={`/api/v1/pprof/debug/pprof/heap?id=${props.robotId}`}>查看堆内存信息</a>
+								</p>
+								<p>
+									<a href={`/api/v1/pprof/debug/pprof/allocs?id=${props.robotId}`}>查看内存分配信息</a>
+								</p>
+							</>
+						),
+					});
+				} else {
+					message.success('创建服务端容器成功');
+				}
 				props.onRefresh();
 			},
 			onError: reason => {
@@ -240,7 +262,31 @@ const RecreateRobotContainer = (props: IProps) => {
 					okText: '创建',
 					cancelText: '取消',
 					onOk: async () => {
-						await createServerContainer();
+						await createServerContainer(false);
+					},
+				});
+			},
+		},
+		{
+			label: '创建服务端容器 (启用pprof)',
+			key: 'create-server-pprof',
+			icon: <PlaySquareOutlined style={{ color: token.colorPrimary }} />,
+			onClick: () => {
+				if (createServerLoading) {
+					message.warning('正在创建容器，请稍后再试');
+					return;
+				}
+				modal.confirm({
+					title: '创建机器人服务端容器',
+					content: (
+						<>
+							确定要创建这个机器人的<b>服务端容器</b>吗？
+						</>
+					),
+					okText: '创建',
+					cancelText: '取消',
+					onOk: async () => {
+						await createServerContainer(true);
 					},
 				});
 			},
