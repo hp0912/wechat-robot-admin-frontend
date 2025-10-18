@@ -1,5 +1,5 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Space, Switch } from 'antd';
+import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
+import { Button, Space, Switch, Tooltip } from 'antd';
 import React from 'react';
 import type { MCPServer } from '@/api/wechat-robot/wechat-robot';
 
@@ -8,30 +8,39 @@ interface IProps {
 }
 const MCPServerActions = (props: IProps) => {
 	return (
-		<Space>
+		<Space size={16}>
 			{props.mcpServer?.is_built_in ? null : (
-				<Button
-					color="danger"
-					variant="solid"
-					size="small"
-					icon={<DeleteOutlined />}
-				>
-					删除
-				</Button>
+				<Tooltip title="删除">
+					<Button
+						type="primary"
+						danger
+						ghost
+						size="small"
+						icon={<DeleteOutlined />}
+					/>
+				</Tooltip>
 			)}
+			<Tooltip title="编辑">
+				<Button
+					type="primary"
+					ghost
+					size="small"
+					icon={<EditOutlined />}
+				/>
+			</Tooltip>
+			<Tooltip title="查看所有工具">
+				<Button
+					type="primary"
+					ghost
+					size="small"
+					icon={<EyeOutlined />}
+				/>
+			</Tooltip>
 			<Switch
 				checkedChildren="启用"
 				unCheckedChildren="禁用"
 				checked={props.mcpServer?.enabled}
 			/>
-			<Button
-				color="primary"
-				variant="solid"
-				size="small"
-				icon={<EditOutlined />}
-			>
-				编辑
-			</Button>
 		</Space>
 	);
 };

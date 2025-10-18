@@ -148,13 +148,13 @@ const RecreateRobotContainer = (props: IProps) => {
 						content: (
 							<>
 								<p>
-									<a href={`/api/v1/pprof/debug/pprof/?id=${props.robotId}`}>查看pprof首页</a>
+									<a href={`/api/v1/pprof/debug/pprof/?id=${props.robotId}&v=${Date.now()}`}>查看pprof首页</a>
 								</p>
 								<p>
-									<a href={`/api/v1/pprof/debug/pprof/heap?id=${props.robotId}`}>查看堆内存信息</a>
+									<a href={`/api/v1/pprof/debug/pprof/heap?id=${props.robotId}&v=${Date.now()}`}>查看堆内存信息</a>
 								</p>
 								<p>
-									<a href={`/api/v1/pprof/debug/pprof/allocs?id=${props.robotId}`}>查看内存分配信息</a>
+									<a href={`/api/v1/pprof/debug/pprof/allocs?id=${props.robotId}&v=${Date.now()}`}>查看内存分配信息</a>
 								</p>
 							</>
 						),
