@@ -42,6 +42,13 @@ const MCPServers = (props: IProps) => {
 		setMCPServerState({ open: false, id: undefined });
 	});
 
+	const isOnline = (mcpServer: MCPServer) => {
+		if (!mcpServer.enabled) {
+			return false;
+		}
+		return !mcpServer.last_error;
+	};
+
 	const getTransportText = (type: MCPServer['transport']) => {
 		switch (type) {
 			case 'stdio':
@@ -107,6 +114,14 @@ const MCPServers = (props: IProps) => {
 									<List.Item.Meta
 										title={
 											<>
+												{isOnline(item) ? (
+													<Tag
+														color="#87d068"
+														style={{ marginRight: 8 }}
+													>
+														在线
+													</Tag>
+												) : null}
 												{item.is_built_in ? (
 													<Tag
 														color="#108ee9"
