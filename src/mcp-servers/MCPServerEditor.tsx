@@ -36,7 +36,7 @@ const JSONEditor = (props: { value?: string; onChange?: (value?: string) => void
 };
 
 const MCPServerEditor = (props: IProps) => {
-	const { message, modal } = App.useApp();
+	const { message } = App.useApp();
 
 	const [form] = Form.useForm<MCPServer>();
 
@@ -119,10 +119,7 @@ const MCPServerEditor = (props: IProps) => {
 		{
 			manual: true,
 			onSuccess: () => {
-				modal.success({
-					title: '保存成功',
-					content: 'MCP 服务器需要重新启用(禁用 -> 启用)才能生效。',
-				});
+				message.success('保存成功');
 				props.onRefresh();
 				props.onClose();
 			},
@@ -460,8 +457,8 @@ const MCPServerEditor = (props: IProps) => {
 												<InputNumber
 													style={{ width: '100%' }}
 													placeholder="请输入连接超时时间"
-													min={0.1}
-													precision={1}
+													min={1}
+													precision={0}
 													suffix="秒"
 												/>
 											</Form.Item>
@@ -472,8 +469,8 @@ const MCPServerEditor = (props: IProps) => {
 												<InputNumber
 													style={{ width: '100%' }}
 													placeholder="请输入读取超时时间"
-													min={0.1}
-													precision={1}
+													min={1}
+													precision={0}
 													suffix="秒"
 												/>
 											</Form.Item>
@@ -484,8 +481,8 @@ const MCPServerEditor = (props: IProps) => {
 												<InputNumber
 													style={{ width: '100%' }}
 													placeholder="请输入写入超时时间"
-													min={0.1}
-													precision={1}
+													min={1}
+													precision={0}
 													suffix="秒"
 												/>
 											</Form.Item>
@@ -508,8 +505,8 @@ const MCPServerEditor = (props: IProps) => {
 												<InputNumber
 													style={{ width: '100%' }}
 													placeholder="请输入重试时间间隔"
-													min={0.1}
-													precision={1}
+													min={1}
+													precision={0}
 													suffix="秒"
 												/>
 											</Form.Item>
@@ -532,7 +529,7 @@ const MCPServerEditor = (props: IProps) => {
 													style={{ width: '100%' }}
 													placeholder="请输入心跳检测间隔"
 													min={1}
-													precision={1}
+													precision={0}
 													suffix="秒"
 												/>
 											</Form.Item>
