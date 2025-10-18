@@ -19,7 +19,7 @@ const MCPServers = (props: IProps) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const containerSize = useSize(containerRef);
 
-	const { data, loading } = useRequest(
+	const { data, loading, refresh } = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.api.v1McpServerListList({
 				id: props.robotId,
@@ -33,6 +33,10 @@ const MCPServers = (props: IProps) => {
 			},
 		},
 	);
+
+	const onEdit = useMemoizedFn((id: number) => {
+		setMCPServerState({ open: true, id });
+	});
 
 	const onMCPServerEditorClose = useMemoizedFn(() => {
 		setMCPServerState({ open: false, id: undefined });
@@ -122,7 +126,12 @@ const MCPServers = (props: IProps) => {
 										description={item.description}
 									/>
 									<div>
-										<MCPServerActions mcpServer={item} />
+										<MCPServerActions
+											robotId={props.robotId}
+											mcpServer={item}
+											onRefresh={refresh}
+											onEdit={onEdit}
+										/>
 									</div>
 								</List.Item>
 							)}
@@ -132,7 +141,9 @@ const MCPServers = (props: IProps) => {
 				{mcpServerState.open && (
 					<MCPServerEditor
 						open={mcpServerState.open}
+						robotId={props.robotId}
 						id={mcpServerState.id}
+						onRefresh={refresh}
 						onClose={onMCPServerEditorClose}
 					/>
 				)}

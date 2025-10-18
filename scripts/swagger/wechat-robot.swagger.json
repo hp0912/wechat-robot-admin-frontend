@@ -7384,13 +7384,22 @@
 		},
 		"/api/v1/mcp-server": {
 			"get": {
-				"summary": "获取 MCP 服务器",
+				"summary": "获取MCP服务器信息",
 				"deprecated": false,
 				"description": "",
 				"tags": [],
 				"parameters": [
 					{
 						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "mcp_server_id",
 						"in": "query",
 						"description": "",
 						"required": true,
