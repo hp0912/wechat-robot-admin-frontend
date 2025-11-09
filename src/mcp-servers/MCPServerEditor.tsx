@@ -252,18 +252,17 @@ const MCPServerEditor = (props: IProps) => {
 						name="transport"
 						label="类型"
 						rules={[{ required: true, message: '请选择MCP服务器类型' }]}
-						initialValue="http"
+						initialValue="stdio"
 					>
 						<Select
 							style={{ width: '100%' }}
 							placeholder="请选择类型"
 							showSearch
+							disabled={!!props.id}
 							filterOption={filterOption}
 							options={[
 								{ label: '命令行模式（标准输入输出）', value: 'stdio', text: '命令行模式（标准输入输出） stdio' },
-								{ label: 'Server-Sent Events模式', value: 'sse', text: 'Server-Sent Events模式 sse' },
-								{ label: 'HTTP模式', value: 'http', text: 'HTTP模式' },
-								{ label: 'WebSocket模式', value: 'ws', text: 'WebSocket模式' },
+								{ label: '流模式', value: 'stream', text: '流模式 stream' },
 							]}
 						/>
 					</Form.Item>
@@ -328,9 +327,7 @@ const MCPServerEditor = (props: IProps) => {
 											</Form.Item>
 										</>
 									);
-								case 'sse':
-								case 'http':
-								case 'ws':
+								case 'stream':
 									return (
 										<>
 											<Form.Item

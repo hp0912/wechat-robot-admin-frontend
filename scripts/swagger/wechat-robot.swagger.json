@@ -8741,7 +8741,7 @@
 					},
 					"transport": {
 						"type": "string",
-						"enum": ["stdio", "sse", "http", "ws"]
+						"enum": ["stdio", "stream"]
 					},
 					"enabled": {
 						"type": "boolean"

@@ -86,7 +86,7 @@ const MCPServerActions = (props: IProps) => {
 	);
 
 	return (
-		<Space size={16}>
+		<Space size={8}>
 			{props.mcpServer?.is_built_in ? null : (
 				<Tooltip title="删除">
 					<Button

@@ -53,12 +53,8 @@ const MCPServers = (props: IProps) => {
 		switch (type) {
 			case 'stdio':
 				return '命令行模式（标准输入输出）';
-			case 'sse':
-				return 'Server-Sent Events 模式';
-			case 'http':
-				return 'HTTP 模式';
-			case 'ws':
-				return 'WebSocket 模式';
+			case 'stream':
+				return '流模式';
 			default:
 				return type;
 		}
