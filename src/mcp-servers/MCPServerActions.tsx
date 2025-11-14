@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, EyeOutlined, LoadingOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { App, Button, Space, Switch, Tooltip } from 'antd';
 import React from 'react';
@@ -85,6 +85,43 @@ const MCPServerActions = (props: IProps) => {
 		},
 	);
 
+	const { runAsync: viewTools, loading: viewLoading } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1McpServerToolsList({
+				id: props.robotId,
+				mcp_server_id: props.mcpServer.id!,
+			});
+			return resp.data?.data;
+		},
+		{
+			manual: true,
+			onSuccess: resp => {
+				modal.info({
+					title: 'MCP 服务器工具列表',
+					width: 600,
+					content: (
+						<div>
+							{resp.length === 0 ? (
+								<p>该 MCP 服务器没有可用的工具</p>
+							) : (
+								<ul style={{ padding: 0 }}>
+									{resp.map(item => (
+										<li key={item.name}>
+											<strong>{item.title || item.name}</strong> - {item.description}
+										</li>
+									))}
+								</ul>
+							)}
+						</div>
+					),
+				});
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
 	return (
 		<Space size={8}>
 			{props.mcpServer?.is_built_in ? null : (
@@ -94,7 +131,8 @@ const MCPServerActions = (props: IProps) => {
 						danger
 						ghost
 						size="small"
-						icon={removeLoading ? <LoadingOutlined /> : <DeleteOutlined />}
+						loading={removeLoading}
+						icon={<DeleteOutlined />}
 						onClick={() => {
 							modal.confirm({
 								title: '确认删除该 MCP 服务器吗？',
@@ -121,9 +159,11 @@ const MCPServerActions = (props: IProps) => {
 				<Button
 					type="primary"
 					ghost
+					loading={viewLoading}
 					size="small"
 					icon={<EyeOutlined />}
 					disabled={!props.mcpServer?.enabled}
+					onClick={viewTools}
 				/>
 			</Tooltip>
 			<Switch

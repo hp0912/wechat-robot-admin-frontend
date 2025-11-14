@@ -7729,6 +7729,75 @@
 				"security": []
 			}
 		},
+		"/api/v1/mcp-server/tools": {
+			"get": {
+				"summary": "获取MCP服务工具列表",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "mcp_server_id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"name": {
+														"type": "string"
+													},
+													"title": {
+														"type": "string"
+													},
+													"description": {
+														"type": "string"
+													}
+												},
+												"required": ["name"]
+											}
+										}
+									},
+									"required": ["code", "message", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
 		"/api/v1/message/timbre": {
 			"get": {
 				"summary": "获取音色列表",

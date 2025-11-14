@@ -1,7 +1,7 @@
 import Editor from '@monaco-editor/react';
 import { useRequest } from 'ahooks';
 import { App, Button, Col, Drawer, Form, Input, InputNumber, Row, Select, Spin, Switch } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import type { MCPServer } from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 import type { AnyType } from '@/common/types';
@@ -40,6 +40,8 @@ const MCPServerEditor = (props: IProps) => {
 
 	const [form] = Form.useForm<MCPServer>();
 
+	const [formDisabled, setFormDisabled] = useState(false);
+
 	const respFormat = (field: string, resp: Record<string, AnyType>) => {
 		if (field in resp && resp[field]) {
 			try {
@@ -75,6 +77,9 @@ const MCPServerEditor = (props: IProps) => {
 			ready: !!props.id,
 			onSuccess: data => {
 				['env', 'headers'].forEach(field => respFormat(field, data));
+				if (data.is_built_in) {
+					setFormDisabled(true);
+				}
 				form.setFieldsValue(data);
 			},
 			onError: reason => {
@@ -141,7 +146,12 @@ const MCPServerEditor = (props: IProps) => {
 
 	return (
 		<Drawer
-			title={<span>{props.id ? '编辑' : '添加'} MCP 服务器</span>}
+			title={
+				<span>
+					{props.id ? '编辑' : '添加'} MCP 服务
+					<span style={{ color: 'red', marginLeft: 8, fontSize: 12 }}>(官方 MCP 服务不支持编辑)</span>
+				</span>
+			}
 			open={props.open}
 			onClose={props.onClose}
 			width={900}
@@ -170,6 +180,7 @@ const MCPServerEditor = (props: IProps) => {
 							block
 							style={{ borderRadius: 0 }}
 							loading={createLoading || updateLoading}
+							disabled={formDisabled}
 							onClick={onOk}
 						>
 							确认
@@ -185,6 +196,7 @@ const MCPServerEditor = (props: IProps) => {
 					wrapperCol={{ flex: '1 1 auto' }}
 					autoComplete="off"
 					labelWrap
+					disabled={formDisabled}
 				>
 					<Form.Item
 						name="id"
