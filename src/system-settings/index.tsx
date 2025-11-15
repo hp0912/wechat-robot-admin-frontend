@@ -111,6 +111,9 @@ const SystemSettings = (props: IProps) => {
 			manual: false,
 			onSuccess: data => {
 				if (data?.id) {
+					if (data.webhook_headers) {
+						data.webhook_headers = JSON.stringify(data.webhook_headers, null, 2) as unknown as object;
+					}
 					form.setFieldsValue(data);
 				}
 				setApiToken(data?.api_token || '');
@@ -168,6 +171,16 @@ const SystemSettings = (props: IProps) => {
 
 	const onOk = async () => {
 		const values = await form.validateFields();
+		const webhookHeaders = values.webhook_headers as unknown as string;
+		if (webhookHeaders?.trim()) {
+			try {
+				values.webhook_headers = JSON.parse(webhookHeaders);
+			} catch {
+				values.webhook_headers = {};
+			}
+		} else {
+			values.webhook_headers = {};
+		}
 		onSave(values);
 	};
 
