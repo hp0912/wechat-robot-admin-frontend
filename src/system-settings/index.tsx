@@ -1,4 +1,5 @@
 import { LoadingOutlined, RedoOutlined } from '@ant-design/icons';
+import Editor from '@monaco-editor/react';
 import { useRequest } from 'ahooks';
 import { Alert, App, Button, Form, Input, InputNumber, Popconfirm, Select, Spin, Switch, Tooltip } from 'antd';
 import React, { useState } from 'react';
@@ -10,6 +11,87 @@ interface IProps {
 }
 
 type IFormValues = Api.V1SystemSettingsCreate.RequestBody;
+
+const JSONEditor = (props: { value?: string; onChange?: (value?: string) => void }) => {
+	return (
+		<div
+			style={{
+				border: '1px solid #d9d9d9',
+				borderRadius: 6,
+				padding: '8px 2px',
+			}}
+		>
+			<Editor
+				width="100%"
+				height="250px"
+				language="json"
+				options={{
+					minimap: { enabled: false },
+					scrollBeyondLastLine: false,
+				}}
+				value={props.value}
+				onChange={props.onChange}
+				onMount={(editor, monaco) => {
+					const model = editor.getModel();
+					if (model) {
+						monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+							validate: true,
+							schemas: [
+								{
+									uri: 'http://myserver/webhook-headers-schema.json',
+									fileMatch: [model.uri.toString()],
+									schema: {
+										type: 'object',
+										description: 'HTTP 请求头配置',
+										properties: {
+											'Content-Type': {
+												type: 'string',
+												description: '内容类型',
+												enum: [
+													'application/json',
+													'application/x-www-form-urlencoded',
+													'multipart/form-data',
+													'text/plain',
+													'text/html',
+												],
+												default: 'application/json',
+											},
+											Authorization: {
+												type: 'string',
+												description: '授权信息，如: Bearer token 或 Basic base64',
+											},
+											'User-Agent': {
+												type: 'string',
+												description: '用户代理',
+											},
+											Accept: {
+												type: 'string',
+												description: '可接受的响应内容类型',
+												default: 'application/json',
+											},
+											'X-API-Key': {
+												type: 'string',
+												description: 'API 密钥',
+											},
+											'X-Custom-Header': {
+												type: 'string',
+												description: '自定义请求头',
+											},
+										},
+										additionalProperties: {
+											type: 'string',
+											description: '其他自定义请求头',
+										},
+									},
+								},
+							],
+						});
+					}
+				}}
+			/>
+		</div>
+	);
+};
 
 const SystemSettings = (props: IProps) => {
 	const { message } = App.useApp();
@@ -105,6 +187,24 @@ const SystemSettings = (props: IProps) => {
 						<Input />
 					</Form.Item>
 					<Form.Item
+						name="webhook_url"
+						label="Webhook 地址"
+					>
+						<Input
+							pattern="请输入 Webhook 地址"
+							addonBefore={<b style={{ color: '#EF6820' }}>POST</b>}
+							allowClear
+						/>
+					</Form.Item>
+					<Form.Item
+						style={{ flexWrap: 'nowrap' }}
+						name="webhook_headers"
+						label="Webhook 请求头"
+						initialValue={'{\n    \n}'}
+					>
+						<JSONEditor />
+					</Form.Item>
+					<Form.Item
 						name="api_token_enabled"
 						label="Api密钥调用接口"
 						valuePropName="checked"
@@ -118,7 +218,7 @@ const SystemSettings = (props: IProps) => {
 					<Form.Item
 						label="Api密钥"
 						hidden={!apiToken}
-						tooltip="Api密钥用于调用接口，刷新后以前的Api密钥将失效，支持Authorization Header、X-API-Token Header、api_token Query参数三种方式调用接口"
+						tooltip="Api密钥用于调用接口，刷新后以前的Api密钥将失效，支持Authorization Header、X-API-Token Header、api_token Query参数三种方式调用接口 (界面上所有需要登录态的接口均可使用Api密钥调用)"
 					>
 						<Input
 							value={apiToken}

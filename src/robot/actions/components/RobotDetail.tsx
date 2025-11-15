@@ -7,6 +7,7 @@ import React, { Suspense, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import Contact from '@/contact';
 import { GlobalContext } from '@/context/global';
+import MCPFilled from '@/icons/MCPFilled';
 import MomentsFilled from '@/icons/MomentsFilled';
 import OSSFilled from '@/icons/OSSFilled';
 import GlobalSettings from '@/settings';
@@ -26,6 +27,7 @@ interface IProps {
 const ContainerLog = React.lazy(() => import(/* webpackChunkName: "container-log" */ '@/container-log'));
 const Moments = React.lazy(() => import(/* webpackChunkName: "moments" */ '@/moments'));
 const SystemSettings = React.lazy(() => import(/* webpackChunkName: "system-settings" */ '@/system-settings'));
+const MCPServers = React.lazy(() => import(/* webpackChunkName: "mcp-servers" */ '@/mcp-servers'));
 const OSSSettings = React.lazy(() => import(/* webpackChunkName: "oss-settings" */ '@/oss-settings'));
 const SystemOverview = React.lazy(() => import(/* webpackChunkName: "system-overview" */ '@/system-overview'));
 
@@ -136,6 +138,16 @@ const RobotDetail = (props: IProps) => {
 			children: (
 				<Suspense fallback={<Spin />}>
 					<SystemSettings robotId={props.robotId} />
+				</Suspense>
+			),
+		},
+		{
+			key: 'mcp-servers',
+			icon: <MCPFilled />,
+			label: 'MCP服务',
+			children: (
+				<Suspense fallback={<Spin />}>
+					<MCPServers robotId={props.robotId} />
 				</Suspense>
 			),
 		},

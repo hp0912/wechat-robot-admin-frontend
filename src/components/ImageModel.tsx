@@ -57,7 +57,7 @@ const ImageModel = (props: IProps) => {
 					form.setFieldsValue({
 						image_ai_settings: JSON.stringify(
 							{
-								base_url: 'http://jimeng-free-api:9000',
+								base_url: 'http://jimeng-api:9000',
 								sessionid: [''],
 								model: 'jimeng-4.0',
 								width: 2560,
