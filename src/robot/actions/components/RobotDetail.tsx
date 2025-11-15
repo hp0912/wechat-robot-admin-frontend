@@ -144,7 +144,7 @@ const RobotDetail = (props: IProps) => {
 		{
 			key: 'mcp-servers',
 			icon: <MCPFilled />,
-			label: 'MCP服务器',
+			label: 'MCP服务',
 			children: (
 				<Suspense fallback={<Spin />}>
 					<MCPServers robotId={props.robotId} />

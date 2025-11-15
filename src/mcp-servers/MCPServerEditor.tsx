@@ -208,12 +208,12 @@ const MCPServerEditor = (props: IProps) => {
 						name="name"
 						label="名称"
 						rules={[
-							{ required: true, message: '请输入MCP服务器名称' },
-							{ max: 100, message: 'MCP服务器名称不能超过100个字符' },
+							{ required: true, message: '请输入 MCP 服务名称' },
+							{ max: 100, message: 'MCP 服务名称不能超过100个字符' },
 						]}
 					>
 						<Input
-							placeholder="请输入MCP服务器名称"
+							placeholder="请输入 MCP 服务名称"
 							allowClear
 						/>
 					</Form.Item>
@@ -221,24 +221,24 @@ const MCPServerEditor = (props: IProps) => {
 						name="description"
 						label="描述"
 						rules={[
-							{ required: true, message: '请输入MCP服务器描述' },
-							{ max: 500, message: 'MCP服务器描述不能超过500个字符' },
+							{ required: true, message: '请输入 MCP 服务描述' },
+							{ max: 500, message: 'MCP 服务描述不能超过500个字符' },
 						]}
 					>
 						<Input.TextArea
 							rows={3}
-							placeholder="请输入MCP服务器描述"
+							placeholder="请输入 MCP 服务描述"
 							allowClear
 						/>
 					</Form.Item>
 					<Form.Item
 						name="priority"
 						label="优先级"
-						rules={[{ required: true, message: '请输入MCP服务器优先级' }]}
+						rules={[{ required: true, message: '请输入 MCP 服务优先级' }]}
 						tooltip="数字越大优先级越高"
 					>
 						<InputNumber
-							placeholder="请输入MCP服务器优先级"
+							placeholder="请输入 MCP 服务优先级"
 							style={{ width: '100%' }}
 							min={0}
 							max={100}
@@ -263,7 +263,7 @@ const MCPServerEditor = (props: IProps) => {
 					<Form.Item
 						name="transport"
 						label="类型"
-						rules={[{ required: true, message: '请选择MCP服务器类型' }]}
+						rules={[{ required: true, message: '请选择 MCP 服务类型' }]}
 						initialValue="stdio"
 					>
 						<Select
@@ -358,7 +358,7 @@ const MCPServerEditor = (props: IProps) => {
 											<Form.Item
 												name="auth_type"
 												label="认证方式"
-												rules={[{ required: true, message: '请选择MCP服务器认证方式' }]}
+												rules={[{ required: true, message: '请选择 MCP 服务认证方式' }]}
 												initialValue="none"
 											>
 												<Select
@@ -394,12 +394,12 @@ const MCPServerEditor = (props: IProps) => {
 																	name="auth_token"
 																	label="认证密钥"
 																	rules={[
-																		{ required: true, message: '请输入MCP服务器认证密钥' },
-																		{ max: 500, message: 'MCP服务器认证密钥不能超过500个字符' },
+																		{ required: true, message: '请输入 MCP 服务认证密钥' },
+																		{ max: 500, message: 'MCP 服务认证密钥不能超过500个字符' },
 																	]}
 																>
 																	<Input
-																		placeholder="请输入MCP服务器认证密钥"
+																		placeholder="请输入 MCP 服务认证密钥"
 																		allowClear
 																	/>
 																</Form.Item>
@@ -411,12 +411,12 @@ const MCPServerEditor = (props: IProps) => {
 																		name="auth_username"
 																		label="认证用户名"
 																		rules={[
-																			{ required: true, message: '请输入MCP服务器认证用户名' },
-																			{ max: 100, message: 'MCP服务器认证用户名不能超过100个字符' },
+																			{ required: true, message: '请输入 MCP 服务认证用户名' },
+																			{ max: 100, message: 'MCP 服务认证用户名不能超过100个字符' },
 																		]}
 																	>
 																		<Input
-																			placeholder="请输入MCP服务器认证用户名"
+																			placeholder="请输入 MCP 服务认证用户名"
 																			allowClear
 																		/>
 																	</Form.Item>
@@ -424,12 +424,12 @@ const MCPServerEditor = (props: IProps) => {
 																		name="auth_password"
 																		label="认证密码"
 																		rules={[
-																			{ required: true, message: '请输入MCP服务器认证密码' },
-																			{ max: 255, message: 'MCP服务器认证密码不能超过255个字符' },
+																			{ required: true, message: '请输入 MCP 服务认证密码' },
+																			{ max: 255, message: 'MCP 服务认证密码不能超过255个字符' },
 																		]}
 																	>
 																		<Input
-																			placeholder="请输入MCP服务器认证密码"
+																			placeholder="请输入 MCP 服务认证密码"
 																			allowClear
 																		/>
 																	</Form.Item>

@@ -88,7 +88,7 @@ const MCPServers = (props: IProps) => {
 						setMCPServerState({ open: true, id: undefined });
 					}}
 				>
-					添加MCP服务器
+					添加 MCP 服务
 				</Button>
 			</div>
 			<div
