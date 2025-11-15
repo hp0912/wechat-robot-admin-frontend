@@ -149,7 +149,7 @@ const MCPServerEditor = (props: IProps) => {
 			title={
 				<span>
 					{props.id ? '编辑' : '添加'} MCP 服务
-					<span style={{ color: 'red', marginLeft: 8, fontSize: 12 }}>(官方 MCP 服务不支持编辑)</span>
+					{formDisabled && <span style={{ color: 'red', marginLeft: 8, fontSize: 12 }}>(官方 MCP 服务不支持编辑)</span>}
 				</span>
 			}
 			open={props.open}

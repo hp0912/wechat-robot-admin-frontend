@@ -6487,6 +6487,13 @@
 													"type": "number",
 													"description": "ID 编号"
 												},
+												"webhook_url": {
+													"type": "string"
+												},
+												"webhook_headers": {
+													"type": "object",
+													"properties": {}
+												},
 												"api_token_enabled": {
 													"type": "boolean"
 												},
@@ -6565,6 +6572,13 @@
 									},
 									"system_settings_id": {
 										"type": "number"
+									},
+									"webhook_url": {
+										"type": "string"
+									},
+									"webhook_headers": {
+										"type": "object",
+										"properties": {}
 									},
 									"api_token_enabled": {
 										"type": "boolean"
