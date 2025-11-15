@@ -28,6 +28,10 @@ const JSONEditor = (props: { value?: string; onChange?: (value?: string) => void
 				options={{
 					minimap: { enabled: false },
 					scrollBeyondLastLine: false,
+					tabSize: 2,
+					insertSpaces: true,
+					fixedOverflowWidgets: true,
+					scrollbar: { alwaysConsumeMouseWheel: false },
 				}}
 				value={props.value}
 				onChange={props.onChange}
