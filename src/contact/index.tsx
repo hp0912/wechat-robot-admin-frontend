@@ -286,11 +286,13 @@ const Contact = (props: IProps) => {
 									}
 									title={
 										<>
-											<span>
-												{item.wechat_id === props.robot.wechat_id
-													? props.robot.nickname
-													: item.remark || item.nickname || item.alias || item.wechat_id}
-											</span>
+											<Tooltip title={item.wechat_id}>
+												<span>
+													{item.wechat_id === props.robot.wechat_id
+														? props.robot.nickname
+														: item.remark || item.nickname || item.alias || item.wechat_id}
+												</span>
+											</Tooltip>
 											{item.type === 'friend' ? (
 												<>
 													{item.wechat_id === props.robot.wechat_id ? (
