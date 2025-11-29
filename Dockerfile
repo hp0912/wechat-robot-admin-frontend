@@ -7,6 +7,7 @@ RUN npm install -g pnpm@8.15.9
 
 ADD ./package.json /app/package.json
 ADD ./pnpm-lock.yaml /app/pnpm-lock.yaml
+ADD ./.npmrc /app/.npmrc
 
 RUN pnpm install --frozen-lockfile
 
