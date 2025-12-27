@@ -62,7 +62,7 @@ const NewRobot = (props: IProps) => {
 					label="机器人编码"
 					rules={[
 						{ required: true, message: '机器人编码不能为空' },
-						{ min: 5, message: '机器人编码至少输入5个字符' },
+						{ min: 10, message: '机器人编码至少输入10个字符' },
 						{ max: 64, message: '机器人编码不能超过64个字符' },
 						{ pattern: /^[a-zA-Z][a-zA-Z0-9_]+$/, message: '机器人编码必须以字母开头，且只能是字母、数字或下划线' },
 					]}
