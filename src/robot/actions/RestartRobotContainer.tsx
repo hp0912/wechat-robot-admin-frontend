@@ -8,7 +8,7 @@ import {
 	PlayCircleFilled,
 } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { App, Button, Dropdown, Upload } from 'antd';
+import { App, Button, Dropdown, Space, Upload } from 'antd';
 import type { MenuProps } from 'antd';
 import type { RcFile } from 'antd/es/upload/interface';
 import React, { useEffect, useRef } from 'react';
@@ -322,28 +322,25 @@ const RestartRobotContainer = (props: IProps) => {
 	];
 
 	return (
-		<Dropdown.Button
-			type="primary"
-			menu={{ items }}
-			buttonsRender={() => {
-				return [
-					<Button
-						key="left"
-						type="primary"
-						loading={loading}
-						icon={<InteractionFilled />}
-						onClick={runAsync}
-					>
-						刷新状态
-					</Button>,
-					<Button
-						key="right"
-						type="primary"
-						icon={<DownOutlined />}
-					/>,
-				];
-			}}
-		/>
+		<Space.Compact>
+			<Button
+				type="primary"
+				loading={loading}
+				icon={<InteractionFilled />}
+				onClick={runAsync}
+			>
+				刷新状态
+			</Button>
+			<Dropdown
+				menu={{ items }}
+				placement="bottomRight"
+			>
+				<Button
+					type="primary"
+					icon={<DownOutlined />}
+				/>
+			</Dropdown>
+		</Space.Compact>
 	);
 };
 

@@ -497,7 +497,7 @@ const SpecifiContactMomentDetail = (props: IProps) => {
 															)}
 														</Space>
 														<div style={{ marginRight: 8 }}>
-															<Dropdown.Button
+															<Dropdown
 																menu={{
 																	items,
 																	onClick: async ev => {
@@ -520,24 +520,17 @@ const SpecifiContactMomentDetail = (props: IProps) => {
 																		}
 																	},
 																}}
-																buttonsRender={() => {
-																	return [
-																		null,
-																		items.length === 0 ? null : (
-																			<Button
-																				key="right"
-																				type="primary"
-																				size="small"
-																				ghost
-																				icon={<EllipsisOutlined />}
-																			/>
-																		),
-																	];
-																}}
-																onClick={() => {
-																	//
-																}}
-															/>
+															>
+																{items.length > 0 ? (
+																	<Button
+																		key="right"
+																		type="primary"
+																		size="small"
+																		ghost
+																		icon={<EllipsisOutlined />}
+																	/>
+																) : null}
+															</Dropdown>
 														</div>
 													</Flex>
 													{/* 只有点赞数据 */}

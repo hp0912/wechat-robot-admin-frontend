@@ -223,59 +223,58 @@ const GroupMember = (props: IProps) => {
 										}
 									/>
 									<div style={{ marginRight: 8 }}>
-										<Dropdown.Button
-											menu={{
-												items: [
-													{ label: '添加为好友', key: 'add-friend' },
-													{ label: '朋友圈', key: 'moments' },
-												],
-												onClick: ev => {
-													switch (ev.key) {
-														case 'add-friend':
-															setAddFriendState({
-																open: true,
-																chatRoomMemberId: item.id,
-																chatRoomMemberName: item.remark || item.nickname || item.alias || item.wechat_id,
-															});
-															break;
-														case 'moments':
-															setMomentState({
-																open: true,
-																contactAvatar: item.avatar,
-																contactId: item.wechat_id,
-																contactName: item.remark || item.nickname || item.alias || item.wechat_id,
-															});
-															break;
-													}
-												},
-											}}
-											buttonsRender={() => {
-												return [
-													<Button
-														key="left"
-														type="primary"
-														ghost
-														disabled={item.is_leaved}
-														onClick={() => {
-															setMemberRemoveState({
-																open: true,
-																chatRoomMemberId: item.wechat_id,
-																chatRoomMemberName: item.remark || item.nickname || item.alias || item.wechat_id,
-															});
-														}}
-													>
-														移除群成员
-													</Button>,
-													<Button
-														key="right"
-														type="primary"
-														ghost
-														disabled={item.is_leaved}
-														icon={<DownOutlined />}
-													/>,
-												];
-											}}
-										/>
+										<Space.Compact>
+											<Button
+												key="left"
+												type="primary"
+												ghost
+												disabled={item.is_leaved}
+												onClick={() => {
+													setMemberRemoveState({
+														open: true,
+														chatRoomMemberId: item.wechat_id,
+														chatRoomMemberName: item.remark || item.nickname || item.alias || item.wechat_id,
+													});
+												}}
+											>
+												移除群成员
+											</Button>
+											<Dropdown
+												menu={{
+													items: [
+														{ label: '添加为好友', key: 'add-friend' },
+														{ label: '朋友圈', key: 'moments' },
+													],
+													onClick: ev => {
+														switch (ev.key) {
+															case 'add-friend':
+																setAddFriendState({
+																	open: true,
+																	chatRoomMemberId: item.id,
+																	chatRoomMemberName: item.remark || item.nickname || item.alias || item.wechat_id,
+																});
+																break;
+															case 'moments':
+																setMomentState({
+																	open: true,
+																	contactAvatar: item.avatar,
+																	contactId: item.wechat_id,
+																	contactName: item.remark || item.nickname || item.alias || item.wechat_id,
+																});
+																break;
+														}
+													},
+												}}
+											>
+												<Button
+													key="right"
+													type="primary"
+													ghost
+													disabled={item.is_leaved}
+													icon={<DownOutlined />}
+												/>
+											</Dropdown>
+										</Space.Compact>
 									</div>
 								</List.Item>
 							);

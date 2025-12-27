@@ -7,7 +7,7 @@ import {
 	PlaySquareOutlined,
 } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
-import { App, Button, Dropdown, Modal, theme } from 'antd';
+import { App, Button, Dropdown, Modal, Space, theme } from 'antd';
 import type { MenuProps } from 'antd';
 import React, { useContext } from 'react';
 import { GlobalContext } from '@/context/global';
@@ -354,40 +354,37 @@ const RecreateRobotContainer = (props: IProps) => {
 
 	return (
 		<div style={{ display: 'inline-block' }}>
-			<Dropdown.Button
-				type="primary"
-				menu={{ items }}
-				buttonsRender={() => {
-					return [
-						<Button
-							key="left"
-							type="primary"
-							loading={imagePullState.loading}
-							icon={<DockerOutlined />}
-							onClick={() => {
-								modal.confirm({
-									title: '更新机器人镜像',
-									content: (
-										<>
-											确定要更新这个机器人的<b>镜像</b>吗？
-										</>
-									),
-									okText: '更新',
-									cancelText: '取消',
-									onOk: pullDockerImages,
-								});
-							}}
-						>
-							更新镜像
-						</Button>,
-						<Button
-							key="right"
-							type="primary"
-							icon={<DownOutlined />}
-						/>,
-					];
-				}}
-			/>
+			<Space.Compact>
+				<Button
+					type="primary"
+					loading={imagePullState.loading}
+					icon={<DockerOutlined />}
+					onClick={() => {
+						modal.confirm({
+							title: '更新机器人镜像',
+							content: (
+								<>
+									确定要更新这个机器人的<b>镜像</b>吗？
+								</>
+							),
+							okText: '更新',
+							cancelText: '取消',
+							onOk: pullDockerImages,
+						});
+					}}
+				>
+					更新镜像
+				</Button>
+				<Dropdown
+					menu={{ items }}
+					placement="bottomRight"
+				>
+					<Button
+						type="primary"
+						icon={<DownOutlined />}
+					/>
+				</Dropdown>
+			</Space.Compact>
 			<Progress
 				open={imagePullState.open}
 				progress={imagePullState.progress}

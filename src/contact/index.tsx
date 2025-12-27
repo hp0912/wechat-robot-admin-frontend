@@ -1,4 +1,10 @@
-import { CloudSyncOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
+import {
+	CloudSyncOutlined,
+	EllipsisOutlined,
+	SearchOutlined,
+	SettingOutlined,
+	WechatOutlined,
+} from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import {
 	App,
@@ -334,14 +340,10 @@ const Contact = (props: IProps) => {
 										</>
 									}
 								/>
-								<Space
-									style={{ marginRight: 8 }}
-									size="small"
-								>
+								<Space.Compact style={{ marginRight: 3 }}>
 									{item.type === 'friend' || item.type === 'official_account' ? (
 										<Button
-											color="primary"
-											variant="outlined"
+											type="default"
 											icon={<SettingOutlined />}
 											onClick={() => {
 												setFriendSettingsState({ open: true, contact: item });
@@ -351,8 +353,7 @@ const Contact = (props: IProps) => {
 										</Button>
 									) : (
 										<Button
-											color="primary"
-											variant="outlined"
+											type="default"
 											icon={<SettingOutlined />}
 											onClick={() => {
 												setChatRoomSettingsState({ open: true, chatRoom: item });
@@ -361,7 +362,29 @@ const Contact = (props: IProps) => {
 											群聊设置
 										</Button>
 									)}
-									<Dropdown.Button
+									<Button
+										type="default"
+										icon={<WechatOutlined />}
+										onClick={() => {
+											if (item.type === 'friend') {
+												setChatHistoryState({
+													open: true,
+													contact: item,
+													title: `我与${item.remark || item.nickname || item.alias || item.wechat_id} 的聊天记录`,
+												});
+											} else {
+												setChatHistoryState({
+													open: true,
+													contact: item,
+													title: `${item.remark || item.nickname || item.alias || item.wechat_id} 的聊天记录`,
+												});
+											}
+										}}
+									>
+										聊天记录
+									</Button>
+									<Dropdown
+										placement="bottomRight"
 										menu={{
 											items,
 											onClick: ev => {
@@ -442,25 +465,13 @@ const Contact = (props: IProps) => {
 												}
 											},
 										}}
-										onClick={() => {
-											if (item.type === 'friend') {
-												setChatHistoryState({
-													open: true,
-													contact: item,
-													title: `我与${item.remark || item.nickname || item.alias || item.wechat_id} 的聊天记录`,
-												});
-											} else {
-												setChatHistoryState({
-													open: true,
-													contact: item,
-													title: `${item.remark || item.nickname || item.alias || item.wechat_id} 的聊天记录`,
-												});
-											}
-										}}
 									>
-										聊天记录
-									</Dropdown.Button>
-								</Space>
+										<Button
+											type="default"
+											icon={<EllipsisOutlined />}
+										/>
+									</Dropdown>
+								</Space.Compact>
 							</List.Item>
 						);
 					}}
