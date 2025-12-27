@@ -1,7 +1,21 @@
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { useBoolean, useMemoizedFn, useRequest, useSetState } from 'ahooks';
-import { App, Breadcrumb, Button, Col, Empty, Input, notification, Pagination, Radio, Row, Spin } from 'antd';
+import {
+	App,
+	Breadcrumb,
+	Button,
+	Col,
+	ConfigProvider,
+	Empty,
+	Input,
+	notification,
+	Pagination,
+	Radio,
+	Row,
+	Spin,
+} from 'antd';
 import { useEffect } from 'react';
+import { useStyle } from '@/hooks';
 import NewRobot from './NewRobot';
 import Robot from './Robot';
 
@@ -19,7 +33,7 @@ const RobotList = () => {
 			return;
 		}
 		api.info({
-			message: '使用过程中遇到问题？',
+			title: '使用过程中遇到问题？',
 			placement: 'bottomRight',
 			onClose: () => {
 				localStorage.setItem('robot-chat-room-closed', Date.now().toString());
@@ -59,7 +73,7 @@ const RobotList = () => {
 
 	const onSuccess = useMemoizedFn(() => {
 		api.success({
-			message: '创建成功',
+			title: '创建成功',
 			description: (
 				<>
 					<p>机器人创建成功，初始化机器人需要一些时间，请耐心等待。</p>
@@ -78,6 +92,8 @@ const RobotList = () => {
 		});
 	});
 
+	const { styles } = useStyle();
+
 	return (
 		<div>
 			<div className="nav">
@@ -89,13 +105,19 @@ const RobotList = () => {
 						},
 					]}
 				/>
-				<Button
-					type="primary"
-					icon={<PlusOutlined />}
-					onClick={setOnNewOpen.setTrue}
+				<ConfigProvider
+					button={{
+						className: styles.linearGradientButton,
+					}}
 				>
-					创建机器人
-				</Button>
+					<Button
+						type="primary"
+						icon={<PlusOutlined />}
+						onClick={setOnNewOpen.setTrue}
+					>
+						创建机器人
+					</Button>
+				</ConfigProvider>
 			</div>
 			<div className="filter">
 				<Row

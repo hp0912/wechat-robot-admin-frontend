@@ -1,7 +1,7 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { useRequest, useSetState } from 'ahooks';
 import { Alert, App, Avatar, Button, Col, Drawer, Input, Row, Space, Table, Tag, theme } from 'antd';
-import type { TableProps } from 'antd';
+import type { DrawerProps, TableProps } from 'antd';
 import React, { useContext } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
@@ -116,12 +116,18 @@ const ChatRoomCreateConfirm = (props: IProps) => {
 		},
 	];
 
+	let size: DrawerProps['size'] = 'large';
+	if (globalContext.global?.size.width) {
+		const { width } = globalContext.global.size;
+		size = globalContext.global.isSmallScreen ? width * 0.99 : 760;
+	}
+
 	return (
 		<Drawer
 			title="创建新的群聊"
 			open={props.open}
 			onClose={props.onClose}
-			width={globalContext.global?.isSmallScreen ? '99%' : '760px'}
+			size={size}
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { paddingTop: 16, paddingBottom: 0 } }}
 			extra={
 				<Space>
@@ -171,7 +177,7 @@ const ChatRoomCreateConfirm = (props: IProps) => {
 					<Alert
 						type="warning"
 						showIcon
-						message="温馨提示：无法进行跨页、跨搜索条件选择"
+						description="温馨提示：无法进行跨页、跨搜索条件选择"
 					/>
 				</Col>
 			</Row>

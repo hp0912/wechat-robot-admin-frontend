@@ -593,7 +593,7 @@ const Moments = (props: IProps) => {
 															)}
 														</Space>
 														<div style={{ marginRight: 8 }}>
-															<Dropdown.Button
+															<Dropdown
 																menu={{
 																	items,
 																	onClick: async ev => {
@@ -616,22 +616,15 @@ const Moments = (props: IProps) => {
 																		}
 																	},
 																}}
-																buttonsRender={() => {
-																	return [
-																		null,
-																		<Button
-																			key="right"
-																			type="primary"
-																			size="small"
-																			ghost
-																			icon={<EllipsisOutlined />}
-																		/>,
-																	];
-																}}
-																onClick={() => {
-																	//
-																}}
-															/>
+															>
+																<Button
+																	key="right"
+																	type="primary"
+																	size="small"
+																	ghost
+																	icon={<EllipsisOutlined />}
+																/>
+															</Dropdown>
 														</div>
 													</Flex>
 													{/* 只有点赞数据 */}

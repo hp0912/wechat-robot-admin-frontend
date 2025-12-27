@@ -1,7 +1,7 @@
 import { CloseCircleFilled, DeleteFilled, EllipsisOutlined, HeartFilled, HeartOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Dropdown, Empty, Flex, List, Row, Space, Spin, Tooltip } from 'antd';
-import type { MenuProps } from 'antd';
+import type { DrawerProps, MenuProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { useContext, useRef } from 'react';
 import type { Api, SnsObject } from '@/api/wechat-robot/wechat-robot';
@@ -358,6 +358,12 @@ const SpecifiContactMomentDetail = (props: IProps) => {
 		);
 	};
 
+	let size: DrawerProps['size'] = 'large';
+	if (globalContext.global?.size.width) {
+		const { width } = globalContext.global.size;
+		size = globalContext.global.isSmallScreen ? width * 0.99 : width * 0.8;
+	}
+
 	return (
 		<Drawer
 			title={
@@ -377,7 +383,7 @@ const SpecifiContactMomentDetail = (props: IProps) => {
 					</Col>
 				</Row>
 			}
-			width={globalContext.global?.isSmallScreen ? '100%' : '80%'}
+			size={size}
 			open={props.open}
 			onClose={props.onClose}
 			footer={null}
@@ -491,7 +497,7 @@ const SpecifiContactMomentDetail = (props: IProps) => {
 															)}
 														</Space>
 														<div style={{ marginRight: 8 }}>
-															<Dropdown.Button
+															<Dropdown
 																menu={{
 																	items,
 																	onClick: async ev => {
@@ -514,24 +520,17 @@ const SpecifiContactMomentDetail = (props: IProps) => {
 																		}
 																	},
 																}}
-																buttonsRender={() => {
-																	return [
-																		null,
-																		items.length === 0 ? null : (
-																			<Button
-																				key="right"
-																				type="primary"
-																				size="small"
-																				ghost
-																				icon={<EllipsisOutlined />}
-																			/>
-																		),
-																	];
-																}}
-																onClick={() => {
-																	//
-																}}
-															/>
+															>
+																{items.length > 0 ? (
+																	<Button
+																		key="right"
+																		type="primary"
+																		size="small"
+																		ghost
+																		icon={<EllipsisOutlined />}
+																	/>
+																) : null}
+															</Dropdown>
 														</div>
 													</Flex>
 													{/* 只有点赞数据 */}

@@ -59,8 +59,8 @@ const AppLayout: React.FC = () => {
 	const isSmallScreen = (bodySize?.width || 0) < 1280;
 
 	const globalState = useMemo<IGlobalContext>(() => {
-		return { global: { isSmallScreen } };
-	}, [isSmallScreen]);
+		return { global: { isSmallScreen, size: bodySize || { width: 0, height: 0 } } };
+	}, [isSmallScreen, bodySize?.width, bodySize?.height]);
 
 	// 获取用户详情
 	const { data: user, loading: userLoading } = useRequest(
@@ -117,7 +117,7 @@ const AppLayout: React.FC = () => {
 						<div className="icon" />
 						<div className="title">微信机器人管理后台</div>
 					</Logo>
-					<Space split={<Divider type="vertical" />}>
+					<Space separator={<Divider orientation="vertical" />}>
 						<GithubOutlined
 							className="github-icon"
 							onClick={() => {

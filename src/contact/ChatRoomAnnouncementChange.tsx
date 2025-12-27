@@ -59,7 +59,7 @@ const ChatRoomAnnouncementChange = (props: IProps) => {
 			<Alert
 				showIcon
 				type="warning"
-				message={
+				description={
 					<>
 						只有<b>群主</b>或者<b>群管理</b>才能发布群公告
 					</>

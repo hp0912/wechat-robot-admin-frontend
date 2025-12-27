@@ -16,6 +16,7 @@ import {
 	Spin,
 	Switch,
 } from 'antd';
+import type { DrawerProps } from 'antd';
 import React, { useContext } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import ImageModel from '@/components/ImageModel';
@@ -237,6 +238,12 @@ const ChatRoomSettings = (props: IProps) => {
 		}
 	};
 
+	let size: DrawerProps['size'] = 'large';
+	if (globalContext.global?.size.width) {
+		const { width } = globalContext.global.size;
+		size = globalContext.global.isSmallScreen ? width * 0.99 : 900;
+	}
+
 	return (
 		<Drawer
 			title={
@@ -272,7 +279,7 @@ const ChatRoomSettings = (props: IProps) => {
 			}
 			open={props.open}
 			onClose={props.onClose}
-			width={globalContext.global?.isSmallScreen ? '99%' : '900px'}
+			size={size}
 			styles={{
 				header: { paddingTop: 12, paddingBottom: 12 },
 				body: { paddingTop: 16, paddingBottom: 0 },

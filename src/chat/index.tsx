@@ -1,6 +1,7 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { useBoolean, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Input, List, Pagination, Row, Space, Tag, theme } from 'antd';
+import type { DrawerProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { useContext } from 'react';
 import type { ReactNode } from 'react';
@@ -132,6 +133,11 @@ const ChatHistory = (props: IProps) => {
 	};
 
 	const now = Date.now() / 1000;
+	let size: DrawerProps['size'] = 'large';
+	if (globalContext.global?.size.width) {
+		const { width } = globalContext.global.size;
+		size = globalContext.global.isSmallScreen ? width * 0.99 : width - 300;
+	}
 
 	return (
 		<Drawer
@@ -164,7 +170,7 @@ const ChatHistory = (props: IProps) => {
 			}
 			open={props.open}
 			onClose={props.onClose}
-			width={globalContext.global?.isSmallScreen ? '99%' : 'calc(100vw - 300px)'}
+			size={size}
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { paddingTop: 16, paddingBottom: 0 } }}
 			footer={null}
 		>

@@ -1,6 +1,7 @@
 import { DownOutlined, SearchOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Dropdown, Input, List, Pagination, Row, Space, Tag, theme } from 'antd';
+import type { DrawerProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { useContext } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
@@ -98,6 +99,12 @@ const GroupMember = (props: IProps) => {
 		setMomentState({ open: false, contactId: undefined, contactName: undefined });
 	});
 
+	let size: DrawerProps['size'] = 'large';
+	if (globalContext.global?.size.width) {
+		const { width } = globalContext.global.size;
+		size = globalContext.global.isSmallScreen ? width * 0.99 : width - 300;
+	}
+
 	return (
 		<Drawer
 			title={
@@ -134,7 +141,7 @@ const GroupMember = (props: IProps) => {
 			}
 			open={props.open}
 			onClose={props.onClose}
-			width={globalContext.global?.isSmallScreen ? '99%' : 'calc(100vw - 300px)'}
+			size={size}
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { paddingTop: 16, paddingBottom: 0 } }}
 			footer={null}
 		>
@@ -216,59 +223,58 @@ const GroupMember = (props: IProps) => {
 										}
 									/>
 									<div style={{ marginRight: 8 }}>
-										<Dropdown.Button
-											menu={{
-												items: [
-													{ label: '添加为好友', key: 'add-friend' },
-													{ label: '朋友圈', key: 'moments' },
-												],
-												onClick: ev => {
-													switch (ev.key) {
-														case 'add-friend':
-															setAddFriendState({
-																open: true,
-																chatRoomMemberId: item.id,
-																chatRoomMemberName: item.remark || item.nickname || item.alias || item.wechat_id,
-															});
-															break;
-														case 'moments':
-															setMomentState({
-																open: true,
-																contactAvatar: item.avatar,
-																contactId: item.wechat_id,
-																contactName: item.remark || item.nickname || item.alias || item.wechat_id,
-															});
-															break;
-													}
-												},
-											}}
-											buttonsRender={() => {
-												return [
-													<Button
-														key="left"
-														type="primary"
-														ghost
-														disabled={item.is_leaved}
-														onClick={() => {
-															setMemberRemoveState({
-																open: true,
-																chatRoomMemberId: item.wechat_id,
-																chatRoomMemberName: item.remark || item.nickname || item.alias || item.wechat_id,
-															});
-														}}
-													>
-														移除群成员
-													</Button>,
-													<Button
-														key="right"
-														type="primary"
-														ghost
-														disabled={item.is_leaved}
-														icon={<DownOutlined />}
-													/>,
-												];
-											}}
-										/>
+										<Space.Compact>
+											<Button
+												key="left"
+												type="primary"
+												ghost
+												disabled={item.is_leaved}
+												onClick={() => {
+													setMemberRemoveState({
+														open: true,
+														chatRoomMemberId: item.wechat_id,
+														chatRoomMemberName: item.remark || item.nickname || item.alias || item.wechat_id,
+													});
+												}}
+											>
+												移除群成员
+											</Button>
+											<Dropdown
+												menu={{
+													items: [
+														{ label: '添加为好友', key: 'add-friend' },
+														{ label: '朋友圈', key: 'moments' },
+													],
+													onClick: ev => {
+														switch (ev.key) {
+															case 'add-friend':
+																setAddFriendState({
+																	open: true,
+																	chatRoomMemberId: item.id,
+																	chatRoomMemberName: item.remark || item.nickname || item.alias || item.wechat_id,
+																});
+																break;
+															case 'moments':
+																setMomentState({
+																	open: true,
+																	contactAvatar: item.avatar,
+																	contactId: item.wechat_id,
+																	contactName: item.remark || item.nickname || item.alias || item.wechat_id,
+																});
+																break;
+														}
+													},
+												}}
+											>
+												<Button
+													key="right"
+													type="primary"
+													ghost
+													disabled={item.is_leaved}
+													icon={<DownOutlined />}
+												/>
+											</Dropdown>
+										</Space.Compact>
 									</div>
 								</List.Item>
 							);

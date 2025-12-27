@@ -159,7 +159,7 @@ const MCPServerEditor = (props: IProps) => {
 			}
 			open={props.open}
 			onClose={props.onClose}
-			width={900}
+			size={900}
 			styles={{
 				header: { paddingTop: 12, paddingBottom: 12 },
 				body: { paddingTop: 16, paddingBottom: 0 },
@@ -259,9 +259,10 @@ const MCPServerEditor = (props: IProps) => {
 							style={{ width: '100%' }}
 							placeholder="请输入标签"
 							maxTagCount="responsive"
-							showSearch
+							showSearch={{
+								filterOption,
+							}}
 							allowClear
-							filterOption={filterOption}
 							options={[]}
 						/>
 					</Form.Item>
@@ -274,9 +275,10 @@ const MCPServerEditor = (props: IProps) => {
 						<Select
 							style={{ width: '100%' }}
 							placeholder="请选择类型"
-							showSearch
+							showSearch={{
+								filterOption,
+							}}
 							disabled={!!props.id}
-							filterOption={filterOption}
 							options={[
 								{ label: '命令行模式（标准输入输出）', value: 'stdio', text: '命令行模式（标准输入输出） stdio' },
 								{ label: '流模式', value: 'stream', text: '流模式 stream' },
@@ -328,9 +330,10 @@ const MCPServerEditor = (props: IProps) => {
 													style={{ width: '100%' }}
 													placeholder="请输入命令行参数"
 													maxTagCount="responsive"
-													showSearch
+													showSearch={{
+														filterOption,
+													}}
 													allowClear
-													filterOption={filterOption}
 													options={[]}
 												/>
 											</Form.Item>
@@ -369,8 +372,9 @@ const MCPServerEditor = (props: IProps) => {
 												<Select
 													style={{ width: '100%' }}
 													placeholder="请选择认证方式"
-													showSearch
-													filterOption={filterOption}
+													showSearch={{
+														filterOption,
+													}}
 													options={[
 														{
 															label: '无认证',
