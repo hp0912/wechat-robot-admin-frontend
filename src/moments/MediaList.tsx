@@ -123,7 +123,7 @@ const MediaList = (props: IProps) => {
 							height={height}
 							fallback={ImageFallback}
 							preview={{
-								destroyOnHidden: true,
+								destroyOnClose: true,
 								mask: (
 									<span style={{ color: '#fff' }}>
 										<EyeOutlined style={{ marginRight: 8 }} />
@@ -154,7 +154,7 @@ export const MediaVideo = (props: IMediaVideoProps) => {
 	return (
 		<Image
 			preview={{
-				destroyOnHidden: true,
+				destroyOnClose: true,
 				mask: (
 					<span style={{ color: '#fff' }}>
 						<PlayCircleFilled style={{ marginRight: 8 }} />

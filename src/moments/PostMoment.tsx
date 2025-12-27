@@ -141,15 +141,16 @@ const PostMoment = (props: IProps) => {
 	const getContactSelect = (placeholder: React.ReactNode) => {
 		return (
 			<Select
-				showSearch
 				labelInValue
-				filterOption={false}
+				showSearch={{
+					filterOption: false,
+					onSearch: value => {
+						getContacts(value);
+					},
+				}}
 				loading={contactsLoading}
 				mode="multiple"
 				placeholder={placeholder}
-				onSearch={value => {
-					getContacts(value);
-				}}
 				options={contacts?.items
 					?.filter(contact => {
 						return contact.wechat_id !== props.robot.wechat_id;
@@ -379,7 +380,9 @@ const PostMoment = (props: IProps) => {
 				</Form.Item>
 				{!!previewImage && (
 					<Image
-						wrapperStyle={{ display: 'none' }}
+						styles={{
+							root: { display: 'none' },
+						}}
 						preview={{
 							visible: previewOpen,
 							onVisibleChange: visible => setPreviewOpen(visible),

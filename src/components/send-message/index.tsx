@@ -534,12 +534,13 @@ const SendMessage = (props: IProps) => {
 							style={{ width: 185 }}
 							mode="multiple"
 							placeholder="选择@对象"
-							showSearch
+							showSearch={{
+								filterOption,
+							}}
 							allowClear
 							loading={loading}
 							maxTagCount="responsive"
 							maxTagPlaceholder={maxTagPlaceholder}
-							filterOption={filterOption}
 							options={(data || []).map(item => {
 								const labelText = item.remark || item.nickname || item.alias || item.wechat_id;
 								return {
@@ -578,10 +579,11 @@ const SendMessage = (props: IProps) => {
 						<Select
 							style={{ width: 185 }}
 							placeholder="选择音色"
-							showSearch
+							showSearch={{
+								filterOption,
+							}}
 							allowClear
 							loading={timbresLoading}
-							filterOption={filterOption}
 							options={timbres.map(item => ({
 								label: item,
 								value: item,

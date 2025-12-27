@@ -117,7 +117,7 @@ const OSSSettings = (props: IProps) => {
 					showIcon
 					closable
 					style={{ marginBottom: 24 }}
-					message="考虑到刚登录的时候可能历史图片消息较多，因此登录一分钟内不会自动上传图片。"
+					description="考虑到刚登录的时候可能历史图片消息较多，因此登录一分钟内不会自动上传图片。"
 				/>
 				<Form
 					form={form}
@@ -151,9 +151,10 @@ const OSSSettings = (props: IProps) => {
 						<Select
 							style={{ width: '100%' }}
 							placeholder="请选择图片上传模式"
-							showSearch
+							showSearch={{
+								filterOption,
+							}}
 							allowClear
-							filterOption={filterOption}
 							options={[
 								{ label: '上传所有图片', value: 'all', text: '上传所有图片' },
 								{ label: '仅上传被AI引用的图片', value: 'ai_only', text: '仅上传被AI引用的图片' },
@@ -181,10 +182,11 @@ const OSSSettings = (props: IProps) => {
 						<Select
 							style={{ width: '100%' }}
 							placeholder="请选择视频上传模式"
-							showSearch
+							showSearch={{
+								filterOption,
+							}}
 							allowClear
 							disabled
-							filterOption={filterOption}
 							options={[
 								{ label: '上传所有视频', value: 'all', text: '上传所有视频' },
 								{ label: '仅上传被AI引用的视频', value: 'ai_only', text: '仅上传被AI引用的视频' },
@@ -212,10 +214,11 @@ const OSSSettings = (props: IProps) => {
 						<Select
 							style={{ width: '100%' }}
 							placeholder="请选择文件上传模式"
-							showSearch
+							showSearch={{
+								filterOption,
+							}}
 							allowClear
 							disabled
-							filterOption={filterOption}
 							options={[
 								{ label: '上传所有文件', value: 'all', text: '上传所有文件' },
 								{ label: '仅上传被AI引用的文件', value: 'ai_only', text: '仅上传被AI引用的文件' },
@@ -231,9 +234,10 @@ const OSSSettings = (props: IProps) => {
 						<Select
 							style={{ width: '100%' }}
 							placeholder="请选择云存储供应商"
-							showSearch
+							showSearch={{
+								filterOption,
+							}}
 							allowClear
-							filterOption={filterOption}
 							options={[
 								{ label: '阿里云', value: 'aliyun', text: '阿里云' },
 								{ label: '腾讯云', value: 'tencent_cloud', text: '腾讯云' },

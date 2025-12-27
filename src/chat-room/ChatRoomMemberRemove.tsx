@@ -60,7 +60,7 @@ const ChatRoomMemberRemove = (props: IProps) => {
 			<Alert
 				type="warning"
 				showIcon
-				message={
+				description={
 					<>
 						只有<b>群主</b>或者<b>管理员</b>才能将<span style={{ color: '#1710da' }}>普通成员</span>移出群聊。
 					</>

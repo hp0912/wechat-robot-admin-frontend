@@ -131,7 +131,7 @@ const MomentSettings = (props: IProps) => {
 				>
 					<Alert
 						style={{ marginBottom: 16 }}
-						message="AI不会对朋友圈图片进行识别，因此，为了防止【别人发了一张讣告图片而点赞】这类情况的发生，当图片内容少于3张且没有文字内容时，AI会跳过处理这条朋友圈。同一个人，每天只会有一条朋友圈会被自动评论，点赞不受此限制。"
+						description="AI不会对朋友圈图片进行识别，因此，为了防止【别人发了一张讣告图片而点赞】这类情况的发生，当图片内容少于3张且没有文字内容时，AI会跳过处理这条朋友圈。同一个人，每天只会有一条朋友圈会被自动评论，点赞不受此限制。"
 						type="warning"
 						showIcon
 					/>
@@ -171,10 +171,11 @@ const MomentSettings = (props: IProps) => {
 							placeholder="选择联系人"
 							mode="multiple"
 							maxTagCount="responsive"
-							showSearch
+							showSearch={{
+								filterOption,
+							}}
 							allowClear
 							loading={contactLoading}
-							filterOption={filterOption}
 							options={(contacts?.items || []).map(item => {
 								const labelText = item.remark || item.nickname || item.alias || item.wechat_id;
 								return {
@@ -215,10 +216,11 @@ const MomentSettings = (props: IProps) => {
 							placeholder="选择联系人"
 							mode="multiple"
 							maxTagCount="responsive"
-							showSearch
+							showSearch={{
+								filterOption,
+							}}
 							allowClear
 							loading={contactLoading}
-							filterOption={filterOption}
 							options={(contacts?.items || []).map(item => {
 								const labelText = item.remark || item.nickname || item.alias || item.wechat_id;
 								return {

@@ -123,7 +123,7 @@ const LoginType = (props: {
 				type="info"
 				showIcon
 				closable
-				message={<b>风控小提示</b>}
+				title={<b>风控小提示</b>}
 				description={
 					<>
 						<ul style={{ padding: 0 }}>

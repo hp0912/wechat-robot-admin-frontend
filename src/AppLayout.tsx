@@ -117,7 +117,7 @@ const AppLayout: React.FC = () => {
 						<div className="icon" />
 						<div className="title">微信机器人管理后台</div>
 					</Logo>
-					<Space split={<Divider type="vertical" />}>
+					<Space separator={<Divider orientation="vertical" />}>
 						<GithubOutlined
 							className="github-icon"
 							onClick={() => {

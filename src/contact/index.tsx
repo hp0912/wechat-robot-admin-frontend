@@ -1,4 +1,4 @@
-import { CloudSyncOutlined, SearchOutlined } from '@ant-design/icons';
+import { CloudSyncOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import {
 	App,
@@ -260,14 +260,12 @@ const Contact = (props: IProps) => {
 					renderItem={item => {
 						const items: MenuProps['items'] = [{ label: '发送消息', key: 'send-message' }];
 						if (item.type === 'friend') {
-							items.push({ label: '好友设置', key: 'friend-settings' });
 							items.push({ label: '朋友圈', key: 'moments' });
 							items.push({ label: '修改备注', key: 'change-remark' });
 							items.push({ label: '删除好友', key: 'delete-friend', danger: true });
 						} else if (item.type === 'official_account') {
-							items.push({ label: '公众号设置', key: 'official-account-settings' });
+							//
 						} else {
-							items.push({ label: '群聊设置', key: 'chat-room-settings' });
 							items.push({ label: '邀请入群', key: 'invite-to-group' });
 							items.push({ label: '查看群成员', key: 'chat-room-member' });
 							items.push({ label: '修改群名称', key: 'change-name' });
@@ -336,7 +334,33 @@ const Contact = (props: IProps) => {
 										</>
 									}
 								/>
-								<div style={{ marginRight: 8 }}>
+								<Space
+									style={{ marginRight: 8 }}
+									size="small"
+								>
+									{item.type === 'friend' || item.type === 'official_account' ? (
+										<Button
+											color="primary"
+											variant="outlined"
+											icon={<SettingOutlined />}
+											onClick={() => {
+												setFriendSettingsState({ open: true, contact: item });
+											}}
+										>
+											{item.type === 'friend' ? '好友设置' : '公众号设置'}
+										</Button>
+									) : (
+										<Button
+											color="primary"
+											variant="outlined"
+											icon={<SettingOutlined />}
+											onClick={() => {
+												setChatRoomSettingsState({ open: true, chatRoom: item });
+											}}
+										>
+											群聊设置
+										</Button>
+									)}
 									<Dropdown.Button
 										menu={{
 											items,
@@ -357,10 +381,6 @@ const Contact = (props: IProps) => {
 															action: 'moments',
 														});
 														break;
-													case 'friend-settings':
-													case 'official-account-settings':
-														setFriendSettingsState({ open: true, contact: item });
-														break;
 													case 'delete-friend':
 														setFriendAction({
 															open: true,
@@ -376,9 +396,6 @@ const Contact = (props: IProps) => {
 															chatRoomName: item.remark || item.nickname || item.alias || item.wechat_id,
 															action: 'invite',
 														});
-														break;
-													case 'chat-room-settings':
-														setChatRoomSettingsState({ open: true, chatRoom: item });
 														break;
 													case 'change-name':
 														setChatRoomAction({
@@ -443,7 +460,7 @@ const Contact = (props: IProps) => {
 									>
 										聊天记录
 									</Dropdown.Button>
-								</div>
+								</Space>
 							</List.Item>
 						);
 					}}

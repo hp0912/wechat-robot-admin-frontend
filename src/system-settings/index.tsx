@@ -1,7 +1,7 @@
 import { LoadingOutlined, RedoOutlined } from '@ant-design/icons';
 import Editor from '@monaco-editor/react';
 import { useRequest } from 'ahooks';
-import { Alert, App, Button, Form, Input, InputNumber, Popconfirm, Select, Spin, Switch, Tooltip } from 'antd';
+import { Alert, App, Button, Form, Input, InputNumber, Popconfirm, Select, Space, Spin, Switch, Tooltip } from 'antd';
 import React, { useState } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
@@ -203,15 +203,21 @@ const SystemSettings = (props: IProps) => {
 					>
 						<Input />
 					</Form.Item>
-					<Form.Item
-						name="webhook_url"
-						label="Webhook 地址"
-					>
-						<Input
-							pattern="请输入 Webhook 地址"
-							addonBefore={<b style={{ color: '#EF6820' }}>POST</b>}
-							allowClear
-						/>
+					<Form.Item label="Webhook 地址">
+						<Space.Compact block>
+							<Space.Addon>
+								<b style={{ color: '#EF6820' }}>POST</b>
+							</Space.Addon>
+							<Form.Item
+								noStyle
+								name="webhook_url"
+							>
+								<Input
+									pattern="请输入 Webhook 地址"
+									allowClear
+								/>
+							</Form.Item>
+						</Space.Compact>
 					</Form.Item>
 					<Form.Item
 						style={{ flexWrap: 'nowrap' }}
@@ -293,9 +299,10 @@ const SystemSettings = (props: IProps) => {
 										<Select
 											style={{ width: '100%' }}
 											placeholder="请选择通知方式"
-											showSearch
+											showSearch={{
+												filterOption,
+											}}
 											allowClear
-											filterOption={filterOption}
 											options={[
 												{ label: '推送加', value: 'push_plus', text: '推送加' },
 												{ label: '邮件', value: 'email', disabled: true, text: '邮件' },
@@ -375,7 +382,7 @@ const SystemSettings = (props: IProps) => {
 					<Alert
 						style={{ marginBottom: 24 }}
 						type="warning"
-						message={
+						description={
 							<>自动通过好友是高危操作，请谨慎使用！如果同一时间有多个好友请求，每个好友请求通过之后会休眠10秒钟。</>
 						}
 					/>
