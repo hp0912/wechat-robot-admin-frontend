@@ -1,6 +1,6 @@
 import { useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Row, Space, Table, Tag, theme } from 'antd';
-import type { TableProps } from 'antd';
+import type { DrawerProps, TableProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { useContext } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
@@ -174,12 +174,18 @@ const MessageList = (props: IProps) => {
 		},
 	];
 
+	let size: DrawerProps['size'] = 'large';
+	if (globalContext.global?.size.width) {
+		const { width } = globalContext.global.size;
+		size = globalContext.global.isSmallScreen ? width * 0.99 : width * 0.75;
+	}
+
 	return (
 		<Drawer
 			title="系统消息"
 			open={props.open}
 			onClose={props.onClose}
-			width={globalContext.global?.isSmallScreen ? '99%' : '75%'}
+			size={size}
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { paddingTop: 16, paddingBottom: 0 } }}
 			extra={
 				<Space>

@@ -1,5 +1,6 @@
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Col, Drawer, List, Row, Skeleton, Spin } from 'antd';
+import type { DrawerProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { useContext } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -107,6 +108,12 @@ const SpecifiContactMomentList = (props: IProps) => {
 		setMomentDetailState({ open: false, momentId: undefined });
 	};
 
+	let size: DrawerProps['size'] = 'large';
+	if (globalContext.global?.size.width) {
+		const { width } = globalContext.global.size;
+		size = globalContext.global.isSmallScreen ? width * 0.99 : width * 0.8;
+	}
+
 	return (
 		<Drawer
 			title={
@@ -126,7 +133,7 @@ const SpecifiContactMomentList = (props: IProps) => {
 					</Col>
 				</Row>
 			}
-			width={globalContext.global?.isSmallScreen ? '100%' : '80%'}
+			size={size}
 			open={props.open}
 			onClose={props.onClose}
 			footer={null}

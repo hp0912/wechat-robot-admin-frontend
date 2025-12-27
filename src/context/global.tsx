@@ -2,6 +2,7 @@ import React from 'react';
 
 export interface IGlobal {
 	isSmallScreen: boolean;
+	size: { width: number; height: number };
 }
 
 export interface IGlobalContext {

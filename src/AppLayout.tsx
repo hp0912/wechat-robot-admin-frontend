@@ -59,8 +59,8 @@ const AppLayout: React.FC = () => {
 	const isSmallScreen = (bodySize?.width || 0) < 1280;
 
 	const globalState = useMemo<IGlobalContext>(() => {
-		return { global: { isSmallScreen } };
-	}, [isSmallScreen]);
+		return { global: { isSmallScreen, size: bodySize || { width: 0, height: 0 } } };
+	}, [isSmallScreen, bodySize?.width, bodySize?.height]);
 
 	// 获取用户详情
 	const { data: user, loading: userLoading } = useRequest(

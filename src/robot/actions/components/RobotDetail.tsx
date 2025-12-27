@@ -1,7 +1,7 @@
 import { FileTextFilled, FundFilled, MacCommandFilled, OpenAIFilled, WechatFilled } from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Spin, Tabs, Tag, theme } from 'antd';
-import type { TabsProps } from 'antd';
+import type { DrawerProps, TabsProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { Suspense, useContext, useEffect } from 'react';
 import styled from 'styled-components';
@@ -183,6 +183,12 @@ const RobotDetail = (props: IProps) => {
 		},
 	];
 
+	let size: DrawerProps['size'] = 'large';
+	if (globalContext.global?.size.width) {
+		const { width } = globalContext.global.size;
+		size = globalContext.global.isSmallScreen ? width * 0.99 : width - 300;
+	}
+
 	return (
 		<Drawer
 			title={
@@ -224,7 +230,7 @@ const RobotDetail = (props: IProps) => {
 			}
 			open={open}
 			onClose={onClose}
-			width={globalContext.global?.isSmallScreen ? '99%' : 'calc(100vw - 300px)'}
+			size={size}
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { padding: 0 } }}
 			footer={null}
 		>

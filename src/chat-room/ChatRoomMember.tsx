@@ -1,6 +1,7 @@
 import { DownOutlined, SearchOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Dropdown, Input, List, Pagination, Row, Space, Tag, theme } from 'antd';
+import type { DrawerProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { useContext } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
@@ -98,6 +99,12 @@ const GroupMember = (props: IProps) => {
 		setMomentState({ open: false, contactId: undefined, contactName: undefined });
 	});
 
+	let size: DrawerProps['size'] = 'large';
+	if (globalContext.global?.size.width) {
+		const { width } = globalContext.global.size;
+		size = globalContext.global.isSmallScreen ? width * 0.99 : width - 300;
+	}
+
 	return (
 		<Drawer
 			title={
@@ -134,7 +141,7 @@ const GroupMember = (props: IProps) => {
 			}
 			open={props.open}
 			onClose={props.onClose}
-			width={globalContext.global?.isSmallScreen ? '99%' : 'calc(100vw - 300px)'}
+			size={size}
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { paddingTop: 16, paddingBottom: 0 } }}
 			footer={null}
 		>
