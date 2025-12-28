@@ -301,6 +301,7 @@ const GlobalSettings = (props: IProps) => {
 													label="最大回复"
 													labelCol={{ flex: '0 0 130px' }}
 													rules={[{ required: true, message: '最大回复不能为空' }]}
+													tooltip="AI每次回复的最大词元个数，为0则表示不限制"
 												>
 													<InputNumber
 														placeholder="请输入最大回复，为0则表示不限制"
