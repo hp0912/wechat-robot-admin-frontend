@@ -23,7 +23,7 @@ import ParamsGroup from '@/components/ParamsGroup';
 import { DefaultAvatar } from '@/constant';
 import { AiModels } from '@/constant/ai';
 import { GlobalContext } from '@/context/global';
-import { imageRecognitionModelTips, ObjectToString, onTTSEnabledChange, workflowModelTips } from './utils';
+import { imageRecognitionModelTips, ObjectToString, onTTSEnabledChange } from './utils';
 
 interface IProps {
 	robotId: number;
@@ -155,7 +155,6 @@ const FriendSettings = (props: IProps) => {
 			chat_ai_enabled: globalSettings.data.chat_ai_enabled,
 			chat_base_url: globalSettings.data.chat_base_url,
 			chat_api_key: globalSettings.data.chat_api_key,
-			workflow_model: globalSettings.data.workflow_model,
 			chat_model: globalSettings.data.chat_model,
 			image_recognition_model: globalSettings.data.image_recognition_model,
 			max_completion_tokens: globalSettings.data.max_completion_tokens,
@@ -362,18 +361,6 @@ const FriendSettings = (props: IProps) => {
 												<Input
 													placeholder="不填则使用全局配置"
 													allowClear
-												/>
-											</Form.Item>
-											<Form.Item
-												name="workflow_model"
-												label="工作流模型"
-												labelCol={{ flex: '0 0 130px' }}
-												tooltip={workflowModelTips}
-											>
-												<AutoComplete
-													placeholder="不填则使用全局配置"
-													style={{ width: '100%' }}
-													options={AiModels}
 												/>
 											</Form.Item>
 											<Form.Item

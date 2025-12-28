@@ -15,13 +15,7 @@ import {
 	parseMonthlyCronExpression,
 	toCronExpression,
 } from '@/utils';
-import {
-	chatBaseURLTips,
-	imageRecognitionModelTips,
-	ObjectToString,
-	onTTSEnabledChange,
-	workflowModelTips,
-} from './utils';
+import { chatBaseURLTips, imageRecognitionModelTips, ObjectToString, onTTSEnabledChange } from './utils';
 
 interface IProps {
 	robotId: number;
@@ -275,19 +269,6 @@ const GlobalSettings = (props: IProps) => {
 													<Input
 														placeholder="请输入API密钥"
 														allowClear
-													/>
-												</Form.Item>
-												<Form.Item
-													name="workflow_model"
-													label="工作流模型"
-													labelCol={{ flex: '0 0 130px' }}
-													rules={[{ required: true, message: '工作流模型不能为空' }]}
-													tooltip={workflowModelTips}
-												>
-													<AutoComplete
-														placeholder="请选择或者手动输入工作流模型"
-														style={{ width: '100%' }}
-														options={AiModels}
 													/>
 												</Form.Item>
 												<Form.Item
