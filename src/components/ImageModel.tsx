@@ -29,7 +29,11 @@ const ImageModel = (props: IProps) => {
 						image_ai_settings: JSON.stringify(
 							{
 								api_key: '',
-								model: 'doubao-seedream-4-0-250828',
+								model: 'doubao-seedream-4.0',
+								sequential_image_generation: 'auto', // 是否关闭组图功能 auto / disabled
+								sequential_image_generation_options: {
+									max_images: 4, // 指定本次请求，最多可生成的图片数量 [1, 15]
+								},
 								response_format: 'url',
 								size: '2560x1440',
 								watermark: false,
@@ -59,7 +63,7 @@ const ImageModel = (props: IProps) => {
 							{
 								base_url: 'http://jimeng-api:9000',
 								sessionid: [''],
-								model: 'jimeng-4.0',
+								model: 'jimeng-4.1',
 								width: 2560,
 								height: 1440,
 								sample_strength: 0.5,
