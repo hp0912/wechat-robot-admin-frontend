@@ -12,7 +12,11 @@ const root = document.getElementById('root')!;
 ReactDOM.createRoot(root).render(
 	<ConfigProvider
 		locale={zhCN}
-		theme={{}}
+		theme={{
+			token: {
+				colorText: '#3e4659',
+			},
+		}}
 	>
 		<AntdApp>
 			<div className="skin" />
