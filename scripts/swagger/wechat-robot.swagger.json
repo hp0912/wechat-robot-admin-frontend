@@ -3101,6 +3101,9 @@
 									"wechat_id": {
 										"type": "string"
 									},
+									"batch": {
+										"type": "boolean"
+									},
 									"is_admin": {
 										"type": "boolean"
 									},
@@ -3122,7 +3125,7 @@
 										"type": "integer"
 									}
 								},
-								"required": ["chat_room_id", "wechat_id"]
+								"required": ["chat_room_id", "wechat_id", "batch"]
 							},
 							"examples": {}
 						}

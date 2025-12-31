@@ -1,5 +1,6 @@
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { App, Form, InputNumber, Modal, Select, Space, Spin, Switch } from 'antd';
+import { App, Button, Form, InputNumber, Modal, Select, Space, Spin, Switch, Tooltip } from 'antd';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 
@@ -56,6 +57,9 @@ const ChatRoomMemberSettings = (props: IProps) => {
 		},
 		{
 			manual: true,
+			onSuccess: () => {
+				message.success('保存成功');
+			},
 			onError: reason => {
 				message.error(reason.message);
 			},
@@ -67,14 +71,54 @@ const ChatRoomMemberSettings = (props: IProps) => {
 			title={`${props.chatRoomName} / ${props.chatRoomMemberName} - 成员设置`}
 			width={650}
 			open={props.open}
-			confirmLoading={saveLoading}
-			onOk={async () => {
-				const values = await form.validateFields();
-				await onSave(values);
-				props.onRefresh();
-				props.onClose();
-			}}
 			onCancel={props.onClose}
+			footer={[
+				<Button
+					key="cancel"
+					onClick={props.onClose}
+				>
+					取消
+				</Button>,
+				<Button
+					key="batch"
+					type="primary"
+					ghost
+					loading={saveLoading}
+					icon={
+						<Tooltip title="为每个群的这个成员设置相同的配置">
+							<QuestionCircleOutlined />
+						</Tooltip>
+					}
+					iconPlacement="end"
+					onClick={async () => {
+						const values = await form.validateFields();
+						values.chat_room_id = props.chatRoomId;
+						values.wechat_id = props.chatRoomMemberId;
+						values.batch = true;
+						await onSave(values);
+						props.onRefresh();
+						props.onClose();
+					}}
+				>
+					批量设置
+				</Button>,
+				<Button
+					key="ok"
+					type="primary"
+					loading={saveLoading}
+					onClick={async () => {
+						const values = await form.validateFields();
+						values.chat_room_id = props.chatRoomId;
+						values.wechat_id = props.chatRoomMemberId;
+						values.batch = false;
+						await onSave(values);
+						props.onRefresh();
+						props.onClose();
+					}}
+				>
+					保存
+				</Button>,
+			]}
 		>
 			<Spin spinning={loading}>
 				<Form
