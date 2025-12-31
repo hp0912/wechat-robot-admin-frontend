@@ -1,6 +1,6 @@
 import { DownOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
-import { App, Avatar, Button, Col, Drawer, Dropdown, Input, List, Pagination, Row, Space, Tag, theme } from 'antd';
+import { App, Avatar, Button, Col, Drawer, Dropdown, Input, List, Pagination, Row, Space, Tag } from 'antd';
 import type { DrawerProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { useContext } from 'react';
@@ -40,7 +40,6 @@ interface IMomentState {
 }
 
 const GroupMember = (props: IProps) => {
-	const { token } = theme.useToken();
 	const { message } = App.useApp();
 
 	const globalContext = useContext(GlobalContext);
@@ -197,22 +196,35 @@ const GroupMember = (props: IProps) => {
 										title={
 											<span>
 												<span>{item.remark || item.nickname || item.alias}</span>
-												{item.is_admin && (
-													<Tag
-														color={token.colorSuccess}
-														style={{ marginLeft: 8 }}
-													>
-														管理员
-													</Tag>
-												)}
-												{item.is_leaved && (
-													<Tag
-														color="gray"
-														style={{ marginLeft: 8 }}
-													>
-														已退群
-													</Tag>
-												)}
+												<Space
+													size="small"
+													style={{ marginLeft: 8 }}
+												>
+													{item.is_admin && (
+														<Tag
+															color="gold"
+															variant="solid"
+														>
+															管理员
+														</Tag>
+													)}
+													{item.is_blacklisted && (
+														<Tag
+															color="gray"
+															variant="solid"
+														>
+															黑名单
+														</Tag>
+													)}
+													{item.is_leaved && (
+														<Tag
+															color="red"
+															variant="solid"
+														>
+															已退群
+														</Tag>
+													)}
+												</Space>
 											</span>
 										}
 										description={
@@ -225,6 +237,7 @@ const GroupMember = (props: IProps) => {
 													</span>
 												)}
 												<b style={{ marginLeft: 8, color: 'goldenrod' }}>积分: {item.score || 0}</b>
+												<b style={{ marginLeft: 8, color: 'gray' }}>临时积分: {item.temporary_score || 0}</b>
 											</>
 										}
 									/>

@@ -256,7 +256,7 @@ const RobotScanLogin = (props: IProps) => {
 				);
 			case 'loading':
 				return (
-					<Space direction="vertical">
+					<Space orientation="vertical">
 						<Spin />
 						<p>Loading...</p>
 					</Space>
