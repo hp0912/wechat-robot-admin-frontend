@@ -1,6 +1,6 @@
-import { DownOutlined, SearchOutlined } from '@ant-design/icons';
+import { DownOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
-import { App, Avatar, Button, Col, Drawer, Dropdown, Input, List, Pagination, Row, Space, Tag, theme } from 'antd';
+import { App, Avatar, Button, Col, Drawer, Dropdown, Input, List, Pagination, Row, Space, Tag } from 'antd';
 import type { DrawerProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { useContext } from 'react';
@@ -10,6 +10,7 @@ import { GlobalContext } from '@/context/global';
 import SpecifiContactMomentList from '@/moments/SpecifiContactMomentList';
 import ChatRoomMemberFriend from './ChatRoomMemberFriend';
 import ChatRoomMemberRemove from './ChatRoomMemberRemove';
+import ChatRoomMemberSettings from './ChatRoomMemberSettings';
 
 interface IProps {
 	robotId: number;
@@ -25,7 +26,7 @@ interface IAddFriendState {
 	open?: boolean;
 }
 
-interface IMemberRemoveState {
+interface IMemberState {
 	chatRoomMemberId?: string;
 	chatRoomMemberName?: string;
 	open?: boolean;
@@ -39,7 +40,6 @@ interface IMomentState {
 }
 
 const GroupMember = (props: IProps) => {
-	const { token } = theme.useToken();
 	const { message } = App.useApp();
 
 	const globalContext = useContext(GlobalContext);
@@ -49,7 +49,8 @@ const GroupMember = (props: IProps) => {
 	const [search, setSearch] = useSetState({ keyword: '', pageIndex: 1 });
 	const [addFriendState, setAddFriendState] = useSetState<IAddFriendState>({});
 	const [momentState, setMomentState] = useSetState<IMomentState>({});
-	const [memberRemoveState, setMemberRemoveState] = useSetState<IMemberRemoveState>({});
+	const [memberSettingsState, setMemberSettingsState] = useSetState<IMemberState>({});
+	const [memberRemoveState, setMemberRemoveState] = useSetState<IMemberState>({});
 
 	// 手动同步群成员
 	const { runAsync, loading: syncLoading } = useRequest(
@@ -89,6 +90,10 @@ const GroupMember = (props: IProps) => {
 
 	const onAddFriendClose = useMemoizedFn(() => {
 		setAddFriendState({ open: false, chatRoomMemberId: undefined, chatRoomMemberName: undefined });
+	});
+
+	const onChatRoomMemberSettingsClose = useMemoizedFn(() => {
+		setMemberSettingsState({ open: false, chatRoomMemberId: undefined, chatRoomMemberName: undefined });
 	});
 
 	const onChatRoomMemberRemoveClose = useMemoizedFn(() => {
@@ -191,22 +196,35 @@ const GroupMember = (props: IProps) => {
 										title={
 											<span>
 												<span>{item.remark || item.nickname || item.alias}</span>
-												{item.is_admin && (
-													<Tag
-														color={token.colorSuccess}
-														style={{ marginLeft: 8 }}
-													>
-														管理员
-													</Tag>
-												)}
-												{item.is_leaved && (
-													<Tag
-														color="gray"
-														style={{ marginLeft: 8 }}
-													>
-														已退群
-													</Tag>
-												)}
+												<Space
+													size="small"
+													style={{ marginLeft: 8 }}
+												>
+													{item.is_admin && (
+														<Tag
+															color="gold"
+															variant="solid"
+														>
+															管理员
+														</Tag>
+													)}
+													{item.is_blacklisted && (
+														<Tag
+															color="gray"
+															variant="solid"
+														>
+															黑名单
+														</Tag>
+													)}
+													{item.is_leaved && (
+														<Tag
+															color="red"
+															variant="solid"
+														>
+															已退群
+														</Tag>
+													)}
+												</Space>
 											</span>
 										}
 										description={
@@ -219,31 +237,33 @@ const GroupMember = (props: IProps) => {
 													</span>
 												)}
 												<b style={{ marginLeft: 8, color: 'goldenrod' }}>积分: {item.score || 0}</b>
+												<b style={{ marginLeft: 8, color: 'gray' }}>临时积分: {item.temporary_score || 0}</b>
 											</>
 										}
 									/>
 									<div style={{ marginRight: 8 }}>
 										<Space.Compact>
 											<Button
-												key="left"
-												type="primary"
-												ghost
+												type="default"
 												disabled={item.is_leaved}
+												icon={<SettingOutlined />}
 												onClick={() => {
-													setMemberRemoveState({
+													setMemberSettingsState({
 														open: true,
 														chatRoomMemberId: item.wechat_id,
 														chatRoomMemberName: item.remark || item.nickname || item.alias || item.wechat_id,
 													});
 												}}
 											>
-												移除群成员
+												成员设置
 											</Button>
 											<Dropdown
 												menu={{
 													items: [
 														{ label: '添加为好友', key: 'add-friend' },
 														{ label: '朋友圈', key: 'moments' },
+														{ type: 'divider' },
+														{ label: '移除群成员', key: 'remove-member', danger: true, disabled: item.is_leaved },
 													],
 													onClick: ev => {
 														switch (ev.key) {
@@ -262,14 +282,20 @@ const GroupMember = (props: IProps) => {
 																	contactName: item.remark || item.nickname || item.alias || item.wechat_id,
 																});
 																break;
+															case 'remove-member':
+																setMemberRemoveState({
+																	open: true,
+																	chatRoomMemberId: item.wechat_id,
+																	chatRoomMemberName: item.remark || item.nickname || item.alias || item.wechat_id,
+																});
+																break;
 														}
 													},
 												}}
 											>
 												<Button
 													key="right"
-													type="primary"
-													ghost
+													type="default"
 													disabled={item.is_leaved}
 													icon={<DownOutlined />}
 												/>
@@ -289,6 +315,18 @@ const GroupMember = (props: IProps) => {
 							chatRoomMemberName={addFriendState.chatRoomMemberName!}
 							open={addFriendState.open}
 							onClose={onAddFriendClose}
+						/>
+					)}
+					{memberSettingsState.open && (
+						<ChatRoomMemberSettings
+							robotId={props.robotId}
+							chatRoomId={chatRoom.wechat_id!}
+							chatRoomName={chatRoom.remark! || chatRoom.nickname! || chatRoom.alias! || chatRoom.wechat_id!}
+							chatRoomMemberId={memberSettingsState.chatRoomMemberId!}
+							chatRoomMemberName={memberSettingsState.chatRoomMemberName!}
+							open={memberSettingsState.open}
+							onRefresh={refresh}
+							onClose={onChatRoomMemberSettingsClose}
 						/>
 					)}
 					{memberRemoveState.open && (

@@ -23,7 +23,7 @@ const headerStyle: React.CSSProperties = {
 	justifyContent: 'space-between',
 	alignItems: 'center',
 	paddingRight: 40,
-	backgroundColor: '#bfb68b',
+	backgroundColor: '#dddddd',
 };
 
 const Logo = styled.div`
