@@ -765,6 +765,21 @@ const ChatRoomSettings = (props: IProps) => {
 						</Form.Item>
 					</ParamsGroup>
 					<ParamsGroup
+						title="群聊短视频解析设置"
+						style={{ marginTop: 24 }}
+					>
+						<Form.Item
+							name="short_video_parsing_enabled"
+							label="短视频解析"
+							valuePropName="checked"
+						>
+							<Switch
+								unCheckedChildren="关闭"
+								checkedChildren="开启"
+							/>
+						</Form.Item>
+					</ParamsGroup>
+					<ParamsGroup
 						title="群聊拍一拍设置"
 						style={{ marginTop: 24 }}
 					>
