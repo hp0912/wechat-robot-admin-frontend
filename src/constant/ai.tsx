@@ -4,7 +4,7 @@ export const AiModels: Array<{ value: string }> = [
 	{ value: 'gpt-4.1' },
 	{ value: 'doubao-seed-1-6-250615' },
 	{ value: 'doubao-seed-1-6-thinking-250615' },
-	{ value: 'doubao-seed-1-8-251215' },
+	{ value: 'doubao-seed-1-8-251228' },
 	{ value: 'qwen-plus' },
 	{ value: 'qwen-vl-plus' },
 	{ value: 'glm-4.7' },
