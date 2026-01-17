@@ -307,7 +307,9 @@ const RobotScanLogin = (props: IProps) => {
 						}}
 					>
 						<p style={{ margin: '0 0 16px 0', fontSize: 13, color: '#3324e0' }}>
-							如果手机微信扫码确认登录界面出现6位验证码，则选择安全码验证，否则选择滑块验证。
+							<b>iPad 扫码登录</b>: 如果手机微信扫码确认登录界面出现6位验证码，则选择安全码验证，否则放弃，
+							<span style={{ color: 'red' }}>微信号不可登录</span>。<br />
+							<b>Mac 扫码登录</b>: 如果手机微信扫码确认登录界面出现6位验证码，则选择安全码验证，否则选择滑块验证。
 						</p>
 						<Row
 							align="middle"
