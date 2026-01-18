@@ -1,42 +1,37 @@
 import type { FormInstance } from 'antd';
 import type { AnyType } from '@/common/types';
 
+export const defaultTTSValue = `{
+  "request_body": {
+    "namespace": "",
+    "req_params": {
+      "audio_params": {
+        "format": "mp3",
+        "sample_rate": 24000
+      },
+      "model": "",
+      "speaker": "zh_female_vv_uranus_bigtts",
+      "text": ""
+    },
+    "user": {
+      "uid": ""
+    }
+  },
+  "request_header": {
+    "X-Api-Access-Key": "",
+    "X-Api-App-Id": "",
+    "X-Api-Request-Id": "",
+    "X-Api-Resource-Id": "seed-tts-2.0",
+    "X-Control-Require-Usage-Tokens-Return": ""
+  },
+  "url": "https://openspeech.bytedance.com/api/v3/tts/unidirectional"
+}`;
+
 export const onTTSEnabledChange = (form: FormInstance<AnyType>, checked: boolean) => {
 	if (checked) {
 		if (!form.getFieldValue('tts_settings')) {
 			form.setFieldsValue({
-				tts_settings: JSON.stringify(
-					{
-						access_token: '',
-						app: {
-							appid: '',
-							cluster: 'volcano_tts',
-							token: '',
-						},
-						audio: {
-							compression_rate: 1,
-							emotion: 'radio',
-							encoding: 'mp3',
-							language: 'cn',
-							pitch_ratio: 1,
-							rate: 24000,
-							speed_ratio: 1,
-							voice_type: 'BV412_streaming',
-							volume_ratio: 1,
-						},
-						base_url: 'https://openspeech.bytedance.com/api/v1/tts',
-						request: {
-							frontend_type: 'unitTson',
-							operation: 'query',
-							pure_english_opt: '1',
-							silence_duration: '125',
-							text_type: 'plain',
-							with_frontend: '1',
-						},
-					},
-					null,
-					2,
-				) as unknown as object,
+				tts_settings: defaultTTSValue as unknown as object,
 			});
 		}
 		if (!form.getFieldValue('ltts_settings')) {
