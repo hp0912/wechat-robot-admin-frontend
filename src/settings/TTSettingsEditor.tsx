@@ -1,37 +1,12 @@
 import Editor from '@monaco-editor/react';
 import { Button } from 'antd';
 import React from 'react';
+import { defaultTTSValue } from './utils';
 
 interface IProps {
 	value?: string;
 	onChange?: (value?: string) => void;
 }
-
-const defaultValue = `{
-  "request_body": {
-    "namespace": "",
-    "req_params": {
-      "audio_params": {
-        "format": "mp3",
-        "sample_rate": 24000
-      },
-      "model": "",
-      "speaker": "zh_female_vv_uranus_bigtts",
-      "text": ""
-    },
-    "user": {
-      "uid": ""
-    }
-  },
-  "request_header": {
-    "X-Api-Access-Key": "",
-    "X-Api-App-Id": "",
-    "X-Api-Request-Id": "",
-    "X-Api-Resource-Id": "seed-tts-2.0",
-    "X-Control-Require-Usage-Tokens-Return": ""
-  },
-  "url": "https://openspeech.bytedance.com/api/v3/tts/unidirectional"
-}`;
 
 const TTSettingsEditor = (props: IProps) => {
 	return (
@@ -154,7 +129,7 @@ const TTSettingsEditor = (props: IProps) => {
 			<div style={{ position: 'absolute', top: -40, right: 0, zIndex: 9999 }}>
 				<Button
 					onClick={() => {
-						props.onChange?.(defaultValue);
+						props.onChange?.(defaultTTSValue);
 					}}
 				>
 					重置为默认值
