@@ -15,6 +15,7 @@ import {
 	parseMonthlyCronExpression,
 	toCronExpression,
 } from '@/utils';
+import TTSettingsEditor from './TTSettingsEditor';
 import { chatBaseURLTips, imageRecognitionModelTips, ObjectToString, onTTSEnabledChange } from './utils';
 
 interface IProps {
@@ -433,18 +434,14 @@ const GlobalSettings = (props: IProps) => {
 															<a
 																target="_blank"
 																rel="noreferrer"
-																href="https://www.volcengine.com/docs/6561/79823"
+																href="https://www.volcengine.com/docs/6561/1598757?lang=zh"
 															>
 																语音设置文档
 															</a>
 														</>
 													}
 												>
-													<Input.TextArea
-														rows={8}
-														placeholder="请输入语音设置"
-														allowClear
-													/>
+													<TTSettingsEditor />
 												</Form.Item>
 												<Form.Item
 													name="ltts_settings"
