@@ -50,7 +50,10 @@ export const defaultAIDrawingValue = `{
 		"enabled": true
 	},
 	"Z-Image": {
-		"enabled": true
+		"enabled": true,
+		"base_url": "https://api-inference.modelscope.cn/",
+		"api_key": "xxxxxxx",
+		"model": "Tongyi-MAI/Z-Image-Turbo"
 	}
 }`;
 
