@@ -1,6 +1,7 @@
 import Editor from '@monaco-editor/react';
 import { Button } from 'antd';
 import React from 'react';
+import { registerMonacoJsonSchema } from './monacoJsonSchema';
 import { defaultAIDrawingValue } from './utils';
 
 interface IProps {
@@ -35,104 +36,104 @@ const AIDrawingSettingsEditor = (props: IProps) => {
 				onMount={(editor, monaco) => {
 					const model = editor.getModel();
 					if (model) {
-						monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-							validate: true,
-							schemas: [
-								{
-									uri: 'http://myserver/webhook-headers-schema.json',
-									fileMatch: [model.uri.toString()],
-									schema: {
-										type: 'object',
-										properties: {
-											'Z-Image': {
-												type: 'object',
-												properties: {
-													enabled: {
-														type: 'boolean',
-														description: '是否启用',
-													},
-												},
-												required: ['enabled'],
-												description: '造像绘图',
-											},
-											GLM: {
-												type: 'object',
-												properties: {
-													enabled: {
-														type: 'boolean',
-														description: '是否启用',
-													},
-												},
-												required: ['enabled'],
-												description: '智谱',
-											},
-											JiMeng: {
-												type: 'object',
-												properties: {
-													base_url: {
-														type: 'string',
-													},
-													model: {
-														type: 'string',
-													},
-													sessionid: {
-														type: 'array',
-														items: {
-															type: 'string',
-														},
-													},
-													sample_strength: {
-														type: 'number',
-													},
-													resolution: {
-														type: 'string',
-													},
-													ratio: {
-														type: 'string',
-													},
-													response_format: {
-														type: 'string',
-													},
-													enabled: {
-														type: 'boolean',
-														description: '是否启用',
-													},
-												},
-												required: ['base_url', 'model', 'sessionid', 'enabled'],
-												description: '即梦绘图',
-											},
-											DouBao: {
-												type: 'object',
-												properties: {
-													enabled: {
-														type: 'boolean',
-														description: '是否启用',
-													},
-													api_key: {
-														type: 'string',
-													},
-													model: {
-														type: 'string',
-													},
-													response_format: {
-														type: 'string',
-													},
-													watermark: {
-														type: 'boolean',
-														description: '是否包含水印',
-													},
-													size: {
-														type: 'string',
-													},
-												},
-												required: ['enabled', 'api_key', 'model'],
-												description: '豆包绘图',
+						registerMonacoJsonSchema(monaco, model.uri.toString(), 'http://myserver/ai-drawing-schema.json', {
+							type: 'object',
+							properties: {
+								'Z-Image': {
+									type: 'object',
+									properties: {
+										enabled: {
+											type: 'boolean',
+											description: '是否启用',
+										},
+										base_url: {
+											type: 'string',
+										},
+										model: {
+											type: 'string',
+										},
+										api_key: {
+											type: 'string',
+										},
+									},
+									required: ['enabled', 'base_url', 'model', 'api_key'],
+									description: '造像绘图',
+								},
+								GLM: {
+									type: 'object',
+									properties: {
+										enabled: {
+											type: 'boolean',
+											description: '是否启用',
+										},
+									},
+									required: ['enabled'],
+									description: '智谱',
+								},
+								JiMeng: {
+									type: 'object',
+									properties: {
+										base_url: {
+											type: 'string',
+										},
+										model: {
+											type: 'string',
+										},
+										sessionid: {
+											type: 'array',
+											items: {
+												type: 'string',
 											},
 										},
-										required: ['JiMeng', 'DouBao', 'GLM', 'Z-Image'],
+										sample_strength: {
+											type: 'number',
+										},
+										resolution: {
+											type: 'string',
+										},
+										ratio: {
+											type: 'string',
+										},
+										response_format: {
+											type: 'string',
+										},
+										enabled: {
+											type: 'boolean',
+											description: '是否启用',
+										},
 									},
+									required: ['base_url', 'model', 'sessionid', 'enabled'],
+									description: '即梦绘图',
 								},
-							],
+								DouBao: {
+									type: 'object',
+									properties: {
+										enabled: {
+											type: 'boolean',
+											description: '是否启用',
+										},
+										api_key: {
+											type: 'string',
+										},
+										model: {
+											type: 'string',
+										},
+										response_format: {
+											type: 'string',
+										},
+										watermark: {
+											type: 'boolean',
+											description: '是否包含水印',
+										},
+										size: {
+											type: 'string',
+										},
+									},
+									required: ['enabled', 'api_key', 'model'],
+									description: '豆包绘图',
+								},
+							},
+							required: ['JiMeng', 'DouBao', 'GLM', 'Z-Image'],
 						});
 					}
 				}}

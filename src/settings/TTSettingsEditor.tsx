@@ -1,6 +1,7 @@
 import Editor from '@monaco-editor/react';
 import { Button } from 'antd';
 import React from 'react';
+import { registerMonacoJsonSchema } from './monacoJsonSchema';
 import { defaultTTSValue } from './utils';
 
 interface IProps {
@@ -35,93 +36,84 @@ const TTSettingsEditor = (props: IProps) => {
 				onMount={(editor, monaco) => {
 					const model = editor.getModel();
 					if (model) {
-						monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-							validate: true,
-							schemas: [
-								{
-									uri: 'http://myserver/webhook-headers-schema.json',
-									fileMatch: [model.uri.toString()],
-									schema: {
-										type: 'object',
-										properties: {
-											request_body: {
-												type: 'object',
-												properties: {
-													namespace: {
-														type: 'string',
-													},
-													req_params: {
-														type: 'object',
-														properties: {
-															audio_params: {
-																type: 'object',
-																properties: {
-																	format: {
-																		type: 'string',
-																		enum: ['mp3', 'wav'],
-																	},
-																	sample_rate: {
-																		type: 'integer',
-																	},
-																},
-																required: ['format'],
-															},
-															model: {
-																type: 'string',
-															},
-															speaker: {
-																type: 'string',
-															},
-															text: {
-																type: 'string',
-															},
-														},
-														required: ['audio_params', 'speaker'],
-													},
-													user: {
-														type: 'object',
-														properties: {
-															uid: {
-																type: 'string',
-															},
-														},
-													},
-												},
-												required: ['req_params', 'user'],
-											},
-											request_header: {
-												type: 'object',
-												properties: {
-													'X-Api-Access-Key': {
-														type: 'string',
-													},
-													'X-Api-App-Id': {
-														type: 'string',
-													},
-													'X-Api-Request-Id': {
-														type: 'string',
-													},
-													'X-Api-Resource-Id': {
-														type: 'string',
-													},
-													'X-Control-Require-Usage-Tokens-Return': {
-														type: 'string',
-													},
-												},
-												required: ['X-Api-Access-Key', 'X-Api-App-Id', 'X-Api-Resource-Id'],
-											},
-											url: {
-												type: 'string',
-											},
-										},
-										required: ['request_body', 'request_header', 'url'],
-										additionalProperties: {
+						registerMonacoJsonSchema(monaco, model.uri.toString(), 'http://myserver/tts-settings-schema.json', {
+							type: 'object',
+							properties: {
+								request_body: {
+									type: 'object',
+									properties: {
+										namespace: {
 											type: 'string',
-											description: '其他自定义请求头',
+										},
+										req_params: {
+											type: 'object',
+											properties: {
+												audio_params: {
+													type: 'object',
+													properties: {
+														format: {
+															type: 'string',
+															enum: ['mp3', 'wav'],
+														},
+														sample_rate: {
+															type: 'integer',
+														},
+													},
+													required: ['format'],
+												},
+												model: {
+													type: 'string',
+												},
+												speaker: {
+													type: 'string',
+												},
+												text: {
+													type: 'string',
+												},
+											},
+											required: ['audio_params', 'speaker'],
+										},
+										user: {
+											type: 'object',
+											properties: {
+												uid: {
+													type: 'string',
+												},
+											},
 										},
 									},
+									required: ['req_params', 'user'],
 								},
-							],
+								request_header: {
+									type: 'object',
+									properties: {
+										'X-Api-Access-Key': {
+											type: 'string',
+										},
+										'X-Api-App-Id': {
+											type: 'string',
+										},
+										'X-Api-Request-Id': {
+											type: 'string',
+										},
+										'X-Api-Resource-Id': {
+											type: 'string',
+										},
+										'X-Control-Require-Usage-Tokens-Return': {
+											type: 'string',
+										},
+									},
+									required: ['X-Api-Access-Key', 'X-Api-App-Id', 'X-Api-Resource-Id'],
+								},
+								url: {
+									type: 'string',
+								},
+							},
+							required: ['request_body', 'request_header', 'url'],
+							additionalProperties: {
+								type: 'string',
+								description: '其他自定义请求头',
+							},
 						});
 					}
 				}}
