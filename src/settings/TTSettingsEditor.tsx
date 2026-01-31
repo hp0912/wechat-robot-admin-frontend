@@ -126,8 +126,10 @@ const TTSettingsEditor = (props: IProps) => {
 					}
 				}}
 			/>
-			<div style={{ position: 'absolute', top: -40, right: 0, zIndex: 9999 }}>
+			<div style={{ position: 'absolute', top: 4, right: 4, zIndex: 9999 }}>
 				<Button
+					color="default"
+					variant="filled"
 					onClick={() => {
 						props.onChange?.(defaultTTSValue);
 					}}

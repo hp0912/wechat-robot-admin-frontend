@@ -19,11 +19,11 @@ import {
 import type { DrawerProps } from 'antd';
 import React, { useContext } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
-import ImageModel from '@/components/ImageModel';
 import ParamsGroup from '@/components/ParamsGroup';
 import { DefaultAvatar } from '@/constant';
 import { AiModels } from '@/constant/ai';
 import { GlobalContext } from '@/context/global';
+import AIDrawingSettingsEditor from './AIDrawingSettingsEditor';
 import TTSettingsEditor from './TTSettingsEditor';
 import { imageRecognitionModelTips, ObjectToString, onTTSEnabledChange } from './utils';
 
@@ -167,7 +167,6 @@ const ChatRoomSettings = (props: IProps) => {
 		};
 		const drawingSettings: Partial<IFormValue> = {
 			image_ai_enabled: globalSettings.data.image_ai_enabled,
-			image_model: globalSettings.data.image_model,
 			image_ai_settings: imageAiSettings as unknown as object,
 		};
 		const welcomeSettings: Partial<IFormValue> = {
@@ -496,20 +495,10 @@ const ChatRoomSettings = (props: IProps) => {
 									return (
 										<>
 											<Form.Item
-												name="image_model"
-												label="绘图模型"
-											>
-												<ImageModel placeholder="不填则使用全局配置" />
-											</Form.Item>
-											<Form.Item
 												name="image_ai_settings"
 												label="绘图设置"
 											>
-												<Input.TextArea
-													rows={8}
-													placeholder="不填则使用全局配置"
-													allowClear
-												/>
+												<AIDrawingSettingsEditor />
 											</Form.Item>
 										</>
 									);

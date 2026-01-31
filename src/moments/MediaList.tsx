@@ -68,7 +68,7 @@ const MediaList = (props: IProps) => {
 	return (
 		<Image.PreviewGroup
 			preview={{
-				toolbarRender: (
+				actionsRender: (
 					_,
 					{
 						transform: { scale },
@@ -123,8 +123,7 @@ const MediaList = (props: IProps) => {
 							height={height}
 							fallback={ImageFallback}
 							preview={{
-								destroyOnClose: true,
-								mask: (
+								cover: (
 									<span style={{ color: '#fff' }}>
 										<EyeOutlined style={{ marginRight: 8 }} />
 										<span>查看高清大图</span>
@@ -154,8 +153,7 @@ export const MediaVideo = (props: IMediaVideoProps) => {
 	return (
 		<Image
 			preview={{
-				destroyOnClose: true,
-				mask: (
+				cover: (
 					<span style={{ color: '#fff' }}>
 						<PlayCircleFilled style={{ marginRight: 8 }} />
 						<span>播放</span>
@@ -169,7 +167,7 @@ export const MediaVideo = (props: IMediaVideoProps) => {
 						src={props.videoDownloadUrl}
 					/>
 				),
-				toolbarRender: () => null,
+				actionsRender: () => null,
 			}}
 			src={src}
 			fallback={ImageFallback}

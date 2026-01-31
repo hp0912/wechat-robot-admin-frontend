@@ -50,11 +50,10 @@
 		"typescript-eslint": "^8.21.0"
 	},
 	"dependencies": {
-		"@ant-design/icons": "^6.1.0",
 		"@monaco-editor/react": "^4.7.0",
 		"ahooks": "^3.8.4",
 		"ansicolor": "^2.0.3",
-		"antd": "^6.2.0",
+		"antd": "^6.2.2",
 		"antd-style": "^4.1.0",
 		"axios": "^1.7.9",
 		"copy-to-clipboard": "^3.3.3",
