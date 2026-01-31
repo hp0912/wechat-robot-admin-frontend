@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@ant-design/icons':
-    specifier: ^6.1.0
-    version: 6.1.0(react-dom@19.0.0)(react@19.0.0)
   '@monaco-editor/react':
     specifier: ^4.7.0
     version: 4.7.0(monaco-editor@0.54.0)(react-dom@19.0.0)(react@19.0.0)
@@ -18,11 +15,11 @@ dependencies:
     specifier: ^2.0.3
     version: 2.0.3
   antd:
-    specifier: ^6.2.0
-    version: 6.2.0(react-dom@19.0.0)(react@19.0.0)
+    specifier: ^6.2.2
+    version: 6.2.2(react-dom@19.0.0)(react@19.0.0)
   antd-style:
     specifier: ^4.1.0
-    version: 4.1.0(@types/react@19.0.7)(antd@6.2.0)(react-dom@19.0.0)(react@19.0.0)
+    version: 4.1.0(@types/react@19.0.7)(antd@6.2.2)(react-dom@19.0.0)(react@19.0.0)
   axios:
     specifier: ^1.7.9
     version: 1.7.9
@@ -69,7 +66,7 @@ dependencies:
 devDependencies:
   '@ant-design/v5-patch-for-react-19':
     specifier: ^1.0.3
-    version: 1.0.3(antd@6.2.0)(react-dom@19.0.0)(react@19.0.0)
+    version: 1.0.3(antd@6.2.2)(react-dom@19.0.0)(react@19.0.0)
   '@eslint/js':
     specifier: ^9.18.0
     version: 9.18.0
@@ -154,15 +151,10 @@ devDependencies:
 
 packages:
 
-  /@ant-design/colors@8.0.0:
-    resolution: {integrity: sha512-6YzkKCw30EI/E9kHOIXsQDHmMvTllT8STzjMb4K2qzit33RW2pqCJP0sk+hidBntXxE+Vz4n1+RvCTfBw6OErw==}
-    dependencies:
-      '@ant-design/fast-color': 3.0.0
-
   /@ant-design/colors@8.0.1:
     resolution: {integrity: sha512-foPVl0+SWIslGUtD/xBr1p9U4AKzPhNYEseXYRRo5QSzGACYZrQbe11AYJbYfAWnWSpGBx6JjBmSeugUsD9vqQ==}
     dependencies:
-      '@ant-design/fast-color': 3.0.0
+      '@ant-design/fast-color': 3.0.1
 
   /@ant-design/cssinjs-utils@2.0.2(react-dom@19.0.0)(react@19.0.0):
     resolution: {integrity: sha512-Mq3Hm6fJuQeFNKSp3+yT4bjuhVbdrsyXE2RyfpJFL0xiYNZdaJ6oFaE3zFrzmHbmvTd2Wp3HCbRtkD4fU+v2ZA==}
@@ -170,7 +162,7 @@ packages:
       react: '>=18'
       react-dom: '>=18'
     dependencies:
-      '@ant-design/cssinjs': 2.0.1(react-dom@19.0.0)(react@19.0.0)
+      '@ant-design/cssinjs': 2.0.3(react-dom@19.0.0)(react@19.0.0)
       '@babel/runtime': 7.28.4
       '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
       react: 19.0.0
@@ -191,9 +183,26 @@ packages:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       stylis: 4.3.5
+    dev: false
 
-  /@ant-design/fast-color@3.0.0:
-    resolution: {integrity: sha512-eqvpP7xEDm2S7dUzl5srEQCBTXZMmY3ekf97zI+M2DHOYyKdJGH0qua0JACHTqbkRnD/KHFQP9J1uMJ/XWVzzA==}
+  /@ant-design/cssinjs@2.0.3(react-dom@19.0.0)(react@19.0.0):
+    resolution: {integrity: sha512-HAo8SZ3a6G8v6jT0suCz1270na6EA3obeJWM4uzRijBhdwdoMAXWK2f4WWkwB28yUufsfk3CAhN1coGPQq4kNQ==}
+    peerDependencies:
+      react: '>=16.0.0'
+      react-dom: '>=16.0.0'
+    dependencies:
+      '@babel/runtime': 7.28.4
+      '@emotion/hash': 0.8.0
+      '@emotion/unitless': 0.7.5
+      '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
+      clsx: 2.1.1
+      csstype: 3.1.3
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+      stylis: 4.3.5
+
+  /@ant-design/fast-color@3.0.1:
+    resolution: {integrity: sha512-esKJegpW4nckh0o6kV3Tkb7NPIZYbPnnFxmQDUmL08ukXZAvV85TZBr70eGuke/CIArLaP6aw8lt9KILjnWuOw==}
     engines: {node: '>=8.x'}
 
   /@ant-design/icons-svg@4.4.2:
@@ -206,9 +215,9 @@ packages:
       react: '>=16.0.0'
       react-dom: '>=16.0.0'
     dependencies:
-      '@ant-design/colors': 8.0.0
+      '@ant-design/colors': 8.0.1
       '@ant-design/icons-svg': 4.4.2
-      '@rc-component/util': 1.6.2(react-dom@19.0.0)(react@19.0.0)
+      '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
       clsx: 2.1.1
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
@@ -226,7 +235,7 @@ packages:
       react-dom: 19.0.0(react@19.0.0)
       throttle-debounce: 5.0.2
 
-  /@ant-design/v5-patch-for-react-19@1.0.3(antd@6.2.0)(react-dom@19.0.0)(react@19.0.0):
+  /@ant-design/v5-patch-for-react-19@1.0.3(antd@6.2.2)(react-dom@19.0.0)(react@19.0.0):
     resolution: {integrity: sha512-iWfZuSUl5kuhqLUw7jJXUQFMMkM7XpW7apmKzQBQHU0cpifYW4A79xIBt9YVO5IBajKpPG5UKP87Ft7Yrw1p/w==}
     engines: {node: '>=12.x'}
     peerDependencies:
@@ -234,7 +243,7 @@ packages:
       react: '>=19.0.0'
       react-dom: '>=19.0.0'
     dependencies:
-      antd: 6.2.0(react-dom@19.0.0)(react@19.0.0)
+      antd: 6.2.2(react-dom@19.0.0)(react@19.0.0)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
     dev: true
@@ -859,7 +868,7 @@ packages:
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
     dependencies:
-      '@rc-component/select': 1.5.0(react-dom@19.0.0)(react@19.0.0)
+      '@rc-component/select': 1.5.2(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/tree': 1.1.0(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
       clsx: 2.1.1
@@ -896,7 +905,7 @@ packages:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
     dependencies:
-      '@ant-design/fast-color': 3.0.0
+      '@ant-design/fast-color': 3.0.1
       '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
       clsx: 2.1.1
       react: 19.0.0
@@ -919,7 +928,7 @@ packages:
       react-dom: '>=18.0.0'
     dependencies:
       '@rc-component/motion': 1.1.6(react-dom@19.0.0)(react@19.0.0)
-      '@rc-component/portal': 2.1.2(react-dom@19.0.0)(react@19.0.0)
+      '@rc-component/portal': 2.2.0(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
       clsx: 2.1.1
       react: 19.0.0
@@ -970,7 +979,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@rc-component/motion': 1.1.6(react-dom@19.0.0)(react@19.0.0)
-      '@rc-component/portal': 2.1.2(react-dom@19.0.0)(react@19.0.0)
+      '@rc-component/portal': 2.2.0(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
       clsx: 2.1.1
       react: 19.0.0
@@ -1076,7 +1085,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.28.4
-      '@rc-component/resize-observer': 1.0.1(react-dom@19.0.0)(react@19.0.0)
+      '@rc-component/resize-observer': 1.1.1(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
       clsx: 2.1.1
       react: 19.0.0
@@ -1114,23 +1123,11 @@ packages:
         optional: true
     dependencies:
       '@rc-component/overflow': 1.0.0(react-dom@19.0.0)(react@19.0.0)
-      '@rc-component/resize-observer': 1.0.1(react-dom@19.0.0)(react@19.0.0)
+      '@rc-component/resize-observer': 1.1.1(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/trigger': 3.9.0(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
       clsx: 2.1.1
       dayjs: 1.11.13
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-
-  /@rc-component/portal@2.1.2(react-dom@19.0.0)(react@19.0.0):
-    resolution: {integrity: sha512-6CQHPuZzKeYxs8GzbisbvchLPlhRC4wH1+P9PeiylLwC9WUt6CPmVh4SR9Fs+avpaGuNTU/7a8maC9csjc2lSw==}
-    engines: {node: '>=12.x'}
-    peerDependencies:
-      react: '>=18.0.0'
-      react-dom: '>=18.0.0'
-    dependencies:
-      '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
-      clsx: 2.1.1
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
@@ -1180,16 +1177,6 @@ packages:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  /@rc-component/resize-observer@1.0.1(react-dom@19.0.0)(react@19.0.0):
-    resolution: {integrity: sha512-r+w+Mz1EiueGk1IgjB3ptNXLYSLZ5vnEfKHH+gfgj7JMupftyzvUUl3fRcMZe5uMM04x0n8+G2o/c6nlO2+Wag==}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-
   /@rc-component/resize-observer@1.1.1(react-dom@19.0.0)(react@19.0.0):
     resolution: {integrity: sha512-NfXXMmiR+SmUuKE1NwJESzEUYUFWIDUn2uXpxCTOLwiRUUakd62DRNFjRJArgzyFW8S5rsL4aX5XlyIXyC/vRA==}
     peerDependencies:
@@ -1213,8 +1200,8 @@ packages:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  /@rc-component/select@1.5.0(react-dom@19.0.0)(react@19.0.0):
-    resolution: {integrity: sha512-Zz0hpToAfOdWo/1jj3dW5iooBNU8F6fVgVaYN4Jy1SL3Xcx2OO+IqiQnxqk/PjY6hg1HVt7LjkkrYvpJQyZxoQ==}
+  /@rc-component/select@1.5.2(react-dom@19.0.0)(react@19.0.0):
+    resolution: {integrity: sha512-7wqD5D4I2+fc5XoB4nzDDK656QPlDnFAUaxLljkU1wwSpi4+MZxndv9vgg7NQfveuuf0/ilUdOjuPg7NPl7Mmg==}
     engines: {node: '>=8.x'}
     peerDependencies:
       react: '*'
@@ -1271,7 +1258,7 @@ packages:
       react-dom: '>=18.0.0'
     dependencies:
       '@rc-component/context': 2.0.1(react-dom@19.0.0)(react@19.0.0)
-      '@rc-component/resize-observer': 1.0.1(react-dom@19.0.0)(react@19.0.0)
+      '@rc-component/resize-observer': 1.1.1(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/virtual-list': 1.0.2(react-dom@19.0.0)(react@19.0.0)
       clsx: 2.1.1
@@ -1288,7 +1275,7 @@ packages:
       '@rc-component/dropdown': 1.0.2(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/menu': 1.2.0(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/motion': 1.1.6(react-dom@19.0.0)(react@19.0.0)
-      '@rc-component/resize-observer': 1.0.1(react-dom@19.0.0)(react@19.0.0)
+      '@rc-component/resize-observer': 1.1.1(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
       clsx: 2.1.1
       react: 19.0.0
@@ -1301,7 +1288,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@rc-component/input': 1.1.2(react-dom@19.0.0)(react@19.0.0)
-      '@rc-component/resize-observer': 1.0.1(react-dom@19.0.0)(react@19.0.0)
+      '@rc-component/resize-observer': 1.1.1(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
       clsx: 2.1.1
       react: 19.0.0
@@ -1339,7 +1326,7 @@ packages:
       react: '*'
       react-dom: '*'
     dependencies:
-      '@rc-component/select': 1.5.0(react-dom@19.0.0)(react@19.0.0)
+      '@rc-component/select': 1.5.2(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/tree': 1.1.0(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
       clsx: 2.1.1
@@ -1396,6 +1383,7 @@ packages:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       react-is: 18.3.1
+    dev: false
 
   /@rc-component/util@1.7.0(react-dom@19.0.0)(react@19.0.0):
     resolution: {integrity: sha512-tIvIGj4Vl6fsZFvWSkYw9sAfiCKUXMyhVz6kpKyZbwyZyRPqv2vxYZROdaO1VB4gqTNvUZFXh6i3APUiterw5g==}
@@ -1416,7 +1404,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.28.4
-      '@rc-component/resize-observer': 1.0.1(react-dom@19.0.0)(react@19.0.0)
+      '@rc-component/resize-observer': 1.1.1(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/util': 1.7.0(react-dom@19.0.0)(react@19.0.0)
       clsx: 2.1.1
       react: 19.0.0
@@ -2430,7 +2418,7 @@ packages:
     resolution: {integrity: sha512-pzusTqk9VHrjgMCcTPDTTvfJfx6Q3+L5tQ6yKC8Diexmoit4YROTFIkxFvRTNL9y5s0Q8HrSrgerCD5bIC+Kiw==}
     dev: false
 
-  /antd-style@4.1.0(@types/react@19.0.7)(antd@6.2.0)(react-dom@19.0.0)(react@19.0.0):
+  /antd-style@4.1.0(@types/react@19.0.7)(antd@6.2.2)(react-dom@19.0.0)(react@19.0.0):
     resolution: {integrity: sha512-vnPBGg0OVlSz90KRYZhxd89aZiOImTiesF+9MQqN8jsLGZUQTjbP04X9jTdEfsztKUuMbBWg/RmB/wHTakbtMQ==}
     peerDependencies:
       antd: '>=6.0.0'
@@ -2443,7 +2431,7 @@ packages:
       '@emotion/react': 11.14.0(@types/react@19.0.7)(react@19.0.0)
       '@emotion/serialize': 1.3.3
       '@emotion/utils': 1.4.2
-      antd: 6.2.0(react-dom@19.0.0)(react@19.0.0)
+      antd: 6.2.2(react-dom@19.0.0)(react@19.0.0)
       react: 19.0.0
       use-merge-value: 1.2.0(react@19.0.0)
     transitivePeerDependencies:
@@ -2452,16 +2440,16 @@ packages:
       - supports-color
     dev: false
 
-  /antd@6.2.0(react-dom@19.0.0)(react@19.0.0):
-    resolution: {integrity: sha512-fwETatwHYExjfzKcV41fBtgPo4kp+g+9gp5YOSSGxwnJHljps8TbXef8WP7ZnaOn5dkcA9xIC0TyUecIybBG7w==}
+  /antd@6.2.2(react-dom@19.0.0)(react@19.0.0):
+    resolution: {integrity: sha512-f5RvWnhjt2gZTpBMW3msHwA3IeaCJBHDwVyEsskYGp0EXcRhhklWrltkybDki0ysBNywkjLPp3wuuWhIKfplcQ==}
     peerDependencies:
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
     dependencies:
       '@ant-design/colors': 8.0.1
-      '@ant-design/cssinjs': 2.0.1(react-dom@19.0.0)(react@19.0.0)
+      '@ant-design/cssinjs': 2.0.3(react-dom@19.0.0)(react@19.0.0)
       '@ant-design/cssinjs-utils': 2.0.2(react-dom@19.0.0)(react@19.0.0)
-      '@ant-design/fast-color': 3.0.0
+      '@ant-design/fast-color': 3.0.1
       '@ant-design/icons': 6.1.0(react-dom@19.0.0)(react@19.0.0)
       '@ant-design/react-slick': 2.0.0(react-dom@19.0.0)(react@19.0.0)
       '@babel/runtime': 7.28.4
@@ -2486,9 +2474,9 @@ packages:
       '@rc-component/progress': 1.0.2(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/qrcode': 1.1.1(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/rate': 1.0.1(react-dom@19.0.0)(react@19.0.0)
-      '@rc-component/resize-observer': 1.0.1(react-dom@19.0.0)(react@19.0.0)
+      '@rc-component/resize-observer': 1.1.1(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/segmented': 1.3.0(react-dom@19.0.0)(react@19.0.0)
-      '@rc-component/select': 1.5.0(react-dom@19.0.0)(react@19.0.0)
+      '@rc-component/select': 1.5.2(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/slider': 1.0.1(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/steps': 1.2.2(react-dom@19.0.0)(react@19.0.0)
       '@rc-component/switch': 1.0.3(react-dom@19.0.0)(react@19.0.0)

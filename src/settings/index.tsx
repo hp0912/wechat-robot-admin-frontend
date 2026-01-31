@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import type { AnyType } from '@/common/types';
-import ImageModel from '@/components/ImageModel';
 import ParamsGroup from '@/components/ParamsGroup';
 import { AiModels } from '@/constant/ai';
 import {
@@ -15,6 +14,7 @@ import {
 	parseMonthlyCronExpression,
 	toCronExpression,
 } from '@/utils';
+import AIDrawingSettingsEditor from './AIDrawingSettingsEditor';
 import TTSettingsEditor from './TTSettingsEditor';
 import { chatBaseURLTips, imageRecognitionModelTips, ObjectToString, onTTSEnabledChange } from './utils';
 
@@ -364,22 +364,11 @@ const GlobalSettings = (props: IProps) => {
 										return (
 											<>
 												<Form.Item
-													name="image_model"
-													label="绘图模型"
-													rules={[{ required: true, message: '绘图模型不能为空' }]}
-												>
-													<ImageModel placeholder="请选择或者手动输入绘图模型" />
-												</Form.Item>
-												<Form.Item
 													name="image_ai_settings"
 													label="绘图设置"
 													rules={[{ required: true, message: '绘图设置不能为空' }]}
 												>
-													<Input.TextArea
-														rows={8}
-														placeholder="请输入绘图设置"
-														allowClear
-													/>
+													<AIDrawingSettingsEditor />
 												</Form.Item>
 											</>
 										);

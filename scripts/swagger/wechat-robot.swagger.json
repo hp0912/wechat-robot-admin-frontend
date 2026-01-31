@@ -1762,9 +1762,6 @@
 												"image_ai_enabled": {
 													"type": "boolean"
 												},
-												"image_model": {
-													"type": "string"
-												},
 												"image_ai_settings": {
 													"type": "object",
 													"properties": {}
@@ -1850,7 +1847,6 @@
 												"chat_model",
 												"chat_prompt",
 												"image_ai_enabled",
-												"image_model",
 												"image_ai_settings",
 												"welcome_enabled",
 												"welcome_type",
@@ -1953,9 +1949,6 @@
 									"image_ai_enabled": {
 										"type": "boolean"
 									},
-									"image_model": {
-										"type": "string"
-									},
 									"image_ai_settings": {
 										"type": "object",
 										"properties": {}
@@ -2039,7 +2032,6 @@
 									"chat_model",
 									"chat_prompt",
 									"image_ai_enabled",
-									"image_model",
 									"image_ai_settings",
 									"welcome_enabled",
 									"welcome_type",
@@ -3650,9 +3642,6 @@
 												"image_ai_enabled": {
 													"type": "boolean"
 												},
-												"image_model": {
-													"type": "string"
-												},
 												"image_ai_settings": {
 													"type": "object",
 													"properties": {}
@@ -3678,7 +3667,6 @@
 												"chat_model",
 												"chat_prompt",
 												"image_ai_enabled",
-												"image_model",
 												"image_ai_settings",
 												"tts_enabled",
 												"tts_settings",
@@ -3762,9 +3750,6 @@
 									"image_ai_enabled": {
 										"type": "boolean"
 									},
-									"image_model": {
-										"type": "string"
-									},
 									"image_ai_settings": {
 										"type": "object",
 										"properties": {}
@@ -3790,7 +3775,6 @@
 									"chat_model",
 									"chat_prompt",
 									"image_ai_enabled",
-									"image_model",
 									"image_ai_settings",
 									"config_id",
 									"wechat_id",
@@ -6822,9 +6806,6 @@
 												"image_ai_enabled": {
 													"type": "boolean"
 												},
-												"image_model": {
-													"type": "string"
-												},
 												"image_ai_settings": {
 													"type": "object",
 													"properties": {}
@@ -6931,7 +6912,6 @@
 												"chat_model",
 												"chat_prompt",
 												"image_ai_enabled",
-												"image_model",
 												"image_ai_settings",
 												"welcome_enabled",
 												"welcome_type",
@@ -7037,9 +7017,6 @@
 									"image_ai_enabled": {
 										"type": "boolean"
 									},
-									"image_model": {
-										"type": "string"
-									},
 									"image_ai_settings": {
 										"type": "object",
 										"properties": {}
@@ -7144,7 +7121,6 @@
 									"chat_model",
 									"chat_prompt",
 									"image_ai_enabled",
-									"image_model",
 									"image_ai_settings",
 									"welcome_enabled",
 									"welcome_type",

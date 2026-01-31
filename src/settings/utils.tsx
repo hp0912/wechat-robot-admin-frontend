@@ -27,6 +27,33 @@ export const defaultTTSValue = `{
   "url": "https://openspeech.bytedance.com/api/v3/tts/unidirectional"
 }`;
 
+export const defaultAIDrawingValue = `{
+	"JiMeng": {
+		"enabled": true,
+		"base_url": "http://jimeng-api:9000",
+		"model": "jimeng-4.1",
+		"sessionid": ["xxxxxx"],
+		"sample_strength": 0.5,
+		"resolution": "2k",
+		"ratio": "16:9",
+		"response_format": "url"
+	},
+	"DouBao": {
+		"enabled": true,
+		"api_key": "xxxxxxx",
+		"model": "doubao-seedream-4-0-250828",
+		"size": "2K",
+		"response_format": "url",
+		"watermark": false
+	},
+	"GLM": {
+		"enabled": true
+	},
+	"Z-Image": {
+		"enabled": true
+	}
+}`;
+
 export const onTTSEnabledChange = (form: FormInstance<AnyType>, checked: boolean) => {
 	if (checked) {
 		if (!form.getFieldValue('tts_settings')) {
