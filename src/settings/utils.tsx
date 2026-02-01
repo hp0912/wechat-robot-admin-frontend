@@ -41,7 +41,7 @@ export const defaultAIDrawingValue = `{
 	"DouBao": {
 		"enabled": true,
 		"api_key": "xxxxxxx",
-		"model": "doubao-seedream-4-0-250828",
+		"model": "doubao-seedream-4.0",
 		"size": "2K",
 		"response_format": "url",
 		"watermark": false
@@ -53,7 +53,7 @@ export const defaultAIDrawingValue = `{
 		"enabled": true,
 		"base_url": "https://api-inference.modelscope.cn/",
 		"api_key": "xxxxxxx",
-		"model": "Tongyi-MAI/Z-Image-Turbo"
+		"model": "Z-Image-Turbo"
 	}
 }`;
 
