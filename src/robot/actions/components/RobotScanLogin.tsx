@@ -263,7 +263,9 @@ const RobotScanLogin = (props: IProps) => {
 				onClose();
 			}}
 			width={256}
-			maskClosable={false}
+			mask={{
+				closable: false,
+			}}
 			footer={null}
 		>
 			<Container>
@@ -295,7 +297,9 @@ const RobotScanLogin = (props: IProps) => {
 						open={securityVerifyState.secOpen}
 						onCancel={onSecClose}
 						width={365}
-						maskClosable={false}
+						mask={{
+							closable: false,
+						}}
 						okText="下一步"
 						okButtonProps={{ disabled: !securityVerifyState.type }}
 						onOk={() => {
@@ -342,7 +346,9 @@ const RobotScanLogin = (props: IProps) => {
 						open={securityVerifyState.tfaOpen}
 						onCancel={on2FAClose}
 						width={256}
-						maskClosable={false}
+						mask={{
+							closable: false,
+						}}
 						footer={null}
 					>
 						<Spin

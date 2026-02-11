@@ -44,7 +44,9 @@ const Progress = (props: { open?: boolean; progress: ImagePullRender[] }) => {
 		<Modal
 			open={props.open}
 			closable={false}
-			maskClosable={false}
+			mask={{
+				closable: false,
+			}}
 			title="更新机器人镜像"
 			footer={null}
 			width={globalContext.global?.isSmallScreen ? '100%' : 900}
