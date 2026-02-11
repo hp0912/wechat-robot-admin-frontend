@@ -42,7 +42,9 @@ const SliderVerify = (props: IProps) => {
 			open={props.open}
 			onCancel={props.onClose}
 			width={500}
-			maskClosable={false}
+			mask={{
+				closable: false,
+			}}
 			footer={[
 				<Button
 					key="ok"

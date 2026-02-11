@@ -154,7 +154,9 @@ const RobotData62Login = (props: IProps) => {
 						open={smsState.open}
 						onCancel={onSmsClose}
 						width={256}
-						maskClosable={false}
+						mask={{
+							closable: false,
+						}}
 						footer={null}
 					>
 						<Spin
