@@ -1,13 +1,15 @@
-import type { AnyType } from '@/common/types';
-import { IconGenerator } from './IconGenerator';
+import Icon from '@ant-design/icons';
+import type { GetProps } from 'antd';
+import React from 'react';
 
-const SVG = (props: AnyType) => (
+type CustomIconComponentProps = GetProps<typeof Icon>;
+
+const SVG: React.FC = () => (
 	<svg
 		width="1em"
 		height="1em"
 		fill="currentColor"
 		viewBox="0 0 1219 1024"
-		{...props}
 	>
 		<path
 			d="M472.8 609.2c-146.1 0-264.9-118.8-264.9-264.9S326.8 79.5 472.8 79.5s264.9 118.8 264.9 264.9-118.8 264.8-264.9 264.8z m0-437c-94.9 0-172.2 77.2-172.2 172.2s77.2 172.2 172.2 172.2S645 439.3 645 344.3s-77.2-172.1-172.2-172.1z"
@@ -24,4 +26,11 @@ const SVG = (props: AnyType) => (
 	</svg>
 );
 
-export default IconGenerator('AddFriendsOutlined', SVG);
+const AddFriendsOutlined: React.FC<Partial<CustomIconComponentProps>> = props => (
+	<Icon
+		component={SVG}
+		{...props}
+	/>
+);
+
+export default AddFriendsOutlined;

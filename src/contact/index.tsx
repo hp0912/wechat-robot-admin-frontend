@@ -25,14 +25,13 @@ import {
 } from 'antd';
 import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import type { ReactNode } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import ChatHistory from '@/chat';
 import ChatRoomMember from '@/chat-room/ChatRoomMember';
 import SendMessage from '@/components/send-message';
 import { DefaultAvatar } from '@/constant';
-import { GlobalContext } from '@/context/global';
 import FemaleFilled from '@/icons/FemaleFilled';
 import GroupFilled from '@/icons/GroupFilled';
 import MaleFilled from '@/icons/MaleFilled';
@@ -78,8 +77,6 @@ interface IFriendActionState {
 
 const Contact = (props: IProps) => {
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const [search, setSearch] = useSetState({ keyword: '', type: 'chat_room', pageIndex: 1 });
 	const [chatRoomAction, setChatRoomAction] = useSetState<IChatRoomActionState>({});
@@ -181,22 +178,20 @@ const Contact = (props: IProps) => {
 					wrap={false}
 					gutter={8}
 				>
-					{globalContext.global?.isSmallScreen ? null : (
-						<Col flex="0 0 300px">
-							<Input
-								placeholder="搜索联系人"
-								style={{ width: '100%' }}
-								prefix={<SearchOutlined />}
-								allowClear
-								onKeyDown={ev => {
-									if (ev.key === 'Enter') {
-										setSearch({ keyword: ev.currentTarget.value, pageIndex: 1 });
-									}
-								}}
-							/>
-						</Col>
-					)}
-					<Col flex="0 0 260px">
+					<Col flex="0 0 300px" className="hide-on-mobile">
+						<Input
+							placeholder="搜索联系人"
+							style={{ width: '100%' }}
+							prefix={<SearchOutlined />}
+							allowClear
+							onKeyDown={ev => {
+								if (ev.key === 'Enter') {
+									setSearch({ keyword: ev.currentTarget.value, pageIndex: 1 });
+								}
+							}}
+						/>
+					</Col>
+				<Col flex="0 0 260px">
 						<Radio.Group
 							optionType="button"
 							buttonStyle="solid"
@@ -221,34 +216,32 @@ const Contact = (props: IProps) => {
 						robotId={props.robotId}
 						robot={props.robot}
 					/>
-					{globalContext.global?.isSmallScreen ? null : (
-						<>
-							<AddFriends
-								robotId={props.robotId}
-								robot={props.robot}
-								onRefresh={refresh}
+					<Space className="hide-on-mobile">
+						<AddFriends
+							robotId={props.robotId}
+							robot={props.robot}
+							onRefresh={refresh}
+						/>
+						<ChatRoomCreate
+							robotId={props.robotId}
+							robot={props.robot}
+							onRefresh={refresh}
+						/>
+						<Tooltip title="同步联系人">
+							<Button
+								type="primary"
+								style={{ marginRight: 8 }}
+								loading={syncLoading}
+								ghost
+								icon={<CloudSyncOutlined />}
+								onClick={async () => {
+									await runAsync();
+									setSearch({ pageIndex: 1 });
+									message.success('同步成功');
+								}}
 							/>
-							<ChatRoomCreate
-								robotId={props.robotId}
-								robot={props.robot}
-								onRefresh={refresh}
-							/>
-							<Tooltip title="同步联系人">
-								<Button
-									type="primary"
-									style={{ marginRight: 8 }}
-									loading={syncLoading}
-									ghost
-									icon={<CloudSyncOutlined />}
-									onClick={async () => {
-										await runAsync();
-										setSearch({ pageIndex: 1 });
-										message.success('同步成功');
-									}}
-								/>
-							</Tooltip>
-						</>
-					)}
+						</Tooltip>
+					</Space>
 				</Space>
 			</Flex>
 			<div

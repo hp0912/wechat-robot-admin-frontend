@@ -3,12 +3,10 @@ import { useRequest, useSize } from 'ahooks';
 import { App, Avatar, Divider, Dropdown, Layout, Skeleton, Space, Watermark } from 'antd';
 import type { MenuProps } from 'antd';
 import logo from 'public/logo.svg';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import { UrlLogin } from './constant/redirect-url';
-import { GlobalContext } from './context/global';
-import type { IGlobalContext } from './context/global';
 import { UserContext } from './context/user';
 
 const { Header } = Layout;
@@ -57,10 +55,6 @@ const AppLayout: React.FC = () => {
 
 	const bodySize = useSize(document.body);
 	const isSmallScreen = (bodySize?.width || 0) < 1280;
-
-	const globalState = useMemo<IGlobalContext>(() => {
-		return { global: { isSmallScreen, size: bodySize || { width: 0, height: 0 } } };
-	}, [isSmallScreen, bodySize?.width, bodySize?.height]);
 
 	// 获取用户详情
 	const { data: user, loading: userLoading } = useRequest(
@@ -144,13 +138,11 @@ const AppLayout: React.FC = () => {
 					</Space>
 				</Header>
 				<Layout>
-					<GlobalContext.Provider value={globalState}>
-						<UserContext.Provider value={{ user: user, signOut }}>
-							<Layout style={{ padding: '10px 10px 0 10px' }}>
-								<Outlet />
-							</Layout>
-						</UserContext.Provider>
-					</GlobalContext.Provider>
+					<UserContext.Provider value={{ user: user, signOut }}>
+						<Layout style={{ padding: '10px 10px 0 10px' }}>
+							<Outlet />
+						</Layout>
+					</UserContext.Provider>
 				</Layout>
 			</Layout>
 		</Watermark>

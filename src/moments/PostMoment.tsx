@@ -3,10 +3,9 @@ import { useRequest } from 'ahooks';
 import { App, Avatar, Col, Form, Image, Input, Modal, Row, Segmented, Select, Spin, Upload } from 'antd';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 import axios from 'axios';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
-import { GlobalContext } from '@/context/global';
 import MentionOutlined from '@/icons/MentionOutlined';
 import { UploadContainer } from './styled';
 
@@ -48,8 +47,6 @@ const getBase64 = (file: FileType): Promise<string> => {
 
 const PostMoment = (props: IProps) => {
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const [form] = Form.useForm<IFormValue>();
 
@@ -181,7 +178,7 @@ const PostMoment = (props: IProps) => {
 	return (
 		<Modal
 			title="发布朋友圈"
-			width={globalContext.global?.isSmallScreen ? '100%' : 550}
+			width="min(550px, calc(100vw - 32px))"
 			open={props.open}
 			confirmLoading={postMomentLoading}
 			onOk={async () => {

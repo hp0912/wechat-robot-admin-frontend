@@ -1,12 +1,11 @@
 import { CloseCircleFilled, DeleteFilled, EllipsisOutlined, HeartFilled, HeartOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Dropdown, Empty, Flex, List, Row, Space, Spin, Tooltip } from 'antd';
-import type { DrawerProps, MenuProps } from 'antd';
+import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
-import React, { useContext, useRef } from 'react';
+import React, { useRef } from 'react';
 import type { Api, SnsObject } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
-import { GlobalContext } from '@/context/global';
 import CommentFilled from '@/icons/CommentFilled';
 import CommentOutlined from '@/icons/CommentOutlined';
 import GroupFilled from '@/icons/GroupFilled';
@@ -37,8 +36,6 @@ type IContact = Api.V1ContactListList.ResponseBody['data']['items'][number];
 
 const SpecifiContactMomentDetail = (props: IProps) => {
 	const { message, modal } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const [commentState, setCommentState] = useSetState<ICommentState>({});
 
@@ -358,12 +355,6 @@ const SpecifiContactMomentDetail = (props: IProps) => {
 		);
 	};
 
-	let size: DrawerProps['size'] = 'large';
-	if (globalContext.global?.size.width) {
-		const { width } = globalContext.global.size;
-		size = globalContext.global.isSmallScreen ? width * 0.99 : width * 0.8;
-	}
-
 	return (
 		<Drawer
 			title={
@@ -383,7 +374,7 @@ const SpecifiContactMomentDetail = (props: IProps) => {
 					</Col>
 				</Row>
 			}
-			size={size}
+			size="min(99vw, 80vw)"
 			open={props.open}
 			onClose={props.onClose}
 			footer={null}

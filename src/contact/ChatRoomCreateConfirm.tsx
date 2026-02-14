@@ -1,11 +1,10 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { useRequest, useSetState } from 'ahooks';
 import { Alert, App, Avatar, Button, Col, Drawer, Input, Row, Space, Table, Tag, theme } from 'antd';
-import type { DrawerProps, TableProps } from 'antd';
-import React, { useContext } from 'react';
+import type { TableProps } from 'antd';
+import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
-import { GlobalContext } from '@/context/global';
 
 type IDataSource = Api.V1ContactListList.ResponseBody['data']['items'][number];
 
@@ -20,8 +19,6 @@ interface IProps {
 const ChatRoomCreateConfirm = (props: IProps) => {
 	const { token } = theme.useToken();
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const [search, setSearch] = useSetState({ keyword: '', pageIndex: 1 });
 	const [selectedState, setSelectedState] = useSetState<{ keys: number[]; rows: IDataSource[] }>({
@@ -116,18 +113,12 @@ const ChatRoomCreateConfirm = (props: IProps) => {
 		},
 	];
 
-	let size: DrawerProps['size'] = 'large';
-	if (globalContext.global?.size.width) {
-		const { width } = globalContext.global.size;
-		size = globalContext.global.isSmallScreen ? width * 0.99 : 760;
-	}
-
 	return (
 		<Drawer
 			title="创建新的群聊"
 			open={props.open}
 			onClose={props.onClose}
-			size={size}
+			size="min(99vw, 760px)"
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { paddingTop: 16, paddingBottom: 0 } }}
 			extra={
 				<Space>

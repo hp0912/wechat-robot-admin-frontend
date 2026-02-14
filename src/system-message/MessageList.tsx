@@ -1,11 +1,10 @@
 import { useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Row, Space, Table, Tag, theme } from 'antd';
-import type { DrawerProps, TableProps } from 'antd';
+import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
-import React, { useContext } from 'react';
+import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
-import { GlobalContext } from '@/context/global';
 import ChatRoomJoin from './ChatRoomJoin';
 import FriendPassVerify from './FriendPassVerify';
 
@@ -22,8 +21,6 @@ interface IProps {
 const MessageList = (props: IProps) => {
 	const { token } = theme.useToken();
 	const { message, modal } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const [selectedState, setSelectedState] = useSetState<{ keys: number[]; rows: IDataSource[] }>({
 		keys: [],
@@ -174,18 +171,12 @@ const MessageList = (props: IProps) => {
 		},
 	];
 
-	let size: DrawerProps['size'] = 'large';
-	if (globalContext.global?.size.width) {
-		const { width } = globalContext.global.size;
-		size = globalContext.global.isSmallScreen ? width * 0.99 : width * 0.75;
-	}
-
 	return (
 		<Drawer
 			title="系统消息"
 			open={props.open}
 			onClose={props.onClose}
-			size={size}
+			size="min(99vw, 75vw)"
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { paddingTop: 16, paddingBottom: 0 } }}
 			extra={
 				<Space>

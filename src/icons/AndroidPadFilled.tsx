@@ -1,13 +1,15 @@
-import type { AnyType } from '@/common/types';
-import { IconGenerator } from './IconGenerator';
+import Icon from '@ant-design/icons';
+import type { GetProps } from 'antd';
+import React from 'react';
 
-const SVG = (props: AnyType) => (
+type CustomIconComponentProps = GetProps<typeof Icon>;
+
+const SVG: React.FC = () => (
 	<svg
 		width="1em"
 		height="1em"
 		fill="currentColor"
 		viewBox="0 0 1024 1024"
-		{...props}
 	>
 		<path
 			d="M800 0h-576A96 96 0 0 0 128 96v832A96 96 0 0 0 224 1024h576c52.992 0 96-43.008 95.936-96v-832c0-53.12-42.88-96-96-96zM496 64h32a16 16 0 1 1 0 32h-32a16 16 0 1 1 0-32zM512 992a31.936 31.936 0 1 1 0-64 31.872 31.872 0 1 1 0 64z m320-96H192V128h640v768z"
@@ -20,4 +22,11 @@ const SVG = (props: AnyType) => (
 	</svg>
 );
 
-export default IconGenerator('AndroidPadFilled', SVG);
+const AndroidPadFilled: React.FC<Partial<CustomIconComponentProps>> = props => (
+	<Icon
+		component={SVG}
+		{...props}
+	/>
+);
+
+export default AndroidPadFilled;

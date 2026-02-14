@@ -1,9 +1,8 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Button, Form, Input, Modal, Spin } from 'antd';
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
-import { GlobalContext } from '@/context/global';
 
 type IRobot = Api.V1RobotListList.ResponseBody['data']['items'][number];
 
@@ -17,8 +16,6 @@ interface IProps {
 
 const RobotData62Login = (props: IProps) => {
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const [smsState, SetSmsState] = useSetState({ open: false, smsCode: '', countdown: 0 });
 
@@ -109,7 +106,7 @@ const RobotData62Login = (props: IProps) => {
 	return (
 		<Modal
 			title="登录iPhone设备"
-			width={globalContext.global?.isSmallScreen ? '100%' : 475}
+			width="min(475px, calc(100vw - 32px))"
 			open={props.open}
 			confirmLoading={loading}
 			onOk={async () => {

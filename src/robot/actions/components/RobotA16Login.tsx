@@ -1,9 +1,8 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { App, Form, Input, Modal } from 'antd';
-import React, { useContext } from 'react';
+import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
-import { GlobalContext } from '@/context/global';
 
 type IRobot = Api.V1RobotListList.ResponseBody['data']['items'][number];
 
@@ -17,8 +16,6 @@ interface IProps {
 
 const RobotA16Login = (props: IProps) => {
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const [form] = Form.useForm<Api.V1RobotLoginA16Create.RequestBody>();
 
@@ -49,7 +46,7 @@ const RobotA16Login = (props: IProps) => {
 	return (
 		<Modal
 			title="登录安卓手机设备"
-			width={globalContext.global?.isSmallScreen ? '100%' : 475}
+			width="min(475px, calc(100vw - 32px))"
 			open={props.open}
 			confirmLoading={loading}
 			onOk={async () => {

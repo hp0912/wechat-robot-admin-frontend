@@ -1,7 +1,6 @@
 import { useRequest } from 'ahooks';
 import { App, Form, Input, Modal } from 'antd';
-import React, { useContext } from 'react';
-import { GlobalContext } from '@/context/global';
+import React from 'react';
 
 interface IProps {
 	robotId: number;
@@ -14,8 +13,6 @@ interface IProps {
 
 const FriendRemarkChange = (props: IProps) => {
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const [form] = Form.useForm<{ content: string }>();
 
@@ -43,7 +40,7 @@ const FriendRemarkChange = (props: IProps) => {
 	return (
 		<Modal
 			title={`修改 ${props.nickname} 好友备注`}
-			width={globalContext.global?.isSmallScreen ? '100%' : 500}
+			width="min(500px, calc(100vw - 32px))"
 			open={props.open}
 			confirmLoading={loading}
 			onOk={async () => {

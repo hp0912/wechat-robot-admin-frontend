@@ -1,12 +1,10 @@
 import { DownOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Dropdown, Input, List, Pagination, Row, Space, Tag } from 'antd';
-import type { DrawerProps } from 'antd';
 import dayjs from 'dayjs';
-import React, { useContext } from 'react';
+import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
-import { GlobalContext } from '@/context/global';
 import SpecifiContactMomentList from '@/moments/SpecifiContactMomentList';
 import ChatRoomMemberFriend from './ChatRoomMemberFriend';
 import ChatRoomMemberRemove from './ChatRoomMemberRemove';
@@ -41,8 +39,6 @@ interface IMomentState {
 
 const GroupMember = (props: IProps) => {
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const { chatRoom } = props;
 
@@ -104,12 +100,6 @@ const GroupMember = (props: IProps) => {
 		setMomentState({ open: false, contactId: undefined, contactName: undefined });
 	});
 
-	let size: DrawerProps['size'] = 'large';
-	if (globalContext.global?.size.width) {
-		const { width } = globalContext.global.size;
-		size = globalContext.global.isSmallScreen ? width * 0.99 : width - 300;
-	}
-
 	return (
 		<Drawer
 			title={
@@ -146,7 +136,7 @@ const GroupMember = (props: IProps) => {
 			}
 			open={props.open}
 			onClose={props.onClose}
-			size={size}
+			size="min(calc(100vw - 32px), max(calc(100vw - 300px), 750px))"
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { paddingTop: 16, paddingBottom: 0 } }}
 			footer={null}
 		>

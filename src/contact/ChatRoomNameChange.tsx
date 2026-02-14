@@ -1,7 +1,6 @@
 import { useRequest } from 'ahooks';
 import { App, Form, Input, Modal } from 'antd';
-import React, { useContext } from 'react';
-import { GlobalContext } from '@/context/global';
+import React from 'react';
 
 interface IProps {
 	robotId: number;
@@ -14,8 +13,6 @@ interface IProps {
 
 const ChatRoomNameChange = (props: IProps) => {
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const [form] = Form.useForm<{ content: string }>();
 
@@ -45,7 +42,7 @@ const ChatRoomNameChange = (props: IProps) => {
 	return (
 		<Modal
 			title={`修改 ${props.chatRoomName} 群名称`}
-			width={globalContext.global?.isSmallScreen ? '100%' : 500}
+			width="min(500px, calc(100vw - 32px))"
 			open={props.open}
 			confirmLoading={loading}
 			onOk={async () => {

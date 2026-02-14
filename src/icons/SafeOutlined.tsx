@@ -1,13 +1,15 @@
-import type { AnyType } from '@/common/types';
-import { IconGenerator } from './IconGenerator';
+import Icon from '@ant-design/icons';
+import type { GetProps } from 'antd';
+import React from 'react';
 
-const SVG = (props: AnyType) => (
+type CustomIconComponentProps = GetProps<typeof Icon>;
+
+const SVG: React.FC = () => (
 	<svg
 		width="1em"
 		height="1em"
 		fill="currentColor"
 		viewBox="0 0 1024 1024"
-		{...props}
 	>
 		<path
 			d="M891.2896 136.73813333C731.68213333 118.6816 611.60106667 75.50293333 534.39146667 8.36266667l-20.30933334-17.64693334-21.9136 15.63306667C371.16586667 92.74026667 251.4944 136.53333333 136.53333333 136.53333333h-34.13333333v477.86666667c0 146.50026667 129.16053333 279.38133333 394.88853333 406.25493333l13.96053334 6.656 14.2336-6.10986666C788.34346667 908.288 921.6 771.44746667 921.6 614.4V140.1856l-30.3104-3.44746667zM853.33333333 614.4c0 124.58666667-114.55146667 238.25066667-340.61653333 337.92C285.73013333 841.6256 170.66666667 727.9616 170.66666667 614.4V203.70773333c111.65013333-7.23626667 225.6896-49.80053333 339.72906666-126.8736C592.24746667 139.22986667 707.3792 180.8384 853.33333333 200.8064V614.4z"
@@ -20,4 +22,11 @@ const SVG = (props: AnyType) => (
 	</svg>
 );
 
-export default IconGenerator('SafeOutlined', SVG);
+const SafeOutlined: React.FC<Partial<CustomIconComponentProps>> = props => (
+	<Icon
+		component={SVG}
+		{...props}
+	/>
+);
+
+export default SafeOutlined;

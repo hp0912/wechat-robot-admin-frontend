@@ -14,12 +14,11 @@ import {
 	Spin,
 	Switch,
 } from 'antd';
-import React, { useContext } from 'react';
+import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 import { DefaultAvatar } from '@/constant';
 import { AiModels } from '@/constant/ai';
-import { GlobalContext } from '@/context/global';
 
 interface IProps {
 	open?: boolean;
@@ -34,8 +33,6 @@ interface IFormValue extends Api.V1MomentsSettingsCreate.RequestBody {
 
 const MomentSettings = (props: IProps) => {
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const [form] = Form.useForm<IFormValue>();
 
@@ -113,7 +110,7 @@ const MomentSettings = (props: IProps) => {
 	return (
 		<Modal
 			title="朋友圈设置"
-			width={globalContext.global?.isSmallScreen ? '100%' : 760}
+			width="min(760px, calc(100vw - 32px))"
 			open={props.open}
 			confirmLoading={saveLoading}
 			onOk={async () => {

@@ -1,9 +1,8 @@
 import { useRequest } from 'ahooks';
 import { App, Avatar, Button, Col, Form, Input, Modal, Row, Tooltip } from 'antd';
-import React, { useContext } from 'react';
+import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
-import { GlobalContext } from '@/context/global';
 
 interface IProps {
 	robotId: number;
@@ -15,8 +14,6 @@ interface IProps {
 
 const SearchFriends = (props: IProps) => {
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const [form] = Form.useForm<{ username: string; verify_content: string }>();
 
@@ -77,7 +74,7 @@ const SearchFriends = (props: IProps) => {
 	return (
 		<Modal
 			title="添加好友"
-			width={globalContext.global?.isSmallScreen ? '100%' : 450}
+			width="min(450px, calc(100vw - 32px))"
 			open={props.open}
 			onCancel={props.onClose}
 			footer={[
