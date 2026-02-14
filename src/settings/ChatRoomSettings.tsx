@@ -16,13 +16,11 @@ import {
 	Spin,
 	Switch,
 } from 'antd';
-import type { DrawerProps } from 'antd';
-import React, { useContext } from 'react';
+import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import ParamsGroup from '@/components/ParamsGroup';
 import { DefaultAvatar } from '@/constant';
 import { AiModels } from '@/constant/ai';
-import { GlobalContext } from '@/context/global';
 import AIDrawingSettingsEditor from './AIDrawingSettingsEditor';
 import TTSettingsEditor from './TTSettingsEditor';
 import { imageRecognitionModelTips, ObjectToString, onTTSEnabledChange } from './utils';
@@ -38,8 +36,6 @@ type IFormValue = Api.V1ChatRoomSettingsCreate.RequestBody;
 
 const ChatRoomSettings = (props: IProps) => {
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const { chatRoom } = props;
 
@@ -237,12 +233,6 @@ const ChatRoomSettings = (props: IProps) => {
 		}
 	};
 
-	let size: DrawerProps['size'] = 'large';
-	if (globalContext.global?.size.width) {
-		const { width } = globalContext.global.size;
-		size = globalContext.global.isSmallScreen ? width * 0.99 : 900;
-	}
-
 	return (
 		<Drawer
 			title={
@@ -278,7 +268,7 @@ const ChatRoomSettings = (props: IProps) => {
 			}
 			open={props.open}
 			onClose={props.onClose}
-			size={size}
+			size="min(99vw, 900px)"
 			styles={{
 				header: { paddingTop: 12, paddingBottom: 12 },
 				body: { paddingTop: 16, paddingBottom: 0 },

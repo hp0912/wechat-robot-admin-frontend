@@ -1,12 +1,10 @@
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Col, Drawer, List, Row, Skeleton, Spin } from 'antd';
-import type { DrawerProps } from 'antd';
 import dayjs from 'dayjs';
-import React, { useContext } from 'react';
+import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { Api, SnsObject } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
-import { GlobalContext } from '@/context/global';
 import MediaList, { MediaVideo } from './MediaList';
 import SpecifiContactMomentDetail from './SpecifiContactMomentDetail';
 import { Container } from './styled';
@@ -32,8 +30,6 @@ interface IState {
 
 const SpecifiContactMomentList = (props: IProps) => {
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	// frist_page_md5 单词拼写原本是协议拼错了
 	const [prevState, setPrevState] = useSetState<IState>({ frist_page_md5: '', max_id: '0', moments: [] });
@@ -108,12 +104,6 @@ const SpecifiContactMomentList = (props: IProps) => {
 		setMomentDetailState({ open: false, momentId: undefined });
 	};
 
-	let size: DrawerProps['size'] = 'large';
-	if (globalContext.global?.size.width) {
-		const { width } = globalContext.global.size;
-		size = globalContext.global.isSmallScreen ? width * 0.99 : width * 0.8;
-	}
-
 	return (
 		<Drawer
 			title={
@@ -133,7 +123,7 @@ const SpecifiContactMomentList = (props: IProps) => {
 					</Col>
 				</Row>
 			}
-			size={size}
+			size="min(99vw, 80vw)"
 			open={props.open}
 			onClose={props.onClose}
 			footer={null}

@@ -1,16 +1,14 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { useBoolean, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Input, List, Pagination, Row, Space, Tag, theme } from 'antd';
-import type { DrawerProps } from 'antd';
 import dayjs from 'dayjs';
-import React, { useContext } from 'react';
+import React from 'react';
 import type { ReactNode } from 'react';
 import styled from 'styled-components';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import SendMessage from '@/components/send-message';
 import { AppMessageTypeMap, DefaultAvatar, MessageTypeMap } from '@/constant';
 import { AppMessageType, MessageType } from '@/constant/types';
-import { GlobalContext } from '@/context/global';
 import AttachDownload from './components/AttachDownload';
 import ImageDownload from './components/ImageDownload';
 import MessageRevoke from './components/MessageRevoke';
@@ -40,8 +38,6 @@ const MessageContentContainer = styled.div`
 const ChatHistory = (props: IProps) => {
 	const { token } = theme.useToken();
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const { contact, robot } = props;
 
@@ -133,11 +129,6 @@ const ChatHistory = (props: IProps) => {
 	};
 
 	const now = Date.now() / 1000;
-	let size: DrawerProps['size'] = 'large';
-	if (globalContext.global?.size.width) {
-		const { width } = globalContext.global.size;
-		size = globalContext.global.isSmallScreen ? width * 0.99 : width - 300;
-	}
 
 	return (
 		<Drawer
@@ -170,7 +161,7 @@ const ChatHistory = (props: IProps) => {
 			}
 			open={props.open}
 			onClose={props.onClose}
-			size={size}
+			size="min(calc(100vw - 32px), max(calc(100vw - 300px), 750px))"
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { paddingTop: 16, paddingBottom: 0 } }}
 			footer={null}
 		>

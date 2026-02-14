@@ -1,12 +1,11 @@
 import { FileTextFilled, FundFilled, MacCommandFilled, OpenAIFilled, WechatFilled } from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Spin, Tabs, Tag, theme } from 'antd';
-import type { DrawerProps, TabsProps } from 'antd';
+import type { TabsProps } from 'antd';
 import dayjs from 'dayjs';
-import React, { Suspense, useContext, useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import styled from 'styled-components';
 import Contact from '@/contact';
-import { GlobalContext } from '@/context/global';
 import MCPFilled from '@/icons/MCPFilled';
 import MomentsFilled from '@/icons/MomentsFilled';
 import OSSFilled from '@/icons/OSSFilled';
@@ -56,8 +55,6 @@ const BaseContainer = styled.div`
 const RobotDetail = (props: IProps) => {
 	const { message } = App.useApp();
 	const { token } = theme.useToken();
-
-	const globalContext = useContext(GlobalContext);
 
 	const { open, onClose } = props;
 
@@ -183,12 +180,6 @@ const RobotDetail = (props: IProps) => {
 		},
 	];
 
-	let size: DrawerProps['size'] = 'large';
-	if (globalContext.global?.size.width) {
-		const { width } = globalContext.global.size;
-		size = globalContext.global.isSmallScreen ? width * 0.99 : width - 300;
-	}
-
 	return (
 		<Drawer
 			title={
@@ -209,28 +200,26 @@ const RobotDetail = (props: IProps) => {
 				</Row>
 			}
 			extra={
-				globalContext.global?.isSmallScreen ? null : (
-					<Space>
-						<RestartRobotContainer
-							robotId={data.id}
-							robot={data}
-							onRefresh={onRefresh}
-						/>
-						<RecreateRobotContainer
-							robotId={data.id}
-							onRefresh={onRefresh}
-						/>
-						<Remove
-							robotId={data.id}
-							onRefresh={onRemoveRefresh}
-							buttonText="删除机器人"
-						/>
-					</Space>
-				)
+				<Space className="hide-on-mobile">
+					<RestartRobotContainer
+						robotId={data.id}
+						robot={data}
+						onRefresh={onRefresh}
+					/>
+					<RecreateRobotContainer
+						robotId={data.id}
+						onRefresh={onRefresh}
+					/>
+					<Remove
+						robotId={data.id}
+						onRefresh={onRemoveRefresh}
+						buttonText="删除机器人"
+					/>
+				</Space>
 			}
 			open={open}
 			onClose={onClose}
-			size={size}
+			size="min(calc(100vw - 32px), max(calc(100vw - 300px), 750px))"
 			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { padding: 0 } }}
 			footer={null}
 		>
@@ -251,276 +240,275 @@ const RobotDetail = (props: IProps) => {
 						items={items}
 					/>
 				</Col>
-				{globalContext.global?.isSmallScreen ? null : (
-					<Col
-						flex="0 0 350px"
-						style={{ width: 350, height: '100%' }}
-					>
-						{loading ? (
-							<Skeleton
-								avatar
-								active
-								paragraph={{ rows: 4 }}
-							/>
-						) : (
-							<BaseContainer>
-								<div
-									style={{
-										height: '100%',
-										overflow: 'hidden auto',
-										flex: '1 1 auto',
-									}}
-								>
-									<div className="title">基本信息</div>
-									<div style={{ padding: '0 16px', fontSize: 12, color: 'rgb(107, 107, 107)' }}>
-										<Row
-											className="base-info-item"
-											align="middle"
-											wrap={false}
+				<Col
+					flex="0 0 350px"
+					className="hide-on-mobile"
+					style={{ width: 350, height: '100%' }}
+				>
+					{loading ? (
+						<Skeleton
+							avatar
+							active
+							paragraph={{ rows: 4 }}
+						/>
+					) : (
+						<BaseContainer>
+							<div
+								style={{
+									height: '100%',
+									overflow: 'hidden auto',
+									flex: '1 1 auto',
+								}}
+							>
+								<div className="title">基本信息</div>
+								<div style={{ padding: '0 16px', fontSize: 12, color: 'rgb(107, 107, 107)' }}>
+									<Row
+										className="base-info-item"
+										align="middle"
+										wrap={false}
+									>
+										<Col
+											flex="0 0 100px"
+											className="base-info-title"
 										>
-											<Col
-												flex="0 0 100px"
-												className="base-info-title"
-											>
-												微信号
-											</Col>
-											<Col
-												flex="1 1 auto"
-												className="ellipsis  base-info-value"
-											>
-												{data.wechat_id || <Tag color="gray">未绑定</Tag>}
-											</Col>
-										</Row>
-										<Row
-											className="base-info-item"
-											align="middle"
-											wrap={false}
+											微信号
+										</Col>
+										<Col
+											flex="1 1 auto"
+											className="ellipsis  base-info-value"
 										>
-											<Col
-												flex="0 0 100px"
-												className="base-info-title"
-											>
-												昵称
-											</Col>
-											<Col
-												flex="1 1 auto"
-												className="ellipsis  base-info-value"
-											>
-												{data.nickname || <Tag color="gray">未绑定</Tag>}
-											</Col>
-										</Row>
-										<Row
-											className="base-info-item"
-											align="middle"
-											wrap={false}
+											{data.wechat_id || <Tag color="gray">未绑定</Tag>}
+										</Col>
+									</Row>
+									<Row
+										className="base-info-item"
+										align="middle"
+										wrap={false}
+									>
+										<Col
+											flex="0 0 100px"
+											className="base-info-title"
 										>
-											<Col
-												flex="0 0 100px"
-												className="base-info-title"
-											>
-												状态
-											</Col>
-											<Col
-												flex="1 1 auto"
-												className="ellipsis base-info-value"
-											>
-												{data.status === 'online' ? (
-													<Tag color={token.colorSuccess}>在线</Tag>
-												) : (
-													<Tag color="gray">离线</Tag>
-												)}
-											</Col>
-										</Row>
-										<Row
-											className="base-info-item"
-											align="middle"
-											wrap={false}
+											昵称
+										</Col>
+										<Col
+											flex="1 1 auto"
+											className="ellipsis  base-info-value"
 										>
-											<Col
-												flex="0 0 100px"
-												className="base-info-title"
-											>
-												上一次登陆时间
-											</Col>
-											<Col
-												flex="1 1 auto"
-												className="ellipsis base-info-value"
-											>
-												{data.last_login_at ? (
-													dayjs(data.last_login_at * 1000).format('YYYY-MM-DD HH:mm:ss')
-												) : (
-													<Tag color="gray">未登录</Tag>
-												)}
-											</Col>
-										</Row>
-										<Row
-											className="base-info-item"
-											align="middle"
-											wrap={false}
+											{data.nickname || <Tag color="gray">未绑定</Tag>}
+										</Col>
+									</Row>
+									<Row
+										className="base-info-item"
+										align="middle"
+										wrap={false}
+									>
+										<Col
+											flex="0 0 100px"
+											className="base-info-title"
 										>
-											<Col
-												flex="0 0 100px"
-												className="base-info-title"
-											>
-												设备ID
-											</Col>
-											<Col
-												flex="1 1 auto"
-												className="ellipsis  base-info-value"
-											>
-												{data.device_id}
-											</Col>
-										</Row>
-										<Row
-											className="base-info-item"
-											align="middle"
-											wrap={false}
+											状态
+										</Col>
+										<Col
+											flex="1 1 auto"
+											className="ellipsis base-info-value"
 										>
-											<Col
-												flex="0 0 100px"
-												className="base-info-title"
-											>
-												设备名称
-											</Col>
-											<Col
-												flex="1 1 auto"
-												className="ellipsis  base-info-value"
-											>
-												{data.device_name}
-											</Col>
-										</Row>
-										<Row
-											className="base-info-item"
-											align="middle"
-											wrap={false}
+											{data.status === 'online' ? (
+												<Tag color={token.colorSuccess}>在线</Tag>
+											) : (
+												<Tag color="gray">离线</Tag>
+											)}
+										</Col>
+									</Row>
+									<Row
+										className="base-info-item"
+										align="middle"
+										wrap={false}
+									>
+										<Col
+											flex="0 0 100px"
+											className="base-info-title"
 										>
-											<Col
-												flex="0 0 100px"
-												className="base-info-title"
-											>
-												设备类型
-											</Col>
-											<Col
-												flex="1 1 auto"
-												className="ellipsis  base-info-value"
-											>
-												{data.device_type}
-											</Col>
-										</Row>
-										<Row
-											className="base-info-item"
-											align="middle"
-											wrap={false}
+											上一次登陆时间
+										</Col>
+										<Col
+											flex="1 1 auto"
+											className="ellipsis base-info-value"
 										>
-											<Col
-												flex="0 0 100px"
-												className="base-info-title"
-											>
-												微信版本
-											</Col>
-											<Col
-												flex="1 1 auto"
-												className="ellipsis  base-info-value"
-											>
-												{data.wechat_version}
-											</Col>
-										</Row>
-										<Row
-											className="base-info-item"
-											align="middle"
-											wrap={false}
+											{data.last_login_at ? (
+												dayjs(data.last_login_at * 1000).format('YYYY-MM-DD HH:mm:ss')
+											) : (
+												<Tag color="gray">未登录</Tag>
+											)}
+										</Col>
+									</Row>
+									<Row
+										className="base-info-item"
+										align="middle"
+										wrap={false}
+									>
+										<Col
+											flex="0 0 100px"
+											className="base-info-title"
 										>
-											<Col
-												flex="0 0 100px"
-												className="base-info-title"
-											>
-												RDS
-											</Col>
-											<Col
-												flex="1 1 auto"
-												className="ellipsis  base-info-value"
-											>
-												{data.redis_db}
-											</Col>
-										</Row>
-										<Row
-											className="base-info-item"
-											align="middle"
-											wrap={false}
+											设备ID
+										</Col>
+										<Col
+											flex="1 1 auto"
+											className="ellipsis  base-info-value"
 										>
-											<Col
-												flex="0 0 100px"
-												className="base-info-title"
-											>
-												归属人
-											</Col>
-											<Col
-												flex="1 1 auto"
-												className="ellipsis  base-info-value"
-											>
-												{data.owner}
-											</Col>
-										</Row>
-										<Row
-											className="base-info-item"
-											align="middle"
-											wrap={false}
+											{data.device_id}
+										</Col>
+									</Row>
+									<Row
+										className="base-info-item"
+										align="middle"
+										wrap={false}
+									>
+										<Col
+											flex="0 0 100px"
+											className="base-info-title"
 										>
-											<Col
-												flex="0 0 100px"
-												className="base-info-title"
-											>
-												机器人ID
-											</Col>
-											<Col
-												flex="1 1 auto"
-												className="ellipsis  base-info-value"
-											>
-												{data.id}
-											</Col>
-										</Row>
-										<Row
-											className="base-info-item"
-											align="middle"
-											wrap={false}
+											设备名称
+										</Col>
+										<Col
+											flex="1 1 auto"
+											className="ellipsis  base-info-value"
 										>
-											<Col
-												flex="0 0 100px"
-												className="base-info-title"
-											>
-												机器人编码
-											</Col>
-											<Col
-												flex="1 1 auto"
-												className="ellipsis  base-info-value"
-											>
-												{data.robot_code}
-											</Col>
-										</Row>
-										<Row
-											className="base-info-item"
-											align="middle"
-											wrap={false}
+											{data.device_name}
+										</Col>
+									</Row>
+									<Row
+										className="base-info-item"
+										align="middle"
+										wrap={false}
+									>
+										<Col
+											flex="0 0 100px"
+											className="base-info-title"
 										>
-											<Col
-												flex="0 0 100px"
-												className="base-info-title"
-											>
-												创建时间
-											</Col>
-											<Col
-												flex="1 1 auto"
-												className="ellipsis base-info-value"
-											>
-												{dayjs(data.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')}
-											</Col>
-										</Row>
-									</div>
+											设备类型
+										</Col>
+										<Col
+											flex="1 1 auto"
+											className="ellipsis  base-info-value"
+										>
+											{data.device_type}
+										</Col>
+									</Row>
+									<Row
+										className="base-info-item"
+										align="middle"
+										wrap={false}
+									>
+										<Col
+											flex="0 0 100px"
+											className="base-info-title"
+										>
+											微信版本
+										</Col>
+										<Col
+											flex="1 1 auto"
+											className="ellipsis  base-info-value"
+										>
+											{data.wechat_version}
+										</Col>
+									</Row>
+									<Row
+										className="base-info-item"
+										align="middle"
+										wrap={false}
+									>
+										<Col
+											flex="0 0 100px"
+											className="base-info-title"
+										>
+											RDS
+										</Col>
+										<Col
+											flex="1 1 auto"
+											className="ellipsis  base-info-value"
+										>
+											{data.redis_db}
+										</Col>
+									</Row>
+									<Row
+										className="base-info-item"
+										align="middle"
+										wrap={false}
+									>
+										<Col
+											flex="0 0 100px"
+											className="base-info-title"
+										>
+											归属人
+										</Col>
+										<Col
+											flex="1 1 auto"
+											className="ellipsis  base-info-value"
+										>
+											{data.owner}
+										</Col>
+									</Row>
+									<Row
+										className="base-info-item"
+										align="middle"
+										wrap={false}
+									>
+										<Col
+											flex="0 0 100px"
+											className="base-info-title"
+										>
+											机器人ID
+										</Col>
+										<Col
+											flex="1 1 auto"
+											className="ellipsis  base-info-value"
+										>
+											{data.id}
+										</Col>
+									</Row>
+									<Row
+										className="base-info-item"
+										align="middle"
+										wrap={false}
+									>
+										<Col
+											flex="0 0 100px"
+											className="base-info-title"
+										>
+											机器人编码
+										</Col>
+										<Col
+											flex="1 1 auto"
+											className="ellipsis  base-info-value"
+										>
+											{data.robot_code}
+										</Col>
+									</Row>
+									<Row
+										className="base-info-item"
+										align="middle"
+										wrap={false}
+									>
+										<Col
+											flex="0 0 100px"
+											className="base-info-title"
+										>
+											创建时间
+										</Col>
+										<Col
+											flex="1 1 auto"
+											className="ellipsis base-info-value"
+										>
+											{dayjs(data.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')}
+										</Col>
+									</Row>
 								</div>
-							</BaseContainer>
-						)}
-					</Col>
-				)}
+							</div>
+						</BaseContainer>
+					)}
+				</Col>
 			</Row>
 		</Drawer>
 	);

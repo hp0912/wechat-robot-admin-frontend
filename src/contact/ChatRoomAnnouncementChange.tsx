@@ -1,7 +1,6 @@
 import { useRequest } from 'ahooks';
 import { Alert, App, Form, Input, Modal } from 'antd';
-import React, { useContext } from 'react';
-import { GlobalContext } from '@/context/global';
+import React from 'react';
 
 interface IProps {
 	robotId: number;
@@ -14,8 +13,6 @@ interface IProps {
 
 const ChatRoomAnnouncementChange = (props: IProps) => {
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const [form] = Form.useForm<{ content: string }>();
 
@@ -45,7 +42,7 @@ const ChatRoomAnnouncementChange = (props: IProps) => {
 	return (
 		<Modal
 			title={`发布 ${props.chatRoomName} 群公告`}
-			width={globalContext.global?.isSmallScreen ? '100%' : 600}
+			width="min(600px, calc(100vw - 32px))"
 			open={props.open}
 			confirmLoading={loading}
 			onOk={async () => {

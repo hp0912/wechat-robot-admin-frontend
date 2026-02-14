@@ -1,7 +1,6 @@
 import { useRequest } from 'ahooks';
 import { App, Modal } from 'antd';
-import React, { useContext } from 'react';
-import { GlobalContext } from '@/context/global';
+import React from 'react';
 
 interface IProps {
 	robotId: number;
@@ -14,8 +13,6 @@ interface IProps {
 
 const ChatRoomQuit = (props: IProps) => {
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const { runAsync, loading } = useRequest(
 		async () => {
@@ -42,7 +39,7 @@ const ChatRoomQuit = (props: IProps) => {
 	return (
 		<Modal
 			title={`退出群聊 ${props.chatRoomName}`}
-			width={globalContext.global?.isSmallScreen ? '100%' : 450}
+			width="min(450px, calc(100vw - 32px))"
 			open={props.open}
 			confirmLoading={loading}
 			onOk={async () => {

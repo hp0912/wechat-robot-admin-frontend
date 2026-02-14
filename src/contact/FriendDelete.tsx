@@ -1,7 +1,6 @@
 import { useRequest } from 'ahooks';
 import { App, Modal } from 'antd';
-import React, { useContext } from 'react';
-import { GlobalContext } from '@/context/global';
+import React from 'react';
 
 interface IProps {
 	robotId: number;
@@ -14,8 +13,6 @@ interface IProps {
 
 const FriendDelete = (props: IProps) => {
 	const { message } = App.useApp();
-
-	const globalContext = useContext(GlobalContext);
 
 	const { runAsync, loading } = useRequest(
 		async () => {
@@ -39,7 +36,7 @@ const FriendDelete = (props: IProps) => {
 	return (
 		<Modal
 			title={`删除好友 ${props.contactName}`}
-			width={globalContext.global?.isSmallScreen ? '100%' : 380}
+			width="min(380px, calc(100vw - 32px))"
 			open={props.open}
 			confirmLoading={loading}
 			onOk={async () => {
