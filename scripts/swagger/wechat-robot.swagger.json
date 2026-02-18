@@ -1777,6 +1777,22 @@
 													"type": "object",
 													"properties": {}
 												},
+												"short_video_parsing_enabled": {
+													"type": "boolean"
+												},
+												"wxhb_notify_enabled": {
+													"type": "boolean"
+												},
+												"wxhb_notify_member_list": {
+													"type": "string"
+												},
+												"podcast_enabled": {
+													"type": "boolean"
+												},
+												"podcast_config": {
+													"type": "object",
+													"properties": {}
+												},
 												"pat_enabled": {
 													"type": "boolean"
 												},
@@ -1872,7 +1888,10 @@
 												"pat_text",
 												"pat_voice_timbre",
 												"workflow_model",
-												"image_recognition_model"
+												"image_recognition_model",
+												"short_video_parsing_enabled",
+												"wxhb_notify_enabled",
+												"podcast_enabled"
 											]
 										}
 									},
@@ -1961,6 +1980,22 @@
 										"properties": {}
 									},
 									"ltts_settings": {
+										"type": "object",
+										"properties": {}
+									},
+									"short_video_parsing_enabled": {
+										"type": "boolean"
+									},
+									"wxhb_notify_enabled": {
+										"type": "boolean"
+									},
+									"wxhb_notify_member_list": {
+										"type": "string"
+									},
+									"podcast_enabled": {
+										"type": "boolean"
+									},
+									"podcast_config": {
 										"type": "object",
 										"properties": {}
 									},
@@ -2059,7 +2094,10 @@
 									"pat_text",
 									"pat_voice_timbre",
 									"workflow_model",
-									"image_recognition_model"
+									"image_recognition_model",
+									"short_video_parsing_enabled",
+									"wxhb_notify_enabled",
+									"podcast_enabled"
 								]
 							},
 							"example": {

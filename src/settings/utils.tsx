@@ -57,6 +57,14 @@ export const defaultAIDrawingValue = `{
 	}
 }`;
 
+export const defaultAIPodcastValue = `{
+	"DouBao": {
+		"app_id": "xxxxxxx",
+		"access_key": "xxxxxxx",
+		"resource_id": "volc.service_type.10050"
+	}
+}`;
+
 export const onTTSEnabledChange = (form: FormInstance<AnyType>, checked: boolean) => {
 	if (checked) {
 		if (!form.getFieldValue('tts_settings')) {
@@ -92,7 +100,15 @@ export const onTTSEnabledChange = (form: FormInstance<AnyType>, checked: boolean
 	}
 };
 
-export const ObjectToString = <T extends { image_ai_settings: object; tts_settings: object; ltts_settings: object }>(
+export const ObjectToString = <
+	T extends {
+		image_ai_settings: object;
+		tts_settings: object;
+		ltts_settings: object;
+		podcast_config?: object;
+		wxhb_notify_member_list?: string;
+	},
+>(
 	data: T,
 ) => {
 	if (data.image_ai_settings && typeof data.image_ai_settings === 'object') {
@@ -103,6 +119,14 @@ export const ObjectToString = <T extends { image_ai_settings: object; tts_settin
 	}
 	if (data.ltts_settings && typeof data.ltts_settings === 'object') {
 		data.ltts_settings = JSON.stringify(data.ltts_settings, null, 2) as unknown as object;
+	}
+	if (data.podcast_config && typeof data.podcast_config === 'object') {
+		data.podcast_config = JSON.stringify(data.podcast_config, null, 2) as unknown as object;
+	}
+	if (data.wxhb_notify_member_list && typeof data.wxhb_notify_member_list === 'string') {
+		data.wxhb_notify_member_list = data.wxhb_notify_member_list.split(',') as unknown as string;
+	} else {
+		data.wxhb_notify_member_list = [] as unknown as string;
 	}
 };
 

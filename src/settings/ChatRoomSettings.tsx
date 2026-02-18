@@ -18,10 +18,12 @@ import {
 } from 'antd';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
+import { filterOption } from '@/common/filter-option';
 import ParamsGroup from '@/components/ParamsGroup';
 import { DefaultAvatar } from '@/constant';
 import { AiModels } from '@/constant/ai';
 import AIDrawingSettingsEditor from './AIDrawingSettingsEditor';
+import AIPodcastConfigEditor from './AIPodcastConfigEditor';
 import TTSettingsEditor from './TTSettingsEditor';
 import { imageRecognitionModelTips, ObjectToString, onTTSEnabledChange } from './utils';
 
@@ -40,6 +42,22 @@ const ChatRoomSettings = (props: IProps) => {
 	const { chatRoom } = props;
 
 	const [form] = Form.useForm<IFormValue>();
+
+	const { data: chatRoomMembers = [], loading: loadingChatRoomMembers } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1ChatRoomNotLeftMembersList({
+				id: props.robotId,
+				chat_room_id: chatRoom.wechat_id!,
+			});
+			return resp.data?.data || [];
+		},
+		{
+			manual: false,
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
 
 	// 加载全局配置
 	const { data: globalSettings, loading: globalLoading } = useRequest(
@@ -130,6 +148,24 @@ const ChatRoomSettings = (props: IProps) => {
 				message.error('语音设置格式错误，不是有效的JSON对象格式');
 				return;
 			}
+		}
+		if (values.podcast_config) {
+			try {
+				const json = JSON.parse(values.podcast_config as unknown as string);
+				if (!json || typeof json !== 'object' || Array.isArray(json)) {
+					message.error('播客设置格式错误，不是有效的JSON对象格式');
+					return;
+				}
+				values.podcast_config = json;
+			} catch {
+				message.error('播客设置格式错误，不是有效的JSON对象格式');
+				return;
+			}
+		} else {
+			values.podcast_config = null as unknown as object;
+		}
+		if (values.wxhb_notify_member_list) {
+			values.wxhb_notify_member_list = (values.wxhb_notify_member_list as unknown as string[]).join(',');
 		}
 		const configId = values.id;
 		await onSave({ ...values, chat_room_id: chatRoom.wechat_id!, config_id: configId, id: props.robotId });
@@ -468,7 +504,7 @@ const ChatRoomSettings = (props: IProps) => {
 					>
 						<Form.Item
 							name="image_ai_enabled"
-							label="绘图AI"
+							label="AI 绘图"
 							valuePropName="checked"
 						>
 							<Switch
@@ -753,6 +789,108 @@ const ChatRoomSettings = (props: IProps) => {
 								unCheckedChildren="关闭"
 								checkedChildren="开启"
 							/>
+						</Form.Item>
+					</ParamsGroup>
+					<ParamsGroup
+						title="群聊 AI 播客设置"
+						style={{ marginTop: 24 }}
+					>
+						<Form.Item
+							name="podcast_enabled"
+							label="AI 播客"
+							valuePropName="checked"
+						>
+							<Switch
+								unCheckedChildren="关闭"
+								checkedChildren="开启"
+							/>
+						</Form.Item>
+						<Form.Item
+							noStyle
+							shouldUpdate={(prev: IFormValue, next: IFormValue) => prev.podcast_enabled !== next.podcast_enabled}
+						>
+							{({ getFieldValue }) => {
+								const enabled = getFieldValue('podcast_enabled');
+								return (
+									<Form.Item
+										name="podcast_config"
+										label="播客设置"
+										rules={[{ required: enabled, message: '播客设置不能为空' }]}
+									>
+										<AIPodcastConfigEditor />
+									</Form.Item>
+								);
+							}}
+						</Form.Item>
+					</ParamsGroup>
+					<ParamsGroup
+						title="群聊红包提醒设置"
+						style={{ marginTop: 24 }}
+					>
+						<Form.Item
+							name="wxhb_notify_enabled"
+							label="红包提醒"
+							valuePropName="checked"
+						>
+							<Switch
+								unCheckedChildren="关闭"
+								checkedChildren="开启"
+							/>
+						</Form.Item>
+						<Form.Item
+							noStyle
+							shouldUpdate={(prev: IFormValue, next: IFormValue) =>
+								prev.wxhb_notify_enabled !== next.wxhb_notify_enabled
+							}
+						>
+							{({ getFieldValue }) => {
+								const enabled = getFieldValue('wxhb_notify_enabled');
+								return (
+									<Form.Item
+										name="wxhb_notify_member_list"
+										label="提醒人"
+										rules={[{ required: enabled, message: '提醒人不能为空' }]}
+									>
+										<Select
+											mode="multiple"
+											placeholder="选择提醒人"
+											showSearch={{
+												filterOption,
+											}}
+											allowClear
+											loading={loadingChatRoomMembers}
+											options={chatRoomMembers.map(item => {
+												const labelText = item.remark || item.nickname || item.alias || item.wechat_id;
+												return {
+													label: (
+														<Row
+															align="middle"
+															wrap={false}
+															gutter={3}
+														>
+															<Col flex="0 0 auto">
+																<Avatar
+																	src={item.avatar || DefaultAvatar}
+																	gap={0}
+																	size={18}
+																/>
+															</Col>
+															<Col
+																flex="1 1 auto"
+																className="ellipsis"
+															>
+																{labelText}
+															</Col>
+														</Row>
+													),
+													value: item.wechat_id,
+													text: `${item.remark || ''} ${item.nickname || ''} ${item.alias || ''} ${item.wechat_id}`,
+												};
+											})}
+										/>
+									</Form.Item>
+								);
+							}}
 						</Form.Item>
 					</ParamsGroup>
 					<ParamsGroup
