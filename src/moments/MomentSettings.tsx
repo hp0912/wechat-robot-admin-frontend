@@ -256,11 +256,11 @@ const MomentSettings = (props: IProps) => {
 							<>
 								示例:{' '}
 								<a
-									href="https://ai-api.houhoukang.com/"
+									href="https://new-api.houhoukang.com/"
 									target="_blank"
 									rel="noreferrer"
 								>
-									https://ai-api.houhoukang.com/
+									https://new-api.houhoukang.com/
 								</a>
 							</>
 						}
@@ -278,11 +278,11 @@ const MomentSettings = (props: IProps) => {
 							<>
 								可前往
 								<a
-									href="https://ai-api.houhoukang.com/"
+									href="https://new-api.houhoukang.com/"
 									target="_blank"
 									rel="noreferrer"
 								>
-									https://ai-api.houhoukang.com/
+									https://new-api.houhoukang.com/
 								</a>
 								获取
 							</>
