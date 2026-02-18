@@ -849,9 +849,11 @@ const ChatRoomSettings = (props: IProps) => {
 									<Form.Item
 										name="wxhb_notify_member_list"
 										label="提醒人"
+										wrapperCol={{ flex: '1 1 calc(100% - 95px)' }}
 										rules={[{ required: enabled, message: '提醒人不能为空' }]}
 									>
 										<Select
+											style={{ width: '100%' }}
 											mode="multiple"
 											placeholder="选择提醒人"
 											showSearch={{
