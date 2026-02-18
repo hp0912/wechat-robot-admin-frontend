@@ -4,7 +4,7 @@ import {
 	ExportOutlined,
 	ImportOutlined,
 	InboxOutlined,
-	InteractionFilled,
+	InteractionOutlined,
 	PlayCircleFilled,
 } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
@@ -325,8 +325,9 @@ const RestartRobotContainer = (props: IProps) => {
 		<Space.Compact>
 			<Button
 				type="primary"
+				ghost
 				loading={loading}
-				icon={<InteractionFilled />}
+				icon={<InteractionOutlined />}
 				onClick={runAsync}
 			>
 				刷新状态
@@ -337,6 +338,7 @@ const RestartRobotContainer = (props: IProps) => {
 			>
 				<Button
 					type="primary"
+					ghost
 					icon={<DownOutlined />}
 				/>
 			</Dropdown>

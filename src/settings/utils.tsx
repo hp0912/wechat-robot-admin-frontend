@@ -110,14 +110,14 @@ export const chatBaseURLTips = (
 	<>
 		示例:{' '}
 		<a
-			href="https://ai-api.houhoukang.com/"
+			href="https://new-api.houhoukang.com/"
 			target="_blank"
 			rel="noreferrer"
 		>
-			https://ai-api.houhoukang.com/
+			https://new-api.houhoukang.com/
 		</a>
-		，或者 https://ai-api.houhoukang.com/v1 或者
-		https://ai-api.houhoukang.com/v2，如果不是以版本号结尾，会自动补全一个/v1
+		，或者 https://new-api.houhoukang.com/v1 或者
+		https://new-api.houhoukang.com/v2，如果不是以版本号结尾，会自动补全一个/v1
 	</>
 );
 
