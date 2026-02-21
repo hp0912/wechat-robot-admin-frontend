@@ -42,7 +42,7 @@ const RobotList = () => {
 				<>
 					<p>欢迎加入我们</p>
 					<img
-						src="https://img.houhoukang.com/char-room-qrcode.jpg?v=20260212"
+						src="https://img.houhoukang.com/char-room-qrcode.jpg?v=20260221"
 						style={{ width: 300, height: 450, display: 'block' }}
 						alt="微信群二维码"
 					/>
