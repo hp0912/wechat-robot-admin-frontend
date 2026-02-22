@@ -27,6 +27,15 @@ const MessageContent = (props: IProps) => {
 			return <pre className="text-message">{props.message.content}</pre>;
 
 		case MessageType.Image:
+			if (props.message.attachment_url) {
+				return (
+					<img
+						style={{ maxHeight: 300, width: 'auto', maxWidth: '100%', objectFit: 'contain' }}
+						src={props.message.attachment_url}
+						alt={props.message.display_full_content || '图片消息'}
+					/>
+				);
+			}
 			return (
 				<img
 					style={{ maxHeight: 300, width: 'auto', maxWidth: '100%', objectFit: 'contain' }}
