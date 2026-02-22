@@ -1,22 +1,22 @@
+# syntax=docker/dockerfile:1.7
 FROM node:18.20.8 AS builder_web
 
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm@8.15.9
+RUN corepack enable && corepack prepare pnpm@8.15.9 --activate
 
-ADD ./package.json /app/package.json
-ADD ./pnpm-lock.yaml /app/pnpm-lock.yaml
-ADD ./.npmrc /app/.npmrc
+COPY package.json pnpm-lock.yaml .npmrc ./
 
-RUN pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
+  pnpm config set store-dir /pnpm/store && \
+  pnpm install --frozen-lockfile
 
 ARG IMAGE_TAG
 ENV IMAGE_TAG=$IMAGE_TAG
 ARG BRANCH
 ENV BRANCH=$BRANCH
 
-ADD ./ /app
+COPY . .
 
 RUN pnpm run build-types branch=$BRANCH && pnpm run build
 

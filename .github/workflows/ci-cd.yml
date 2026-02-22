@@ -14,33 +14,6 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: false
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -64,6 +37,11 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
+          cache-from: type=gha,scope=wechat-robot-admin-frontend
+          cache-to: type=gha,mode=max,scope=wechat-robot-admin-frontend
+          build-args: |
+            BRANCH=${{ github.ref_name }}
+            IMAGE_TAG=${{ github.sha }}
           tags: |
             ${{ secrets.ACR_REGISTRY }}/houhou/wechat-robot-admin-frontend:latest
           labels: ${{ steps.meta.outputs.labels }}
