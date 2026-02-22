@@ -23,7 +23,7 @@ export const MessageTypeMap: Record<MessageType, string> = {
 	[MessageType.MicroVideo]: '小视频消息',
 	[MessageType.Unknow]: '未知消息',
 	[MessageType.Sys]: '系统消息',
-	[MessageType.Recalled]: '消息撤回',
+	[MessageType.Sysmsg]: '消息撤回',
 };
 
 export const AppMessageTypeMap: Record<AppMessageType, string> = {
@@ -31,7 +31,7 @@ export const AppMessageTypeMap: Record<AppMessageType, string> = {
 	[AppMessageType.Image]: '图片消息',
 	[AppMessageType.Voice]: '语音消息',
 	[AppMessageType.Video]: '视频消息',
-	[AppMessageType.Url]: '文章消息',
+	[AppMessageType.Url]: '链接/文章消息',
 	[AppMessageType.Attach]: '附件消息',
 	[AppMessageType.Open]: 'Open',
 	[AppMessageType.Emoji]: '表情消息',
@@ -41,8 +41,10 @@ export const AppMessageTypeMap: Record<AppMessageType, string> = {
 	[AppMessageType.Emotion]: 'Emotion',
 	[AppMessageType.ShareCard]: '名片消息',
 	[AppMessageType.RealtimeShareLocation]: '地理位置消息',
+	[AppMessageType.ChatHistory]: '聊天记录',
 	[AppMessageType.AppMsgTypequote]: '引用消息',
 	[AppMessageType.AttachUploading]: '附件上传中',
+	[AppMessageType.Music]: '音乐消息',
 	[AppMessageType.Transfers]: '转账消息',
 	[AppMessageType.RedEnvelopes]: '红包消息',
 	[AppMessageType.AppMsgTypeReaderType]: '自定义的消息',
