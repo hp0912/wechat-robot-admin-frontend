@@ -37,7 +37,7 @@ export enum MessageType {
 	/** 系统消息 */
 	Sys = 10000,
 	/** 消息撤回 */
-	Recalled = 10002,
+	Sysmsg = 10002,
 }
 
 export enum AppMessageType {
@@ -69,10 +69,14 @@ export enum AppMessageType {
 	ShareCard = 16,
 	/** 地理位置消息 */
 	RealtimeShareLocation = 17,
+	/** 聊天记录消息 */
+	ChatHistory = 19,
 	/** 引用消息 */
 	AppMsgTypequote = 57,
 	/** 附件上传中 */
 	AttachUploading = 74,
+	/** 音乐消息 */
+	Music = 76,
 	/** 转账消息 */
 	Transfers = 2000,
 	/** 红包消息 */

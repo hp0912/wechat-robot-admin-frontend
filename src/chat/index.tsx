@@ -7,10 +7,11 @@ import type { ReactNode } from 'react';
 import styled from 'styled-components';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import SendMessage from '@/components/send-message';
-import { AppMessageTypeMap, DefaultAvatar, MessageTypeMap } from '@/constant';
+import { DefaultAvatar } from '@/constant';
 import { AppMessageType, MessageType } from '@/constant/types';
 import AttachDownload from './components/AttachDownload';
 import ImageDownload from './components/ImageDownload';
+import MessageContent from './components/MessageContent';
 import MessageRevoke from './components/MessageRevoke';
 import VideoDownload from './components/VideoDownload';
 import VoiceDownload from './components/VoiceDownload';
@@ -25,7 +26,7 @@ interface IProps {
 }
 
 const MessageContentContainer = styled.div`
-	.recalled {
+	.text-message {
 		margin: 0px;
 		padding: 0px;
 		white-space: pre-wrap;
@@ -43,6 +44,30 @@ const ChatHistory = (props: IProps) => {
 
 	const [search, setSearch] = useSetState({ keyword: '', pageIndex: 1 });
 	const [sendMessageOpen, setSendMessageOpen] = useBoolean(false);
+
+	const { data: chatRoomMembers } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1ChatRoomMembersList({
+				id: props.robotId,
+				chat_room_id: props.contact.wechat_id,
+				page_index: 1,
+				page_size: 9999,
+			});
+			const members = resp.data?.data?.items || [];
+			const memberMap: Record<string, string> = {};
+			members.forEach(item => {
+				memberMap[item.wechat_id] = item.remark || item.alias || item.nickname || item.wechat_id;
+			});
+			return memberMap;
+		},
+		{
+			manual: false,
+			refreshDeps: [search],
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
 
 	const { data, loading } = useRequest(
 		async () => {
@@ -64,25 +89,6 @@ const ChatHistory = (props: IProps) => {
 			},
 		},
 	);
-
-	const messageContentRender = (msg: Api.V1ChatHistoryList.ResponseBody['data']['items'][number]) => {
-		const msgType = msg.type as MessageType;
-		const subType = msg.app_msg_type as AppMessageType;
-		switch (msgType) {
-			case MessageType.Text:
-				return <pre className="recalled">{msg.content}</pre>;
-			case MessageType.App:
-				if (msg.display_full_content) {
-					return msg.display_full_content;
-				}
-				return `[${AppMessageTypeMap[subType] || '未知消息'}]`;
-			default:
-				if (msg.display_full_content) {
-					return msg.display_full_content;
-				}
-				return `[${MessageTypeMap[msgType] || '未知消息'}]`;
-		}
-	};
 
 	const downloadButtonRender = (msg: Api.V1ChatHistoryList.ResponseBody['data']['items'][number]) => {
 		const msgType = msg.type as MessageType;
@@ -126,6 +132,41 @@ const ChatHistory = (props: IProps) => {
 			default:
 				return null;
 		}
+	};
+
+	const getMessageAvatar = (msg: Api.V1ChatHistoryList.ResponseBody['data']['items'][number]) => {
+		if (msg.is_group || msg.sender_wxid !== robot.wechat_id) {
+			if (msg.sender_wxid === props.contact.wechat_id) {
+				return (
+					<Avatar
+						style={{ marginLeft: 8 }}
+						src={props.contact.avatar || DefaultAvatar}
+					/>
+				);
+			}
+			return (
+				<Avatar
+					style={{ marginLeft: 8 }}
+					src={msg.sender_avatar || DefaultAvatar}
+				/>
+			);
+		}
+		return (
+			<Avatar
+				style={{ marginLeft: 8 }}
+				src={robot.avatar || DefaultAvatar}
+			/>
+		);
+	};
+
+	const getMessageNickname = (msg: Api.V1ChatHistoryList.ResponseBody['data']['items'][number]) => {
+		if (msg.is_group || msg.sender_wxid !== robot.wechat_id) {
+			if (msg.sender_wxid === props.contact.wechat_id) {
+				return <span style={{ color: '#191919' }}>系统消息</span>;
+			}
+			return <span>{msg.sender_nickname || msg.sender_wxid}</span>;
+		}
+		return <span>{robot.nickname || robot.wechat_id}</span>;
 	};
 
 	const now = Date.now() / 1000;
@@ -202,26 +243,10 @@ const ChatHistory = (props: IProps) => {
 							return (
 								<List.Item>
 									<List.Item.Meta
-										avatar={
-											item.is_group || item.sender_wxid !== robot.wechat_id ? (
-												<Avatar
-													style={{ marginLeft: 8 }}
-													src={item.sender_avatar || DefaultAvatar}
-												/>
-											) : (
-												<Avatar
-													style={{ marginLeft: 8 }}
-													src={robot.avatar || DefaultAvatar}
-												/>
-											)
-										}
+										avatar={getMessageAvatar(item)}
 										title={
 											<span style={{ color: '#87888a' }}>
-												{item.is_group || item.sender_wxid !== robot.wechat_id ? (
-													<span>{item.sender_nickname || item.sender_wxid}</span>
-												) : (
-													<span>{robot.nickname || robot.wechat_id}</span>
-												)}
+												{getMessageNickname(item)}
 												<span style={{ fontSize: 13, fontWeight: 300, marginLeft: 8, color: '#191a1b' }}>
 													{dayjs(Number(item.created_at) * 1000).format('YYYY-MM-DD HH:mm:ss')}
 												</span>
@@ -237,10 +262,22 @@ const ChatHistory = (props: IProps) => {
 														>
 															已撤回
 														</Tag>
-														<s>{messageContentRender(item)}</s>
+														<s>
+															<MessageContent
+																robotId={props.robotId}
+																message={item}
+																chatRoomMembers={chatRoomMembers}
+															/>
+														</s>
 													</>
 												) : (
-													<span>{messageContentRender(item)}</span>
+													<span>
+														<MessageContent
+															robotId={props.robotId}
+															message={item}
+															chatRoomMembers={chatRoomMembers}
+														/>
+													</span>
 												)}
 											</MessageContentContainer>
 										}
