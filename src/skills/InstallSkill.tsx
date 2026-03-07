@@ -1,5 +1,5 @@
 import { useRequest } from 'ahooks';
-import { Alert, App, Form, Input, Modal } from 'antd';
+import { Alert, App, Divider, Form, Input, Modal } from 'antd';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 
@@ -56,11 +56,12 @@ const InstallSkill = (props: IProps) => {
 				modal.confirm({
 					title: '安装成功',
 					content: '需要重启客户端以启用技能，是否立即重启？',
-					width: 350,
+					width: 400,
 					okText: '立即重启',
 					cancelText: '稍后重启',
 					onOk: async () => {
 						await onClientRestart();
+						await new Promise(resolve => setTimeout(resolve, 4000));
 						props.onRefresh();
 						props.onClose();
 					},
@@ -95,6 +96,12 @@ const InstallSkill = (props: IProps) => {
 				wrapperCol={{ flex: '1 1 auto' }}
 				autoComplete="off"
 			>
+				<Divider
+					orientation="horizontal"
+					titlePlacement="center"
+				>
+					从本地安装
+				</Divider>
 				<Alert
 					style={{ marginBottom: 24 }}
 					title="本地安装提示"
@@ -116,6 +123,12 @@ const InstallSkill = (props: IProps) => {
 						</>
 					}
 				/>
+				<Divider
+					orientation="horizontal"
+					titlePlacement="center"
+				>
+					从 Git 仓库安装
+				</Divider>
 				<Form.Item
 					name="url"
 					label="安装地址"
