@@ -9,6 +9,7 @@ import Contact from '@/contact';
 import MCPFilled from '@/icons/MCPFilled';
 import MomentsFilled from '@/icons/MomentsFilled';
 import OSSFilled from '@/icons/OSSFilled';
+import SkillsFilled from '@/icons/SkillsFilled';
 import GlobalSettings from '@/settings';
 import RecreateRobotContainer from '../RecreateRobotContainer';
 import Remove from '../Remove';
@@ -27,6 +28,7 @@ const ContainerLog = React.lazy(() => import(/* webpackChunkName: "container-log
 const Moments = React.lazy(() => import(/* webpackChunkName: "moments" */ '@/moments'));
 const SystemSettings = React.lazy(() => import(/* webpackChunkName: "system-settings" */ '@/system-settings'));
 const MCPServers = React.lazy(() => import(/* webpackChunkName: "mcp-servers" */ '@/mcp-servers'));
+const Skills = React.lazy(() => import(/* webpackChunkName: "skills" */ '@/skills'));
 const OSSSettings = React.lazy(() => import(/* webpackChunkName: "oss-settings" */ '@/oss-settings'));
 const SystemOverview = React.lazy(() => import(/* webpackChunkName: "system-overview" */ '@/system-overview'));
 
@@ -145,6 +147,16 @@ const RobotDetail = (props: IProps) => {
 			children: (
 				<Suspense fallback={<Spin />}>
 					<MCPServers robotId={props.robotId} />
+				</Suspense>
+			),
+		},
+		{
+			key: 'skills',
+			icon: <SkillsFilled />,
+			label: 'Skills',
+			children: (
+				<Suspense fallback={<Spin />}>
+					<Skills robotId={props.robotId} />
 				</Suspense>
 			),
 		},

@@ -1,0 +1,183 @@
+import { DeleteOutlined, ReloadOutlined } from '@ant-design/icons';
+import { useRequest } from 'ahooks';
+import { App, Button, Space, Switch, Tooltip } from 'antd';
+import React from 'react';
+import type { Skill } from '@/api/wechat-robot/wechat-robot';
+
+interface IProps {
+	robotId: number;
+	skill: Skill;
+	onRefresh: () => void;
+}
+const SkillActions = (props: IProps) => {
+	const { message, modal } = App.useApp();
+
+	const { runAsync: onUpdate, loading: updateLoading } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1SkillsUpdateUpdate(
+				{
+					id: props.robotId,
+				},
+				{
+					name: props.skill.metadata.name,
+				},
+			);
+			return resp.data?.data;
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('更新成功');
+				props.onRefresh();
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	const { runAsync: onEnable, loading: enableLoading } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1SkillsEnableCreate(
+				{
+					id: props.robotId,
+				},
+				{
+					name: props.skill.metadata.name,
+				},
+			);
+			return resp.data?.data;
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('启用成功');
+				props.onRefresh();
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	const { runAsync: onDisable, loading: disableLoading } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1SkillsDisableCreate(
+				{
+					id: props.robotId,
+				},
+				{
+					name: props.skill.metadata.name,
+				},
+			);
+			return resp.data?.data;
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('禁用成功');
+				props.onRefresh();
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	const { runAsync: onUninstall, loading: uninstallLoading } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1SkillsUninstallDelete(
+				{
+					id: props.robotId,
+				},
+				{
+					name: props.skill.metadata.name,
+				},
+			);
+			return resp.data?.data;
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('卸载成功');
+				props.onRefresh();
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	return (
+		<Space size={8}>
+			<Tooltip title="卸载">
+				<Button
+					type="primary"
+					danger
+					ghost
+					size="small"
+					loading={uninstallLoading}
+					icon={<DeleteOutlined />}
+					onClick={() => {
+						modal.confirm({
+							title: '卸载技能',
+							content: '确认卸载这个技能？',
+							width: 350,
+							onOk: async () => {
+								await onUninstall();
+							},
+						});
+					}}
+				/>
+			</Tooltip>
+			<Tooltip title="更新技能">
+				<Button
+					type="primary"
+					ghost
+					size="small"
+					icon={<ReloadOutlined />}
+					loading={updateLoading}
+					onClick={() => {
+						modal.confirm({
+							title: '更新技能',
+							content: '确认更新这个技能？',
+							width: 350,
+							onOk: async () => {
+								await onUpdate();
+							},
+						});
+					}}
+				/>
+			</Tooltip>
+			<Switch
+				checkedChildren="启用"
+				unCheckedChildren="禁用"
+				checked={props.skill?.enabled}
+				loading={enableLoading || disableLoading}
+				onChange={checked => {
+					if (checked) {
+						modal.confirm({
+							title: '启用技能',
+							content: '确认启用这个技能？',
+							width: 350,
+							onOk: async () => {
+								await onEnable();
+							},
+						});
+					} else {
+						modal.confirm({
+							title: '禁用技能',
+							content: '确认禁用这个技能？',
+							width: 350,
+							onOk: async () => {
+								await onDisable();
+							},
+						});
+					}
+				}}
+			/>
+		</Space>
+	);
+};
+
+export default React.memo(SkillActions);
