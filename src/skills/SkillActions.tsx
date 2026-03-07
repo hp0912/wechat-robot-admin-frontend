@@ -47,11 +47,12 @@ const SkillActions = (props: IProps) => {
 				modal.confirm({
 					title: '更新成功',
 					content: '需要重启客户端以启用技能，是否立即重启？',
-					width: 350,
+					width: 400,
 					okText: '立即重启',
 					cancelText: '稍后重启',
 					onOk: async () => {
 						await onClientRestart();
+						await new Promise(resolve => setTimeout(resolve, 4000));
 						props.onRefresh();
 					},
 					onCancel: () => {
