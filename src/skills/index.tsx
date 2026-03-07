@@ -3,11 +3,13 @@ import { useBoolean, useRequest, useSize } from 'ahooks';
 import { App, Button, Empty, List, Spin, Tooltip } from 'antd';
 import VirtualList from 'rc-virtual-list';
 import React, { useRef } from 'react';
+import type { Api } from '@/api/wechat-robot/wechat-robot';
 import InstallSkill from './InstallSkill';
 import SkillActions from './SkillActions';
 
 interface IProps {
 	robotId: number;
+	robot: Api.V1RobotViewList.ResponseBody['data'];
 }
 
 const Skills = (props: IProps) => {
@@ -96,6 +98,7 @@ const Skills = (props: IProps) => {
 				{onInstallOpen && (
 					<InstallSkill
 						robotId={props.robotId}
+						robot={props.robot}
 						open={onInstallOpen}
 						onRefresh={refresh}
 						onClose={setInstallOpen.setFalse}

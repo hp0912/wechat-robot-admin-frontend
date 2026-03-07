@@ -156,7 +156,10 @@ const RobotDetail = (props: IProps) => {
 			label: 'Skills',
 			children: (
 				<Suspense fallback={<Spin />}>
-					<Skills robotId={props.robotId} />
+					<Skills
+						robotId={props.robotId}
+						robot={data}
+					/>
 				</Suspense>
 			),
 		},

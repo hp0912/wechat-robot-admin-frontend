@@ -1,9 +1,11 @@
 import { useRequest } from 'ahooks';
-import { App, Form, Input, Modal } from 'antd';
+import { Alert, App, Form, Input, Modal } from 'antd';
 import React from 'react';
+import type { Api } from '@/api/wechat-robot/wechat-robot';
 
 interface IProps {
 	robotId: number;
+	robot: Api.V1RobotViewList.ResponseBody['data'];
 	open: boolean;
 	onRefresh: () => void;
 	onClose: () => void;
@@ -93,6 +95,27 @@ const InstallSkill = (props: IProps) => {
 				wrapperCol={{ flex: '1 1 auto' }}
 				autoComplete="off"
 			>
+				<Alert
+					style={{ marginBottom: 24 }}
+					title="本地安装提示"
+					type="info"
+					showIcon
+					closable
+					description={
+						<>
+							<p>技能支持从本地安装：</p>
+							<p>
+								1. 安装目录在<b>docker-compose.yml</b>同级目录下的{' '}
+								<b>wechat-robot/{props.robot.robot_code}/data/skills</b>
+							</p>
+							<p>
+								2. 在安装目录下创建一个文件夹，文件夹名称为技能名称（英文），如 <b>pdf</b>，注意文件夹名称要符合 Skills
+								命名规范
+							</p>
+							<p>3. 将技能代码放入该文件夹中，重启客户端后自动发现该技能</p>
+						</>
+					}
+				/>
 				<Form.Item
 					name="url"
 					label="安装地址"
