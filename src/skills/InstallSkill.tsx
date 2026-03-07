@@ -17,9 +17,26 @@ interface IFormValues {
 }
 
 const InstallSkill = (props: IProps) => {
-	const { message } = App.useApp();
+	const { message, modal } = App.useApp();
 
 	const [form] = Form.useForm<IFormValues>();
+
+	const { runAsync: onClientRestart } = useRequest(
+		async () => {
+			await window.wechatRobotClient.api.v1RobotRestartClientCreate({
+				id: props.robotId,
+			});
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('重启客户端成功');
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
 
 	const { runAsync, loading } = useRequest(
 		async (values: IFormValues) => {
@@ -34,9 +51,22 @@ const InstallSkill = (props: IProps) => {
 		{
 			manual: true,
 			onSuccess: () => {
-				message.success(`技能安装成功`);
-				props.onRefresh();
-				props.onClose();
+				modal.confirm({
+					title: '安装成功',
+					content: '需要重启客户端以启用技能，是否立即重启？',
+					width: 350,
+					okText: '立即重启',
+					cancelText: '稍后重启',
+					onOk: async () => {
+						await onClientRestart();
+						props.onRefresh();
+						props.onClose();
+					},
+					onCancel: () => {
+						props.onRefresh();
+						props.onClose();
+					},
+				});
 			},
 			onError: reason => {
 				message.error(reason.message);

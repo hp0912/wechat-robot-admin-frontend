@@ -12,6 +12,23 @@ interface IProps {
 const SkillActions = (props: IProps) => {
 	const { message, modal } = App.useApp();
 
+	const { runAsync: onClientRestart } = useRequest(
+		async () => {
+			await window.wechatRobotClient.api.v1RobotRestartClientCreate({
+				id: props.robotId,
+			});
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('重启客户端成功');
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
 	const { runAsync: onUpdate, loading: updateLoading } = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.api.v1SkillsUpdateUpdate(
@@ -27,8 +44,20 @@ const SkillActions = (props: IProps) => {
 		{
 			manual: true,
 			onSuccess: () => {
-				message.success('更新成功');
-				props.onRefresh();
+				modal.confirm({
+					title: '更新成功',
+					content: '需要重启客户端以启用技能，是否立即重启？',
+					width: 350,
+					okText: '立即重启',
+					cancelText: '稍后重启',
+					onOk: async () => {
+						await onClientRestart();
+						props.onRefresh();
+					},
+					onCancel: () => {
+						props.onRefresh();
+					},
+				});
 			},
 			onError: reason => {
 				message.error(reason.message);
