@@ -116,7 +116,7 @@ const InstallSkill = (props: IProps) => {
 								<b>wechat-robot/{props.robot.robot_code}/data/skills</b>
 							</p>
 							<p>
-								2. 在安装目录下创建一个文件夹，文件夹名称为技能名称（英文），如 <b>pdf</b>，注意文件夹名称要符合 Skills
+								2. 在安装目录下创建一个文件夹，文件夹名称为技能名称（英文），如 <b>kfc</b>，注意文件夹名称要符合 Skills
 								命名规范
 							</p>
 							<p>3. 将技能代码放入该文件夹中，重启客户端后自动发现该技能</p>
@@ -140,11 +140,11 @@ const InstallSkill = (props: IProps) => {
 						<>
 							示例:{' '}
 							<a
-								href="https://github.com/anthropics/skills/tree/main/skills/pdf"
+								href="https://github.com/hp0912/wechat-robot-skills/tree/main/skills/kfc"
 								target="_blank"
 								rel="noopener noreferrer"
 							>
-								https://github.com/anthropics/skills/tree/main/skills/pdf
+								https://github.com/hp0912/wechat-robot-skills/tree/main/skills/kfc
 							</a>
 						</>
 					}
