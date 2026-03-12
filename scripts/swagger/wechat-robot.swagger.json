@@ -8299,6 +8299,75 @@
 				"security": []
 			}
 		},
+		"/api/v1/skills/envs": {
+			"post": {
+				"summary": "设置 Skill 环境变量",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"env_vars": {
+										"type": "array",
+										"items": {
+											"$ref": "#/components/schemas/EnvVar"
+										}
+									}
+								},
+								"required": ["name", "env_vars"]
+							},
+							"examples": {}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "object",
+											"properties": {}
+										}
+									},
+									"required": ["code", "message"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
 		"/api/v1/message/timbre": {
 			"get": {
 				"summary": "获取音色列表",
@@ -9528,9 +9597,30 @@
 					},
 					"enabled": {
 						"type": "boolean"
+					},
+					"env_vars": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/EnvVar"
+						}
 					}
 				},
-				"required": ["metadata", "instructions", "path"]
+				"required": ["metadata", "instructions", "path", "env_vars"]
+			},
+			"EnvVar": {
+				"type": "object",
+				"properties": {
+					"key": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					}
+				},
+				"required": ["key", "value"]
 			},
 			"SKBuiltinString_S": {
 				"type": "object",
