@@ -27,7 +27,7 @@ const SkillEnvs = (props: IProps) => {
 			const envs = props.skill.env_vars || [];
 			try {
 				form.setFieldsValue({
-					env_vars: JSON.stringify(envs, null, 2) as unknown as EnvVar[],
+					env_vars: JSON.stringify(envs || [], null, 2) as unknown as EnvVar[],
 				});
 			} catch {
 				//
