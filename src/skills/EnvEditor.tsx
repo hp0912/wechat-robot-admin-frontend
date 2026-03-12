@@ -1,4 +1,5 @@
 import Editor from '@monaco-editor/react';
+import { Button } from 'antd';
 import React from 'react';
 import { registerMonacoJsonSchema } from '@/settings/monacoJsonSchema';
 
@@ -55,6 +56,23 @@ const EnvEditor = (props: IProps) => {
 					}
 				}}
 			/>
+			<div style={{ position: 'absolute', top: 4, right: 4, zIndex: 9999 }}>
+				<Button
+					color="primary"
+					variant="filled"
+					onClick={() => {
+						props.onChange?.(
+							JSON.stringify(
+								[{ key: 'ENV_VAR_KEY', value: 'ENV_VAR_VALUE', description: '这是一个环境变量的示例' }],
+								null,
+								2,
+							),
+						);
+					}}
+				>
+					填入示例
+				</Button>
+			</div>
 		</div>
 	);
 };
