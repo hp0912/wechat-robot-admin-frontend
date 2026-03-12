@@ -1,16 +1,20 @@
-import { DeleteOutlined, ReloadOutlined } from '@ant-design/icons';
-import { useRequest } from 'ahooks';
+import { DeleteOutlined, GlobalOutlined, ReloadOutlined } from '@ant-design/icons';
+import { useBoolean, useRequest } from 'ahooks';
 import { App, Button, Space, Switch, Tooltip } from 'antd';
 import React from 'react';
 import type { Skill } from '@/api/wechat-robot/wechat-robot';
+import SkillEnvs from './SkillEnvs';
 
 interface IProps {
 	robotId: number;
 	skill: Skill;
 	onRefresh: () => void;
 }
+
 const SkillActions = (props: IProps) => {
 	const { message, modal } = App.useApp();
+
+	const [onSkillEnvsOpen, setSkillEnvsOpen] = useBoolean(false);
 
 	const { runAsync: onClientRestart } = useRequest(
 		async () => {
@@ -140,24 +144,35 @@ const SkillActions = (props: IProps) => {
 
 	return (
 		<Space size={8}>
-			<Tooltip title="卸载">
+			{!props.skill?.enabled && (
+				<Tooltip title="卸载">
+					<Button
+						type="primary"
+						danger
+						ghost
+						size="small"
+						loading={uninstallLoading}
+						icon={<DeleteOutlined />}
+						onClick={() => {
+							modal.confirm({
+								title: '卸载技能',
+								content: '确认卸载这个技能？',
+								width: 350,
+								onOk: async () => {
+									await onUninstall();
+								},
+							});
+						}}
+					/>
+				</Tooltip>
+			)}
+			<Tooltip title="环境变量">
 				<Button
 					type="primary"
-					danger
 					ghost
 					size="small"
-					loading={uninstallLoading}
-					icon={<DeleteOutlined />}
-					onClick={() => {
-						modal.confirm({
-							title: '卸载技能',
-							content: '确认卸载这个技能？',
-							width: 350,
-							onOk: async () => {
-								await onUninstall();
-							},
-						});
-					}}
+					icon={<GlobalOutlined />}
+					onClick={setSkillEnvsOpen.setTrue}
 				/>
 			</Tooltip>
 			<Tooltip title="更新技能">
@@ -206,6 +221,15 @@ const SkillActions = (props: IProps) => {
 					}
 				}}
 			/>
+			{onSkillEnvsOpen && (
+				<SkillEnvs
+					open={onSkillEnvsOpen}
+					robotId={props.robotId}
+					skill={props.skill}
+					onRefresh={props.onRefresh}
+					onClose={setSkillEnvsOpen.setFalse}
+				/>
+			)}
 		</Space>
 	);
 };
