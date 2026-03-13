@@ -5,7 +5,7 @@ import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import type { AnyType } from '@/common/types';
 import ParamsGroup from '@/components/ParamsGroup';
-import { AiModels } from '@/constant/ai';
+import { AiModels, TextEmbeddingModels } from '@/constant/ai';
 import {
 	fromCronExpression,
 	generateMondayCronExpression,
@@ -151,7 +151,6 @@ const GlobalSettings = (props: IProps) => {
 				return;
 			}
 		}
-		const configId = values.id;
 		const cronFields: (keyof Api.V1GlobalSettingsCreate.RequestBody)[] = [
 			'chat_room_ranking_daily_cron',
 			'chat_room_summary_cron',
@@ -172,7 +171,7 @@ const GlobalSettings = (props: IProps) => {
 			const cronValue = values.chat_room_ranking_month_cron as unknown as dayjs.Dayjs;
 			(values as AnyType).chat_room_ranking_month_cron = validateMonthlyCron(cronValue);
 		}
-		await onSave({ ...values, config_id: configId, id: props.robotId });
+		await onSave(values);
 	};
 
 	return (
@@ -282,6 +281,18 @@ const GlobalSettings = (props: IProps) => {
 														placeholder="请选择或者手动输入聊天模型"
 														style={{ width: '100%' }}
 														options={AiModels}
+													/>
+												</Form.Item>
+												<Form.Item
+													name="text_embedding_model"
+													label="文本嵌入模型"
+													labelCol={{ flex: '0 0 130px' }}
+													rules={[{ required: true, message: '文本嵌入模型不能为空' }]}
+												>
+													<AutoComplete
+														placeholder="请选择或者手动输入文本嵌入模型"
+														style={{ width: '100%' }}
+														options={TextEmbeddingModels}
 													/>
 												</Form.Item>
 												<Form.Item

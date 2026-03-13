@@ -18,3 +18,12 @@ export const AiModels: Array<{ value: string }> = [
 	{ value: 'Pro/deepseek-ai/DeepSeek-R1' },
 	{ value: 'ERNIE-4.0-Turbo-8K' },
 ];
+
+export const TextEmbeddingModels: Array<{ value: string }> = [
+	{ value: 'text-embedding-3-small' },
+	{ value: 'text-embedding-3-large' },
+	{ value: 'text-embedding-ada-002' },
+	{ value: 'text-embedding-v4' },
+];
+
+export const ImageEmbeddingModels: Array<{ value: string }> = [];
