@@ -284,6 +284,17 @@ const GlobalSettings = (props: IProps) => {
 													/>
 												</Form.Item>
 												<Form.Item
+													name="memory_enabled"
+													label="会话持久记忆"
+													labelCol={{ flex: '0 0 130px' }}
+													valuePropName="checked"
+												>
+													<Switch
+														unCheckedChildren="关闭"
+														checkedChildren="开启"
+													/>
+												</Form.Item>
+												<Form.Item
 													name="text_embedding_model"
 													label="文本嵌入模型"
 													labelCol={{ flex: '0 0 130px' }}
