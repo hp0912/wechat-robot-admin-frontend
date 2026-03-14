@@ -58,17 +58,16 @@ const NewRobot = (props: IProps) => {
 				autoComplete="off"
 			>
 				<Form.Item
-					name="robot_code"
-					label="机器人编码"
+					name="robot_name"
+					label="机器人名称"
 					rules={[
-						{ required: true, message: '机器人编码不能为空' },
-						{ min: 10, message: '机器人编码至少输入10个字符' },
-						{ max: 64, message: '机器人编码不能超过64个字符' },
-						{ pattern: /^[a-zA-Z][a-zA-Z0-9_]+$/, message: '机器人编码必须以字母开头，且只能是字母、数字或下划线' },
+						{ required: true, message: '机器人名称不能为空' },
+						{ min: 2, message: '机器人名称至少输入2个字符' },
+						{ max: 12, message: '机器人名称不能超过12个字符' },
 					]}
 				>
 					<Input
-						placeholder="请输入机器人编码"
+						placeholder="请输入机器人名称"
 						allowClear
 					/>
 				</Form.Item>

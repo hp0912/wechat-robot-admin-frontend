@@ -4754,12 +4754,13 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-									"robot_code": {
+									"robot_name": {
 										"type": "string"
 									}
 								},
-								"required": ["robot_code"]
-							}
+								"required": ["robot_name"]
+							},
+							"examples": {}
 						}
 					}
 				},
@@ -4863,6 +4864,9 @@
 															"robot_code": {
 																"type": "string"
 															},
+															"robot_name": {
+																"type": "string"
+															},
 															"owner": {
 																"type": "string"
 															},
@@ -4918,7 +4922,8 @@
 															"last_login_at",
 															"created_at",
 															"device_type",
-															"wechat_version"
+															"wechat_version",
+															"robot_name"
 														]
 													}
 												}
@@ -5018,6 +5023,9 @@
 												"robot_code": {
 													"type": "string"
 												},
+												"robot_name": {
+													"type": "string"
+												},
 												"owner": {
 													"type": "string"
 												},
@@ -5073,7 +5081,8 @@
 												"last_login_at",
 												"created_at",
 												"device_type",
-												"wechat_version"
+												"wechat_version",
+												"robot_name"
 											]
 										}
 									},
