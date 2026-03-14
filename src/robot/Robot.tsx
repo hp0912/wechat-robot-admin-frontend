@@ -111,7 +111,7 @@ const Robot = (props: IProps) => {
 				}
 				description={
 					<>
-						<p>机器人编码: {robot.robot_code}</p>
+						<p>机器人名称: {robot.robot_name}</p>
 						<p>微信号: {robot.wechat_id || '-'}</p>
 						<p>
 							登录时间: {robot.last_login_at ? dayjs(robot.last_login_at * 1000).format('YYYY-MM-DD HH:mm:ss') : '-'}
