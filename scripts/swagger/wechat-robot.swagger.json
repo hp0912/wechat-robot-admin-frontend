@@ -9413,6 +9413,9 @@
 					"friend_sync_cron": {
 						"type": "string"
 					},
+					"memory_enabled": {
+						"type": "boolean"
+					},
 					"text_embedding_model": {
 						"type": "string"
 					},
