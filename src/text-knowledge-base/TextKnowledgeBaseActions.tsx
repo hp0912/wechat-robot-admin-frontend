@@ -44,7 +44,7 @@ const TextKnowledgeBaseActions = (props: IProps) => {
 	);
 
 	return (
-		<Space size={8}>
+		<Space size={12}>
 			<Tooltip title="知识库文档管理">
 				<Button
 					type="primary"
@@ -65,19 +65,24 @@ const TextKnowledgeBaseActions = (props: IProps) => {
 					onClick={setOnEditOpen.setTrue}
 				/>
 			</Tooltip>
-			<Tooltip title="删除知识库">
+			<Tooltip title={props.dataSource?.is_builtin ? '内置知识库不允许删除' : '删除知识库'}>
 				<Button
 					type="primary"
 					danger
 					ghost
 					size="small"
 					loading={removeLoading}
+					disabled={props.dataSource?.is_builtin}
 					icon={<DeleteOutlined />}
 					onClick={() => {
 						modal.confirm({
 							title: '删除知识库',
 							content: '删除知识库，会删除知识库下面的所有文档，确认删除这个知识库？',
 							width: 350,
+							okText: '删除',
+							okButtonProps: {
+								danger: true,
+							},
 							onOk: async () => {
 								await onRemove();
 							},

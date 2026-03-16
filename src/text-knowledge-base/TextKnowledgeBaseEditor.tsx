@@ -80,7 +80,7 @@ const TextKnowledgeBaseEditor = (props: IProps) => {
 			onOk={async () => {
 				const values = await form.validateFields();
 				if (props.dataSource) {
-					await onUpdate(values);
+					await onUpdate({ ...values, id: props.dataSource.id });
 				} else {
 					await onCreate(values);
 				}
@@ -89,9 +89,10 @@ const TextKnowledgeBaseEditor = (props: IProps) => {
 		>
 			<Form
 				form={form}
-				labelCol={{ flex: '0 0 85px' }}
+				labelCol={{ flex: '0 0 95px' }}
 				wrapperCol={{ flex: '1 1 auto' }}
 				autoComplete="off"
+				initialValues={props.dataSource}
 			>
 				<Form.Item
 					name="code"

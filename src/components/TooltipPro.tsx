@@ -32,7 +32,7 @@ const TooltipPro = (props: { content?: string; style?: React.CSSProperties }) =>
 				<span>-</span>
 			) : (
 				<Tooltip
-					placement="topRight"
+					placement="topLeft"
 					title={
 						content.length < 500 && !content.includes('script') ? (
 							<PRE

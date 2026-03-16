@@ -1,9 +1,11 @@
+import { PlusOutlined } from '@ant-design/icons';
 import { useBoolean, useRequest } from 'ahooks';
-import { App, Button, Table } from 'antd';
+import { App, Button, Table, theme } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import TooltipPro from '@/components/TooltipPro';
 import { Container } from './styled';
+import TextKnowledgeBaseActions from './TextKnowledgeBaseActions';
 import TextKnowledgeBaseEditor from './TextKnowledgeBaseEditor';
 
 interface IProps {
@@ -11,6 +13,7 @@ interface IProps {
 }
 
 const TextKnowledgeBase = (props: IProps) => {
+	const { token } = theme.useToken();
 	const { message } = App.useApp();
 
 	const [onNewOpen, setOnNewOpen] = useBoolean(false);
@@ -35,7 +38,8 @@ const TextKnowledgeBase = (props: IProps) => {
 			<div className="action-bar">
 				<Button
 					color="primary"
-					variant="solid"
+					variant="outlined"
+					icon={<PlusOutlined />}
 					onClick={setOnNewOpen.setTrue}
 				>
 					新建知识库
@@ -44,7 +48,7 @@ const TextKnowledgeBase = (props: IProps) => {
 			<Table
 				rowKey="id"
 				dataSource={data}
-				scroll={{ x: 'max-content', y: 'calc(100vh - 210px)' }}
+				scroll={{ x: 'max-content', y: 'calc(100vh - 290px)' }}
 				columns={[
 					{
 						title: '知识库名称',
@@ -70,9 +74,14 @@ const TextKnowledgeBase = (props: IProps) => {
 					{
 						title: '系统内置',
 						dataIndex: 'is_builtin',
-						width: 140,
+						width: 100,
 						ellipsis: true,
-						render: (_, record) => (record.is_builtin ? '是' : '否'),
+						render: (_, record) => {
+							if (record.is_builtin) {
+								return <span style={{ color: token.colorSuccess }}>是</span>;
+							}
+							return '否';
+						},
 					},
 					{
 						title: '更新时间',
@@ -95,11 +104,17 @@ const TextKnowledgeBase = (props: IProps) => {
 					{
 						title: '操作',
 						dataIndex: 'actions',
-						width: 180,
+						width: 130,
 						ellipsis: true,
 						fixed: 'right',
-						render: () => {
-							return null;
+						render: (_, record) => {
+							return (
+								<TextKnowledgeBaseActions
+									robotId={props.robotId}
+									dataSource={record}
+									onRefresh={refresh}
+								/>
+							);
 						},
 					},
 				]}
