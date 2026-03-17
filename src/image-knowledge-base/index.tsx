@@ -1,11 +1,17 @@
 import React from 'react';
+import KnowledgeBase from '@/knowledge-base';
 
 interface IProps {
 	robotId: number;
 }
 
 const ImageKnowledgeBase = (props: IProps) => {
-	return <div>{props.robotId} 图片知识库</div>;
+	return (
+		<KnowledgeBase
+			robotId={props.robotId}
+			type="image"
+		/>
+	);
 };
 
 export default React.memo(ImageKnowledgeBase);

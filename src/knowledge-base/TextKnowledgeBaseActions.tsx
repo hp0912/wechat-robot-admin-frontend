@@ -3,18 +3,20 @@ import { useBoolean, useRequest } from 'ahooks';
 import { App, Button, Space, Tooltip } from 'antd';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
+import ImageKnowledgeFilled from '@/icons/ImageKnowledgeFilled';
 import TextKnowledgeFilled from '@/icons/TextKnowledgeFilled';
-import TextKnowledgeBaseEditor from './TextKnowledgeBaseEditor';
+import KnowledgeBaseEditor from './TextKnowledgeBaseEditor';
 
 type IDataSource = NonNullable<Api.V1KnowledgeCategoriesList.ResponseBody['data']>[number];
 
 interface IProps {
 	robotId: number;
+	type: 'text' | 'image';
 	dataSource?: IDataSource;
 	onRefresh: () => void;
 }
 
-const TextKnowledgeBaseActions = (props: IProps) => {
+const KnowledgeBaseActions = (props: IProps) => {
 	const { message, modal } = App.useApp();
 
 	const [onEditOpen, setOnEditOpen] = useBoolean(false);
@@ -50,9 +52,12 @@ const TextKnowledgeBaseActions = (props: IProps) => {
 					type="primary"
 					ghost
 					size="small"
-					icon={<TextKnowledgeFilled />}
+					icon={props.type === 'text' ? <TextKnowledgeFilled /> : <ImageKnowledgeFilled />}
 					onClick={() => {
-						//
+						if (props.type === 'image') {
+							message.info('敬请期待');
+							return;
+						}
 					}}
 				/>
 			</Tooltip>
@@ -91,7 +96,7 @@ const TextKnowledgeBaseActions = (props: IProps) => {
 				/>
 			</Tooltip>
 			{onEditOpen && (
-				<TextKnowledgeBaseEditor
+				<KnowledgeBaseEditor
 					open={onEditOpen}
 					robotId={props.robotId}
 					dataSource={props.dataSource}
@@ -103,4 +108,4 @@ const TextKnowledgeBaseActions = (props: IProps) => {
 	);
 };
 
-export default React.memo(TextKnowledgeBaseActions);
+export default React.memo(KnowledgeBaseActions);

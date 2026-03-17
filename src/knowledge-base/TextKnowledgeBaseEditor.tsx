@@ -6,6 +6,7 @@ import type { Api } from '@/api/wechat-robot/wechat-robot';
 type IDataSource = NonNullable<Api.V1KnowledgeCategoriesList.ResponseBody['data']>[number];
 
 interface IFormValues {
+	type: 'text' | 'image';
 	id: number;
 	name: string;
 	code: string;
@@ -14,13 +15,14 @@ interface IFormValues {
 
 interface IProps {
 	robotId: number;
+	type?: 'text' | 'image';
 	dataSource?: IDataSource;
 	open: boolean;
 	onRefresh: () => void;
 	onClose: () => void;
 }
 
-const TextKnowledgeBaseEditor = (props: IProps) => {
+const KnowledgeBaseEditor = (props: IProps) => {
 	const { message } = App.useApp();
 
 	const [form] = Form.useForm<IFormValues>();
@@ -82,7 +84,7 @@ const TextKnowledgeBaseEditor = (props: IProps) => {
 				if (props.dataSource) {
 					await onUpdate({ ...values, id: props.dataSource.id });
 				} else {
-					await onCreate(values);
+					await onCreate({ ...values, type: props.type || 'text' });
 				}
 			}}
 			onCancel={props.onClose}
@@ -144,4 +146,4 @@ const TextKnowledgeBaseEditor = (props: IProps) => {
 	);
 };
 
-export default React.memo(TextKnowledgeBaseEditor);
+export default React.memo(KnowledgeBaseEditor);

@@ -8375,6 +8375,16 @@
 						"schema": {
 							"type": "integer"
 						}
+					},
+					{
+						"name": "type",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"enum": ["text", "image"]
+						}
 					}
 				],
 				"responses": {
@@ -8455,6 +8465,10 @@
 							"schema": {
 								"type": "object",
 								"properties": {
+									"type": {
+										"type": "string",
+										"enum": ["text", "image"]
+									},
 									"code": {
 										"type": "string"
 									},
@@ -8465,7 +8479,7 @@
 										"type": "string"
 									}
 								},
-								"required": ["code", "name"]
+								"required": ["code", "name", "type"]
 							},
 							"examples": {}
 						}
