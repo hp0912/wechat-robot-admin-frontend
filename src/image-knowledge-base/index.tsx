@@ -1,5 +1,6 @@
 import React from 'react';
 import KnowledgeBase from '@/knowledge-base';
+import KnowledgeDocument from './KnowledgeDocument';
 
 interface IProps {
 	robotId: number;
@@ -10,6 +11,7 @@ const ImageKnowledgeBase = (props: IProps) => {
 		<KnowledgeBase
 			robotId={props.robotId}
 			type="image"
+			KnowledgeDocumentComponent={KnowledgeDocument}
 		/>
 	);
 };

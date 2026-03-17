@@ -3,14 +3,23 @@ import { useBoolean, useRequest } from 'ahooks';
 import { App, Button, Table, theme } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
+import type { Api } from '@/api/wechat-robot/wechat-robot';
 import TooltipPro from '@/components/TooltipPro';
 import { Container } from './styled';
 import KnowledgeBaseActions from './TextKnowledgeBaseActions';
 import KnowledgeBaseEditor from './TextKnowledgeBaseEditor';
 
+type IKnowledgeBase = NonNullable<Api.V1KnowledgeCategoriesList.ResponseBody['data']>[number];
+
 interface IProps {
 	robotId: number;
 	type: 'text' | 'image';
+	KnowledgeDocumentComponent: React.ComponentType<{
+		robotId: number;
+		knowledgeBase: IKnowledgeBase;
+		open: boolean;
+		onClose: () => void;
+	}>;
 }
 
 const KnowledgeBase = (props: IProps) => {
@@ -114,6 +123,7 @@ const KnowledgeBase = (props: IProps) => {
 								<KnowledgeBaseActions
 									robotId={props.robotId}
 									type={props.type}
+									KnowledgeDocumentComponent={props.KnowledgeDocumentComponent}
 									dataSource={record}
 									onRefresh={refresh}
 								/>

@@ -7,19 +7,28 @@ import ImageKnowledgeFilled from '@/icons/ImageKnowledgeFilled';
 import TextKnowledgeFilled from '@/icons/TextKnowledgeFilled';
 import KnowledgeBaseEditor from './TextKnowledgeBaseEditor';
 
-type IDataSource = NonNullable<Api.V1KnowledgeCategoriesList.ResponseBody['data']>[number];
+type IKnowledgeBase = NonNullable<Api.V1KnowledgeCategoriesList.ResponseBody['data']>[number];
 
 interface IProps {
 	robotId: number;
 	type: 'text' | 'image';
-	dataSource?: IDataSource;
+	KnowledgeDocumentComponent: React.ComponentType<{
+		robotId: number;
+		knowledgeBase: IKnowledgeBase;
+		open: boolean;
+		onClose: () => void;
+	}>;
+	dataSource?: IKnowledgeBase;
 	onRefresh: () => void;
 }
 
 const KnowledgeBaseActions = (props: IProps) => {
 	const { message, modal } = App.useApp();
 
+	const { KnowledgeDocumentComponent } = props;
+
 	const [onEditOpen, setOnEditOpen] = useBoolean(false);
+	const [onDocumentOpen, setOnDocumentOpen] = useBoolean(false);
 
 	const { runAsync: onRemove, loading: removeLoading } = useRequest(
 		async () => {
@@ -53,12 +62,7 @@ const KnowledgeBaseActions = (props: IProps) => {
 					ghost
 					size="small"
 					icon={props.type === 'text' ? <TextKnowledgeFilled /> : <ImageKnowledgeFilled />}
-					onClick={() => {
-						if (props.type === 'image') {
-							message.info('敬请期待');
-							return;
-						}
-					}}
+					onClick={setOnDocumentOpen.setTrue}
 				/>
 			</Tooltip>
 			<Tooltip title="编辑知识库元信息">
@@ -102,6 +106,14 @@ const KnowledgeBaseActions = (props: IProps) => {
 					dataSource={props.dataSource}
 					onClose={setOnEditOpen.setFalse}
 					onRefresh={props.onRefresh}
+				/>
+			)}
+			{onDocumentOpen && props.dataSource && (
+				<KnowledgeDocumentComponent
+					open={onDocumentOpen}
+					robotId={props.robotId}
+					knowledgeBase={props.dataSource}
+					onClose={setOnDocumentOpen.setFalse}
 				/>
 			)}
 		</Space>
