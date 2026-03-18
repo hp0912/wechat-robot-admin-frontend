@@ -8375,6 +8375,16 @@
 						"schema": {
 							"type": "integer"
 						}
+					},
+					{
+						"name": "type",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"enum": ["text", "image"]
+						}
 					}
 				],
 				"responses": {
@@ -8392,31 +8402,34 @@
 											"type": "string"
 										},
 										"data": {
-											"type": "object",
-											"properties": {
-												"id": {
-													"type": "integer"
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": {
+														"type": "integer"
+													},
+													"code": {
+														"type": "string"
+													},
+													"name": {
+														"type": "string"
+													},
+													"description": {
+														"type": "string"
+													},
+													"is_builtin": {
+														"type": "boolean"
+													},
+													"created_at": {
+														"type": "integer"
+													},
+													"updated_at": {
+														"type": "integer"
+													}
 												},
-												"code": {
-													"type": "string"
-												},
-												"name": {
-													"type": "string"
-												},
-												"description": {
-													"type": "string"
-												},
-												"is_builtin": {
-													"type": "boolean"
-												},
-												"created_at": {
-													"type": "integer"
-												},
-												"updated_at": {
-													"type": "integer"
-												}
-											},
-											"required": ["id", "code", "name", "is_builtin", "created_at", "updated_at"]
+												"required": ["id", "code", "name", "is_builtin", "created_at", "updated_at"]
+											}
 										}
 									},
 									"required": ["code", "message"]
@@ -8452,6 +8465,10 @@
 							"schema": {
 								"type": "object",
 								"properties": {
+									"type": {
+										"type": "string",
+										"enum": ["text", "image"]
+									},
 									"code": {
 										"type": "string"
 									},
@@ -8462,7 +8479,7 @@
 										"type": "string"
 									}
 								},
-								"required": ["code", "name"]
+								"required": ["code", "name", "type"]
 							},
 							"examples": {}
 						}

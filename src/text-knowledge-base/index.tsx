@@ -1,11 +1,19 @@
 import React from 'react';
+import KnowledgeBase from '@/knowledge-base';
+import KnowledgeDocument from './KnowledgeDocument';
 
 interface IProps {
 	robotId: number;
 }
 
 const TextKnowledgeBase = (props: IProps) => {
-	return <div>{props.robotId > 0 ? '敬请期待~' : '敬请期待~'}</div>;
+	return (
+		<KnowledgeBase
+			robotId={props.robotId}
+			type="text"
+			KnowledgeDocumentComponent={KnowledgeDocument}
+		/>
+	);
 };
 
 export default React.memo(TextKnowledgeBase);

@@ -162,7 +162,6 @@ const RobotDetail = (props: IProps) => {
 			key: 'image-knowledge-base',
 			icon: <ImageKnowledgeFilled />,
 			label: '图片知识库',
-			disabled: true,
 			children: (
 				<Suspense fallback={<Spin />}>
 					<ImageKnowledgeBase robotId={props.robotId} />
