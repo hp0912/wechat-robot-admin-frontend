@@ -20,6 +20,54 @@ const KnowledgeDocumentActions = (props: IProps) => {
 
 	const [onEditOpen, setOnEditOpen] = useBoolean(false);
 
+	const { runAsync: onEnable, loading: enableLoading } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1KnowledgeDocumentEnableCreate(
+				{
+					id: props.robotId,
+				},
+				{
+					id: props.dataSource?.id || 0,
+				},
+			);
+			return resp.data?.data;
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('启用成功');
+				props.onRefresh();
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
+	const { runAsync: onDisable, loading: disableLoading } = useRequest(
+		async () => {
+			const resp = await window.wechatRobotClient.api.v1KnowledgeDocumentDisableCreate(
+				{
+					id: props.robotId,
+				},
+				{
+					id: props.dataSource?.id || 0,
+				},
+			);
+			return resp.data?.data;
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('禁用成功');
+				props.onRefresh();
+			},
+			onError: reason => {
+				message.error(reason.message);
+			},
+		},
+	);
+
 	const { runAsync: onRemove, loading: removeLoading } = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.api.v1KnowledgeDocumentDelete(
@@ -51,8 +99,7 @@ const KnowledgeDocumentActions = (props: IProps) => {
 				checkedChildren="启用"
 				unCheckedChildren="禁用"
 				checked={props.dataSource?.enabled}
-				// loading={enableLoading || disableLoading}
-				disabled
+				loading={enableLoading || disableLoading}
 				onChange={checked => {
 					if (checked) {
 						modal.confirm({
@@ -60,7 +107,7 @@ const KnowledgeDocumentActions = (props: IProps) => {
 							content: '确认启用文档？',
 							width: 300,
 							onOk: async () => {
-								//
+								await onEnable();
 							},
 						});
 					} else {
@@ -69,7 +116,7 @@ const KnowledgeDocumentActions = (props: IProps) => {
 							content: '确认禁用文档？',
 							width: 300,
 							onOk: async () => {
-								//
+								await onDisable();
 							},
 						});
 					}
@@ -91,6 +138,7 @@ const KnowledgeDocumentActions = (props: IProps) => {
 					ghost
 					size="small"
 					loading={removeLoading}
+					disabled={props.dataSource?.enabled}
 					icon={<DeleteOutlined />}
 					onClick={() => {
 						modal.confirm({
