@@ -41,6 +41,7 @@ const DocumentEditor = (props: { value?: string; onChange?: (value?: string) => 
 					tabSize: 2,
 					insertSpaces: true,
 					fixedOverflowWidgets: true,
+					wordWrap: 'on',
 					scrollbar: { alwaysConsumeMouseWheel: false },
 				}}
 				value={props.value}
