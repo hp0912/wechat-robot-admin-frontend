@@ -1,6 +1,6 @@
-import { GithubOutlined, LogoutOutlined } from '@ant-design/icons';
+import { FileWordOutlined, GithubOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useRequest, useSize } from 'ahooks';
-import { App, Avatar, Divider, Dropdown, Layout, Skeleton, Space, Watermark } from 'antd';
+import { App, Avatar, Divider, Dropdown, Flex, Layout, Skeleton, Space, Watermark } from 'antd';
 import type { MenuProps } from 'antd';
 import logo from 'public/logo.svg';
 import React from 'react';
@@ -20,7 +20,8 @@ const headerStyle: React.CSSProperties = {
 	display: 'flex',
 	justifyContent: 'space-between',
 	alignItems: 'center',
-	paddingRight: 40,
+	paddingLeft: 10,
+	paddingRight: 10,
 	backgroundColor: '#dddddd',
 };
 
@@ -47,6 +48,28 @@ const Logo = styled.div`
 		font-size: 18px;
 		line-height: 32px;
 		vertical-align: middle;
+	}
+`;
+
+const Nav = styled.div`
+	height: 64px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 12px;
+
+	.nav-item {
+		display: flex;
+		align-items: center;
+		padding: 0 8px;
+		gap: 4px;
+		cursor: pointer;
+
+		.nav-icon {
+			font-size: 20px;
+			vertical-align: middle;
+			color: #4d4c4c;
+		}
 	}
 `;
 
@@ -107,17 +130,36 @@ const AppLayout: React.FC = () => {
 		>
 			<Layout style={rootStyle}>
 				<Header style={headerStyle}>
-					<Logo>
-						<div className="icon" />
-						<div className="title">微信机器人管理后台</div>
-					</Logo>
+					<Flex
+						justify="flex-start"
+						align="center"
+					>
+						<Logo>
+							<div className="icon" />
+							<div className="title">微信机器人管理后台</div>
+						</Logo>
+						<Nav>
+							<div
+								className="nav-item"
+								onClick={() => {
+									window.open('https://github.com/hp0912/wechat-robot-client', '_blank');
+								}}
+							>
+								<GithubOutlined className="nav-icon" />
+								<b>GitHub</b>
+							</div>
+							<div
+								className="nav-item"
+								onClick={() => {
+									message.info('敬请期待');
+								}}
+							>
+								<FileWordOutlined className="nav-icon" />
+								<b>使用文档</b>
+							</div>
+						</Nav>
+					</Flex>
 					<Space separator={<Divider orientation="vertical" />}>
-						<GithubOutlined
-							className="github-icon"
-							onClick={() => {
-								window.open('https://github.com/hp0912/wechat-robot-client', '_blank');
-							}}
-						/>
 						<Dropdown
 							menu={{ items }}
 							placement="bottomRight"
