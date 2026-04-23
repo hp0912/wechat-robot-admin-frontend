@@ -76,7 +76,7 @@ const KnowledgeBaseEditor = (props: IProps) => {
 	return (
 		<Modal
 			title={props.dataSource ? '编辑知识库' : '新建知识库'}
-			width="min(550px, calc(100vw - 32px))"
+			width="min(650px, calc(100vw - 32px))"
 			open={props.open}
 			confirmLoading={createLoading || updateLoading}
 			onOk={async () => {

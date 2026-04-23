@@ -1,5 +1,5 @@
 import React from 'react';
-import KnowledgeBase from '@/knowledge-base';
+import KnowledgeBase from '@/knowledge-base/KnowledgeBase';
 import KnowledgeDocument from './KnowledgeDocument';
 
 interface IProps {

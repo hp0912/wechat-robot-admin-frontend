@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import React, { Suspense, useEffect } from 'react';
 import styled from 'styled-components';
 import Contact from '@/contact';
-import ImageKnowledgeFilled from '@/icons/ImageKnowledgeFilled';
 import MCPFilled from '@/icons/MCPFilled';
 import MomentsFilled from '@/icons/MomentsFilled';
 import OSSFilled from '@/icons/OSSFilled';
@@ -29,12 +28,7 @@ interface IProps {
 const ContainerLog = React.lazy(() => import(/* webpackChunkName: "container-log" */ '@/container-log'));
 const Moments = React.lazy(() => import(/* webpackChunkName: "moments" */ '@/moments'));
 const SystemSettings = React.lazy(() => import(/* webpackChunkName: "system-settings" */ '@/system-settings'));
-const TextKnowledgeBase = React.lazy(
-	() => import(/* webpackChunkName: "text-knowledge-base" */ '@/text-knowledge-base'),
-);
-const ImageKnowledgeBase = React.lazy(
-	() => import(/* webpackChunkName: "image-knowledge-base" */ '@/image-knowledge-base'),
-);
+const KnowledgeBase = React.lazy(() => import(/* webpackChunkName: "knowledge-base" */ '@/knowledge-base'));
 const MCPServers = React.lazy(() => import(/* webpackChunkName: "mcp-servers" */ '@/mcp-servers'));
 const Skills = React.lazy(() => import(/* webpackChunkName: "skills" */ '@/skills'));
 const OSSSettings = React.lazy(() => import(/* webpackChunkName: "oss-settings" */ '@/oss-settings'));
@@ -151,20 +145,10 @@ const RobotDetail = (props: IProps) => {
 		{
 			key: 'text-knowledge-base',
 			icon: <TextKnowledgeFilled />,
-			label: '文本知识库',
+			label: '知识库',
 			children: (
 				<Suspense fallback={<Spin />}>
-					<TextKnowledgeBase robotId={props.robotId} />
-				</Suspense>
-			),
-		},
-		{
-			key: 'image-knowledge-base',
-			icon: <ImageKnowledgeFilled />,
-			label: '图片知识库',
-			children: (
-				<Suspense fallback={<Spin />}>
-					<ImageKnowledgeBase robotId={props.robotId} />
+					<KnowledgeBase robotId={props.robotId} />
 				</Suspense>
 			),
 		},
