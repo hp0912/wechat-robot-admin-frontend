@@ -324,8 +324,8 @@ const RestartRobotContainer = (props: IProps) => {
 	return (
 		<Space.Compact>
 			<Button
-				type="primary"
-				ghost
+				color="primary"
+				variant="filled"
 				loading={loading}
 				icon={<InteractionOutlined />}
 				onClick={runAsync}
@@ -337,8 +337,8 @@ const RestartRobotContainer = (props: IProps) => {
 				placement="bottomRight"
 			>
 				<Button
-					type="primary"
-					ghost
+					color="primary"
+					variant="filled"
 					icon={<DownOutlined />}
 				/>
 			</Dropdown>

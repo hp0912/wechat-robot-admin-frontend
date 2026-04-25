@@ -41,8 +41,8 @@ const Skills = (props: IProps) => {
 				style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 16, paddingRight: 8 }}
 			>
 				<Button
-					type="primary"
-					ghost
+					color="primary"
+					variant="filled"
 					icon={<PlusOutlined />}
 					onClick={setInstallOpen.setTrue}
 				>
@@ -54,7 +54,21 @@ const Skills = (props: IProps) => {
 				ref={containerRef}
 			>
 				{!data?.length ? (
-					<Empty />
+					<Empty
+						description={
+							<>
+								暂无可用技能，前往{' '}
+								<a
+									href="https://git.houhoukang.com/houhou/wechat-robot-skills"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									Skills
+								</a>{' '}
+								技能市场探索海量技能。
+							</>
+						}
+					/>
 				) : (
 					<List bordered>
 						<VirtualList

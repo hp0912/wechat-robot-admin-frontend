@@ -178,7 +178,10 @@ const Contact = (props: IProps) => {
 					wrap={false}
 					gutter={8}
 				>
-					<Col flex="0 0 300px" className="hide-on-mobile">
+					<Col
+						flex="0 0 300px"
+						className="hide-on-mobile"
+					>
 						<Input
 							placeholder="搜索联系人"
 							style={{ width: '100%' }}
@@ -191,10 +194,10 @@ const Contact = (props: IProps) => {
 							}}
 						/>
 					</Col>
-				<Col flex="0 0 260px">
+					<Col flex="0 0 260px">
 						<Radio.Group
 							optionType="button"
-							buttonStyle="solid"
+							buttonStyle="outline"
 							value={search.type}
 							onChange={ev => {
 								setSearch({ type: ev.target.value, pageIndex: 1 });
@@ -229,10 +232,10 @@ const Contact = (props: IProps) => {
 						/>
 						<Tooltip title="同步联系人">
 							<Button
-								type="primary"
+								color="primary"
+								variant="filled"
 								style={{ marginRight: 8 }}
 								loading={syncLoading}
-								ghost
 								icon={<CloudSyncOutlined />}
 								onClick={async () => {
 									await runAsync();

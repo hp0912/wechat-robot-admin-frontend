@@ -202,7 +202,7 @@ const OSSSettings = (props: IProps) => {
 							}}
 							allowClear
 							options={[
-								{ label: '上传所有视频', value: 'all', text: '上传所有视频' },
+								{ label: '上传所有视频', value: 'all', text: '上传所有视频', disabled: true },
 								{ label: '仅上传被AI引用的视频', value: 'ai_only', text: '仅上传被AI引用的视频' },
 							]}
 						/>

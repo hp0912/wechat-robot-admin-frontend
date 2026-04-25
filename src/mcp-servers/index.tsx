@@ -81,8 +81,8 @@ const MCPServers = (props: IProps) => {
 				style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 16, paddingRight: 8 }}
 			>
 				<Button
-					type="primary"
-					ghost
+					color="primary"
+					variant="filled"
 					icon={<PlusOutlined />}
 					onClick={() => {
 						setMCPServerState({ open: true, id: undefined });

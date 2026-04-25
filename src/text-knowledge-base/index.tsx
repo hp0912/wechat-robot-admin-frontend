@@ -4,6 +4,7 @@ import KnowledgeDocument from './KnowledgeDocument';
 
 interface IProps {
 	robotId: number;
+	portalContainer?: HTMLElement | null;
 }
 
 const TextKnowledgeBase = (props: IProps) => {
@@ -12,6 +13,7 @@ const TextKnowledgeBase = (props: IProps) => {
 			robotId={props.robotId}
 			type="text"
 			KnowledgeDocumentComponent={KnowledgeDocument}
+			portalContainer={props.portalContainer}
 		/>
 	);
 };

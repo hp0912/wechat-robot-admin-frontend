@@ -18,8 +18,8 @@ const AddFriends = (props: IProps) => {
 		<div style={{ display: 'inline-block' }}>
 			<Tooltip title="添加好友">
 				<Button
-					type="primary"
-					ghost
+					color="primary"
+					variant="filled"
 					icon={<AddFriendsOutlined />}
 					onClick={setOpen.setTrue}
 				/>
