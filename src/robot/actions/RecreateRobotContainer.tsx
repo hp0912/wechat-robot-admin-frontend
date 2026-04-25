@@ -355,7 +355,8 @@ const RecreateRobotContainer = (props: IProps) => {
 		<div style={{ display: 'inline-block' }}>
 			<Space.Compact>
 				<Button
-					type="primary"
+					color="primary"
+					variant="filled"
 					loading={imagePullState.loading}
 					icon={<DockerOutlined />}
 					onClick={() => {
@@ -379,7 +380,8 @@ const RecreateRobotContainer = (props: IProps) => {
 					placement="bottomRight"
 				>
 					<Button
-						type="primary"
+						color="primary"
+						variant="filled"
 						icon={<DownOutlined />}
 					/>
 				</Dropdown>

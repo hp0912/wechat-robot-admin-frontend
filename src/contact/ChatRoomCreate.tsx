@@ -18,8 +18,8 @@ const ChatRoomCreate = (props: IProps) => {
 		<div style={{ display: 'inline-block' }}>
 			<Tooltip title="发起群聊">
 				<Button
-					type="primary"
-					ghost
+					color="primary"
+					variant="filled"
 					icon={<UsergroupAddOutlined />}
 					onClick={setOpen.setTrue}
 				/>

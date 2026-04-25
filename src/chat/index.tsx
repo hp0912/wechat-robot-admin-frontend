@@ -7,7 +7,6 @@ import {
 	Col,
 	DatePicker,
 	Drawer,
-	Flex,
 	Input,
 	List,
 	Pagination,
@@ -256,12 +255,7 @@ const ChatHistory = (props: IProps) => {
 			footer={null}
 		>
 			<div>
-				<Flex
-					style={{ marginBottom: 16 }}
-					gap={8}
-					align="center"
-					wrap={false}
-				>
+				<Space.Compact style={{ marginBottom: 16 }}>
 					<Input
 						style={{ width: 250 }}
 						placeholder="根据关键字搜索"
@@ -340,7 +334,7 @@ const ChatHistory = (props: IProps) => {
 							setSearch({ timeStart: dates[0], timeEnd: dates[1], pageIndex: 1 });
 						}}
 					/>
-				</Flex>
+				</Space.Compact>
 				<div
 					style={{
 						border: '1px solid rgba(5,5,5,0.06)',

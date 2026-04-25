@@ -39,8 +39,8 @@ const SystemMessage = (props: IProps) => {
 			<Tooltip title="消息通知">
 				<Button
 					className={data && data.filter(item => !item.is_read).length > 0 ? 'new-message' : undefined}
-					type="primary"
-					ghost
+					color="primary"
+					variant="filled"
 					disabled={loading || data === undefined}
 					icon={<BellOutlined />}
 					onClick={() => setOpen.setTrue()}

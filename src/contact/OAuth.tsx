@@ -93,8 +93,8 @@ const OAuth = (props: IProps) => {
 				}
 			>
 				<Button
-					type="primary"
-					ghost
+					color="primary"
+					variant="filled"
 					icon={<PhoneOutlined />}
 					loading={loading}
 					onClick={runAsync}

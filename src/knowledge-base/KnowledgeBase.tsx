@@ -3,6 +3,7 @@ import { useBoolean, useRequest } from 'ahooks';
 import { App, Button, Space, Table, theme } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import TooltipPro from '@/components/TooltipPro';
 import { Container } from './styled';
@@ -20,6 +21,7 @@ interface IProps {
 		open: boolean;
 		onClose: () => void;
 	}>;
+	portalContainer?: HTMLElement | null;
 }
 
 const KnowledgeBase = (props: IProps) => {
@@ -67,39 +69,41 @@ const KnowledgeBase = (props: IProps) => {
 
 	return (
 		<Container>
-			<div className="action-bar">
-				<Space>
-					<Button
-						color="primary"
-						variant="filled"
-						icon={<RedoOutlined />}
-						loading={reindexLoading}
-						onClick={() => {
-							modal.confirm({
-								title: '重建向量库索引',
-								content: '重建索引会删除原有索引并重新创建，预计需要几分钟时间完成，确定要继续吗？',
-								onOk: async () => {
-									await reindex();
-								},
-							});
-						}}
-					>
-						重建索引
-					</Button>
-					<Button
-						color="primary"
-						variant="filled"
-						icon={<PlusOutlined />}
-						onClick={setOnNewOpen.setTrue}
-					>
-						新建知识库
-					</Button>
-				</Space>
-			</div>
+			{props.portalContainer &&
+				ReactDOM.createPortal(
+					<Space>
+						<Button
+							color="primary"
+							variant="filled"
+							icon={<RedoOutlined />}
+							loading={reindexLoading}
+							onClick={() => {
+								modal.confirm({
+									title: '重建向量库索引',
+									content: '重建索引会删除原有索引并重新创建，预计需要几分钟时间完成，确定要继续吗？',
+									onOk: async () => {
+										await reindex();
+									},
+								});
+							}}
+						>
+							重建索引
+						</Button>
+						<Button
+							color="primary"
+							variant="filled"
+							icon={<PlusOutlined />}
+							onClick={setOnNewOpen.setTrue}
+						>
+							新建知识库
+						</Button>
+					</Space>,
+					props.portalContainer,
+				)}
 			<Table
 				rowKey="id"
 				dataSource={data}
-				scroll={{ x: 'max-content', y: 'calc(100vh - 350px)' }}
+				scroll={{ x: 'max-content', y: 'calc(100vh - 300px)' }}
 				columns={[
 					{
 						title: '知识库名称',
