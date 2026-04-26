@@ -88,14 +88,8 @@ const SkillEnvs = (props: IProps) => {
 				style={{ marginBottom: 16 }}
 				description={
 					<>
-						<p style={{ fontSize: 12, marginTop: 0 }}>
-							<b>技能环境变量</b>用来给脚本注入一些私密信息，比如调用外部接口的密钥或数据库连接信息。
-						</p>
-						<p style={{ fontSize: 12, marginBottom: 0 }}>
-							技能脚本执行环境，默认不注入 mysql 连接信息，如果脚本需要操作机器人数据库，需要手动注入 mysql
-							连接信息，点击
-							<b style={{ color: '#1677ff' }}>填入示例</b>
-							，如果没有改过 docker-compose.yml 配置的话，数据库密码就是<b>mwechat12345678</b>。
+						<p style={{ fontSize: 12, margin: 0 }}>
+							<b>技能环境变量</b>用来给脚本注入一些私密信息，比如调用外部接口的密钥。
 						</p>
 					</>
 				}
