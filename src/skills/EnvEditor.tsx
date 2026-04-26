@@ -72,14 +72,6 @@ const EnvEditor = (props: IProps) => {
 										key: 'MYSQL_PORT',
 										value: '3306',
 									},
-									{
-										key: 'MYSQL_USER',
-										value: 'root',
-									},
-									{
-										key: 'MYSQL_PASSWORD',
-										value: '',
-									},
 								],
 								null,
 								2,
