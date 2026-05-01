@@ -140,12 +140,6 @@ const GlobalSettings = (props: IProps) => {
 					return;
 				}
 				values.tts_settings = json;
-				const json2 = JSON.parse(values.ltts_settings as unknown as string);
-				if (!json2 || typeof json2 !== 'object' || Array.isArray(json2)) {
-					message.error('长文本语音设置格式错误，不是有效的JSON对象格式');
-					return;
-				}
-				values.ltts_settings = json2;
 			} catch {
 				message.error('语音设置格式错误，不是有效的JSON对象格式');
 				return;
@@ -454,6 +448,21 @@ const GlobalSettings = (props: IProps) => {
 										return (
 											<>
 												<Form.Item
+													name="tts_model"
+													label="语音模型"
+													labelCol={{ flex: '0 0 110px' }}
+													rules={[{ required: true, message: '语音模型不能为空' }]}
+												>
+													<Select
+														placeholder="请选择语音模型"
+														style={{ width: '100%' }}
+														options={[
+															{ label: '豆包', value: 'doubao' },
+															{ label: '小米', value: 'mimo' },
+														]}
+													/>
+												</Form.Item>
+												<Form.Item
 													name="tts_settings"
 													label="语音设置"
 													labelCol={{ flex: '0 0 110px' }}
@@ -471,29 +480,6 @@ const GlobalSettings = (props: IProps) => {
 													}
 												>
 													<TTSettingsEditor />
-												</Form.Item>
-												<Form.Item
-													name="ltts_settings"
-													label="长文本语音设置"
-													labelCol={{ flex: '0 0 110px' }}
-													rules={[{ required: true, message: '长文本语音设置不能为空' }]}
-													tooltip={
-														<>
-															<a
-																target="_blank"
-																rel="noreferrer"
-																href="https://www.volcengine.com/docs/6561/1096680"
-															>
-																长文本语音设置文档
-															</a>
-														</>
-													}
-												>
-													<Input.TextArea
-														rows={8}
-														placeholder="请输入长文本语音设置"
-														allowClear
-													/>
 												</Form.Item>
 											</>
 										);

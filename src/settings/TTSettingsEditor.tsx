@@ -39,81 +39,102 @@ const TTSettingsEditor = (props: IProps) => {
 						registerMonacoJsonSchema(monaco, model.uri.toString(), 'http://myserver/tts-settings-schema.json', {
 							type: 'object',
 							properties: {
-								request_body: {
+								doubao: {
 									type: 'object',
 									properties: {
-										namespace: {
-											type: 'string',
-										},
-										req_params: {
+										request_body: {
 											type: 'object',
 											properties: {
-												audio_params: {
+												namespace: {
+													type: 'string',
+												},
+												req_params: {
 													type: 'object',
 													properties: {
-														format: {
-															type: 'string',
-															enum: ['mp3', 'wav'],
+														audio_params: {
+															type: 'object',
+															properties: {
+																format: {
+																	type: 'string',
+																	enum: ['mp3', 'wav'],
+																},
+																sample_rate: {
+																	type: 'integer',
+																},
+															},
+															required: ['format'],
 														},
-														sample_rate: {
-															type: 'integer',
+														model: {
+															type: 'string',
+														},
+														speaker: {
+															type: 'string',
+														},
+														text: {
+															type: 'string',
 														},
 													},
-													required: ['format'],
+													required: ['audio_params', 'speaker'],
 												},
-												model: {
-													type: 'string',
-												},
-												speaker: {
-													type: 'string',
-												},
-												text: {
-													type: 'string',
+												user: {
+													type: 'object',
+													properties: {
+														uid: {
+															type: 'string',
+														},
+													},
 												},
 											},
-											required: ['audio_params', 'speaker'],
+											required: ['req_params', 'user'],
 										},
-										user: {
+										request_header: {
 											type: 'object',
 											properties: {
-												uid: {
+												'X-Api-Access-Key': {
+													type: 'string',
+												},
+												'X-Api-App-Id': {
+													type: 'string',
+												},
+												'X-Api-Request-Id': {
+													type: 'string',
+												},
+												'X-Api-Resource-Id': {
+													type: 'string',
+												},
+												'X-Control-Require-Usage-Tokens-Return': {
 													type: 'string',
 												},
 											},
+											required: ['X-Api-Access-Key', 'X-Api-App-Id', 'X-Api-Resource-Id'],
+										},
+										url: {
+											type: 'string',
 										},
 									},
-									required: ['req_params', 'user'],
+									required: ['request_body', 'request_header', 'url'],
+									additionalProperties: {
+										type: 'string',
+										description: '其他自定义请求头',
+									},
 								},
-								request_header: {
+								mimo: {
 									type: 'object',
 									properties: {
-										'X-Api-Access-Key': {
+										base_url: {
 											type: 'string',
 										},
-										'X-Api-App-Id': {
+										api_key: {
 											type: 'string',
 										},
-										'X-Api-Request-Id': {
-											type: 'string',
-										},
-										'X-Api-Resource-Id': {
-											type: 'string',
-										},
-										'X-Control-Require-Usage-Tokens-Return': {
+										model: {
 											type: 'string',
 										},
 									},
-									required: ['X-Api-Access-Key', 'X-Api-App-Id', 'X-Api-Resource-Id'],
-								},
-								url: {
-									type: 'string',
+									required: ['model'],
 								},
 							},
-							required: ['request_body', 'request_header', 'url'],
-							additionalProperties: {
-								type: 'string',
-								description: '其他自定义请求头',
-							},
+							required: ['doubao', 'mimo'],
 						});
 					}
 				}}
