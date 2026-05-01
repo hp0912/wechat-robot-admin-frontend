@@ -293,6 +293,49 @@ const ChatRoomSettings = (props: IProps) => {
 		}
 	};
 
+	const getChatRoomMemberSelector = (placeholder: string) => {
+		return (
+			<Select
+				style={{ width: '100%' }}
+				mode="multiple"
+				placeholder={placeholder}
+				showSearch={{
+					filterOption,
+				}}
+				allowClear
+				loading={loadingChatRoomMembers}
+				options={chatRoomMembers.map(item => {
+					const labelText = item.remark || item.nickname || item.alias || item.wechat_id;
+					return {
+						label: (
+							<Row
+								align="middle"
+								wrap={false}
+								gutter={3}
+							>
+								<Col flex="0 0 auto">
+									<Avatar
+										src={item.avatar || DefaultAvatar}
+										gap={0}
+										size={18}
+									/>
+								</Col>
+								<Col
+									flex="1 1 auto"
+									className="ellipsis"
+								>
+									{labelText}
+								</Col>
+							</Row>
+						),
+						value: item.wechat_id,
+						text: `${item.remark || ''} ${item.nickname || ''} ${item.alias || ''} ${item.wechat_id}`,
+					};
+				})}
+			/>
+		);
+	};
+
 	return (
 		<Drawer
 			title={
@@ -499,6 +542,15 @@ const ChatRoomSettings = (props: IProps) => {
 													maxTagPlaceholder={maxTagPlaceholder}
 													options={knowledgeCategories || []}
 												/>
+											</Form.Item>
+											<Form.Item
+												name="memory_extraction_blacklist"
+												label="记忆提取黑名单"
+												labelCol={{ flex: '0 0 130px' }}
+												wrapperCol={{ flex: '1 1 calc(100% - 130px)' }}
+												tooltip="屏蔽指定群成员的消息，他的消息不会提取到记忆中，比如群里的水军或者广告号，减少记忆噪音"
+											>
+												{getChatRoomMemberSelector('请选择记忆提取黑名单成员')}
 											</Form.Item>
 											<Form.Item
 												name="max_completion_tokens"
@@ -896,44 +948,7 @@ const ChatRoomSettings = (props: IProps) => {
 										wrapperCol={{ flex: '1 1 calc(100% - 95px)' }}
 										rules={[{ required: enabled, message: '提醒人不能为空' }]}
 									>
-										<Select
-											style={{ width: '100%' }}
-											mode="multiple"
-											placeholder="选择提醒人"
-											showSearch={{
-												filterOption,
-											}}
-											allowClear
-											loading={loadingChatRoomMembers}
-											options={chatRoomMembers.map(item => {
-												const labelText = item.remark || item.nickname || item.alias || item.wechat_id;
-												return {
-													label: (
-														<Row
-															align="middle"
-															wrap={false}
-															gutter={3}
-														>
-															<Col flex="0 0 auto">
-																<Avatar
-																	src={item.avatar || DefaultAvatar}
-																	gap={0}
-																	size={18}
-																/>
-															</Col>
-															<Col
-																flex="1 1 auto"
-																className="ellipsis"
-															>
-																{labelText}
-															</Col>
-														</Row>
-													),
-													value: item.wechat_id,
-													text: `${item.remark || ''} ${item.nickname || ''} ${item.alias || ''} ${item.wechat_id}`,
-												};
-											})}
-										/>
+										{getChatRoomMemberSelector('请选择提醒人')}
 									</Form.Item>
 								);
 							}}
