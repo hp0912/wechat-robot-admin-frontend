@@ -1777,11 +1777,10 @@
 												"tts_enabled": {
 													"type": "boolean"
 												},
-												"tts_settings": {
-													"type": "object",
-													"properties": {}
+												"tts_model": {
+													"type": "string"
 												},
-												"ltts_settings": {
+												"tts_settings": {
 													"type": "object",
 													"properties": {}
 												},
@@ -1901,7 +1900,6 @@
 												"tts_settings",
 												"leave_chat_room_alert_enabled",
 												"leave_chat_room_alert_text",
-												"ltts_settings",
 												"max_completion_tokens",
 												"pat_enabled",
 												"pat_type",
@@ -1911,7 +1909,8 @@
 												"image_recognition_model",
 												"short_video_parsing_enabled",
 												"wxhb_notify_enabled",
-												"podcast_enabled"
+												"podcast_enabled",
+												"tts_model"
 											]
 										}
 									},
@@ -1995,11 +1994,10 @@
 									"tts_enabled": {
 										"type": "boolean"
 									},
-									"tts_settings": {
-										"type": "object",
-										"properties": {}
+									"tts_model": {
+										"type": "string"
 									},
-									"ltts_settings": {
+									"tts_settings": {
 										"type": "object",
 										"properties": {}
 									},
@@ -2119,7 +2117,6 @@
 									"tts_settings",
 									"leave_chat_room_alert_enabled",
 									"leave_chat_room_alert_text",
-									"ltts_settings",
 									"max_completion_tokens",
 									"pat_enabled",
 									"pat_type",
@@ -2130,7 +2127,8 @@
 									"short_video_parsing_enabled",
 									"wxhb_notify_enabled",
 									"podcast_enabled",
-									"knowledge_categories"
+									"knowledge_categories",
+									"tts_model"
 								]
 							},
 							"example": {
@@ -3720,11 +3718,10 @@
 												"tts_enabled": {
 													"type": "boolean"
 												},
-												"tts_settings": {
-													"type": "object",
-													"properties": {}
+												"tts_model": {
+													"type": "string"
 												},
-												"ltts_settings": {
+												"tts_settings": {
 													"type": "object",
 													"properties": {}
 												}
@@ -3741,10 +3738,10 @@
 												"image_ai_settings",
 												"tts_enabled",
 												"tts_settings",
-												"ltts_settings",
 												"max_completion_tokens",
 												"workflow_model",
-												"image_recognition_model"
+												"image_recognition_model",
+												"tts_model"
 											]
 										}
 									},
@@ -3828,11 +3825,10 @@
 									"tts_enabled": {
 										"type": "boolean"
 									},
-									"tts_settings": {
-										"type": "object",
-										"properties": {}
+									"tts_model": {
+										"type": "string"
 									},
-									"ltts_settings": {
+									"tts_settings": {
 										"type": "object",
 										"properties": {}
 									}
@@ -3851,10 +3847,10 @@
 									"wechat_id",
 									"tts_enabled",
 									"tts_settings",
-									"ltts_settings",
 									"max_completion_tokens",
 									"workflow_model",
-									"image_recognition_model"
+									"image_recognition_model",
+									"tts_model"
 								]
 							},
 							"example": {
@@ -10227,11 +10223,10 @@
 					"tts_enabled": {
 						"type": "boolean"
 					},
-					"tts_settings": {
-						"type": "object",
-						"properties": {}
+					"tts_model": {
+						"type": "string"
 					},
-					"ltts_settings": {
+					"tts_settings": {
 						"type": "object",
 						"properties": {}
 					},
@@ -10372,7 +10367,6 @@
 					"tts_settings",
 					"leave_chat_room_alert_enabled",
 					"leave_chat_room_alert_text",
-					"ltts_settings",
 					"max_completion_tokens",
 					"pat_enabled",
 					"pat_type",
@@ -10381,7 +10375,8 @@
 					"workflow_model",
 					"image_recognition_model",
 					"text_embedding_dimension",
-					"text_embedding_model"
+					"text_embedding_model",
+					"tts_model"
 				]
 			}
 		},

@@ -162,12 +162,6 @@ const ChatRoomSettings = (props: IProps) => {
 					return;
 				}
 				values.tts_settings = json;
-				const json2 = JSON.parse(values.ltts_settings as unknown as string);
-				if (!json2 || typeof json2 !== 'object' || Array.isArray(json2)) {
-					message.error('长文本语音设置格式错误，不是有效的JSON对象格式');
-					return;
-				}
-				values.ltts_settings = json2;
 			} catch {
 				message.error('语音设置格式错误，不是有效的JSON对象格式');
 				return;
@@ -208,9 +202,6 @@ const ChatRoomSettings = (props: IProps) => {
 		const _ttsSettings = globalSettings.data.tts_settings
 			? JSON.stringify(globalSettings.data.tts_settings, null, 2)
 			: '{}';
-		const _lttsSettings = globalSettings.data.ltts_settings
-			? JSON.stringify(globalSettings.data.ltts_settings, null, 2)
-			: '{}';
 		const chatSettings: Partial<IFormValue> = {
 			chat_ai_enabled: globalSettings.data.chat_ai_enabled,
 			chat_ai_trigger: globalSettings.data.chat_ai_trigger,
@@ -242,8 +233,8 @@ const ChatRoomSettings = (props: IProps) => {
 		};
 		const ttsSettings: Partial<IFormValue> = {
 			tts_enabled: globalSettings.data.tts_enabled,
+			tts_model: globalSettings.data.tts_model,
 			tts_settings: _ttsSettings as unknown as object,
-			ltts_settings: _lttsSettings as unknown as object,
 		};
 		const leaveChatRoomAlertSettings: Partial<IFormValue> = {
 			leave_chat_room_alert_enabled: globalSettings.data.leave_chat_room_alert_enabled,
@@ -666,6 +657,20 @@ const ChatRoomSettings = (props: IProps) => {
 									return (
 										<>
 											<Form.Item
+												name="tts_model"
+												label="语音模型"
+												rules={[{ required: true, message: '语音模型不能为空' }]}
+											>
+												<Select
+													placeholder="请选择语音模型"
+													style={{ width: '100%' }}
+													options={[
+														{ label: '豆包', value: 'doubao' },
+														{ label: '小米', value: 'mimo' },
+													]}
+												/>
+											</Form.Item>
+											<Form.Item
 												name="tts_settings"
 												label="语音设置"
 												labelCol={{ flex: '0 0 110px' }}
@@ -683,29 +688,6 @@ const ChatRoomSettings = (props: IProps) => {
 												}
 											>
 												<TTSettingsEditor />
-											</Form.Item>
-											<Form.Item
-												name="ltts_settings"
-												label="长文本语音设置"
-												labelCol={{ flex: '0 0 110px' }}
-												rules={[{ required: true, message: '长文本语音设置不能为空' }]}
-												tooltip={
-													<>
-														<a
-															target="_blank"
-															rel="noreferrer"
-															href="https://www.volcengine.com/docs/6561/1096680"
-														>
-															长文本语音设置文档
-														</a>
-													</>
-												}
-											>
-												<Input.TextArea
-													rows={8}
-													placeholder="请输入长文本语音设置"
-													allowClear
-												/>
 											</Form.Item>
 										</>
 									);

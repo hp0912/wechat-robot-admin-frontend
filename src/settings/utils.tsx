@@ -2,29 +2,34 @@ import type { FormInstance } from 'antd';
 import type { AnyType } from '@/common/types';
 
 export const defaultTTSValue = `{
-  "request_body": {
-    "namespace": "",
-    "req_params": {
-      "audio_params": {
-        "format": "mp3",
-        "sample_rate": 24000
-      },
-      "model": "",
-      "speaker": "zh_female_vv_uranus_bigtts",
-      "text": ""
-    },
-    "user": {
-      "uid": ""
-    }
-  },
-  "request_header": {
-    "X-Api-Access-Key": "",
-    "X-Api-App-Id": "",
-    "X-Api-Request-Id": "",
-    "X-Api-Resource-Id": "seed-tts-2.0",
-    "X-Control-Require-Usage-Tokens-Return": ""
-  },
-  "url": "https://openspeech.bytedance.com/api/v3/tts/unidirectional"
+	"doubao": {
+		"request_body": {
+			"namespace": "",
+			"req_params": {
+				"audio_params": {
+					"format": "mp3",
+					"sample_rate": 24000
+				},
+				"model": "",
+				"speaker": "zh_female_vv_uranus_bigtts",
+				"text": ""
+			},
+			"user": {
+				"uid": ""
+			}
+		},
+		"request_header": {
+			"X-Api-Access-Key": "",
+			"X-Api-App-Id": "",
+			"X-Api-Request-Id": "",
+			"X-Api-Resource-Id": "seed-tts-2.0",
+			"X-Control-Require-Usage-Tokens-Return": ""
+		},
+		"url": "https://openspeech.bytedance.com/api/v3/tts/unidirectional"
+	},
+	"mimo": {
+		"api-key": ""
+	}
 }`;
 
 export const defaultAIDrawingValue = `{
@@ -72,31 +77,6 @@ export const onTTSEnabledChange = (form: FormInstance<AnyType>, checked: boolean
 				tts_settings: defaultTTSValue as unknown as object,
 			});
 		}
-		if (!form.getFieldValue('ltts_settings')) {
-			form.setFieldsValue({
-				ltts_settings: JSON.stringify(
-					{
-						access_token: '',
-						appid: '',
-						base_url: 'https://openspeech.bytedance.com/api/v1/tts_async/submit',
-						callback_url: '',
-						enable_subtitle: 0,
-						format: 'mp3',
-						language: '',
-						pitch: 1,
-						sample_rate: 24000,
-						sentence_interval: 0,
-						speed: 1,
-						style: '',
-						voice: '',
-						voice_type: 'BV406_V2_streaming',
-						volume: 1,
-					},
-					null,
-					2,
-				) as unknown as object,
-			});
-		}
 	}
 };
 
@@ -104,7 +84,6 @@ export const ObjectToString = <
 	T extends {
 		image_ai_settings: object;
 		tts_settings: object;
-		ltts_settings: object;
 		podcast_config?: object;
 		wxhb_notify_member_list?: string;
 	},
@@ -116,9 +95,6 @@ export const ObjectToString = <
 	}
 	if (data.tts_settings && typeof data.tts_settings === 'object') {
 		data.tts_settings = JSON.stringify(data.tts_settings, null, 2) as unknown as object;
-	}
-	if (data.ltts_settings && typeof data.ltts_settings === 'object') {
-		data.ltts_settings = JSON.stringify(data.ltts_settings, null, 2) as unknown as object;
 	}
 	if (data.podcast_config && typeof data.podcast_config === 'object') {
 		data.podcast_config = JSON.stringify(data.podcast_config, null, 2) as unknown as object;
