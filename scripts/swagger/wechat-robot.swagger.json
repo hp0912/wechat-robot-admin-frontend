@@ -1562,6 +1562,9 @@
 												},
 												"max_completion_tokens": {
 													"type": "number"
+												},
+												"sync_interval": {
+													"type": "integer"
 												}
 											},
 											"required": [
@@ -1572,7 +1575,8 @@
 												"workflow_model",
 												"comment_model",
 												"comment_prompt",
-												"max_completion_tokens"
+												"max_completion_tokens",
+												"sync_interval"
 											]
 										}
 									},
@@ -1640,6 +1644,9 @@
 									},
 									"max_completion_tokens": {
 										"type": "number"
+									},
+									"sync_interval": {
+										"type": "integer"
 									}
 								},
 								"required": [
@@ -1650,7 +1657,8 @@
 									"workflow_model",
 									"comment_model",
 									"comment_prompt",
-									"max_completion_tokens"
+									"max_completion_tokens",
+									"sync_interval"
 								]
 							},
 							"examples": {}
@@ -1854,6 +1862,12 @@
 													"type": "boolean"
 												},
 												"knowledge_categories": {
+													"type": "array",
+													"items": {
+														"type": "string"
+													}
+												},
+												"memory_extraction_blacklist": {
 													"type": "array",
 													"items": {
 														"type": "string"
@@ -2064,6 +2078,12 @@
 										"type": "boolean"
 									},
 									"knowledge_categories": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
+									},
+									"memory_extraction_blacklist": {
 										"type": "array",
 										"items": {
 											"type": "string"

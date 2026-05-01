@@ -133,6 +133,21 @@ const MomentSettings = (props: IProps) => {
 						showIcon
 					/>
 					<Form.Item
+						name="sync_interval"
+						label="同步间隔"
+						tooltip="设置朋友圈没隔多久同步一次"
+						rules={[{ required: true, message: '同步间隔不能为空' }]}
+					>
+						<InputNumber
+							placeholder="请输入朋友圈同步间隔"
+							style={{ width: '100%' }}
+							max={86400}
+							min={10}
+							precision={0}
+							suffix="分钟"
+						/>
+					</Form.Item>
+					<Form.Item
 						name="id"
 						hidden
 					>
