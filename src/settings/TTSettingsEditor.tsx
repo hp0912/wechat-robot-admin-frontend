@@ -121,11 +121,17 @@ const TTSettingsEditor = (props: IProps) => {
 								mimo: {
 									type: 'object',
 									properties: {
-										'api-key': {
+										base_url: {
+											type: 'string',
+										},
+										api_key: {
+											type: 'string',
+										},
+										model: {
 											type: 'string',
 										},
 									},
-									required: ['api-key'],
+									required: ['model'],
 								},
 							},
 							required: ['doubao', 'mimo'],

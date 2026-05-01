@@ -502,6 +502,7 @@ const FriendSettings = (props: IProps) => {
 											<Form.Item
 												name="tts_model"
 												label="语音模型"
+												labelCol={{ flex: '0 0 110px' }}
 												rules={[{ required: true, message: '语音模型不能为空' }]}
 											>
 												<Select

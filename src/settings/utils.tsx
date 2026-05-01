@@ -28,7 +28,7 @@ export const defaultTTSValue = `{
 		"url": "https://openspeech.bytedance.com/api/v3/tts/unidirectional"
 	},
 	"mimo": {
-		"api-key": ""
+		"model": "mimo-v2.5-tts"
 	}
 }`;
 
