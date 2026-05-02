@@ -1,10 +1,11 @@
-import { Image, theme } from 'antd';
+import { theme } from 'antd';
 import { XMLParser } from 'fast-xml-parser';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
-import { AppMessageTypeMap, ImageFallback, MessageTypeMap } from '@/constant';
+import { AppMessageTypeMap, MessageTypeMap } from '@/constant';
 import { AppMessageType } from '@/constant/types';
 import { MessageType } from '@/constant/types';
+import ImageMessage from './ImageMessage';
 
 interface IProps {
 	robotId: number;
@@ -47,42 +48,10 @@ const MessageContent = (props: IProps) => {
 		case MessageType.Text:
 			return <pre className="text-message">{props.message.content}</pre>;
 		case MessageType.Image:
-			if (props.message.attachment_url) {
-				return (
-					<Image
-						styles={{
-							image: {
-								maxHeight: 300,
-								width: 'auto',
-								maxWidth: '100%',
-							},
-						}}
-						src={props.message.attachment_url}
-						alt={props.message.display_full_content || '图片消息'}
-						preview={{
-							mask: true,
-							cover: '点击查看大图',
-						}}
-						fallback={ImageFallback}
-					/>
-				);
-			}
 			return (
-				<Image
-					styles={{
-						image: {
-							maxHeight: 300,
-							width: 'auto',
-							maxWidth: '100%',
-						},
-					}}
-					src={`/api/v1/chat/image/download?id=${props.robotId}&message_id=${props.message.id}`}
-					alt={props.message.display_full_content || '图片消息'}
-					preview={{
-						mask: true,
-						cover: '点击查看大图',
-					}}
-					fallback={ImageFallback}
+				<ImageMessage
+					robotId={props.robotId}
+					message={props.message}
 				/>
 			);
 		case MessageType.Voice:

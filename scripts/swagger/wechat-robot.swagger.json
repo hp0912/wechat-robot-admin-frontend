@@ -4812,9 +4812,73 @@
 								"properties": {
 									"robot_name": {
 										"type": "string"
+									},
+									"proxy": {
+										"$ref": "#/components/schemas/Proxy"
 									}
 								},
-								"required": ["robot_name"]
+								"required": ["robot_name", "proxy"]
+							},
+							"examples": {}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": ["code", "message"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
+		"/api/v1/robot/update": {
+			"put": {
+				"summary": "更新机器人",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"robot_name": {
+										"type": "string"
+									},
+									"proxy": {
+										"$ref": "#/components/schemas/Proxy"
+									}
+								},
+								"required": ["robot_name", "proxy"]
 							},
 							"examples": {}
 						}
@@ -5096,6 +5160,9 @@
 												},
 												"wechat_version": {
 													"type": "string"
+												},
+												"proxy": {
+													"$ref": "#/components/schemas/Proxy"
 												},
 												"wechat_id": {
 													"type": "string"
@@ -10378,6 +10445,21 @@
 					"text_embedding_model",
 					"tts_model"
 				]
+			},
+			"Proxy": {
+				"type": "object",
+				"properties": {
+					"ProxyIp": {
+						"type": "string"
+					},
+					"ProxyUser": {
+						"type": "string"
+					},
+					"ProxyPassword": {
+						"type": "string"
+					}
+				},
+				"required": ["ProxyIp", "ProxyUser", "ProxyPassword"]
 			}
 		},
 		"responses": {},

@@ -37,6 +37,12 @@ const NewRobot = (props: IProps) => {
 
 	const onOk = async () => {
 		const values = await form.validateFields();
+		if (values.proxy.ProxyIp === '' && values.proxy.ProxyUser === '' && values.proxy.ProxyPassword === '') {
+			//
+		} else if (values.proxy.ProxyIp === '' || values.proxy.ProxyUser === '' || values.proxy.ProxyPassword === '') {
+			message.error('请完整填写代理信息，或者全部留空');
+			return;
+		}
 		await onCreate(values);
 		props.onRefresh?.();
 		props.onClose();
@@ -68,6 +74,39 @@ const NewRobot = (props: IProps) => {
 				>
 					<Input
 						placeholder="请输入机器人名称"
+						allowClear
+					/>
+				</Form.Item>
+				<Form.Item
+					name={['proxy', 'ProxyIp']}
+					label="代理 IP"
+					rules={[{ max: 15, message: '代理 IP 不能超过 15 个字符' }]}
+					help="如果不使用代理，请留空"
+				>
+					<Input
+						placeholder="请输入代理 IP"
+						allowClear
+					/>
+				</Form.Item>
+				<Form.Item
+					name={['proxy', 'ProxyUser']}
+					label="代理用户名"
+					rules={[{ max: 64, message: '代理用户名不能超过 64 个字符' }]}
+					help="如果不使用代理，请留空"
+				>
+					<Input
+						placeholder="请输入代理用户名"
+						allowClear
+					/>
+				</Form.Item>
+				<Form.Item
+					name={['proxy', 'ProxyPassword']}
+					label="代理密码"
+					rules={[{ max: 64, message: '代理密码不能超过 64 个字符' }]}
+					help="如果不使用代理，请留空"
+				>
+					<Input
+						placeholder="请输入代理密码"
 						allowClear
 					/>
 				</Form.Item>
