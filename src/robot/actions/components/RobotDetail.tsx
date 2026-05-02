@@ -531,6 +531,64 @@ const RobotDetail = (props: IProps) => {
 											{data.robot_name}
 										</Col>
 									</Row>
+									{!!data.proxy?.ProxyIp && (
+										<>
+											<Row
+												className="base-info-item"
+												align="middle"
+												wrap={false}
+											>
+												<Col
+													flex="0 0 100px"
+													className="base-info-title"
+												>
+													代理 IP
+												</Col>
+												<Col
+													flex="1 1 auto"
+													className="ellipsis  base-info-value"
+												>
+													{data.proxy.ProxyIp}
+												</Col>
+											</Row>
+											<Row
+												className="base-info-item"
+												align="middle"
+												wrap={false}
+											>
+												<Col
+													flex="0 0 100px"
+													className="base-info-title"
+												>
+													代理用户名
+												</Col>
+												<Col
+													flex="1 1 auto"
+													className="ellipsis  base-info-value"
+												>
+													{data.proxy.ProxyUser}
+												</Col>
+											</Row>
+											<Row
+												className="base-info-item"
+												align="middle"
+												wrap={false}
+											>
+												<Col
+													flex="0 0 100px"
+													className="base-info-title"
+												>
+													代理密码
+												</Col>
+												<Col
+													flex="1 1 auto"
+													className="ellipsis  base-info-value"
+												>
+													{data.proxy.ProxyPassword}
+												</Col>
+											</Row>
+										</>
+									)}
 									<Row
 										className="base-info-item"
 										align="middle"

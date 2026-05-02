@@ -27,7 +27,6 @@ import SendMessage from '@/components/send-message';
 import { DefaultAvatar } from '@/constant';
 import { AppMessageType, MessageType } from '@/constant/types';
 import AttachDownload from './components/AttachDownload';
-import ImageDownload from './components/ImageDownload';
 import MessageContent from './components/MessageContent';
 import MessageRevoke from './components/MessageRevoke';
 import VideoDownload from './components/VideoDownload';
@@ -147,12 +146,7 @@ const ChatHistory = (props: IProps) => {
 		}
 		switch (msgType) {
 			case MessageType.Image:
-				return (
-					<ImageDownload
-						robotId={props.robotId}
-						messageId={msg.id}
-					/>
-				);
+				return null;
 			case MessageType.Video:
 				return (
 					<VideoDownload

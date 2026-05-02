@@ -1,5 +1,6 @@
-import { useRequest, useUpdateEffect } from 'ahooks';
-import { App, Avatar, Card, Flex } from 'antd';
+import { EditFilled } from '@ant-design/icons';
+import { useBoolean, useRequest, useUpdateEffect } from 'ahooks';
+import { App, Avatar, Button, Card, Flex, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -10,7 +11,7 @@ import Remove from './actions/Remove';
 import RestartClient from './actions/RestartClient';
 import RestartServer from './actions/RestartServer';
 import RobotMetadata from './actions/RobotMetadata';
-import RobotState from './actions/RobotState';
+import RobotEditor from './RobotEditor';
 
 interface IProps {
 	robot: Api.V1RobotListList.ResponseBody['data']['items'][number];
@@ -193,6 +194,8 @@ const Robot = (props: IProps) => {
 	const { message } = App.useApp();
 
 	const [robot, setRobot] = useState(props.robot);
+	const [editOpen, setEditOpen] = useBoolean(false);
+
 	const statusConfig = statusMap[robot.status as keyof typeof statusMap] || defaultStatus;
 	const isOnline = robot.status === 'online';
 	const displayName = isOnline ? robot.nickname || robot.robot_name || '微信机器人' : '未登录';
@@ -231,11 +234,16 @@ const Robot = (props: IProps) => {
 					onListRefresh={props.onRefresh}
 					onDetailRefresh={refresh}
 				/>,
-				<RobotState
-					key="refresh"
-					robotId={robot.id}
-					onRefresh={refresh}
-				/>,
+				<Tooltip
+					key="edit"
+					title="编辑机器人"
+				>
+					<Button
+						type="text"
+						icon={<EditFilled />}
+						onClick={setEditOpen.setTrue}
+					/>
+				</Tooltip>,
 				<RestartClient
 					key="restart-client"
 					robotId={robot.id}
@@ -300,7 +308,6 @@ const Robot = (props: IProps) => {
 							)}
 						</ActionSlot>
 					</Flex>
-
 					<InfoGrid>
 						<InfoItem>
 							<InfoLabel>机器人名称</InfoLabel>
@@ -317,6 +324,15 @@ const Robot = (props: IProps) => {
 					</InfoGrid>
 				</Hero>
 			</CardContent>
+			{editOpen && (
+				<RobotEditor
+					key="editor"
+					open={editOpen}
+					robotId={robot.id}
+					onRefresh={refresh}
+					onClose={setEditOpen.setFalse}
+				/>
+			)}
 		</StyledCard>
 	);
 };
