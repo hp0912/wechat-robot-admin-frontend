@@ -1850,6 +1850,9 @@
 												"chat_room_summary_model": {
 													"type": "string"
 												},
+												"chat_room_summary_mode": {
+													"type": "string"
+												},
 												"news_enabled": {
 													"type": "boolean"
 												},
@@ -1910,7 +1913,8 @@
 												"short_video_parsing_enabled",
 												"wxhb_notify_enabled",
 												"podcast_enabled",
-												"tts_model"
+												"tts_model",
+												"chat_room_summary_mode"
 											]
 										}
 									},
@@ -2066,6 +2070,9 @@
 									"chat_room_summary_model": {
 										"type": "string"
 									},
+									"chat_room_summary_mode": {
+										"type": "string"
+									},
 									"news_enabled": {
 										"type": "boolean"
 									},
@@ -2128,7 +2135,8 @@
 									"wxhb_notify_enabled",
 									"podcast_enabled",
 									"knowledge_categories",
-									"tts_model"
+									"tts_model",
+									"chat_room_summary_mode"
 								]
 							},
 							"example": {
@@ -10356,6 +10364,9 @@
 					"chat_room_summary_model": {
 						"type": "string"
 					},
+					"chat_room_summary_mode": {
+						"type": "string"
+					},
 					"chat_room_summary_cron": {
 						"type": "string"
 					},
@@ -10443,7 +10454,8 @@
 					"image_recognition_model",
 					"text_embedding_dimension",
 					"text_embedding_model",
-					"tts_model"
+					"tts_model",
+					"chat_room_summary_mode"
 				]
 			},
 			"Proxy": {

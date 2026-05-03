@@ -244,6 +244,7 @@ const ChatRoomSettings = (props: IProps) => {
 			chat_room_ranking_enabled: globalSettings.data.chat_room_ranking_enabled,
 			chat_room_summary_enabled: globalSettings.data.chat_room_summary_enabled,
 			chat_room_summary_model: globalSettings.data.chat_room_summary_model,
+			chat_room_summary_mode: globalSettings.data.chat_room_summary_mode,
 			news_enabled: globalSettings.data.news_enabled,
 			news_type: globalSettings.data.news_type,
 			morning_enabled: globalSettings.data.morning_enabled,
@@ -1148,6 +1149,19 @@ const ChatRoomSettings = (props: IProps) => {
 													placeholder="不填则使用全局配置"
 													style={{ width: '100%' }}
 													options={AiModels}
+												/>
+											</Form.Item>
+											<Form.Item
+												name="chat_room_summary_mode"
+												label="显示模式"
+											>
+												<Select
+													placeholder="请选择显示模式"
+													style={{ width: '100%' }}
+													options={[
+														{ label: '文本', value: 'text' },
+														{ label: '图片', value: 'image' },
+													]}
 												/>
 											</Form.Item>
 										</>

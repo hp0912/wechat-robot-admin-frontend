@@ -12,6 +12,7 @@ import { Image, Space } from 'antd';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { ImageFallback } from '@/constant';
+import { useAttachDownload } from '@/hooks';
 
 interface IProps {
 	robotId: number;
@@ -19,25 +20,10 @@ interface IProps {
 }
 
 const ImageMessage = (props: IProps) => {
+	const { onAttachDownload: onDownload } = useAttachDownload('image', props.robotId, props.message.id);
+
 	const url =
 		props.message.attachment_url || `/api/v1/chat/image/download?id=${props.robotId}&message_id=${props.message.id}`;
-
-	const onDownload = () => {
-		const suffix = url.slice(url.lastIndexOf('.'));
-		const filename = Date.now() + suffix;
-		fetch(url)
-			.then(response => response.blob())
-			.then(blob => {
-				const blobUrl = URL.createObjectURL(new Blob([blob]));
-				const link = document.createElement('a');
-				link.href = blobUrl;
-				link.download = filename;
-				document.body.appendChild(link);
-				link.click();
-				URL.revokeObjectURL(blobUrl);
-				link.remove();
-			});
-	};
 
 	return (
 		<Image

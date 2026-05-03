@@ -912,6 +912,21 @@ const GlobalSettings = (props: IProps) => {
 													/>
 												</Form.Item>
 												<Form.Item
+													name="chat_room_summary_mode"
+													label="显示模式"
+													rules={[{ required: true, message: '显示模式不能为空' }]}
+													labelCol={{ flex: '0 0 120px' }}
+												>
+													<Select
+														placeholder="请选择显示模式"
+														style={{ width: '100%' }}
+														options={[
+															{ label: '文本', value: 'text' },
+															{ label: '图片', value: 'image' },
+														]}
+													/>
+												</Form.Item>
+												<Form.Item
 													name="chat_room_summary_cron"
 													label="总结时间(每天)"
 													labelCol={{ flex: '0 0 120px' }}
