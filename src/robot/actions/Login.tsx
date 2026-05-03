@@ -92,11 +92,12 @@ const LoginType = (props: {
 					}}
 					options={[
 						{ value: 'ipad', label: 'iPad' },
-						{ value: 'win', label: 'Windows微信' },
+						{ value: 'win', label: 'Windows微信', disabled: true },
 						{ value: 'mac', label: 'Mac微信' },
-						{ value: 'car', label: '车载微信' },
+						{ value: 'car', label: '车载微信', disabled: true },
 						{
 							value: 'iphone',
+							disabled: true,
 							label: (
 								<span>
 									iPhone{' '}
@@ -108,7 +109,7 @@ const LoginType = (props: {
 						},
 						{
 							value: 'android-pad',
-							disabled: !props.robot.wechat_id,
+							disabled: true,
 							label: (
 								<span>
 									Android手机{' '}
