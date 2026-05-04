@@ -136,6 +136,11 @@ const MomentSettings = (props: IProps) => {
 						name="sync_interval"
 						label="同步间隔"
 						tooltip="设置朋友圈没隔多久同步一次"
+						help={
+							<>
+								修改同步间隔后，需要<b style={{ color: 'red' }}>重启客户端容器</b>才能生效。
+							</>
+						}
 						rules={[{ required: true, message: '同步间隔不能为空' }]}
 					>
 						<InputNumber
