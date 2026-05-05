@@ -132,8 +132,44 @@ const AIDrawingSettingsEditor = (props: IProps) => {
 									required: ['enabled', 'api_key', 'model'],
 									description: '豆包绘图',
 								},
+								OpenAI: {
+									type: 'object',
+									properties: {
+										n: {
+											type: 'integer',
+											description: '一次生成多少张图片',
+										},
+										size: {
+											type: 'string',
+											enum: [
+												'auto',
+												'1024x1024',
+												'1536x1024',
+												'1024x1536',
+												'2048x2048',
+												'2048x1152',
+												'3840x2160',
+												'2160x3840',
+											],
+										},
+										quality: {
+											type: 'string',
+											enum: ['auto', 'low', 'medium', 'high'],
+										},
+										background: {
+											type: 'string',
+											enum: ['auto', 'opaque'],
+										},
+										output_format: {
+											type: 'string',
+											enum: ['png', 'jpeg', 'webp'],
+										},
+									},
+									required: ['n', 'size', 'quality', 'background', 'output_format'],
+									description: 'OpenAI 绘图',
+								},
 							},
-							required: ['JiMeng', 'DouBao', 'GLM', 'Z-Image'],
+							required: ['JiMeng', 'DouBao', 'GLM', 'Z-Image', 'OpenAI'],
 						});
 					}
 				}}

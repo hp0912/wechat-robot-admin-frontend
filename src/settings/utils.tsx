@@ -59,6 +59,17 @@ export const defaultAIDrawingValue = `{
 		"base_url": "https://api-inference.modelscope.cn/",
 		"api_key": "xxxxxxx",
 		"model": "Z-Image-Turbo"
+	},
+	"OpenAI": {
+		"enabled": true,
+		"base_url": "https://new-api.houhoukang.com",
+		"api_key": "",
+		"model": "gpt-image-2",
+		"n": 1,
+		"size": "auto",
+		"quality": "auto",
+		"background": "auto",
+		"output_format": "png"
 	}
 }`;
 
