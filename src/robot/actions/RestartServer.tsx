@@ -2,10 +2,12 @@ import { PlayCircleFilled } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { App, Button, Tooltip } from 'antd';
 import React from 'react';
+import type { Api } from '@/api/wechat-robot/wechat-robot';
 import LoadingOutlined from '@/icons/LoadingOutlined';
 
 interface IProps {
 	robotId: number;
+	robot: Api.V1RobotViewList.ResponseBody['data'];
 	buttonText?: string;
 	onRefresh: () => void;
 }

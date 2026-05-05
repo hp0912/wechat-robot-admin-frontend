@@ -307,7 +307,7 @@ const RestartRobotContainer = (props: IProps) => {
 					width: 335,
 					content: (
 						<>
-							确定要重启这个机器人的<b>服务端容器</b>吗？
+							确定要重启机器人<b>{props.robot.robot_name}</b>的<b>服务端容器</b>吗？
 						</>
 					),
 					okText: '重启',

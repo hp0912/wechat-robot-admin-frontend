@@ -86,7 +86,11 @@ const KnowledgeBaseActions = (props: IProps) => {
 					onClick={() => {
 						modal.confirm({
 							title: '删除知识库',
-							content: '删除知识库，会删除知识库下面的所有文档，确认删除这个知识库？',
+							content: (
+								<>
+									删除知识库，会删除知识库下面的所有文档，确认删除知识库<b>{props.dataSource?.name}</b>吗？
+								</>
+							),
 							width: 350,
 							okText: '删除',
 							okButtonProps: {

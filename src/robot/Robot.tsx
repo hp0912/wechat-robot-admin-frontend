@@ -247,16 +247,19 @@ const Robot = (props: IProps) => {
 				<RestartClient
 					key="restart-client"
 					robotId={robot.id}
+					robot={robot}
 					onRefresh={refresh}
 				/>,
 				<RestartServer
 					key="restart-server"
 					robotId={robot.id}
+					robot={robot}
 					onRefresh={refresh}
 				/>,
 				<Remove
 					key="remove"
 					robotId={robot.id}
+					robot={robot}
 					onRefresh={props.onRefresh}
 				/>,
 			]}

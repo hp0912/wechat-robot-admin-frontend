@@ -2,10 +2,12 @@ import { BulbFilled } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { App, Button, Tooltip } from 'antd';
 import React from 'react';
+import type { Api } from '@/api/wechat-robot/wechat-robot';
 import LoadingOutlined from '@/icons/LoadingOutlined';
 
 interface IProps {
 	robotId: number;
+	robot: Api.V1RobotViewList.ResponseBody['data'];
 	buttonText?: string;
 	onRefresh: () => void;
 }
@@ -36,7 +38,7 @@ const RestartClient = (props: IProps) => {
 			width: 320,
 			content: (
 				<>
-					确定要重启这个机器人的<b>客户端</b>吗？
+					确定要重启机器人<b>{props.robot.robot_name}</b>的<b>客户端</b>吗？
 				</>
 			),
 			okText: '重启',

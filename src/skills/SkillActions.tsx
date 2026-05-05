@@ -185,7 +185,11 @@ const SkillActions = (props: IProps) => {
 					onClick={() => {
 						modal.confirm({
 							title: '更新技能',
-							content: '确认更新这个技能？',
+							content: (
+								<>
+									确认更新技能<b>{props.skill.metadata.name}</b>吗？
+								</>
+							),
 							width: 350,
 							onOk: async () => {
 								await onUpdate();
@@ -203,7 +207,11 @@ const SkillActions = (props: IProps) => {
 					if (checked) {
 						modal.confirm({
 							title: '启用技能',
-							content: '确认启用这个技能？',
+							content: (
+								<>
+									确认启用技能<b>{props.skill.metadata.name}</b>吗？
+								</>
+							),
 							width: 350,
 							onOk: async () => {
 								await onEnable();
@@ -212,7 +220,11 @@ const SkillActions = (props: IProps) => {
 					} else {
 						modal.confirm({
 							title: '禁用技能',
-							content: '确认禁用这个技能？',
+							content: (
+								<>
+									确认禁用技能<b>{props.skill.metadata.name}</b>吗？
+								</>
+							),
 							width: 350,
 							onOk: async () => {
 								await onDisable();
