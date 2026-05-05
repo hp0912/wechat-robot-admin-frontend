@@ -63,7 +63,7 @@ const SkillEnvs = (props: IProps) => {
 
 	return (
 		<Modal
-			title="技能环境变量"
+			title={<>技能{props.skill.metadata.name}环境变量</>}
 			width="min(500px, calc(100vw - 32px))"
 			open={props.open}
 			confirmLoading={loading}

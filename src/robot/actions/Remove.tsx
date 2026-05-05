@@ -2,10 +2,12 @@ import { DeleteFilled } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { App, Button, Tooltip } from 'antd';
 import React from 'react';
+import type { Api } from '@/api/wechat-robot/wechat-robot';
 import LoadingOutlined from '@/icons/LoadingOutlined';
 
 interface IProps {
 	robotId: number;
+	robot: Api.V1RobotViewList.ResponseBody['data'];
 	buttonText?: string;
 	onRefresh: () => void;
 }
@@ -34,7 +36,11 @@ const Remove = (props: IProps) => {
 		modal.confirm({
 			title: '删除机器人',
 			width: 275,
-			content: '确定要删除这个机器人吗？',
+			content: (
+				<>
+					确定要删除机器人<b>{props.robot.robot_name}</b>吗？
+				</>
+			),
 			okText: '删除',
 			cancelText: '取消',
 			onOk: async () => {

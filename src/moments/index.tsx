@@ -406,7 +406,8 @@ const Moments = (props: IProps) => {
 					</Row>
 					<Space>
 						<Button
-							type="primary"
+							color="primary"
+							variant="filled"
 							icon={<ArrowUpOutlined />}
 							ghost
 							onClick={goToTop}
@@ -414,7 +415,8 @@ const Moments = (props: IProps) => {
 							返回朋友圈首页
 						</Button>
 						<Button
-							type="primary"
+							color="primary"
+							variant="filled"
 							icon={<CameraOutlined />}
 							ghost
 							onClick={setNewPostMomentOpen.setTrue}
@@ -422,7 +424,8 @@ const Moments = (props: IProps) => {
 							发朋友圈
 						</Button>
 						<Button
-							type="primary"
+							color="primary"
+							variant="filled"
 							style={{ marginRight: 8 }}
 							icon={<SettingOutlined />}
 							ghost

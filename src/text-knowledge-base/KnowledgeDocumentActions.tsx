@@ -104,7 +104,11 @@ const KnowledgeDocumentActions = (props: IProps) => {
 					if (checked) {
 						modal.confirm({
 							title: '启用文档',
-							content: '确认启用文档？',
+							content: (
+								<>
+									确认启用知识库(<b>{props.knowledgeBase.name}</b>)文档[<b>{props.dataSource?.title}</b>]吗？
+								</>
+							),
 							width: 300,
 							onOk: async () => {
 								await onEnable();
@@ -113,7 +117,11 @@ const KnowledgeDocumentActions = (props: IProps) => {
 					} else {
 						modal.confirm({
 							title: '禁用文档',
-							content: '确认禁用文档？',
+							content: (
+								<>
+									确认禁用知识库(<b>{props.knowledgeBase.name}</b>)文档[<b>{props.dataSource?.title}</b>]吗？
+								</>
+							),
 							width: 300,
 							onOk: async () => {
 								await onDisable();

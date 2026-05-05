@@ -135,8 +135,12 @@ const MCPServerActions = (props: IProps) => {
 						icon={<DeleteOutlined />}
 						onClick={() => {
 							modal.confirm({
-								title: '确认删除该 MCP 服务吗？',
-								content: '删除后将无法恢复',
+								title: '删除 MCP 服务',
+								content: (
+									<>
+										确认删除 MCP 服务<b>{props.mcpServer.name}</b>吗？
+									</>
+								),
 								width: 350,
 								onOk: async () => {
 									await onRemove();
@@ -175,7 +179,11 @@ const MCPServerActions = (props: IProps) => {
 					if (checked) {
 						modal.confirm({
 							title: '启用 MCP 服务',
-							content: '确认启用该 MCP 服务吗？',
+							content: (
+								<>
+									确认启用 MCP 服务<b>{props.mcpServer.name}</b>吗？
+								</>
+							),
 							width: 350,
 							onOk: async () => {
 								await onEnable();
@@ -184,7 +192,11 @@ const MCPServerActions = (props: IProps) => {
 					} else {
 						modal.confirm({
 							title: '禁用 MCP 服务',
-							content: '确认禁用该 MCP 服务吗？',
+							content: (
+								<>
+									确认禁用 MCP 服务<b>{props.mcpServer.name}</b>吗？
+								</>
+							),
 							width: 350,
 							onOk: async () => {
 								await onDisable();

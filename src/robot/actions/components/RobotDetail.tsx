@@ -239,6 +239,7 @@ const RobotDetail = (props: IProps) => {
 					/>
 					<Remove
 						robotId={data.id}
+						robot={data}
 						onRefresh={onRemoveRefresh}
 						buttonText="删除机器人"
 					/>

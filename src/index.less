@@ -93,11 +93,17 @@ body {
 
 @media (min-width: 960px) and (max-width: 1279px) {
 	.cards-container {
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(3, 1fr);
 	}
 }
 
 @media (min-width: 1280px) {
+	.cards-container {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}
+
+@media (min-width: 1680px) {
 	.cards-container {
 		grid-template-columns: repeat(5, 1fr);
 	}
