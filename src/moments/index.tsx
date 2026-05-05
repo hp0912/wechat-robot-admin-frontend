@@ -409,7 +409,6 @@ const Moments = (props: IProps) => {
 							color="primary"
 							variant="filled"
 							icon={<ArrowUpOutlined />}
-							ghost
 							onClick={goToTop}
 						>
 							返回朋友圈首页
@@ -418,7 +417,6 @@ const Moments = (props: IProps) => {
 							color="primary"
 							variant="filled"
 							icon={<CameraOutlined />}
-							ghost
 							onClick={setNewPostMomentOpen.setTrue}
 						>
 							发朋友圈
@@ -428,7 +426,6 @@ const Moments = (props: IProps) => {
 							variant="filled"
 							style={{ marginRight: 8 }}
 							icon={<SettingOutlined />}
-							ghost
 							onClick={async () => {
 								setMomentSettingsOpen.setTrue();
 							}}
