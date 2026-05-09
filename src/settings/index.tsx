@@ -269,7 +269,14 @@ const GlobalSettings = (props: IProps) => {
 													name="chat_model"
 													label="聊天模型"
 													labelCol={{ flex: '0 0 130px' }}
+													wrapperCol={{ flex: '1 1 calc(100% - 130px)' }}
 													rules={[{ required: true, message: '聊天模型不能为空' }]}
+													help={
+														<>
+															<b style={{ color: '#e46161' }}>特别注意</b> 提取记忆依赖全局聊天模型，这个模型必须支持
+															JSON Schema，推荐 gpt-4o-mini，国产模型只有 doubao-seed-2-0-lite-260215 支持JSON Schema
+														</>
+													}
 												>
 													<AutoComplete
 														placeholder="请选择或者手动输入聊天模型"
@@ -304,6 +311,7 @@ const GlobalSettings = (props: IProps) => {
 													name="text_embedding_dimension"
 													label="文本嵌入维度"
 													labelCol={{ flex: '0 0 130px' }}
+													wrapperCol={{ flex: '1 1 calc(100% - 130px)' }}
 													rules={[{ required: true, message: '文本嵌入维度不能为空' }]}
 													help={
 														<>
