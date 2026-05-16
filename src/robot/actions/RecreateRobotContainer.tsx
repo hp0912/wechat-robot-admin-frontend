@@ -199,28 +199,116 @@ const RecreateRobotContainer = (props: IProps) => {
 
 	const openPerformanceSampling = useMemoizedFn(() => {
 		modal.info({
-			title: '性能采样',
+			title: '服务端性能采样',
+			width: 520,
 			content: (
-				<Space
-					orientation="vertical"
-					size={8}
-				>
-					<a href={getPprofUrl()}>pprof 首页</a>
-					<a href={getPprofUrl('profile?seconds=30')}>CPU 采样</a>
-					<a href={getPprofUrl('heap')}>堆内存</a>
-					<a href={getPprofUrl('allocs')}>内存分配</a>
-					<a href={getPprofUrl('goroutine?debug=1')}>Goroutine</a>
-					<Space wrap>
-						<Button onClick={() => handlePprofSampling({ block: true }, '已开启阻塞采样')}>开启阻塞采样</Button>
-						<Button onClick={() => handlePprofSampling({ block: false }, '已关闭阻塞采样')}>关闭阻塞采样</Button>
-						<a href={getPprofUrl('block')}>查看阻塞数据</a>
-					</Space>
-					<Space wrap>
-						<Button onClick={() => handlePprofSampling({ mutex: true }, '已开启锁竞争采样')}>开启锁竞争采样</Button>
-						<Button onClick={() => handlePprofSampling({ mutex: false }, '已关闭锁竞争采样')}>关闭锁竞争采样</Button>
-						<a href={getPprofUrl('mutex')}>查看锁竞争数据</a>
-					</Space>
-				</Space>
+				<div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 20 }}>
+					<Button
+						color="primary"
+						variant="filled"
+						href={getPprofUrl()}
+						target="_blank"
+						block
+					>
+						打开 pprof 全局首页
+					</Button>
+
+					<div>
+						<div style={{ marginBottom: 12, fontWeight: 500, color: 'var(--ant-color-text)' }}>
+							常规分析 (新标签页打开)
+						</div>
+						<Space wrap>
+							<Button
+								color="default"
+								variant="filled"
+								href={getPprofUrl('profile?seconds=30')}
+								target="_blank"
+							>
+								CPU 采样 (30s)
+							</Button>
+							<Button
+								color="default"
+								variant="filled"
+								href={getPprofUrl('heap')}
+								target="_blank"
+							>
+								堆内存
+							</Button>
+							<Button
+								color="default"
+								variant="filled"
+								href={getPprofUrl('allocs')}
+								target="_blank"
+							>
+								内存分配
+							</Button>
+							<Button
+								color="default"
+								variant="filled"
+								href={getPprofUrl('goroutine?debug=1')}
+								target="_blank"
+							>
+								Goroutine
+							</Button>
+						</Space>
+					</div>
+
+					<div>
+						<div style={{ marginBottom: 12, fontWeight: 500, color: 'var(--ant-color-text)' }}>阻塞采样 (Block)</div>
+						<Space wrap>
+							<Button
+								color="primary"
+								variant="filled"
+								onClick={() => handlePprofSampling({ block: true }, '已开启阻塞采样')}
+							>
+								开启采样
+							</Button>
+							<Button
+								color="danger"
+								variant="filled"
+								onClick={() => handlePprofSampling({ block: false }, '已关闭阻塞采样')}
+							>
+								关闭采样
+							</Button>
+							<Button
+								color="default"
+								variant="filled"
+								href={getPprofUrl('block')}
+								target="_blank"
+							>
+								查看阻塞数据
+							</Button>
+						</Space>
+					</div>
+
+					<div>
+						<div style={{ marginBottom: 12, fontWeight: 500, color: 'var(--ant-color-text)' }}>锁竞争采样 (Mutex)</div>
+						<Space wrap>
+							<Button
+								color="primary"
+								variant="filled"
+								onClick={() => handlePprofSampling({ mutex: true }, '已开启锁竞争采样')}
+							>
+								开启采样
+							</Button>
+							<Button
+								color="danger"
+								variant="filled"
+								onClick={() => handlePprofSampling({ mutex: false }, '已关闭锁竞争采样')}
+							>
+								关闭采样
+							</Button>
+							<Button
+								color="default"
+								variant="filled"
+								href={getPprofUrl('mutex')}
+								target="_blank"
+							>
+								查看锁竞争数据
+							</Button>
+						</Space>
+					</div>
+				</div>
 			),
 		});
 	});
@@ -323,7 +411,7 @@ const RecreateRobotContainer = (props: IProps) => {
 			},
 		},
 		{
-			label: '性能采样',
+			label: '服务端性能采样',
 			key: 'performance-sampling',
 			icon: <FundProjectionScreenOutlined style={{ color: token.colorPrimary }} />,
 			onClick: openPerformanceSampling,
