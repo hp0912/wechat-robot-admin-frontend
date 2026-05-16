@@ -5678,12 +5678,9 @@
 								"properties": {
 									"id": {
 										"type": "number"
-									},
-									"pprof_enable": {
-										"type": "boolean"
 									}
 								},
-								"required": ["id", "pprof_enable"]
+								"required": ["id"]
 							},
 							"examples": {}
 						}

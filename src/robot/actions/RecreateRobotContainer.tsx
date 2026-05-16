@@ -3,6 +3,7 @@ import {
 	DeleteOutlined,
 	DockerOutlined,
 	DownOutlined,
+	FundProjectionScreenOutlined,
 	PlayCircleOutlined,
 	PlaySquareOutlined,
 } from '@ant-design/icons';
@@ -34,6 +35,18 @@ interface ImagePullState {
 	loading: boolean;
 	eventSource: EventSource | null;
 	progress: ImagePullRender[];
+}
+
+interface PprofSamplingPayload {
+	mutex?: boolean;
+	block?: boolean;
+}
+
+interface PprofSamplingState {
+	mutex_enabled: boolean;
+	block_enabled: boolean;
+	mutex_fraction: number;
+	block_rate: number;
 }
 
 const Progress = (props: { open?: boolean; progress: ImagePullRender[] }) => {
@@ -132,35 +145,16 @@ const RecreateRobotContainer = (props: IProps) => {
 	);
 
 	const { runAsync: createServerContainer, loading: createServerLoading } = useRequest(
-		async (pprofEnable: boolean) => {
+		async () => {
 			await window.wechatRobotClient.api.v1RobotDockerContainerServerStartCreate(
-				{ id: props.robotId, pprof_enable: pprofEnable },
+				{ id: props.robotId },
 				{ id: props.robotId },
 			);
 		},
 		{
 			manual: true,
-			onSuccess: (_, params) => {
-				if (params[0]) {
-					modal.success({
-						title: '创建服务端容器成功',
-						content: (
-							<>
-								<p>
-									<a href={`/api/v1/pprof/debug/pprof/?id=${props.robotId}&v=${Date.now()}`}>查看pprof首页</a>
-								</p>
-								<p>
-									<a href={`/api/v1/pprof/debug/pprof/heap?id=${props.robotId}&v=${Date.now()}`}>查看堆内存信息</a>
-								</p>
-								<p>
-									<a href={`/api/v1/pprof/debug/pprof/allocs?id=${props.robotId}&v=${Date.now()}`}>查看内存分配信息</a>
-								</p>
-							</>
-						),
-					});
-				} else {
-					message.success('创建服务端容器成功');
-				}
+			onSuccess: () => {
+				message.success('创建服务端容器成功');
 				props.onRefresh();
 			},
 			onError: reason => {
@@ -168,6 +162,68 @@ const RecreateRobotContainer = (props: IProps) => {
 			},
 		},
 	);
+
+	const getPprofUrl = useMemoizedFn((path = '') => {
+		const [profilePath, rawQuery = ''] = path.split('?');
+		const params = new URLSearchParams(rawQuery);
+		params.set('id', String(props.robotId));
+		params.set('v', String(Date.now()));
+		const suffix = profilePath ? `/${profilePath}` : '/';
+		return `/api/v1/pprof/debug/pprof${suffix}?${params.toString()}`;
+	});
+
+	const updatePprofSampling = useMemoizedFn(async (payload: PprofSamplingPayload, successText: string) => {
+		const response = await fetch(getPprofUrl('sampling'), {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(payload),
+		});
+		if (!response.ok) {
+			throw new Error(await response.text());
+		}
+		const state = (await response.json()) as PprofSamplingState;
+		message.success(
+			`${successText}，阻塞采样: ${state.block_enabled ? '开启' : '关闭'}，锁竞争采样: ${state.mutex_enabled ? '开启' : '关闭'}`,
+		);
+	});
+
+	const handlePprofSampling = useMemoizedFn(async (payload: PprofSamplingPayload, successText: string) => {
+		try {
+			await updatePprofSampling(payload, successText);
+		} catch (error) {
+			message.error(error instanceof Error ? error.message : '设置性能采样失败');
+		}
+	});
+
+	const openPerformanceSampling = useMemoizedFn(() => {
+		modal.info({
+			title: '性能采样',
+			content: (
+				<Space
+					orientation="vertical"
+					size={8}
+				>
+					<a href={getPprofUrl()}>pprof 首页</a>
+					<a href={getPprofUrl('profile?seconds=30')}>CPU 采样</a>
+					<a href={getPprofUrl('heap')}>堆内存</a>
+					<a href={getPprofUrl('allocs')}>内存分配</a>
+					<a href={getPprofUrl('goroutine?debug=1')}>Goroutine</a>
+					<Space wrap>
+						<Button onClick={() => handlePprofSampling({ block: true }, '已开启阻塞采样')}>开启阻塞采样</Button>
+						<Button onClick={() => handlePprofSampling({ block: false }, '已关闭阻塞采样')}>关闭阻塞采样</Button>
+						<a href={getPprofUrl('block')}>查看阻塞数据</a>
+					</Space>
+					<Space wrap>
+						<Button onClick={() => handlePprofSampling({ mutex: true }, '已开启锁竞争采样')}>开启锁竞争采样</Button>
+						<Button onClick={() => handlePprofSampling({ mutex: false }, '已关闭锁竞争采样')}>关闭锁竞争采样</Button>
+						<a href={getPprofUrl('mutex')}>查看锁竞争数据</a>
+					</Space>
+				</Space>
+			),
+		});
+	});
 
 	const items: MenuProps['items'] = [
 		{
@@ -261,34 +317,16 @@ const RecreateRobotContainer = (props: IProps) => {
 					okText: '创建',
 					cancelText: '取消',
 					onOk: async () => {
-						await createServerContainer(false);
+						await createServerContainer();
 					},
 				});
 			},
 		},
 		{
-			label: '创建服务端容器 (启用pprof)',
-			key: 'create-server-pprof',
-			icon: <PlaySquareOutlined style={{ color: token.colorPrimary }} />,
-			onClick: () => {
-				if (createServerLoading) {
-					message.warning('正在创建容器，请稍后再试');
-					return;
-				}
-				modal.confirm({
-					title: '创建机器人服务端容器',
-					content: (
-						<>
-							确定要创建这个机器人的<b>服务端容器</b>吗？
-						</>
-					),
-					okText: '创建',
-					cancelText: '取消',
-					onOk: async () => {
-						await createServerContainer(true);
-					},
-				});
-			},
+			label: '性能采样',
+			key: 'performance-sampling',
+			icon: <FundProjectionScreenOutlined style={{ color: token.colorPrimary }} />,
+			onClick: openPerformanceSampling,
 		},
 	];
 
