@@ -2,10 +2,10 @@ import { FileWordOutlined, GithubOutlined, LogoutOutlined, UserOutlined } from '
 import { useRequest } from 'ahooks';
 import { App, Avatar, Dropdown, Layout, Skeleton, Watermark } from 'antd';
 import type { MenuProps } from 'antd';
-import logo from 'public/logo.svg';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
+import logo from '../public/logo.svg';
 import { UrlLogin } from './constant/redirect-url';
 import { UserContext } from './context/user';
 

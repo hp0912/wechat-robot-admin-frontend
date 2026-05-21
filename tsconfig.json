@@ -1,37 +1,37 @@
 {
-  "ts-node": {
-    "compilerOptions": {
-      "target": "ES2021",
-      "module": "commonjs"
-    }
-  },
-  "compilerOptions": {
-    "sourceMap": true,
-    "allowJs": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "importHelpers": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "noEmitOnError": true,
+	"ts-node": {
+		"compilerOptions": {
+			"target": "ES2022",
+			"module": "commonjs"
+		}
+	},
+	"compilerOptions": {
+		"verbatimModuleSyntax": true,
+		"sourceMap": true,
+		"allowJs": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"importHelpers": true,
+		"allowSyntheticDefaultImports": true,
+		"skipLibCheck": true,
+		"isolatedModules": true,
+		"noEmitOnError": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": false,
-    "baseUrl": ".",
-    "outDir": "dist",
-    "module": "esnext",
-    "target": "esnext",
-    "lib": ["dom", "ES2021"],
-    "jsx": "react-jsx",
-    "moduleResolution": "node",
-    "ignoreDeprecations": "6.0",
-    "paths": {
-      "@/*": ["src/*"]
-    },
-    "typeRoots": ["node_modules/@types", "src/@types"],
-  },
-  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./rsbuild.config.ts"],
-  "exclude": ["node_modules"]
+		"outDir": "dist",
+		"module": "esnext",
+		"target": "esnext",
+		"lib": ["dom", "ES2022"],
+		"jsx": "react-jsx",
+		"moduleResolution": "bundler",
+		"types": ["node"],
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"typeRoots": ["node_modules/@types", "src/@types"]
+	},
+	"include": ["./src/**/*.ts", "./src/**/*.tsx", "./rsbuild.config.ts"],
+	"exclude": ["node_modules"]
 }
