@@ -32,6 +32,9 @@ dependencies:
   fast-xml-parser:
     specifier: ^5.2.5
     version: 5.2.5
+  monaco-editor:
+    specifier: 0.54.0
+    version: 0.54.0
   qs:
     specifier: ^6.14.0
     version: 6.14.0
