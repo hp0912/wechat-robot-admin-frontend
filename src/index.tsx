@@ -5,6 +5,7 @@ import 'dayjs/locale/zh-cn';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.less';
+import './utils/monacoSetup';
 
 dayjs.locale('zh-cn');
 const root = document.getElementById('root')!;

@@ -7,10 +7,20 @@ import tseslint from 'typescript-eslint';
 /** @type {import('eslint').Linter.Config[]} */
 export default [
 	{
-		ignores: ['node_modules', 'dist', 'public', 'src/api', 'scripts'],
+		ignores: [
+			'node_modules',
+			'dist',
+			'public',
+			'build',
+			'release',
+			'src/api',
+			'src/utils/clientInit.ts',
+			'scripts',
+			'**/*.less',
+		],
 	},
 	{
-		files: ['**/*.{js,mjs,cjs,ts,jsx,tsx,less}'],
+		files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
 	},
 	{
 		languageOptions: {
@@ -22,6 +32,11 @@ export default [
 	pluginReact.configs.flat.recommended,
 	eslintConfigPrettier,
 	{
+		settings: {
+			react: {
+				version: 'detect',
+			},
+		},
 		rules: {
 			'react/react-in-jsx-scope': ['off'],
 			'@typescript-eslint/consistent-type-imports': ['warn'],
@@ -29,10 +44,23 @@ export default [
 			'@typescript-eslint/no-unused-vars': [
 				'error',
 				{
-					varsIgnorePattern: '^_',
 					argsIgnorePattern: '^_',
+					varsIgnorePattern: '^_',
+					caughtErrorsIgnorePattern: '^_',
 				},
 			],
+		},
+	},
+	{
+		files: ['**/*.{ts,tsx}'],
+		languageOptions: {
+			parserOptions: {
+				projectService: true,
+				tsconfigRootDir: import.meta.dirname,
+			},
+		},
+		rules: {
+			'@typescript-eslint/no-deprecated': 'error',
 		},
 	},
 ];
