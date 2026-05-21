@@ -353,7 +353,7 @@ const RobotScanLogin = (props: IProps) => {
 					>
 						<Spin
 							spinning={loading2FA}
-							tip="正在验证..."
+							description="正在验证..."
 						>
 							<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 								<p style={{ margin: '0 0 16px 0', textAlign: 'center', color: '#3324e0' }}>请输入微信安全码</p>

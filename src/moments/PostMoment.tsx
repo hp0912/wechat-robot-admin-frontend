@@ -237,7 +237,7 @@ const PostMoment = (props: IProps) => {
 				</Form.Item>
 				<Spin
 					spinning={mediaUploadTip !== ''}
-					tip={mediaUploadTip}
+					description={mediaUploadTip}
 				>
 					<Form.Item
 						name="media_type"

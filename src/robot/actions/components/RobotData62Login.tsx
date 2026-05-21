@@ -158,7 +158,7 @@ const RobotData62Login = (props: IProps) => {
 					>
 						<Spin
 							spinning={verifyLoading}
-							tip="正在验证..."
+							description="正在验证..."
 						>
 							<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 								<Input.OTP
