@@ -15,8 +15,8 @@ import {
 	WechatFilled,
 } from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
-import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Spin, Tabs, Tag, theme } from 'antd';
-import type { TabsProps } from 'antd';
+import { App, Avatar, BorderBeam, Col, Drawer, Row, Skeleton, Space, Spin, Tabs, Tag, theme } from 'antd';
+import type { BorderBeamColor, TabsProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { Suspense, useEffect } from 'react';
 import styled from 'styled-components';
@@ -49,6 +49,13 @@ const Skills = React.lazy(() => import(/* webpackChunkName: "skills" */ '@/skill
 const OSSSettings = React.lazy(() => import(/* webpackChunkName: "oss-settings" */ '@/oss-settings'));
 const SystemOverview = React.lazy(() => import(/* webpackChunkName: "system-overview" */ '@/system-overview'));
 
+
+const sciFiCyan: BorderBeamColor = [
+	{ color: '#06b6d4', percent: 0 },
+	{ color: '#1677ff', percent: 50 },
+	{ color: '#7c3aed', percent: 100 },
+];
+
 const BaseContainer = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -65,6 +72,7 @@ const BaseContainer = styled.div`
 	}
 
 	.base-info-header {
+		position: relative;
 		display: flex;
 		align-items: center;
 		gap: 12px;
@@ -75,17 +83,19 @@ const BaseContainer = styled.div`
 	}
 
 	.base-info-card {
+		position: relative;
 		margin: 12px;
-		background: #fff;
+		background: linear-gradient(160deg, rgba(240, 249, 255, 0.9) 0%, rgba(245, 247, 255, 0.7) 100%);
 		border-radius: 10px;
 		padding: 12px;
-		border: 1px solid rgba(0, 0, 0, 0.04);
+		border: 1px solid rgba(22, 119, 255, 0.1);
+		box-shadow: 0 0 20px rgba(22, 119, 255, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6);
 	}
 
 	.base-info-card-title {
 		font-size: 12px;
 		font-weight: 600;
-		color: rgba(0, 0, 0, 0.45);
+		color: rgba(22, 119, 255, 0.65);
 		margin-bottom: 8px;
 		letter-spacing: 0.5px;
 	}
@@ -97,7 +107,7 @@ const BaseContainer = styled.div`
 	}
 
 	.base-info-row + .base-info-row {
-		border-top: 1px solid rgba(0, 0, 0, 0.04);
+		border-top: 1px solid rgba(22, 119, 255, 0.06);
 	}
 
 	.base-info-label {
@@ -368,37 +378,39 @@ const RobotDetail = (props: IProps) => {
 							>
 								<div className="title">基本信息</div>
 
-								<div className="base-info-header">
-									<Avatar
-										src={data.avatar}
-										size={44}
-									/>
-									<div style={{ minWidth: 0 }}>
-										<div
-											className="ellipsis"
-											style={{ fontSize: 15, fontWeight: 600, lineHeight: '22px' }}
-										>
-											{data.nickname || data.wechat_id || '未命名'}
-										</div>
-										<div style={{ marginTop: 2 }}>
-											{data.status === 'online' ? (
-												<Tag
-													color={token.colorSuccess}
-													style={{ margin: 0 }}
-												>
-													在线
-												</Tag>
-											) : (
-												<Tag
-													color="default"
-													style={{ margin: 0 }}
-												>
-													离线
-												</Tag>
-											)}
+								<BorderBeam color={sciFiCyan}>
+									<div className="base-info-header">
+										<Avatar
+											src={data.avatar}
+											size={44}
+										/>
+										<div style={{ minWidth: 0 }}>
+											<div
+												className="ellipsis"
+												style={{ fontSize: 15, fontWeight: 600, lineHeight: '22px' }}
+											>
+												{data.nickname || data.wechat_id || '未命名'}
+											</div>
+											<div style={{ marginTop: 2 }}>
+												{data.status === 'online' ? (
+													<Tag
+														color={token.colorSuccess}
+														style={{ margin: 0 }}
+													>
+														在线
+													</Tag>
+												) : (
+													<Tag
+														color="default"
+														style={{ margin: 0 }}
+													>
+														离线
+													</Tag>
+												)}
+											</div>
 										</div>
 									</div>
-								</div>
+								</BorderBeam>
 
 								<div className="base-info-card">
 									<div className="base-info-card-title">账号信息</div>
