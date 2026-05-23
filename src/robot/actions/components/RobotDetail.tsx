@@ -1,4 +1,19 @@
-import { FileTextFilled, FundFilled, MacCommandFilled, OpenAIFilled, WechatFilled } from '@ant-design/icons';
+import {
+	ClockCircleOutlined,
+	DatabaseOutlined,
+	DesktopOutlined,
+	EnvironmentOutlined,
+	FileTextFilled,
+	FundFilled,
+	IdcardOutlined,
+	KeyOutlined,
+	MacCommandFilled,
+	OpenAIFilled,
+	QrcodeOutlined,
+	TagOutlined,
+	UserOutlined,
+	WechatFilled,
+} from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Spin, Tabs, Tag, theme } from 'antd';
 import type { TabsProps } from 'antd';
@@ -38,23 +53,86 @@ const BaseContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	height: 100%;
+	background: #fafbfc;
 
 	.title {
-		margin: 12px 0;
-		padding: 0 16px;
-		font-size: 16px;
+		margin: 12px;
+		padding: 8px 12px;
+		border-radius: 12px;
+		background: #fff;
+		font-size: 14px;
 		font-weight: 600;
 	}
 
-	.base-info-item {
-		margin-bottom: 24px;
+	.base-info-header {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin: 12px;
+		padding: 12px;
+		background: linear-gradient(135deg, #f0f5ff 0%, #e6f4ff 100%);
+		border-radius: 12px;
 	}
 
-	.base-info-title,
-	.base-info-value {
+	.base-info-card {
+		margin: 12px;
+		background: #fff;
+		border-radius: 10px;
+		padding: 12px;
+		border: 1px solid rgba(0, 0, 0, 0.04);
+	}
+
+	.base-info-card-title {
 		font-size: 12px;
+		font-weight: 600;
+		color: rgba(0, 0, 0, 0.45);
+		margin-bottom: 8px;
+		letter-spacing: 0.5px;
+	}
+
+	.base-info-row {
+		display: flex;
+		align-items: flex-start;
+		padding: 8px 0;
+	}
+
+	.base-info-row + .base-info-row {
+		border-top: 1px solid rgba(0, 0, 0, 0.04);
+	}
+
+	.base-info-label {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		flex: 0 0 80px;
+		font-size: 12px;
+		color: rgba(0, 0, 0, 0.45);
+		white-space: nowrap;
+	}
+
+	.base-info-label .anticon {
+		font-size: 13px;
+		color: #1677ff;
+		opacity: 0.6;
+	}
+
+	.base-info-value {
+		flex: 1 1 auto;
+		font-size: 13px;
+		word-break: break-all;
+		min-width: 0;
 	}
 `;
+
+const InfoRow = ({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) => (
+	<div className="base-info-row">
+		<div className="base-info-label">
+			{icon}
+			{label}
+		</div>
+		<div className="base-info-value ellipsis">{children}</div>
+	</div>
+);
 
 const RobotDetail = (props: IProps) => {
 	const { message } = App.useApp();
@@ -289,325 +367,158 @@ const RobotDetail = (props: IProps) => {
 								}}
 							>
 								<div className="title">基本信息</div>
-								<div style={{ padding: '0 16px', fontSize: 12, color: 'rgb(107, 107, 107)' }}>
-									<Row
-										className="base-info-item"
-										align="middle"
-										wrap={false}
-									>
-										<Col
-											flex="0 0 100px"
-											className="base-info-title"
+
+								<div className="base-info-header">
+									<Avatar
+										src={data.avatar}
+										size={44}
+									/>
+									<div style={{ minWidth: 0 }}>
+										<div
+											className="ellipsis"
+											style={{ fontSize: 15, fontWeight: 600, lineHeight: '22px' }}
 										>
-											微信号
-										</Col>
-										<Col
-											flex="1 1 auto"
-											className="ellipsis  base-info-value"
-										>
-											{data.wechat_id || <Tag color="gray">未绑定</Tag>}
-										</Col>
-									</Row>
-									<Row
-										className="base-info-item"
-										align="middle"
-										wrap={false}
-									>
-										<Col
-											flex="0 0 100px"
-											className="base-info-title"
-										>
-											昵称
-										</Col>
-										<Col
-											flex="1 1 auto"
-											className="ellipsis  base-info-value"
-										>
-											{data.nickname || <Tag color="gray">未绑定</Tag>}
-										</Col>
-									</Row>
-									<Row
-										className="base-info-item"
-										align="middle"
-										wrap={false}
-									>
-										<Col
-											flex="0 0 100px"
-											className="base-info-title"
-										>
-											状态
-										</Col>
-										<Col
-											flex="1 1 auto"
-											className="ellipsis base-info-value"
-										>
+											{data.nickname || data.wechat_id || '未命名'}
+										</div>
+										<div style={{ marginTop: 2 }}>
 											{data.status === 'online' ? (
-												<Tag color={token.colorSuccess}>在线</Tag>
+												<Tag
+													color={token.colorSuccess}
+													style={{ margin: 0 }}
+												>
+													在线
+												</Tag>
 											) : (
-												<Tag color="gray">离线</Tag>
+												<Tag
+													color="default"
+													style={{ margin: 0 }}
+												>
+													离线
+												</Tag>
 											)}
-										</Col>
-									</Row>
-									<Row
-										className="base-info-item"
-										align="middle"
-										wrap={false}
+										</div>
+									</div>
+								</div>
+
+								<div className="base-info-card">
+									<div className="base-info-card-title">账号信息</div>
+									<InfoRow
+										icon={<WechatFilled />}
+										label="微信号"
 									>
-										<Col
-											flex="0 0 100px"
-											className="base-info-title"
-										>
-											上一次登陆时间
-										</Col>
-										<Col
-											flex="1 1 auto"
-											className="ellipsis base-info-value"
-										>
-											{data.last_login_at ? (
-												dayjs(data.last_login_at * 1000).format('YYYY-MM-DD HH:mm:ss')
-											) : (
-												<Tag color="gray">未登录</Tag>
-											)}
-										</Col>
-									</Row>
-									<Row
-										className="base-info-item"
-										align="middle"
-										wrap={false}
+										{data.wechat_id || <Tag color="default">未绑定</Tag>}
+									</InfoRow>
+									<InfoRow
+										icon={<UserOutlined />}
+										label="昵称"
 									>
-										<Col
-											flex="0 0 100px"
-											className="base-info-title"
-										>
-											设备ID
-										</Col>
-										<Col
-											flex="1 1 auto"
-											className="ellipsis  base-info-value"
-										>
-											{data.device_id}
-										</Col>
-									</Row>
-									<Row
-										className="base-info-item"
-										align="middle"
-										wrap={false}
+										{data.nickname || <Tag color="default">未绑定</Tag>}
+									</InfoRow>
+									<InfoRow
+										icon={<IdcardOutlined />}
+										label="归属人"
 									>
-										<Col
-											flex="0 0 100px"
-											className="base-info-title"
-										>
-											设备名称
-										</Col>
-										<Col
-											flex="1 1 auto"
-											className="ellipsis  base-info-value"
-										>
-											{data.device_name}
-										</Col>
-									</Row>
-									<Row
-										className="base-info-item"
-										align="middle"
-										wrap={false}
+										{data.owner}
+									</InfoRow>
+									<InfoRow
+										icon={<ClockCircleOutlined />}
+										label="上次登录"
 									>
-										<Col
-											flex="0 0 100px"
-											className="base-info-title"
-										>
-											设备类型
-										</Col>
-										<Col
-											flex="1 1 auto"
-											className="ellipsis  base-info-value"
-										>
-											{data.device_type}
-										</Col>
-									</Row>
-									<Row
-										className="base-info-item"
-										align="middle"
-										wrap={false}
+										{data.last_login_at ? (
+											dayjs(data.last_login_at * 1000).format('YYYY-MM-DD HH:mm:ss')
+										) : (
+											<Tag color="default">未登录</Tag>
+										)}
+									</InfoRow>
+								</div>
+
+								<div className="base-info-card">
+									<div className="base-info-card-title">设备信息</div>
+									<InfoRow
+										icon={<DesktopOutlined />}
+										label="设备ID"
 									>
-										<Col
-											flex="0 0 100px"
-											className="base-info-title"
-										>
-											微信版本
-										</Col>
-										<Col
-											flex="1 1 auto"
-											className="ellipsis  base-info-value"
-										>
-											{data.wechat_version}
-										</Col>
-									</Row>
-									<Row
-										className="base-info-item"
-										align="middle"
-										wrap={false}
+										{data.device_id}
+									</InfoRow>
+									<InfoRow
+										icon={<TagOutlined />}
+										label="设备名称"
 									>
-										<Col
-											flex="0 0 100px"
-											className="base-info-title"
-										>
-											RDS
-										</Col>
-										<Col
-											flex="1 1 auto"
-											className="ellipsis  base-info-value"
-										>
-											{data.redis_db}
-										</Col>
-									</Row>
-									<Row
-										className="base-info-item"
-										align="middle"
-										wrap={false}
+										{data.device_name}
+									</InfoRow>
+									<InfoRow
+										icon={<DesktopOutlined />}
+										label="设备类型"
 									>
-										<Col
-											flex="0 0 100px"
-											className="base-info-title"
-										>
-											归属人
-										</Col>
-										<Col
-											flex="1 1 auto"
-											className="ellipsis  base-info-value"
-										>
-											{data.owner}
-										</Col>
-									</Row>
-									<Row
-										className="base-info-item"
-										align="middle"
-										wrap={false}
+										{data.device_type}
+									</InfoRow>
+									<InfoRow
+										icon={<QrcodeOutlined />}
+										label="微信版本"
 									>
-										<Col
-											flex="0 0 100px"
-											className="base-info-title"
-										>
-											机器人ID
-										</Col>
-										<Col
-											flex="1 1 auto"
-											className="ellipsis  base-info-value"
-										>
-											{data.id}
-										</Col>
-									</Row>
-									<Row
-										className="base-info-item"
-										align="middle"
-										wrap={false}
+										{data.wechat_version}
+									</InfoRow>
+								</div>
+
+								<div className="base-info-card">
+									<div className="base-info-card-title">实例信息</div>
+									<InfoRow
+										icon={<KeyOutlined />}
+										label="机器人ID"
 									>
-										<Col
-											flex="0 0 100px"
-											className="base-info-title"
-										>
-											机器人编码
-										</Col>
-										<Col
-											flex="1 1 auto"
-											className="ellipsis  base-info-value"
-										>
-											{data.robot_code}
-										</Col>
-									</Row>
-									<Row
-										className="base-info-item"
-										align="middle"
-										wrap={false}
+										{data.id}
+									</InfoRow>
+									<InfoRow
+										icon={<QrcodeOutlined />}
+										label="机器人编码"
 									>
-										<Col
-											flex="0 0 100px"
-											className="base-info-title"
-										>
-											机器人名称
-										</Col>
-										<Col
-											flex="1 1 auto"
-											className="ellipsis  base-info-value"
-										>
-											{data.robot_name}
-										</Col>
-									</Row>
-									{!!data.proxy?.ProxyIp && (
-										<>
-											<Row
-												className="base-info-item"
-												align="middle"
-												wrap={false}
-											>
-												<Col
-													flex="0 0 100px"
-													className="base-info-title"
-												>
-													代理 IP
-												</Col>
-												<Col
-													flex="1 1 auto"
-													className="ellipsis  base-info-value"
-												>
-													{data.proxy.ProxyIp}
-												</Col>
-											</Row>
-											<Row
-												className="base-info-item"
-												align="middle"
-												wrap={false}
-											>
-												<Col
-													flex="0 0 100px"
-													className="base-info-title"
-												>
-													代理用户名
-												</Col>
-												<Col
-													flex="1 1 auto"
-													className="ellipsis  base-info-value"
-												>
-													{data.proxy.ProxyUser}
-												</Col>
-											</Row>
-											<Row
-												className="base-info-item"
-												align="middle"
-												wrap={false}
-											>
-												<Col
-													flex="0 0 100px"
-													className="base-info-title"
-												>
-													代理密码
-												</Col>
-												<Col
-													flex="1 1 auto"
-													className="ellipsis  base-info-value"
-												>
-													{data.proxy.ProxyPassword}
-												</Col>
-											</Row>
-										</>
-									)}
-									<Row
-										className="base-info-item"
-										align="middle"
-										wrap={false}
+										{data.robot_code}
+									</InfoRow>
+									<InfoRow
+										icon={<TagOutlined />}
+										label="机器人名称"
 									>
-										<Col
-											flex="0 0 100px"
-											className="base-info-title"
+										{data.robot_name}
+									</InfoRow>
+									<InfoRow
+										icon={<DatabaseOutlined />}
+										label="RDS"
+									>
+										{data.redis_db}
+									</InfoRow>
+								</div>
+
+								{!!data.proxy?.ProxyIp && (
+									<div className="base-info-card">
+										<div className="base-info-card-title">代理信息</div>
+										<InfoRow
+											icon={<EnvironmentOutlined />}
+											label="代理 IP"
 										>
-											创建时间
-										</Col>
-										<Col
-											flex="1 1 auto"
-											className="ellipsis base-info-value"
+											{data.proxy.ProxyIp}
+										</InfoRow>
+										<InfoRow
+											icon={<EnvironmentOutlined />}
+											label="代理用户"
 										>
-											{dayjs(data.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')}
-										</Col>
-									</Row>
+											{data.proxy.ProxyUser}
+										</InfoRow>
+										<InfoRow
+											icon={<EnvironmentOutlined />}
+											label="代理密码"
+										>
+											{data.proxy.ProxyPassword}
+										</InfoRow>
+									</div>
+								)}
+
+								<div className="base-info-card">
+									<InfoRow
+										icon={<ClockCircleOutlined />}
+										label="创建时间"
+									>
+										{dayjs(data.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')}
+									</InfoRow>
 								</div>
 							</div>
 						</BaseContainer>
