@@ -208,6 +208,36 @@ const OSSSettings = (props: IProps) => {
 						/>
 					</Form.Item>
 					<Form.Item
+						name="auto_upload_voice"
+						label="自动上传语音"
+						valuePropName="checked"
+						initialValue={false}
+					>
+						<Switch
+							unCheckedChildren="关闭"
+							checkedChildren="开启"
+						/>
+					</Form.Item>
+					<Form.Item
+						name="auto_upload_voice_mode"
+						label="语音上传模式"
+						rules={[{ required: true, message: '语音上传模式不能为空' }]}
+						initialValue="ai_only"
+					>
+						<Select
+							style={{ width: '100%' }}
+							placeholder="请选择语音上传模式"
+							showSearch={{
+								filterOption,
+							}}
+							allowClear
+							options={[
+								{ label: '上传所有语音', value: 'all', text: '上传所有语音', disabled: true },
+								{ label: '仅上传被AI引用的语音', value: 'ai_only', text: '仅上传被AI引用的语音' },
+							]}
+						/>
+					</Form.Item>
+					<Form.Item
 						name="auto_upload_file"
 						label="自动上传文件"
 						valuePropName="checked"
