@@ -20,13 +20,13 @@ import type { BorderBeamColor, TabsProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { Suspense, useEffect } from 'react';
 import styled from 'styled-components';
-import Contact from '@/contact';
 import MCPFilled from '@/icons/MCPFilled';
 import MomentsFilled from '@/icons/MomentsFilled';
 import OSSFilled from '@/icons/OSSFilled';
 import SkillsFilled from '@/icons/SkillsFilled';
 import TextKnowledgeFilled from '@/icons/TextKnowledgeFilled';
 import GlobalSettings from '@/settings';
+import '@/utils/monacoSetup';
 import RecreateRobotContainer from '../RecreateRobotContainer';
 import Remove from '../Remove';
 import RestartRobotContainer from '../RestartRobotContainer';
@@ -40,6 +40,7 @@ interface IProps {
 	onModuleLoaded?: () => void;
 }
 
+const Contact = React.lazy(() => import(/* webpackChunkName: "contact" */ '@/contact'));
 const ContainerLog = React.lazy(() => import(/* webpackChunkName: "container-log" */ '@/container-log'));
 const Moments = React.lazy(() => import(/* webpackChunkName: "moments" */ '@/moments'));
 const SystemSettings = React.lazy(() => import(/* webpackChunkName: "system-settings" */ '@/system-settings'));
