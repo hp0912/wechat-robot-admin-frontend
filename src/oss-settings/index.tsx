@@ -244,7 +244,6 @@ const OSSSettings = (props: IProps) => {
 						initialValue={false}
 					>
 						<Switch
-							disabled
 							unCheckedChildren="关闭"
 							checkedChildren="开启"
 						/>
@@ -262,9 +261,8 @@ const OSSSettings = (props: IProps) => {
 								filterOption,
 							}}
 							allowClear
-							disabled
 							options={[
-								{ label: '上传所有文件', value: 'all', text: '上传所有文件' },
+								{ label: '上传所有文件', value: 'all', disabled: true, text: '上传所有文件' },
 								{ label: '仅上传被AI引用的文件', value: 'ai_only', text: '仅上传被AI引用的文件' },
 							]}
 						/>
