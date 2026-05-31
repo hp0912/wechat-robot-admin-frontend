@@ -79,7 +79,10 @@ const LoginType = (props: {
 		>
 			<p style={{ margin: '0 0 16px 0' }}>
 				推荐使用<span style={{ color: '#1890ff' }}>iPad登录</span>，iPad登录不上的时候再尝试其他登录方式。
-				<span style={{ color: token.colorError }}>温馨提示: 服务器在深圳，广东以外的地区请设置代理后再登录。</span>
+				<span style={{ color: token.colorError }}>
+					温馨提示:
+					机器人服务器在深圳，本站仅供演示，请大家根据使用文档在本地部署。玩机器人第一要义：登录微信的手机和微信机器人服务器在同一局域网。
+				</span>
 			</p>
 			<div>
 				<Radio.Group

@@ -26,7 +26,6 @@ import OSSFilled from '@/icons/OSSFilled';
 import SkillsFilled from '@/icons/SkillsFilled';
 import TextKnowledgeFilled from '@/icons/TextKnowledgeFilled';
 import GlobalSettings from '@/settings';
-import '@/utils/monacoSetup';
 import RecreateRobotContainer from '../RecreateRobotContainer';
 import Remove from '../Remove';
 import RestartRobotContainer from '../RestartRobotContainer';
