@@ -80,8 +80,16 @@ const LoginType = (props: {
 			<p style={{ margin: '0 0 16px 0' }}>
 				推荐使用<span style={{ color: '#1890ff' }}>iPad登录</span>，iPad登录不上的时候再尝试其他登录方式。
 				<span style={{ color: token.colorError }}>
-					温馨提示:
-					机器人服务器在深圳，本站仅供演示，请大家根据使用文档在本地部署。玩机器人第一要义：登录微信的手机和微信机器人服务器在同一局域网。
+					温馨提示: 机器人服务器在<b>深圳 </b>，本站仅供演示，请大家根据
+					<a
+						href="https://wechat-doc.houhoukang.com/"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						使用文档
+					</a>
+					在本地部署。
+					<b style={{ color: '#2b920c' }}>玩机器人第一要义：登录微信的手机和微信机器人服务器在同一局域网</b>。
 				</span>
 			</p>
 			<div>
