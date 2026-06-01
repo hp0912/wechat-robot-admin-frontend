@@ -78,7 +78,7 @@ const LoginType = (props: {
 			}}
 		>
 			<p style={{ margin: '0 0 16px 0' }}>
-				推荐使用<span style={{ color: '#1890ff' }}>iPad登录</span>，iPad登录不上的时候再尝试其他登录方式。
+				推荐使用<span style={{ color: '#2b920c' }}>iPad登录</span>，iPad登录不上的时候再尝试其他登录方式。
 				<span style={{ color: token.colorError }}>
 					温馨提示: 机器人服务器在<b>深圳 </b>，本站仅供演示，请大家根据
 					<a
