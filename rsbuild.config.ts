@@ -60,8 +60,8 @@ if (isDev) {
 			{
 				context: ['/api/v1/**'],
 				changeOrigin: true,
-				// target: 'https://wechat-sz.houhoukang.com/',
-				target: 'http://127.0.0.1:9000',
+				target: 'https://wechat-sz.houhoukang.com/',
+				// target: 'http://127.0.0.1:9000',
 				// target: 'https://192.168.3.28:8443/',
 				secure: false,
 				cookieDomainRewrite: '',

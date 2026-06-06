@@ -11,6 +11,7 @@ import {
 	Avatar,
 	Button,
 	Col,
+	ConfigProvider,
 	Dropdown,
 	Flex,
 	Input,
@@ -50,6 +51,7 @@ import ChatRoomRemarkChange from './ChatRoomRemarkChange';
 import FriendDelete from './FriendDelete';
 import FriendRemarkChange from './FriendRemarkChange';
 import OAuth from './OAuth';
+import { Container } from './styled';
 
 interface IProps {
 	robotId: number;
@@ -185,7 +187,7 @@ const Contact = (props: IProps) => {
 						<Input
 							placeholder="搜索联系人"
 							style={{ width: '100%' }}
-							prefix={<SearchOutlined />}
+							prefix={<SearchOutlined style={{ color: '#08979c' }} />}
 							allowClear
 							onKeyDown={ev => {
 								if (ev.key === 'Enter') {
@@ -195,19 +197,32 @@ const Contact = (props: IProps) => {
 						/>
 					</Col>
 					<Col flex="0 0 260px">
-						<Radio.Group
-							optionType="button"
-							buttonStyle="outline"
-							value={search.type}
-							onChange={ev => {
-								setSearch({ type: ev.target.value, pageIndex: 1 });
+						<ConfigProvider
+							theme={{
+								components: {
+									Radio: {
+										buttonSolidCheckedBg: '#1677ff',
+										buttonSolidCheckedHoverBg: '#0958d9',
+										colorPrimary: '#1677ff',
+										colorPrimaryHover: '#22d3ee',
+									},
+								},
 							}}
 						>
-							<Radio.Button value="chat_room">群聊</Radio.Button>
-							<Radio.Button value="friend">朋友</Radio.Button>
-							<Radio.Button value="official_account">公众号</Radio.Button>
-							<Radio.Button value="all">全部</Radio.Button>
-						</Radio.Group>
+							<Radio.Group
+								optionType="button"
+								buttonStyle="solid"
+								value={search.type}
+								onChange={ev => {
+									setSearch({ type: ev.target.value, pageIndex: 1 });
+								}}
+							>
+								<Radio.Button value="chat_room">群聊</Radio.Button>
+								<Radio.Button value="friend">朋友</Radio.Button>
+								<Radio.Button value="official_account">公众号</Radio.Button>
+								<Radio.Button value="all">全部</Radio.Button>
+							</Radio.Group>
+						</ConfigProvider>
 					</Col>
 				</Row>
 				<Space>
@@ -247,18 +262,13 @@ const Contact = (props: IProps) => {
 					</Space>
 				</Space>
 			</Flex>
-			<div
-				style={{
-					border: '1px solid rgba(5,5,5,0.06)',
-					borderRadius: 4,
-					marginRight: 2,
-				}}
-			>
+			<Container>
 				<List
 					rowKey="id"
 					itemLayout="horizontal"
+					split={false}
 					dataSource={data?.items || []}
-					style={{ maxHeight: 'calc(100vh - 235px)', overflowY: 'auto' }}
+					className="tech-list-scroll"
 					renderItem={item => {
 						const items: MenuProps['items'] = [{ label: '发送消息', key: 'send-message' }];
 						if (item.type === 'friend') {
@@ -276,7 +286,7 @@ const Contact = (props: IProps) => {
 							items.push({ label: '退出群聊', key: 'quit', danger: true });
 						}
 						return (
-							<List.Item>
+							<List.Item className="tech-list-item">
 								<List.Item.Meta
 									avatar={
 										<Avatar
@@ -472,7 +482,7 @@ const Contact = (props: IProps) => {
 						);
 					}}
 				/>
-			</div>
+			</Container>
 			<div className="pagination">
 				<Pagination
 					align="end"

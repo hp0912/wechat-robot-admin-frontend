@@ -273,8 +273,8 @@ const GlobalSettings = (props: IProps) => {
 													rules={[{ required: true, message: '聊天模型不能为空' }]}
 													help={
 														<>
-															<b style={{ color: '#e46161' }}>特别注意</b> 提取记忆依赖全局聊天模型，这个模型必须支持
-															JSON Schema，推荐 gpt-4o-mini，国产模型只有 doubao-seed-2-0-lite-260215 支持JSON Schema
+															<b style={{ color: '#e46161' }}>特别注意</b>{' '}
+															提取记忆依赖全局聊天模型，这个模型必须支持JSON Schema
 														</>
 													}
 												>

@@ -15,11 +15,10 @@ import {
 	WechatFilled,
 } from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
-import { App, Avatar, BorderBeam, Col, Drawer, Row, Skeleton, Space, Spin, Tabs, Tag, theme } from 'antd';
-import type { BorderBeamColor, TabsProps } from 'antd';
+import { App, Avatar, Col, ConfigProvider, Drawer, Row, Skeleton, Space, Spin, Tabs, Tag, theme } from 'antd';
+import type { TabsProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { Suspense, useEffect } from 'react';
-import styled from 'styled-components';
 import MCPFilled from '@/icons/MCPFilled';
 import MomentsFilled from '@/icons/MomentsFilled';
 import OSSFilled from '@/icons/OSSFilled';
@@ -29,6 +28,7 @@ import GlobalSettings from '@/settings';
 import RecreateRobotContainer from '../RecreateRobotContainer';
 import Remove from '../Remove';
 import RestartRobotContainer from '../RestartRobotContainer';
+import { BaseContainer, LeftPanel } from './RobotDetail.styled';
 
 interface IProps {
 	robotId: number;
@@ -48,226 +48,6 @@ const MCPServers = React.lazy(() => import(/* webpackChunkName: "mcp-servers" */
 const Skills = React.lazy(() => import(/* webpackChunkName: "skills" */ '@/skills'));
 const OSSSettings = React.lazy(() => import(/* webpackChunkName: "oss-settings" */ '@/oss-settings'));
 const SystemOverview = React.lazy(() => import(/* webpackChunkName: "system-overview" */ '@/system-overview'));
-
-const sciFiCyan: BorderBeamColor = [
-	{ color: '#22d3ee', percent: 0 },
-	{ color: '#52c41a', percent: 36 },
-	{ color: '#1677ff', percent: 68 },
-	{ color: '#f759ab', percent: 100 },
-];
-
-const BaseContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-	background: linear-gradient(
-			180deg,
-			rgba(247, 252, 255, 0.96) 0%,
-			rgba(242, 249, 255, 0.96) 52%,
-			rgba(250, 255, 252, 0.96) 100%
-		),
-		repeating-linear-gradient(
-			90deg,
-			rgba(22, 119, 255, 0.04) 0,
-			rgba(22, 119, 255, 0.04) 1px,
-			transparent 1px,
-			transparent 18px
-		);
-
-	.title {
-		position: relative;
-		margin: 12px;
-		padding: 10px 14px 10px 22px;
-		border: 1px solid rgba(34, 211, 238, 0.28);
-		border-radius: 8px;
-		background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(245, 252, 255, 0.86));
-		box-shadow:
-			0 8px 22px rgba(22, 119, 255, 0.08),
-			inset 0 0 18px rgba(34, 211, 238, 0.08);
-		color: #0958d9;
-		font-size: 14px;
-		font-weight: 600;
-		overflow: hidden;
-	}
-
-	.title::before {
-		position: absolute;
-		top: 50%;
-		left: 10px;
-		width: 4px;
-		height: 16px;
-		border-radius: 2px;
-		background: #22d3ee;
-		box-shadow: 0 0 10px rgba(34, 211, 238, 0.58);
-		transform: translateY(-50%);
-		content: '';
-	}
-
-	.base-info-header {
-		position: relative;
-		isolation: isolate;
-		display: flex;
-		align-items: center;
-		gap: 12px;
-		margin: 12px;
-		padding: 16px 14px;
-		border: 1px solid rgba(34, 211, 238, 0.32);
-		border-radius: 8px;
-		background: linear-gradient(
-				135deg,
-				rgba(238, 251, 255, 0.94) 0%,
-				rgba(240, 246, 255, 0.9) 58%,
-				rgba(249, 255, 246, 0.9) 100%
-			),
-			repeating-linear-gradient(
-				135deg,
-				rgba(34, 211, 238, 0.11) 0,
-				rgba(34, 211, 238, 0.11) 1px,
-				transparent 1px,
-				transparent 12px
-			);
-		box-shadow:
-			0 14px 34px rgba(22, 119, 255, 0.12),
-			inset 0 1px 0 rgba(255, 255, 255, 0.8);
-		overflow: hidden;
-	}
-
-	.base-info-beam {
-		z-index: 3;
-		padding: 2px;
-	}
-
-	.base-info-beam::before {
-		width: 140px;
-		animation-duration: 4.8s;
-	}
-
-	.base-info-header::before {
-		position: absolute;
-		top: 0;
-		right: 0;
-		width: 96px;
-		height: 100%;
-		background: linear-gradient(90deg, transparent 0%, rgba(34, 211, 238, 0.16) 48%, rgba(82, 196, 26, 0.12) 100%);
-		clip-path: polygon(32% 0, 100% 0, 100% 100%, 0 100%);
-		content: '';
-		pointer-events: none;
-		z-index: 0;
-	}
-
-	.base-info-header .ant-avatar,
-	.base-info-profile {
-		position: relative;
-		z-index: 2;
-	}
-
-	.base-info-header .ant-avatar {
-		box-shadow:
-			0 0 0 2px rgba(255, 255, 255, 0.92),
-			0 0 18px rgba(34, 211, 238, 0.2);
-	}
-
-	.base-info-card {
-		position: relative;
-		margin: 12px;
-		padding: 14px 14px 12px;
-		border: 1px solid rgba(34, 211, 238, 0.32);
-		border-radius: 8px;
-		background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(247, 252, 255, 0.88) 100%),
-			linear-gradient(135deg, rgba(34, 211, 238, 0.14) 0%, rgba(82, 196, 26, 0.1) 45%, rgba(247, 89, 171, 0.1) 100%);
-		box-shadow:
-			0 12px 30px rgba(22, 119, 255, 0.08),
-			0 0 0 1px rgba(255, 255, 255, 0.75) inset;
-		overflow: hidden;
-	}
-
-	.base-info-card::before {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 2px;
-		background: linear-gradient(
-			90deg,
-			rgba(34, 211, 238, 0.92) 0%,
-			rgba(82, 196, 26, 0.68) 38%,
-			rgba(22, 119, 255, 0.72) 70%,
-			rgba(247, 89, 171, 0.78) 100%
-		);
-		content: '';
-	}
-
-	.base-info-card::after {
-		position: absolute;
-		top: 8px;
-		right: 8px;
-		width: 26px;
-		height: 13px;
-		border-top: 1px solid rgba(34, 211, 238, 0.62);
-		border-right: 1px solid rgba(34, 211, 238, 0.62);
-		content: '';
-		pointer-events: none;
-	}
-
-	.base-info-card-title {
-		position: relative;
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		margin-bottom: 8px;
-		font-size: 12px;
-		font-weight: 600;
-		color: #0958d9;
-		letter-spacing: 0.5px;
-	}
-
-	.base-info-card-title::before {
-		width: 6px;
-		height: 6px;
-		border: 1px solid #22d3ee;
-		background: #e6fffb;
-		box-shadow: 0 0 8px rgba(34, 211, 238, 0.72);
-		content: '';
-	}
-
-	.base-info-row {
-		position: relative;
-		display: flex;
-		align-items: flex-start;
-		gap: 12px;
-		padding: 8px 0;
-	}
-
-	.base-info-row + .base-info-row {
-		border-top: 1px solid rgba(34, 211, 238, 0.14);
-	}
-
-	.base-info-label {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-		flex: 0 0 96px;
-		font-size: 12px;
-		color: rgba(0, 42, 76, 0.58);
-		white-space: nowrap;
-	}
-
-	.base-info-label .anticon {
-		font-size: 13px;
-		color: #08979c;
-		filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.36));
-		opacity: 0.78;
-	}
-
-	.base-info-value {
-		flex: 1 1 auto;
-		font-size: 13px;
-		color: rgba(0, 0, 0, 0.78);
-		line-height: 20px;
-		word-break: break-all;
-		min-width: 0;
-	}
-`;
 
 const InfoRow = ({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) => (
 	<div className="base-info-row">
@@ -438,14 +218,25 @@ const RobotDetail = (props: IProps) => {
 					wrap={false}
 				>
 					<Col flex="0 0 32px">
-						<Avatar src={data.avatar} />
+						<Avatar
+							src={data.avatar}
+							style={{ boxShadow: '0 0 0 2px rgba(255, 255, 255, 0.92)' }}
+						/>
 					</Col>
 					<Col
 						flex="0 1 auto"
 						className="ellipsis"
-						style={{ padding: '0 3px' }}
+						style={{ padding: '0 8px', fontWeight: 600, color: '#0958d9' }}
 					>
 						{data.nickname || data.wechat_id}
+					</Col>
+					<Col flex="0 0 auto">
+						<Tag
+							color={data.status === 'online' ? token.colorSuccess : 'default'}
+							style={{ margin: 0 }}
+						>
+							{data.status === 'online' ? '在线' : '离线'}
+						</Tag>
 					</Col>
 				</Row>
 			}
@@ -471,68 +262,93 @@ const RobotDetail = (props: IProps) => {
 			open={open}
 			onClose={onClose}
 			size="min(calc(100vw - 32px), max(calc(100vw - 300px), 750px))"
-			styles={{ header: { paddingTop: 12, paddingBottom: 12 }, body: { padding: 0 } }}
+			styles={{
+				header: {
+					paddingTop: 8,
+					paddingBottom: 8,
+					background: '#ffffff',
+					borderBottom: '1px solid rgba(15, 23, 42, 0.08)',
+				},
+				body: { padding: 0 },
+			}}
 			footer={null}
 		>
-			<Row
-				style={{ height: '100%' }}
-				wrap={false}
+			<ConfigProvider
+				theme={{
+					token: {
+						colorBorderSecondary: 'rgba(15, 23, 42, 0.08)',
+					},
+					components: {
+						Tabs: {
+							itemColor: 'rgba(0, 42, 76, 0.62)',
+							itemHoverColor: '#0958d9',
+							itemSelectedColor: '#0958d9',
+							itemActiveColor: '#0958d9',
+							inkBarColor: '#22d3ee',
+						},
+						Card: {
+							boxShadowTertiary: '0 1px 2px rgba(15, 23, 42, 0.04), 0 6px 16px rgba(22, 119, 255, 0.04)',
+							colorBorderSecondary: 'rgba(15, 23, 42, 0.08)',
+						},
+						List: {
+							colorBorder: 'rgba(15, 23, 42, 0.08)',
+						},
+						Segmented: {
+							itemSelectedBg: '#1677ff',
+							itemSelectedColor: '#ffffff',
+						},
+					},
+				}}
 			>
-				<Col
-					flex="1 1 auto"
-					style={{
-						position: 'relative',
-						borderRight: '1px solid rgb(240, 240, 240)',
-						padding: '0 2px 0 24px',
-					}}
+				<Row
+					style={{ height: '100%' }}
+					wrap={false}
 				>
-					<Tabs
-						destroyOnHidden
-						items={items}
-					/>
-				</Col>
-				<Col
-					flex="0 0 350px"
-					className="hide-on-mobile"
-					style={{ width: 350, height: '100%' }}
-				>
-					{loading ? (
-						<Skeleton
-							avatar
-							active
-							paragraph={{ rows: 4 }}
-						/>
-					) : (
-						<BaseContainer>
-							<div
-								style={{
-									height: '100%',
-									overflow: 'hidden auto',
-									flex: '1 1 auto',
+					<Col
+						flex="1 1 auto"
+						style={{
+							position: 'relative',
+							borderRight: '1px solid rgb(240, 240, 240)',
+							padding: '0 2px 0 24px',
+						}}
+					>
+						<LeftPanel>
+							<Tabs
+								destroyOnHidden
+								items={items}
+								classNames={{
+									header: 'tech-tabs-header',
+									item: 'tech-tabs-item',
+									indicator: 'tech-tabs-indicator',
+									content: 'tech-tabs-content',
 								}}
-							>
-								<div className="title">基本信息</div>
+							/>
+						</LeftPanel>
+					</Col>
+					<Col
+						flex="0 0 350px"
+						className="hide-on-mobile"
+						style={{ width: 350, height: '100%' }}
+					>
+						{loading ? (
+							<Skeleton
+								avatar
+								active
+								paragraph={{ rows: 4 }}
+							/>
+						) : (
+							<BaseContainer>
+								<div className="base-info-scroll">
+									<div className="title">基本信息</div>
 
-								<BorderBeam
-									className="base-info-beam"
-									color={sciFiCyan}
-									outset={0}
-								>
 									<div className="base-info-header">
 										<Avatar
 											src={data.avatar}
 											size={44}
+											style={{ boxShadow: '0 0 0 2px rgba(255, 255, 255, 0.92)' }}
 										/>
-										<div
-											className="base-info-profile"
-											style={{ minWidth: 0 }}
-										>
-											<div
-												className="ellipsis"
-												style={{ fontSize: 15, fontWeight: 600, lineHeight: '22px' }}
-											>
-												{data.nickname || data.wechat_id || '未命名'}
-											</div>
+										<div className="base-info-profile">
+											<div className="ellipsis base-info-name">{data.nickname || data.wechat_id || '未命名'}</div>
 											<div style={{ marginTop: 2 }}>
 												{data.status === 'online' ? (
 													<Tag
@@ -552,133 +368,133 @@ const RobotDetail = (props: IProps) => {
 											</div>
 										</div>
 									</div>
-								</BorderBeam>
 
-								<div className="base-info-card">
-									<div className="base-info-card-title">账号信息</div>
-									<InfoRow
-										icon={<WechatFilled />}
-										label="微信号"
-									>
-										{data.wechat_id || <Tag color="default">未绑定</Tag>}
-									</InfoRow>
-									<InfoRow
-										icon={<UserOutlined />}
-										label="昵称"
-									>
-										{data.nickname || <Tag color="default">未绑定</Tag>}
-									</InfoRow>
-									<InfoRow
-										icon={<IdcardOutlined />}
-										label="归属人"
-									>
-										{data.owner}
-									</InfoRow>
-									<InfoRow
-										icon={<ClockCircleOutlined />}
-										label="上次登录"
-									>
-										{data.last_login_at ? (
-											dayjs(data.last_login_at * 1000).format('YYYY-MM-DD HH:mm:ss')
-										) : (
-											<Tag color="default">未登录</Tag>
-										)}
-									</InfoRow>
-								</div>
-
-								<div className="base-info-card">
-									<div className="base-info-card-title">设备信息</div>
-									<InfoRow
-										icon={<DesktopOutlined />}
-										label="设备ID"
-									>
-										{data.device_id}
-									</InfoRow>
-									<InfoRow
-										icon={<TagOutlined />}
-										label="设备名称"
-									>
-										{data.device_name}
-									</InfoRow>
-									<InfoRow
-										icon={<DesktopOutlined />}
-										label="设备类型"
-									>
-										{data.device_type}
-									</InfoRow>
-									<InfoRow
-										icon={<QrcodeOutlined />}
-										label="微信版本"
-									>
-										{data.wechat_version}
-									</InfoRow>
-								</div>
-
-								<div className="base-info-card">
-									<div className="base-info-card-title">实例信息</div>
-									<InfoRow
-										icon={<KeyOutlined />}
-										label="机器人ID"
-									>
-										{data.id}
-									</InfoRow>
-									<InfoRow
-										icon={<QrcodeOutlined />}
-										label="机器人编码"
-									>
-										{data.robot_code}
-									</InfoRow>
-									<InfoRow
-										icon={<TagOutlined />}
-										label="机器人名称"
-									>
-										{data.robot_name}
-									</InfoRow>
-									<InfoRow
-										icon={<DatabaseOutlined />}
-										label="RDS"
-									>
-										{data.redis_db}
-									</InfoRow>
-								</div>
-
-								{!!data.proxy?.ProxyIp && (
 									<div className="base-info-card">
-										<div className="base-info-card-title">代理信息</div>
+										<div className="base-info-card-title">账号信息</div>
 										<InfoRow
-											icon={<EnvironmentOutlined />}
-											label="代理 IP"
+											icon={<WechatFilled />}
+											label="微信号"
 										>
-											{data.proxy.ProxyIp}
+											{data.wechat_id || <Tag color="default">未绑定</Tag>}
 										</InfoRow>
 										<InfoRow
-											icon={<EnvironmentOutlined />}
-											label="代理用户"
+											icon={<UserOutlined />}
+											label="昵称"
 										>
-											{data.proxy.ProxyUser}
+											{data.nickname || <Tag color="default">未绑定</Tag>}
 										</InfoRow>
 										<InfoRow
-											icon={<EnvironmentOutlined />}
-											label="代理密码"
+											icon={<IdcardOutlined />}
+											label="归属人"
 										>
-											{data.proxy.ProxyPassword}
+											{data.owner}
+										</InfoRow>
+										<InfoRow
+											icon={<ClockCircleOutlined />}
+											label="上次登录"
+										>
+											{data.last_login_at ? (
+												dayjs(data.last_login_at * 1000).format('YYYY-MM-DD HH:mm:ss')
+											) : (
+												<Tag color="default">未登录</Tag>
+											)}
 										</InfoRow>
 									</div>
-								)}
 
-								<div className="base-info-card">
-									<InfoRow
-										icon={<ClockCircleOutlined />}
-										label="创建时间"
-									>
-										{dayjs(data.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')}
-									</InfoRow>
+									<div className="base-info-card">
+										<div className="base-info-card-title">设备信息</div>
+										<InfoRow
+											icon={<DesktopOutlined />}
+											label="设备ID"
+										>
+											{data.device_id}
+										</InfoRow>
+										<InfoRow
+											icon={<TagOutlined />}
+											label="设备名称"
+										>
+											{data.device_name}
+										</InfoRow>
+										<InfoRow
+											icon={<DesktopOutlined />}
+											label="设备类型"
+										>
+											{data.device_type}
+										</InfoRow>
+										<InfoRow
+											icon={<QrcodeOutlined />}
+											label="微信版本"
+										>
+											{data.wechat_version}
+										</InfoRow>
+									</div>
+
+									<div className="base-info-card">
+										<div className="base-info-card-title">实例信息</div>
+										<InfoRow
+											icon={<KeyOutlined />}
+											label="机器人ID"
+										>
+											{data.id}
+										</InfoRow>
+										<InfoRow
+											icon={<QrcodeOutlined />}
+											label="机器人编码"
+										>
+											{data.robot_code}
+										</InfoRow>
+										<InfoRow
+											icon={<TagOutlined />}
+											label="机器人名称"
+										>
+											{data.robot_name}
+										</InfoRow>
+										<InfoRow
+											icon={<DatabaseOutlined />}
+											label="RDS"
+										>
+											{data.redis_db}
+										</InfoRow>
+									</div>
+
+									{!!data.proxy?.ProxyIp && (
+										<div className="base-info-card">
+											<div className="base-info-card-title">代理信息</div>
+											<InfoRow
+												icon={<EnvironmentOutlined />}
+												label="代理 IP"
+											>
+												{data.proxy.ProxyIp}
+											</InfoRow>
+											<InfoRow
+												icon={<EnvironmentOutlined />}
+												label="代理用户"
+											>
+												{data.proxy.ProxyUser}
+											</InfoRow>
+											<InfoRow
+												icon={<EnvironmentOutlined />}
+												label="代理密码"
+											>
+												{data.proxy.ProxyPassword}
+											</InfoRow>
+										</div>
+									)}
+
+									<div className="base-info-card">
+										<InfoRow
+											icon={<ClockCircleOutlined />}
+											label="创建时间"
+										>
+											{dayjs(data.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')}
+										</InfoRow>
+									</div>
 								</div>
-							</div>
-						</BaseContainer>
-					)}
-				</Col>
-			</Row>
+							</BaseContainer>
+						)}
+					</Col>
+				</Row>
+			</ConfigProvider>
 		</Drawer>
 	);
 };

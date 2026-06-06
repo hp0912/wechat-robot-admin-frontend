@@ -74,6 +74,7 @@ const SystemOverview = (props: IProps) => {
 			style={{ paddingRight: 22 }}
 		>
 			<Card
+				hoverable
 				title="运行时间"
 				style={{ width: '24%' }}
 			>
@@ -91,6 +92,7 @@ const SystemOverview = (props: IProps) => {
 				)}
 			</Card>
 			<Card
+				hoverable
 				title="内存占用"
 				style={{ width: '24%' }}
 			>
@@ -122,6 +124,7 @@ const SystemOverview = (props: IProps) => {
 				)}
 			</Card>
 			<Card
+				hoverable
 				title="CPU 使用率"
 				style={{ width: '24%' }}
 			>
@@ -153,6 +156,7 @@ const SystemOverview = (props: IProps) => {
 				)}
 			</Card>
 			<Card
+				hoverable
 				title="磁盘使用"
 				style={{ width: '24%' }}
 			>
