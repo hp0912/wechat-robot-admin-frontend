@@ -15,22 +15,8 @@ import {
 	WechatFilled,
 } from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
-import {
-	App,
-	Avatar,
-	BorderBeam,
-	Col,
-	ConfigProvider,
-	Drawer,
-	Row,
-	Skeleton,
-	Space,
-	Spin,
-	Tabs,
-	Tag,
-	theme,
-} from 'antd';
-import type { BorderBeamColor, TabsProps } from 'antd';
+import { App, Avatar, Col, ConfigProvider, Drawer, Row, Skeleton, Space, Spin, Tabs, Tag, theme } from 'antd';
+import type { TabsProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { Suspense, useEffect } from 'react';
 import MCPFilled from '@/icons/MCPFilled';
@@ -62,13 +48,6 @@ const MCPServers = React.lazy(() => import(/* webpackChunkName: "mcp-servers" */
 const Skills = React.lazy(() => import(/* webpackChunkName: "skills" */ '@/skills'));
 const OSSSettings = React.lazy(() => import(/* webpackChunkName: "oss-settings" */ '@/oss-settings'));
 const SystemOverview = React.lazy(() => import(/* webpackChunkName: "system-overview" */ '@/system-overview'));
-
-const sciFiCyan: BorderBeamColor = [
-	{ color: '#22d3ee', percent: 0 },
-	{ color: '#52c41a', percent: 36 },
-	{ color: '#1677ff', percent: 68 },
-	{ color: '#f759ab', percent: 100 },
-];
 
 const InfoRow = ({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) => (
 	<div className="base-info-row">
@@ -241,7 +220,7 @@ const RobotDetail = (props: IProps) => {
 					<Col flex="0 0 32px">
 						<Avatar
 							src={data.avatar}
-							style={{ boxShadow: '0 0 0 2px rgba(255, 255, 255, 0.92), 0 0 14px rgba(34, 211, 238, 0.28)' }}
+							style={{ boxShadow: '0 0 0 2px rgba(255, 255, 255, 0.92)' }}
 						/>
 					</Col>
 					<Col
@@ -285,11 +264,10 @@ const RobotDetail = (props: IProps) => {
 			size="min(calc(100vw - 32px), max(calc(100vw - 300px), 750px))"
 			styles={{
 				header: {
-					paddingTop: 12,
-					paddingBottom: 12,
-					background:
-						'linear-gradient(135deg, rgba(238, 251, 255, 0.96) 0%, rgba(240, 246, 255, 0.92) 58%, rgba(249, 255, 246, 0.92) 100%)',
-					borderBottom: '1px solid rgba(34, 211, 238, 0.28)',
+					paddingTop: 8,
+					paddingBottom: 8,
+					background: '#ffffff',
+					borderBottom: '1px solid rgba(15, 23, 42, 0.08)',
 				},
 				body: { padding: 0 },
 			}}
@@ -297,6 +275,9 @@ const RobotDetail = (props: IProps) => {
 		>
 			<ConfigProvider
 				theme={{
+					token: {
+						colorBorderSecondary: 'rgba(15, 23, 42, 0.08)',
+					},
 					components: {
 						Tabs: {
 							itemColor: 'rgba(0, 42, 76, 0.62)',
@@ -304,6 +285,17 @@ const RobotDetail = (props: IProps) => {
 							itemSelectedColor: '#0958d9',
 							itemActiveColor: '#0958d9',
 							inkBarColor: '#22d3ee',
+						},
+						Card: {
+							boxShadowTertiary: '0 1px 2px rgba(15, 23, 42, 0.04), 0 6px 16px rgba(22, 119, 255, 0.04)',
+							colorBorderSecondary: 'rgba(15, 23, 42, 0.08)',
+						},
+						List: {
+							colorBorder: 'rgba(15, 23, 42, 0.08)',
+						},
+						Segmented: {
+							itemSelectedBg: '#1677ff',
+							itemSelectedColor: '#ffffff',
 						},
 					},
 				}}
@@ -349,43 +341,33 @@ const RobotDetail = (props: IProps) => {
 								<div className="base-info-scroll">
 									<div className="title">基本信息</div>
 
-									<BorderBeam
-										className="base-info-beam"
-										color={sciFiCyan}
-										outset={0}
-									>
-										<div className="base-info-header">
-											<Avatar
-												src={data.avatar}
-												size={44}
-												style={{
-													position: 'relative',
-													zIndex: 2,
-													boxShadow: '0 0 0 2px rgba(255, 255, 255, 0.92), 0 0 18px rgba(34, 211, 238, 0.2)',
-												}}
-											/>
-											<div className="base-info-profile">
-												<div className="ellipsis base-info-name">{data.nickname || data.wechat_id || '未命名'}</div>
-												<div style={{ marginTop: 2 }}>
-													{data.status === 'online' ? (
-														<Tag
-															color={token.colorSuccess}
-															style={{ margin: 0 }}
-														>
-															在线
-														</Tag>
-													) : (
-														<Tag
-															color="default"
-															style={{ margin: 0 }}
-														>
-															离线
-														</Tag>
-													)}
-												</div>
+									<div className="base-info-header">
+										<Avatar
+											src={data.avatar}
+											size={44}
+											style={{ boxShadow: '0 0 0 2px rgba(255, 255, 255, 0.92)' }}
+										/>
+										<div className="base-info-profile">
+											<div className="ellipsis base-info-name">{data.nickname || data.wechat_id || '未命名'}</div>
+											<div style={{ marginTop: 2 }}>
+												{data.status === 'online' ? (
+													<Tag
+														color={token.colorSuccess}
+														style={{ margin: 0 }}
+													>
+														在线
+													</Tag>
+												) : (
+													<Tag
+														color="default"
+														style={{ margin: 0 }}
+													>
+														离线
+													</Tag>
+												)}
 											</div>
 										</div>
-									</BorderBeam>
+									</div>
 
 									<div className="base-info-card">
 										<div className="base-info-card-title">账号信息</div>

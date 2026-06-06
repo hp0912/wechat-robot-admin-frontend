@@ -1,15 +1,11 @@
 import styled from 'styled-components';
-import { techAccentLine, techCard, techScrollbar, theme } from '@/common/tech-theme';
+import { techCard, techScrollbar, theme } from '@/common/tech-theme';
 
 /** 联系人列表外层容器：与「基本信息」一致的科技感卡片底座 */
 export const Container = styled.div`
 	${techCard}
 	margin-right: 2px;
-	border-radius: 10px;
-
-	&::before {
-		${techAccentLine}
-	}
+	overflow: hidden;
 
 	.tech-list-scroll {
 		max-height: calc(100vh - 235px);

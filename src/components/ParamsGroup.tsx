@@ -1,23 +1,38 @@
 import React from 'react';
 import styled from 'styled-components';
+import { techCard, techCardHover, theme } from '@/common/tech-theme';
 
 const Container = styled.div`
-	position: relative;
-	border: 1px solid rgba(5, 5, 5, 0.06);
-	border-radius: 6px;
-	transition: background-color 0.4s;
-	padding: 10px;
+	${techCard}
+	margin-top: 20px;
+	padding: 16px 14px 4px;
+
+	&:hover {
+		${techCardHover}
+	}
 
 	.param-group-title {
-		background: #ffffff;
-		color: rgba(0, 0, 0, 0.88);
 		position: absolute;
-		top: -14px;
-		padding: 1px 8px;
-		border-radius: 6px 6px 0 0;
-		transition: background-color 0.4s;
-		margin-inline-start: 24px;
-		font-weight: 500;
+		top: -13px;
+		display: inline-flex;
+		align-items: center;
+		gap: 7px;
+		margin-inline-start: 16px;
+		padding: 2px 10px 2px 9px;
+		border: 1px solid ${theme.border};
+		border-radius: 8px;
+		background: ${theme.surface};
+		color: ${theme.title};
+		font-size: 13px;
+		font-weight: 600;
+	}
+
+	.param-group-title::before {
+		width: 3px;
+		height: 12px;
+		border-radius: 2px;
+		background: linear-gradient(180deg, ${theme.cyan} 0%, ${theme.blue} 100%);
+		content: '';
 	}
 `;
 
