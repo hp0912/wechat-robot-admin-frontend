@@ -4,16 +4,16 @@ import { App, Avatar, Col, Form, Image, Input, Modal, Row, Segmented, Select, Sp
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 import axios from 'axios';
 import React, { useState } from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import MentionOutlined from '@/icons/MentionOutlined';
 import { UploadContainer } from './styled';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
-type IMomentBody = Api.V1MomentsPostCreate.RequestBody;
+type IMomentBody = Api.Moments.PostCreate.RequestBody;
 
-type IUploadMedia = Api.V1MomentsUploadMediaCreate.ResponseBody['data'];
+type IUploadMedia = NonNullable<Api.Moments.UploadMediaCreate.ResponseBody['data']>;
 
 interface ILabelInValue {
 	value: string;
@@ -31,7 +31,7 @@ interface IFormValue {
 interface IProps {
 	open: boolean;
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
 	onRefresh: () => void;
 	onClose: () => void;
 }
@@ -62,7 +62,7 @@ const PostMoment = (props: IProps) => {
 		loading: contactsLoading,
 	} = useRequest(
 		async (keyword = '') => {
-			const resp = await window.wechatRobotClient.api.v1ContactListList({
+			const resp = await window.wechatRobotClient.contact.listList({
 				id: props.robotId,
 				keyword,
 				type: 'friend',
@@ -81,9 +81,12 @@ const PostMoment = (props: IProps) => {
 
 	const { runAsync: postMoment } = useRequest(
 		async (moment: IMomentBody) => {
-			const resp = await window.wechatRobotClient.api.v1MomentsPostCreate(moment, {
-				id: props.robotId,
-			});
+			const resp = await window.wechatRobotClient.moments.postCreate(
+				{
+					id: props.robotId,
+				},
+				moment,
+			);
 			return resp.data;
 		},
 		{

@@ -1,7 +1,7 @@
 import { useRequest } from 'ahooks';
 import { App, Form, Input, Modal } from 'antd';
 import React from 'react';
-import type { SnsObject } from '@/api/wechat-robot/wechat-robot';
+import type { DtoSnsObject as SnsObject } from '@/api/wechat-robot/wechat-robot';
 
 interface IProps {
 	open: boolean;
@@ -20,7 +20,7 @@ const CommentMoment = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async (content: string) => {
-			const resp = await window.wechatRobotClient.api.v1MomentsCommentCreate(
+			const resp = await window.wechatRobotClient.moments.commentCreate(
 				{
 					id: props.robotId,
 				},
@@ -38,7 +38,9 @@ const CommentMoment = (props: IProps) => {
 			manual: true,
 			onSuccess: resp => {
 				message.success('评论成功');
-				props.onRefresh(resp);
+				if (resp) {
+					props.onRefresh(resp);
+				}
 				props.onClose();
 			},
 			onError: reason => {

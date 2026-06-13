@@ -2,10 +2,10 @@ import Editor from '@monaco-editor/react';
 import { useRequest } from 'ahooks';
 import { Alert, App, Button, Col, Drawer, Form, Input, Row } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 
-type IKnowledgeBase = NonNullable<Api.V1KnowledgeCategoriesList.ResponseBody['data']>[number];
-type IKnowledgeDocument = NonNullable<Api.V1KnowledgeDocumentsList.ResponseBody['data']>['items'][number];
+type IKnowledgeBase = NonNullable<Api.Knowledge.CategoriesList.ResponseBody['data']>[number];
+type IKnowledgeDocument = NonNullable<NonNullable<Api.Knowledge.DocumentsList.ResponseBody['data']>['items']>[number];
 
 interface IFormValues {
 	id: number;
@@ -58,7 +58,7 @@ const KnowledgeDocumentEditor = (props: IProps) => {
 
 	const { runAsync: onCreate, loading: createLoading } = useRequest(
 		async (values: IFormValues) => {
-			const resp = await window.wechatRobotClient.api.v1KnowledgeDocumentCreate(
+			const resp = await window.wechatRobotClient.knowledge.documentCreate(
 				{
 					id: props.robotId,
 				},
@@ -81,7 +81,7 @@ const KnowledgeDocumentEditor = (props: IProps) => {
 
 	const { runAsync: onUpdate, loading: updateLoading } = useRequest(
 		async (values: IFormValues) => {
-			const resp = await window.wechatRobotClient.api.v1KnowledgeDocumentUpdate(
+			const resp = await window.wechatRobotClient.knowledge.documentUpdate(
 				{
 					id: props.robotId,
 				},
@@ -136,9 +136,9 @@ const KnowledgeDocumentEditor = (props: IProps) => {
 							onClick={async () => {
 								const values = await form.validateFields();
 								if (props.dataSource) {
-									await onUpdate({ ...values, id: props.dataSource.id });
+									await onUpdate({ ...values, id: props.dataSource.id || 0 });
 								} else {
-									await onCreate({ ...values, category: props.knowledgeBase.code });
+									await onCreate({ ...values, category: props.knowledgeBase.code + '' });
 								}
 							}}
 						>

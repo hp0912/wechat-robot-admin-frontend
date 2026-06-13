@@ -3,7 +3,7 @@ import { useBoolean, useRequest, useSetState } from 'ahooks';
 import { App, Button, Empty, Input, Space, Spin, Table } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
-import type { SystemPrompt } from '@/api/wechat-robot/wechat-robot';
+import type { DtoSystemPrompt as SystemPrompt } from '@/api/wechat-robot/wechat-robot';
 import SystemPromptActions from './SystemPromptActions';
 import SystemPromptEditor from './SystemPromptEditor';
 
@@ -31,7 +31,7 @@ const SystemPrompts = (props: IProps) => {
 		refresh,
 	} = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1SystemPromptsList({
+			const resp = await window.wechatRobotClient.systemPrompts.systemPromptsList({
 				id: props.robotId,
 				keyword: searchState.keyword,
 			});

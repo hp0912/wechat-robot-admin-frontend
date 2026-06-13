@@ -3,11 +3,11 @@ import { useBoolean, useRequest, useSetState } from 'ahooks';
 import { App, Button, Drawer, Table } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import KnowledgeDocumentActions from './KnowledgeDocumentActions';
 import KnowledgeDocumentEditor from './KnowledgeDocumentEditor';
 
-type IKnowledgeBase = NonNullable<Api.V1KnowledgeCategoriesList.ResponseBody['data']>[number];
+type IKnowledgeBase = NonNullable<Api.Knowledge.CategoriesList.ResponseBody['data']>[number];
 
 interface IProps {
 	robotId: number;
@@ -30,9 +30,9 @@ const KnowledgeDocument = (props: IProps) => {
 
 	const { data, loading, refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1KnowledgeDocumentsList({
+			const resp = await window.wechatRobotClient.knowledge.documentsList({
 				id: props.robotId,
-				category: props.knowledgeBase.code,
+				category: props.knowledgeBase.code + '',
 				page_index: searchState.pageIndex,
 				page_size: PageSize,
 			});

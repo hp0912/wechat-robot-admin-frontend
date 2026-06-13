@@ -2,11 +2,11 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useBoolean, useRequest } from 'ahooks';
 import { App, Button, Space, Switch, Tooltip } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import KnowledgeDocumentEditor from './KnowledgeDocumentEditor';
 
-type IKnowledgeBase = NonNullable<Api.V1KnowledgeCategoriesList.ResponseBody['data']>[number];
-type IKnowledgeDocument = NonNullable<Api.V1KnowledgeDocumentsList.ResponseBody['data']>['items'][number];
+type IKnowledgeBase = NonNullable<Api.Knowledge.CategoriesList.ResponseBody['data']>[number];
+type IKnowledgeDocument = NonNullable<NonNullable<Api.Knowledge.DocumentsList.ResponseBody['data']>['items']>[number];
 
 interface IProps {
 	robotId: number;
@@ -22,7 +22,7 @@ const KnowledgeDocumentActions = (props: IProps) => {
 
 	const { runAsync: onEnable, loading: enableLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1KnowledgeDocumentEnableCreate(
+			const resp = await window.wechatRobotClient.knowledge.documentEnableCreate(
 				{
 					id: props.robotId,
 				},
@@ -46,7 +46,7 @@ const KnowledgeDocumentActions = (props: IProps) => {
 
 	const { runAsync: onDisable, loading: disableLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1KnowledgeDocumentDisableCreate(
+			const resp = await window.wechatRobotClient.knowledge.documentDisableCreate(
 				{
 					id: props.robotId,
 				},
@@ -70,7 +70,7 @@ const KnowledgeDocumentActions = (props: IProps) => {
 
 	const { runAsync: onRemove, loading: removeLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1KnowledgeDocumentDelete(
+			const resp = await window.wechatRobotClient.knowledge.documentDelete(
 				{
 					id: props.robotId,
 				},

@@ -3,13 +3,13 @@ import { useBoolean, useRequest, useSize } from 'ahooks';
 import { App, Button, Empty, List, Spin, Tooltip } from 'antd';
 import VirtualList from 'rc-virtual-list';
 import React, { useRef } from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import InstallSkill from './InstallSkill';
 import SkillActions from './SkillActions';
 
 interface IProps {
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
 }
 
 const Skills = (props: IProps) => {
@@ -22,7 +22,7 @@ const Skills = (props: IProps) => {
 
 	const { data, loading, refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1SkillsList({
+			const resp = await window.wechatRobotClient.skills.skillsList({
 				id: props.robotId,
 			});
 			return resp.data?.data;
@@ -75,13 +75,13 @@ const Skills = (props: IProps) => {
 							data={data}
 							height={containerSize?.height ? containerSize.height - 2 : 0}
 							itemHeight={47}
-							itemKey={item => item.metadata.name}
+							itemKey={item => item.metadata?.name || ''}
 						>
 							{item => {
 								return (
-									<List.Item key={item.metadata.name}>
+									<List.Item key={item.metadata?.name || ''}>
 										<List.Item.Meta
-											title={item.metadata.name}
+											title={item.metadata?.name}
 											description={
 												<Tooltip
 													styles={{
@@ -89,10 +89,10 @@ const Skills = (props: IProps) => {
 															width: 750,
 														},
 													}}
-													title={item.metadata.description}
+													title={item.metadata?.description}
 													placement="topLeft"
 												>
-													<div className="ellipsis">{item.metadata.description}</div>
+													<div className="ellipsis">{item.metadata?.description}</div>
 												</Tooltip>
 											}
 										/>

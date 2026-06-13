@@ -14,7 +14,7 @@ import {
 import { App, Image, Space } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import type { Media } from '@/api/wechat-robot/wechat-robot';
+import type { DtoMedia as Media } from '@/api/wechat-robot/wechat-robot';
 import { ImageFallback } from '@/constant';
 
 interface IProps {

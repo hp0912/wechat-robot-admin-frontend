@@ -2,7 +2,7 @@ import { AndroidFilled } from '@ant-design/icons';
 import { useBoolean, useMemoizedFn } from 'ahooks';
 import { Button, theme } from 'antd';
 import React, { Suspense } from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import AndroidPadFilled from '@/icons/AndroidPadFilled';
 import CarWeChatFilled from '@/icons/CarWeChatFilled';
 import IPadFilled from '@/icons/IPadFilled';
@@ -13,7 +13,7 @@ import WindowsFilled from '@/icons/WindowsFilled';
 
 interface IProps {
 	robotId: number;
-	robot: Api.V1RobotListList.ResponseBody['data']['items'][number];
+	robot: NonNullable<NonNullable<Api.Robot.ListList.ResponseBody['data']>['items']>[number];
 	onListRefresh: () => void;
 	onDetailRefresh: () => void;
 }

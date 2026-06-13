@@ -3,7 +3,7 @@ import { useRequest } from 'ahooks';
 import { App, Select } from 'antd';
 import React from 'react';
 import type { CSSProperties } from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 
 interface IProps {
@@ -14,7 +14,7 @@ interface IProps {
 	onChange?: (value?: string) => void;
 }
 
-type ISystemPrompt = Api.V1SystemPromptsList.ResponseBody['data'][number];
+type ISystemPrompt = NonNullable<Api.SystemPrompts.SystemPromptsList.ResponseBody['data']>[number];
 
 const SystemPromptEditor = (props: IProps) => {
 	const { className = '', style = {} } = props;
@@ -23,7 +23,7 @@ const SystemPromptEditor = (props: IProps) => {
 
 	const { data: prompts = [], loading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1SystemPromptsList({
+			const resp = await window.wechatRobotClient.systemPrompts.systemPromptsList({
 				id: props.robotId,
 			});
 			return resp.data?.data || [];

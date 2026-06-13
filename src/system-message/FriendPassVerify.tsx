@@ -2,10 +2,10 @@ import { SmileOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { App, Avatar, Button, theme } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 
-type IDataSource = Api.V1SystemMessagesList.ResponseBody['data'][number];
+type IDataSource = NonNullable<Api.SystemMessages.SystemMessagesList.ResponseBody['data']>[number];
 
 interface IProps {
 	robotId: number;
@@ -19,12 +19,12 @@ const FriendPassVerify = (props: IProps) => {
 
 	const { runAsync } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ContactFriendPassVerifyCreate(
+			const resp = await window.wechatRobotClient.contact.friendPassVerifyCreate(
+				{ id: props.robotId },
 				{
 					id: props.robotId,
 					system_message_id: props.dataSource.id,
 				},
-				{ id: props.robotId },
 			);
 			await new Promise(resolve => setTimeout(resolve, 6000)); // 等待6秒，确保数据更新
 			return resp.data;

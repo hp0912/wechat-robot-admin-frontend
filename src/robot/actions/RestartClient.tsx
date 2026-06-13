@@ -2,12 +2,12 @@ import { BulbFilled } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { App, Button, Tooltip } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import LoadingOutlined from '@/icons/LoadingOutlined';
 
 interface IProps {
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
 	buttonText?: string;
 	onRefresh: () => void;
 }
@@ -17,9 +17,12 @@ const RestartClient = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1RobotRestartClientCreate({
-				id: props.robotId,
-			});
+			await window.wechatRobotClient.robot.restartClientCreate(
+				{ id: props.robotId },
+				{
+					id: props.robotId,
+				},
+			);
 		},
 		{
 			manual: true,

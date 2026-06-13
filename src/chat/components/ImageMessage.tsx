@@ -10,17 +10,17 @@ import {
 } from '@ant-design/icons';
 import { Image, Space } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import { ImageFallback } from '@/constant';
 import { useAttachDownload } from '@/hooks';
 
 interface IProps {
 	robotId: number;
-	message: Api.V1ChatHistoryList.ResponseBody['data']['items'][number];
+	message: NonNullable<NonNullable<Api.Chat.HistoryList.ResponseBody['data']>['items']>[number];
 }
 
 const ImageMessage = (props: IProps) => {
-	const { onAttachDownload: onDownload } = useAttachDownload('image', props.robotId, props.message.id);
+	const { onAttachDownload: onDownload } = useAttachDownload('image', props.robotId, props.message.id!);
 
 	const url =
 		props.message.attachment_url || `/api/v1/chat/image/download?id=${props.robotId}&message_id=${props.message.id}`;

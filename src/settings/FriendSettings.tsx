@@ -17,7 +17,8 @@ import {
 	Switch,
 } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
+import { DtoContactType } from '@/api/wechat-robot/wechat-robot';
 import ParamsGroup from '@/components/ParamsGroup';
 import SystemPromptEditor from '@/components/SystemPromptEditor';
 import { DefaultAvatar } from '@/constant';
@@ -28,12 +29,12 @@ import { imageRecognitionModelTips, ObjectToString, onTTSEnabledChange } from '.
 
 interface IProps {
 	robotId: number;
-	contact: Api.V1ContactListList.ResponseBody['data']['items'][number];
+	contact: NonNullable<NonNullable<Api.Contact.ListList.ResponseBody['data']>['items']>[number];
 	open: boolean;
 	onClose: () => void;
 }
 
-type IFormValue = Api.V1FriendSettingsCreate.RequestBody;
+type IFormValue = Api.FriendSettings.FriendSettingsCreate.RequestBody;
 
 const FriendSettings = (props: IProps) => {
 	const { message } = App.useApp();
@@ -45,7 +46,7 @@ const FriendSettings = (props: IProps) => {
 	// 加载全局配置
 	const { data: globalSettings, loading: globalLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1GlobalSettingsList({ id: props.robotId });
+			const resp = await window.wechatRobotClient.globalSettings.globalSettingsList({ id: props.robotId });
 			return resp.data;
 		},
 		{
@@ -59,7 +60,7 @@ const FriendSettings = (props: IProps) => {
 	// 加载好友设置
 	const { data, loading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1FriendSettingsList({
+			const resp = await window.wechatRobotClient.friendSettings.friendSettingsList({
 				id: props.robotId,
 				contact_id: contact.wechat_id!,
 			});
@@ -81,8 +82,8 @@ const FriendSettings = (props: IProps) => {
 	);
 
 	const { runAsync: onSave, loading: saveLoading } = useRequest(
-		async (data: Api.V1FriendSettingsCreate.RequestBody) => {
-			const resp = await window.wechatRobotClient.api.v1FriendSettingsCreate({ id: props.robotId }, data);
+		async (data: Api.FriendSettings.FriendSettingsCreate.RequestBody) => {
+			const resp = await window.wechatRobotClient.friendSettings.friendSettingsCreate({ id: props.robotId }, data);
 			return resp.data;
 		},
 		{
@@ -200,7 +201,8 @@ const FriendSettings = (props: IProps) => {
 						{contact.remark || contact.alias || contact.nickname || contact.wechat_id} 聊天设置
 						{data?.data?.id === 0 && (
 							<span style={{ fontSize: 12, color: '#ff5722' }}>
-								(该好友未进行过任何设置{props.contact.type === 'official_account' ? null : '，运行时会继承全局设置'})
+								(该好友未进行过任何设置
+								{props.contact.type === DtoContactType.ContactTypeOfficialAccount ? null : '，运行时会继承全局设置'})
 							</span>
 						)}
 					</Col>

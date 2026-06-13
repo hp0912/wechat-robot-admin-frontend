@@ -3,10 +3,10 @@ import { useRequest, useSetState } from 'ahooks';
 import { Alert, App, Avatar, Button, Col, Drawer, Input, Row, Space, Table, Tag, theme } from 'antd';
 import type { TableProps } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 
-type IDataSource = Api.V1ContactListList.ResponseBody['data']['items'][number];
+type IDataSource = NonNullable<NonNullable<Api.Contact.ListList.ResponseBody['data']>['items']>[number];
 
 interface IProps {
 	robotId: number;
@@ -29,7 +29,7 @@ const ChatRoomInvite = (props: IProps) => {
 
 	const { data, loading, refreshAsync } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ContactListList({
+			const resp = await window.wechatRobotClient.contact.listList({
 				id: props.robotId,
 				keyword: search.keyword,
 				type: 'friend',
@@ -53,12 +53,12 @@ const ChatRoomInvite = (props: IProps) => {
 		refreshAsync: refreshChatRoomMembers,
 	} = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomNotLeftMembersList({
+			const resp = await window.wechatRobotClient.chatRoom.notLeftMembersList({
 				id: props.robotId,
 				chat_room_id: props.chatRoomId,
 			});
 			const members = resp.data?.data || [];
-			const memberMap = new Map<string, Api.V1ChatRoomNotLeftMembersList.ResponseBody['data'][number]>();
+			const memberMap = new Map<string, NonNullable<Api.ChatRoom.NotLeftMembersList.ResponseBody['data']>[number]>();
 			members.forEach(item => {
 				memberMap.set(item.wechat_id!, item);
 			});
@@ -74,14 +74,14 @@ const ChatRoomInvite = (props: IProps) => {
 
 	const { runAsync: invite, loading: inviteLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomInviteCreate(
+			const resp = await window.wechatRobotClient.chatRoom.inviteCreate(
+				{
+					id: props.robotId,
+				},
 				{
 					id: props.robotId,
 					chat_room_id: props.chatRoomId,
 					contact_ids: selectedState.rows.map(item => item.wechat_id!),
-				},
-				{
-					id: props.robotId,
 				},
 			);
 			return resp.data?.data;

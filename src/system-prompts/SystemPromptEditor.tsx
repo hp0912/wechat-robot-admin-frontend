@@ -1,7 +1,7 @@
 import { useRequest } from 'ahooks';
 import { App, Button, Col, Drawer, Form, Input, Row } from 'antd';
 import React from 'react';
-import type { SystemPrompt } from '@/api/wechat-robot/wechat-robot';
+import type { DtoSystemPrompt as SystemPrompt } from '@/api/wechat-robot/wechat-robot';
 
 interface IFormValues {
 	id?: number;
@@ -28,7 +28,7 @@ const SystemPromptEditor = (props: IProps) => {
 
 	const { runAsync: onCreate, loading: createLoading } = useRequest(
 		async (values: IFormValues) => {
-			const resp = await window.wechatRobotClient.api.v1SystemPromptsCreate(
+			const resp = await window.wechatRobotClient.systemPrompts.systemPromptsCreate(
 				{
 					id: props.robotId,
 				},
@@ -54,7 +54,7 @@ const SystemPromptEditor = (props: IProps) => {
 
 	const { runAsync: onUpdate, loading: updateLoading } = useRequest(
 		async (values: IFormValues) => {
-			const resp = await window.wechatRobotClient.api.v1SystemPromptsUpdate(
+			const resp = await window.wechatRobotClient.systemPrompts.systemPromptsUpdate(
 				{
 					id: props.robotId,
 				},

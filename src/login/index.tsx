@@ -4,7 +4,7 @@ import { App, Button, Form, Input } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 
 const Container = styled.div`
 	width: 345px;
@@ -95,8 +95,8 @@ const Login = () => {
 	}, []);
 
 	const { runAsync, loading } = useRequest(
-		async (data: Api.V1OauthWechatCreate.RequestBody) => {
-			const resp = await window.wechatRobotClient.api.v1OauthWechatCreate(data);
+		async (data: Api.Oauth.WechatCreate.RequestBody) => {
+			const resp = await window.wechatRobotClient.oauth.wechatCreate(data);
 			return resp.data;
 		},
 		{
@@ -112,8 +112,8 @@ const Login = () => {
 	);
 
 	const { runAsync: loginByToken, loading: loginLoading } = useRequest(
-		async (data: Api.V1LoginCreate.RequestBody) => {
-			const resp = await window.wechatRobotClient.api.v1LoginCreate(data);
+		async (data: Api.Login.LoginCreate.RequestBody) => {
+			const resp = await window.wechatRobotClient.login.loginCreate(data);
 			return resp.data;
 		},
 		{
@@ -130,7 +130,7 @@ const Login = () => {
 
 	const onSignIn = async () => {
 		const values = await form.validateFields();
-		let resp: { code: number; message: string; data?: { success: boolean } } | undefined;
+		let resp: { code?: number; message?: string; data?: { success?: boolean } } | undefined;
 		if (loginMethod === 'scan') {
 			resp = await runAsync(values);
 		} else {

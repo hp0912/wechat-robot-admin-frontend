@@ -28,7 +28,7 @@ const SystemOverview = (props: IProps) => {
 
 	const { data } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1RobotViewList({
+			const resp = await window.wechatRobotClient.robot.viewList({
 				id: props.robotId,
 			});
 			return resp.data?.data;
@@ -43,7 +43,7 @@ const SystemOverview = (props: IProps) => {
 
 	const { data: overview } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1SystemRobotContainerStatsList({
+			const resp = await window.wechatRobotClient.system.robotContainerStatsList({
 				id: props.robotId,
 			});
 			return resp.data?.data;
@@ -102,21 +102,21 @@ const SystemOverview = (props: IProps) => {
 					<div>
 						<p style={{ fontSize: 12 }}>
 							<b>客户端: </b>
-							{overview.client.memory_usage.usage} / {overview.client.memory_usage.limit}
+							{overview.client?.memory_usage?.usage} / {overview.client?.memory_usage?.limit}
 						</p>
 						<Progress
-							percent={Number(overview.client.memory_usage.percent.replace('%', ''))}
-							strokeColor={getStrokeColor(overview.client.memory_usage.percent)}
+							percent={Number(overview.client?.memory_usage?.percent?.replace('%', ''))}
+							strokeColor={getStrokeColor(overview.client?.memory_usage?.percent || '')}
 							size="small"
 							showInfo={false}
 						/>
 						<p style={{ fontSize: 12 }}>
 							<b>服务端: </b>
-							{overview.server.memory_usage.usage} / {overview.server.memory_usage.limit}
+							{overview.server?.memory_usage?.usage} / {overview.server?.memory_usage?.limit}
 						</p>
 						<Progress
-							percent={Number(overview.server.memory_usage.percent.replace('%', ''))}
-							strokeColor={getStrokeColor(overview.server.memory_usage.percent)}
+							percent={Number(overview.server?.memory_usage?.percent?.replace('%', ''))}
+							strokeColor={getStrokeColor(overview.server?.memory_usage?.percent || '')}
 							size="small"
 							showInfo={false}
 						/>
@@ -134,21 +134,21 @@ const SystemOverview = (props: IProps) => {
 					<div>
 						<p style={{ fontSize: 12 }}>
 							<b>客户端: </b>
-							{overview.client.cpu_usage}
+							{overview.client?.cpu_usage}
 						</p>
 						<Progress
-							percent={Number(overview.client.cpu_usage.replace('%', ''))}
-							strokeColor={getStrokeColor(overview.client.cpu_usage)}
+							percent={Number(overview.client?.cpu_usage?.replace('%', ''))}
+							strokeColor={getStrokeColor(overview.client?.cpu_usage || '')}
 							size="small"
 							showInfo={false}
 						/>
 						<p style={{ fontSize: 12 }}>
 							<b>服务端: </b>
-							{overview.server.cpu_usage}
+							{overview.server?.cpu_usage}
 						</p>
 						<Progress
-							percent={Number(overview.server.cpu_usage.replace('%', ''))}
-							strokeColor={getStrokeColor(overview.server.cpu_usage)}
+							percent={Number(overview.server?.cpu_usage?.replace('%', ''))}
+							strokeColor={getStrokeColor(overview.server?.cpu_usage || '')}
 							size="small"
 							showInfo={false}
 						/>
@@ -166,19 +166,19 @@ const SystemOverview = (props: IProps) => {
 					<div>
 						<p style={{ fontSize: 12 }}>
 							<b>客户端读取: </b>
-							{overview.client.disk_read}
+							{overview.client?.disk_read}
 						</p>
 						<p style={{ fontSize: 12 }}>
 							<b>客户端写入: </b>
-							{overview.client.disk_write}
+							{overview.client?.disk_write}
 						</p>
 						<p style={{ fontSize: 12 }}>
 							<b>服务端读取: </b>
-							{overview.server.disk_read}
+							{overview.server?.disk_read}
 						</p>
 						<p style={{ fontSize: 12 }}>
 							<b>服务端写入: </b>
-							{overview.server.disk_write}
+							{overview.server?.disk_write}
 						</p>
 					</div>
 				)}

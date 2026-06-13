@@ -15,7 +15,7 @@ const RobotState = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1RobotStateList({
+			await window.wechatRobotClient.robot.stateList({
 				id: props.robotId,
 			});
 		},

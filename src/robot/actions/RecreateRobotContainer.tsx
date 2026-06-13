@@ -98,7 +98,10 @@ const RecreateRobotContainer = (props: IProps) => {
 
 	const { runAsync: removeClientContainer, loading: removeClientLoading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1RobotDockerContainerClientRemoveDelete({ id: props.robotId });
+			await window.wechatRobotClient.robot.dockerContainerClientRemoveDelete(
+				{ id: props.robotId },
+				{ id: props.robotId },
+			);
 		},
 		{
 			manual: true,
@@ -114,7 +117,10 @@ const RecreateRobotContainer = (props: IProps) => {
 
 	const { runAsync: removeServerContainer, loading: removeServerLoading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1RobotDockerContainerServerRemoveDelete({ id: props.robotId });
+			await window.wechatRobotClient.robot.dockerContainerServerRemoveDelete(
+				{ id: props.robotId },
+				{ id: props.robotId },
+			);
 		},
 		{
 			manual: true,
@@ -130,7 +136,10 @@ const RecreateRobotContainer = (props: IProps) => {
 
 	const { runAsync: createClientContainer, loading: createClientLoading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1RobotDockerContainerClientStartCreate({ id: props.robotId });
+			await window.wechatRobotClient.robot.dockerContainerClientStartCreate(
+				{ id: props.robotId },
+				{ id: props.robotId },
+			);
 		},
 		{
 			manual: true,
@@ -146,7 +155,7 @@ const RecreateRobotContainer = (props: IProps) => {
 
 	const { runAsync: createServerContainer, loading: createServerLoading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1RobotDockerContainerServerStartCreate(
+			await window.wechatRobotClient.robot.dockerContainerServerStartCreate(
 				{ id: props.robotId },
 				{ id: props.robotId },
 			);

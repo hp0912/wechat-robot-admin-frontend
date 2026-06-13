@@ -3,12 +3,12 @@ import { App, Avatar, Button, Col, Drawer, Row, Space, Table, Tag, theme } from 
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import ChatRoomJoin from './ChatRoomJoin';
 import FriendPassVerify from './FriendPassVerify';
 
-type IDataSource = Api.V1SystemMessagesList.ResponseBody['data'][number];
+type IDataSource = NonNullable<Api.SystemMessages.SystemMessagesList.ResponseBody['data']>[number];
 
 interface IProps {
 	open: boolean;
@@ -29,9 +29,9 @@ const MessageList = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1SystemMessagesMarkAsReadCreate(
-				{ id: props.robotId, system_message_ids: selectedState.keys },
+			const resp = await window.wechatRobotClient.systemMessages.markAsReadCreate(
 				{ id: props.robotId },
+				{ id: props.robotId, system_message_ids: selectedState.keys },
 			);
 			return resp.data;
 		},
@@ -125,6 +125,9 @@ const MessageList = (props: IProps) => {
 			dataIndex: 'created_at',
 			ellipsis: true,
 			render: (value: IDataSource['created_at']) => {
+				if (!value) {
+					return '-';
+				}
 				return dayjs(value * 1000).format('YYYY-MM-DD HH:mm:ss');
 			},
 		},
@@ -135,6 +138,9 @@ const MessageList = (props: IProps) => {
 			ellipsis: true,
 			render: (value: IDataSource['updated_at'], record) => {
 				if (!record.status) {
+					return '-';
+				}
+				if (!value) {
 					return '-';
 				}
 				return dayjs(value * 1000).format('YYYY-MM-DD HH:mm:ss');

@@ -15,7 +15,7 @@ import {
 	Switch,
 } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 import { DefaultAvatar } from '@/constant';
 import { AiModels } from '@/constant/ai';
@@ -26,7 +26,7 @@ interface IProps {
 	onClose: () => void;
 }
 
-interface IFormValue extends Api.V1MomentsSettingsCreate.RequestBody {
+interface IFormValue extends Api.Moments.SettingsCreate.RequestBody {
 	whitelist_contacts?: string[];
 	blacklist_contacts?: string[];
 }
@@ -38,7 +38,7 @@ const MomentSettings = (props: IProps) => {
 
 	const { data: contacts, loading: contactLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ContactListList({
+			const resp = await window.wechatRobotClient.contact.listList({
 				id: props.robotId,
 				type: 'friend',
 				page_index: 1,
@@ -56,7 +56,7 @@ const MomentSettings = (props: IProps) => {
 
 	const { loading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1MomentsSettingsList({
+			const resp = await window.wechatRobotClient.moments.settingsList({
 				id: props.robotId,
 			});
 			return resp.data?.data;
@@ -90,9 +90,12 @@ const MomentSettings = (props: IProps) => {
 			}
 			delete data.whitelist_contacts;
 			delete data.blacklist_contacts;
-			const resp = await window.wechatRobotClient.api.v1MomentsSettingsCreate(data, {
-				id: props.robotId,
-			});
+			const resp = await window.wechatRobotClient.moments.settingsCreate(
+				{
+					id: props.robotId,
+				},
+				data,
+			);
 			return resp.data?.data;
 		},
 		{

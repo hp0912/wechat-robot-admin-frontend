@@ -14,7 +14,7 @@ const ContainerLog = (props: IProps) => {
 
 	const { data, loading, refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1SystemRobotContainerLogsList({
+			const resp = await window.wechatRobotClient.system.robotContainerLogsList({
 				id: props.robotId,
 			});
 			const client = resp.data?.data?.client || [];

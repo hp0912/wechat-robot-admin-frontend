@@ -2,7 +2,7 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useBoolean, useRequest } from 'ahooks';
 import { App, Button, Space, Tooltip } from 'antd';
 import React from 'react';
-import type { SystemPrompt } from '@/api/wechat-robot/wechat-robot';
+import type { DtoSystemPrompt as SystemPrompt } from '@/api/wechat-robot/wechat-robot';
 import SystemPromptEditor from './SystemPromptEditor';
 
 interface IProps {
@@ -22,12 +22,12 @@ const SystemPromptActions = (props: IProps) => {
 
 	const { runAsync: onRemove, loading: removeLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1SystemPromptsDelete(
+			const resp = await window.wechatRobotClient.systemPrompts.systemPromptsDelete(
 				{
 					id: props.robotId,
 				},
 				{
-					id: props.dataSource.id,
+					id: props.dataSource.id || 0,
 				},
 			);
 			return resp.data?.data;

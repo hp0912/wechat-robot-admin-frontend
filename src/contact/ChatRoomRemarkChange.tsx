@@ -18,7 +18,7 @@ const ChatRoomRemarkChange = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async (content: string) => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomRemarkCreate(
+			const resp = await window.wechatRobotClient.chatRoom.remarkCreate(
 				{ id: props.robotId },
 				{
 					id: props.robotId,

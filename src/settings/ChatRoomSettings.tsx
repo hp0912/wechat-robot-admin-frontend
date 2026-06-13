@@ -17,7 +17,7 @@ import {
 	Switch,
 } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 import { maxTagPlaceholder } from '@/common/maxTagPlaceholder';
 import ParamsGroup from '@/components/ParamsGroup';
@@ -31,12 +31,12 @@ import { imageRecognitionModelTips, ObjectToString, onTTSEnabledChange } from '.
 
 interface IProps {
 	robotId: number;
-	chatRoom: Api.V1ContactListList.ResponseBody['data']['items'][number];
+	chatRoom: NonNullable<NonNullable<Api.Contact.ListList.ResponseBody['data']>['items']>[number];
 	open: boolean;
 	onClose: () => void;
 }
 
-type IFormValue = Api.V1ChatRoomSettingsCreate.RequestBody;
+type IFormValue = Api.ChatRoomSettings.ChatRoomSettingsCreate.RequestBody;
 
 const ChatRoomSettings = (props: IProps) => {
 	const { message } = App.useApp();
@@ -47,7 +47,7 @@ const ChatRoomSettings = (props: IProps) => {
 
 	const { data: chatRoomMembers = [], loading: loadingChatRoomMembers } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomNotLeftMembersList({
+			const resp = await window.wechatRobotClient.chatRoom.notLeftMembersList({
 				id: props.robotId,
 				chat_room_id: chatRoom.wechat_id!,
 			});
@@ -64,7 +64,7 @@ const ChatRoomSettings = (props: IProps) => {
 	// 加载全局配置
 	const { data: globalSettings, loading: globalLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1GlobalSettingsList({ id: props.robotId });
+			const resp = await window.wechatRobotClient.globalSettings.globalSettingsList({ id: props.robotId });
 			return resp.data;
 		},
 		{
@@ -78,7 +78,7 @@ const ChatRoomSettings = (props: IProps) => {
 	// 知识库列表
 	const { data: knowledgeCategories, loading: knowledgeCategoriesLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1KnowledgeCategoriesList({
+			const resp = await window.wechatRobotClient.knowledge.categoriesList({
 				id: props.robotId,
 				type: 'text',
 			});
@@ -101,7 +101,7 @@ const ChatRoomSettings = (props: IProps) => {
 	// 加载群聊设置
 	const { data, loading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomSettingsList({
+			const resp = await window.wechatRobotClient.chatRoomSettings.chatRoomSettingsList({
 				id: props.robotId,
 				chat_room_id: chatRoom.wechat_id!,
 			});
@@ -123,8 +123,8 @@ const ChatRoomSettings = (props: IProps) => {
 	);
 
 	const { runAsync: onSave, loading: saveLoading } = useRequest(
-		async (data: Api.V1ChatRoomSettingsCreate.RequestBody) => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomSettingsCreate({ id: props.robotId }, data);
+		async (data: Api.ChatRoomSettings.ChatRoomSettingsCreate.RequestBody) => {
+			const resp = await window.wechatRobotClient.chatRoomSettings.chatRoomSettingsCreate({ id: props.robotId }, data);
 			return resp.data;
 		},
 		{

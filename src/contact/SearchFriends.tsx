@@ -1,12 +1,12 @@
 import { useRequest } from 'ahooks';
 import { App, Avatar, Button, Col, Form, Input, Modal, Row, Tooltip } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 
 interface IProps {
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
 	open: boolean;
 	onRefresh?: () => void;
 	onClose: () => void;
@@ -24,13 +24,13 @@ const SearchFriends = (props: IProps) => {
 		loading,
 	} = useRequest(
 		async (username: string) => {
-			const resp = await window.wechatRobotClient.api.v1ContactFriendSearchCreate(
+			const resp = await window.wechatRobotClient.contact.friendSearchCreate(
 				{
 					id: props.robotId,
-					to_username: username,
 				},
 				{
 					id: props.robotId,
+					to_username: username,
 				},
 			);
 			return resp.data?.data;
@@ -46,14 +46,14 @@ const SearchFriends = (props: IProps) => {
 	// 添加好友
 	const { runAsync: addFriend, loading: addLoading } = useRequest(
 		async (verifyContent: string) => {
-			const resp = await window.wechatRobotClient.api.v1ContactFriendAddCreate(
+			const resp = await window.wechatRobotClient.contact.friendAddCreate(
+				{ id: props.robotId },
 				{
 					id: props.robotId,
-					v1: data?.username || '',
-					v2: data?.antispam_ticket || '',
+					V1: data?.username || '',
+					V2: data?.antispam_ticket || '',
 					verify_content: verifyContent,
 				},
-				{ id: props.robotId },
 			);
 			await new Promise(resolve => setTimeout(resolve, 6000)); // 等待6秒，确保群聊创建成功
 			return resp.data?.data;

@@ -1,6 +1,6 @@
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 
-export type IMomentItem = Omit<Api.V1MomentsListList.ResponseBody['data']['ObjectList'][number], 'Moment'>;
+export type IMomentItem = Omit<NonNullable<NonNullable<Api.Moments.ListList.ResponseBody['data']>['ObjectList']>[number], 'Moment'>;
 
 export interface IMoment extends IMomentItem {
 	Moment?: ITimeline;

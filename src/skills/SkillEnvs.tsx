@@ -1,7 +1,7 @@
 import { useRequest } from 'ahooks';
 import { Alert, App, Form, Modal } from 'antd';
 import React, { useEffect } from 'react';
-import type { EnvVar, Skill } from '@/api/wechat-robot/wechat-robot';
+import type { DtoEnvVar as EnvVar, DtoSkill as Skill } from '@/api/wechat-robot/wechat-robot';
 import EnvEditor from './EnvEditor';
 
 interface IProps {
@@ -37,12 +37,12 @@ const SkillEnvs = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async (values: IFormValues) => {
-			const resp = await window.wechatRobotClient.api.v1SkillsEnvsCreate(
+			const resp = await window.wechatRobotClient.skills.envsCreate(
 				{
 					id: props.robotId,
 				},
 				{
-					name: props.skill.metadata.name,
+					name: props.skill.metadata?.name || '',
 					env_vars: values.env_vars,
 				},
 			);
@@ -63,7 +63,7 @@ const SkillEnvs = (props: IProps) => {
 
 	return (
 		<Modal
-			title={<>技能{props.skill.metadata.name}环境变量</>}
+			title={<>技能{props.skill.metadata?.name}环境变量</>}
 			width="min(500px, calc(100vw - 32px))"
 			open={props.open}
 			confirmLoading={loading}

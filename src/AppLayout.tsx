@@ -144,7 +144,7 @@ const AppLayout: React.FC = () => {
 	// 获取用户详情
 	const { data: user, loading: userLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1UserSelfList();
+			const resp = await window.wechatRobotClient.user.selfList();
 			return resp.data.data;
 		},
 		{
@@ -158,7 +158,7 @@ const AppLayout: React.FC = () => {
 	// 用户登出
 	const { runAsync: signOut } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1UserLogoutDelete();
+			const resp = await window.wechatRobotClient.user.logoutDelete();
 			return resp?.data;
 		},
 		{

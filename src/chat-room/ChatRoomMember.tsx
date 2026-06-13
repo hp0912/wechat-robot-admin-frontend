@@ -3,7 +3,7 @@ import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Avatar, Button, Col, Drawer, Dropdown, Input, List, Pagination, Row, Space, Tag } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import SpecifiContactMomentList from '@/moments/SpecifiContactMomentList';
 import ChatRoomMemberFriend from './ChatRoomMemberFriend';
@@ -12,8 +12,8 @@ import ChatRoomMemberSettings from './ChatRoomMemberSettings';
 
 interface IProps {
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
-	chatRoom: Api.V1ContactListList.ResponseBody['data']['items'][number];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
+	chatRoom: NonNullable<NonNullable<Api.Contact.ListList.ResponseBody['data']>['items']>[number];
 	open: boolean;
 	onClose: () => void;
 }
@@ -51,10 +51,13 @@ const GroupMember = (props: IProps) => {
 	// 手动同步群成员
 	const { runAsync, loading: syncLoading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1ChatRoomMembersSyncCreate({
-				id: props.robotId,
-				chat_room_id: chatRoom.wechat_id,
-			});
+			await window.wechatRobotClient.chatRoom.membersSyncCreate(
+				{ id: props.robotId },
+				{
+					id: props.robotId,
+					chat_room_id: chatRoom.wechat_id || '',
+				},
+			);
 		},
 		{
 			manual: true,
@@ -66,9 +69,9 @@ const GroupMember = (props: IProps) => {
 
 	const { data, loading, refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomMembersList({
+			const resp = await window.wechatRobotClient.chatRoom.membersList({
 				id: props.robotId,
-				chat_room_id: chatRoom.wechat_id,
+				chat_room_id: chatRoom.wechat_id || '',
 				keyword: search.keyword,
 				page_index: search.pageIndex,
 				page_size: 20,

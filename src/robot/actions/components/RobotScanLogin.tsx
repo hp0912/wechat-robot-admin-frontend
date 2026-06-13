@@ -57,13 +57,13 @@ const RobotScanLogin = (props: IProps) => {
 
 	const { data: qrData, refreshAsync } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1RobotLoginCreate(
+			const resp = await window.wechatRobotClient.robot.loginCreate(
+				{
+					id: props.robotId,
+				},
 				{
 					login_type: props.loginType,
 					is_pretender: props.isPretender,
-				},
-				{
-					id: props.robotId,
 				},
 			);
 			return resp.data?.data;
@@ -104,7 +104,7 @@ const RobotScanLogin = (props: IProps) => {
 
 	const { runAsync, cancel } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1RobotLoginCheckCreate(
+			const resp = await window.wechatRobotClient.robot.loginCheckCreate(
 				{
 					id: props.robotId,
 				},
@@ -121,7 +121,13 @@ const RobotScanLogin = (props: IProps) => {
 			pollingInterval: 3000,
 			onSuccess: resp => {
 				if (resp?.ticket) {
-					setSecurityVerifyState({ secOpen: true, type: undefined, uuid: resp.uuid, ticket: resp.ticket, code: '' });
+					setSecurityVerifyState({
+						secOpen: true,
+						type: undefined,
+						uuid: resp.uuid || '',
+						ticket: resp.ticket,
+						code: '',
+					});
 					cancel();
 					return;
 				}
@@ -131,7 +137,7 @@ const RobotScanLogin = (props: IProps) => {
 					message.success('登录成功');
 					return;
 				}
-				if (resp?.status === 4 || resp?.expiredTime < 10) {
+				if (resp?.status === 4 || (resp?.expiredTime || 0) < 10) {
 					setScanState({
 						status: 'expired',
 						percent: undefined,
@@ -140,7 +146,7 @@ const RobotScanLogin = (props: IProps) => {
 					return;
 				}
 				// 默认240秒超时
-				const percent = Math.floor((resp?.expiredTime / 240) * 100);
+				const percent = Math.floor(((resp?.expiredTime || 0) / 240) * 100);
 				let strokeColor = token.colorSuccess;
 				if (percent < 50) {
 					strokeColor = token.colorWarning;
@@ -170,16 +176,16 @@ const RobotScanLogin = (props: IProps) => {
 
 	const { runAsync: run2FA, loading: loading2FA } = useRequest(
 		async (code: string) => {
-			const resp = await window.wechatRobotClient.api.v1RobotLogin2FaCreate(
+			const resp = await window.wechatRobotClient.robot.login2FaCreate(
+				{
+					id: props.robotId,
+				},
 				{
 					id: props.robotId,
 					uuid: securityVerifyState.uuid,
 					data62: qrData?.data62 || '',
 					code,
 					ticket: securityVerifyState.ticket,
-				},
-				{
-					id: props.robotId,
 				},
 			);
 			return resp.data;

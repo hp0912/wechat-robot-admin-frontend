@@ -3,14 +3,14 @@ import Editor from '@monaco-editor/react';
 import { useRequest } from 'ahooks';
 import { Alert, App, Button, Form, Input, InputNumber, Popconfirm, Select, Space, Spin, Switch, Tooltip } from 'antd';
 import React, { useState } from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 
 interface IProps {
 	robotId: number;
 }
 
-type IFormValues = Api.V1SystemSettingsCreate.RequestBody;
+type IFormValues = Api.SystemSettings.SystemSettingsCreate.RequestBody;
 
 const JSONEditor = (props: { value?: string; onChange?: (value?: string) => void }) => {
 	return (
@@ -106,7 +106,7 @@ const SystemSettings = (props: IProps) => {
 
 	const { loading, refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1SystemSettingsList({
+			const resp = await window.wechatRobotClient.systemSettings.systemSettingsList({
 				id: props.robotId,
 			});
 			return resp.data?.data;
@@ -130,7 +130,7 @@ const SystemSettings = (props: IProps) => {
 
 	const { runAsync: refreshApiToken, loading: refreshLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1UserApiTokenRefreshCreate();
+			const resp = await window.wechatRobotClient.user.apiTokenRefreshCreate();
 			return resp.data?.data;
 		},
 		{
@@ -149,13 +149,13 @@ const SystemSettings = (props: IProps) => {
 
 	const { runAsync: onSave, loading: saveLoading } = useRequest(
 		async (data: IFormValues) => {
-			const resp = await window.wechatRobotClient.api.v1SystemSettingsCreate(
+			const resp = await window.wechatRobotClient.systemSettings.systemSettingsCreate(
 				{
-					...data,
-					system_settings_id: data.id || 0,
 					id: props.robotId,
 				},
 				{
+					...data,
+					system_settings_id: data.id || 0,
 					id: props.robotId,
 				},
 			);
@@ -283,8 +283,8 @@ const SystemSettings = (props: IProps) => {
 					<Form.Item
 						noStyle
 						shouldUpdate={(
-							preValues: Api.V1SystemSettingsCreate.RequestBody,
-							nextValues: Api.V1SystemSettingsCreate.RequestBody,
+							preValues: Api.SystemSettings.SystemSettingsCreate.RequestBody,
+							nextValues: Api.SystemSettings.SystemSettingsCreate.RequestBody,
 						) => {
 							return preValues.offline_notification_enabled !== nextValues.offline_notification_enabled;
 						}}
@@ -318,8 +318,8 @@ const SystemSettings = (props: IProps) => {
 									<Form.Item
 										noStyle
 										shouldUpdate={(
-											preValues: Api.V1SystemSettingsCreate.RequestBody,
-											nextValues: Api.V1SystemSettingsCreate.RequestBody,
+											preValues: Api.SystemSettings.SystemSettingsCreate.RequestBody,
+											nextValues: Api.SystemSettings.SystemSettingsCreate.RequestBody,
 										) => {
 											return preValues.notification_type !== nextValues.notification_type;
 										}}
@@ -459,8 +459,8 @@ const SystemSettings = (props: IProps) => {
 					<Form.Item
 						noStyle
 						shouldUpdate={(
-							preValues: Api.V1SystemSettingsCreate.RequestBody,
-							nextValues: Api.V1SystemSettingsCreate.RequestBody,
+							preValues: Api.SystemSettings.SystemSettingsCreate.RequestBody,
+							nextValues: Api.SystemSettings.SystemSettingsCreate.RequestBody,
 						) => {
 							return preValues.auto_verify_user !== nextValues.auto_verify_user;
 						}}

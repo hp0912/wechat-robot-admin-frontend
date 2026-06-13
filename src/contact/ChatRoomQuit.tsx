@@ -16,7 +16,7 @@ const ChatRoomQuit = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomQuitDelete(
+			const resp = await window.wechatRobotClient.chatRoom.quitDelete(
 				{ id: props.robotId },
 				{
 					id: props.robotId,

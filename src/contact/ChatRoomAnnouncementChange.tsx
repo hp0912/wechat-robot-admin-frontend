@@ -18,7 +18,7 @@ const ChatRoomAnnouncementChange = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async (content: string) => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomAnnouncementCreate(
+			const resp = await window.wechatRobotClient.chatRoom.announcementCreate(
 				{ id: props.robotId },
 				{
 					id: props.robotId,

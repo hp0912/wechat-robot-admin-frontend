@@ -4,7 +4,7 @@ import { App, Avatar, Button, Card, Flex, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import Login from './actions/Login';
 import Logout from './actions/Logout';
 import Remove from './actions/Remove';
@@ -14,7 +14,7 @@ import RobotMetadata from './actions/RobotMetadata';
 import RobotEditor from './RobotEditor';
 
 interface IProps {
-	robot: Api.V1RobotListList.ResponseBody['data']['items'][number];
+	robot: NonNullable<NonNullable<Api.Robot.ListList.ResponseBody['data']>['items']>[number];
 	onRefresh: () => void;
 }
 
@@ -203,15 +203,17 @@ const Robot = (props: IProps) => {
 
 	const { refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1RobotViewList({
-				id: robot.id,
+			const resp = await window.wechatRobotClient.robot.viewList({
+				id: robot.id!,
 			});
 			return resp.data?.data;
 		},
 		{
 			manual: true,
 			onSuccess: resp => {
-				setRobot(resp);
+				if (resp) {
+					setRobot(resp);
+				}
 			},
 			onError: reason => {
 				message.error(reason.message);
@@ -229,7 +231,7 @@ const Robot = (props: IProps) => {
 			actions={[
 				<RobotMetadata
 					key="meta"
-					robotId={robot.id}
+					robotId={robot.id!}
 					robot={robot}
 					onListRefresh={props.onRefresh}
 					onDetailRefresh={refresh}
@@ -246,19 +248,19 @@ const Robot = (props: IProps) => {
 				</Tooltip>,
 				<RestartClient
 					key="restart-client"
-					robotId={robot.id}
+					robotId={robot.id!}
 					robot={robot}
 					onRefresh={refresh}
 				/>,
 				<RestartServer
 					key="restart-server"
-					robotId={robot.id}
+					robotId={robot.id!}
 					robot={robot}
 					onRefresh={refresh}
 				/>,
 				<Remove
 					key="remove"
-					robotId={robot.id}
+					robotId={robot.id!}
 					robot={robot}
 					onRefresh={props.onRefresh}
 				/>,
@@ -299,12 +301,12 @@ const Robot = (props: IProps) => {
 						<ActionSlot>
 							{isOnline ? (
 								<Logout
-									robotId={robot.id}
+									robotId={robot.id!}
 									onRefresh={refresh}
 								/>
 							) : (
 								<Login
-									robotId={robot.id}
+									robotId={robot.id!}
 									robot={robot}
 									onRefresh={refresh}
 								/>
@@ -331,7 +333,7 @@ const Robot = (props: IProps) => {
 				<RobotEditor
 					key="editor"
 					open={editOpen}
-					robotId={robot.id}
+					robotId={robot.id!}
 					onRefresh={refresh}
 					onClose={setEditOpen.setFalse}
 				/>

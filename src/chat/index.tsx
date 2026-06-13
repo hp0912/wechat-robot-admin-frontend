@@ -21,11 +21,11 @@ import type { Dayjs } from 'dayjs';
 import React from 'react';
 import type { ReactNode } from 'react';
 import styled from 'styled-components';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
+import { DtoAppMessageType, DtoMessageType } from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 import SendMessage from '@/components/send-message';
 import { DefaultAvatar } from '@/constant';
-import { AppMessageType, MessageType } from '@/constant/types';
 import AttachDownload from './components/AttachDownload';
 import MessageContent from './components/MessageContent';
 import MessageRevoke from './components/MessageRevoke';
@@ -34,8 +34,8 @@ import VoiceDownload from './components/VoiceDownload';
 
 interface IProps {
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
-	contact: Api.V1ContactListList.ResponseBody['data']['items'][number];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
+	contact: NonNullable<NonNullable<Api.Contact.ListList.ResponseBody['data']>['items']>[number];
 	open: boolean;
 	title: ReactNode;
 	onClose: () => void;
@@ -88,16 +88,16 @@ const ChatHistory = (props: IProps) => {
 
 	const { data: chatRoomMember, loading: chatRoomMemberLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomMembersList({
+			const resp = await window.wechatRobotClient.chatRoom.membersList({
 				id: props.robotId,
-				chat_room_id: props.contact.wechat_id,
+				chat_room_id: props.contact.wechat_id || '',
 				page_index: 1,
 				page_size: 9999,
 			});
 			const members = resp.data?.data?.items || [];
 			const memberMap: Record<string, string> = {};
 			members.forEach(item => {
-				memberMap[item.wechat_id] = item.remark || item.alias || item.nickname || item.wechat_id;
+				memberMap[item.wechat_id || ''] = item.remark || item.alias || item.nickname || item.wechat_id || '未知';
 			});
 			return {
 				map: memberMap,
@@ -115,7 +115,7 @@ const ChatHistory = (props: IProps) => {
 
 	const { data, loading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ChatHistoryList({
+			const resp = await window.wechatRobotClient.chat.historyList({
 				id: props.robotId,
 				contact_id: contact.wechat_id!,
 				keyword: search.keyword,
@@ -137,36 +137,38 @@ const ChatHistory = (props: IProps) => {
 		},
 	);
 
-	const downloadButtonRender = (msg: Api.V1ChatHistoryList.ResponseBody['data']['items'][number]) => {
-		const msgType = msg.type as MessageType;
-		const subType = msg.app_msg_type as AppMessageType;
+	const downloadButtonRender = (
+		msg: NonNullable<NonNullable<Api.Chat.HistoryList.ResponseBody['data']>['items']>[number],
+	) => {
+		const msgType = msg.type;
+		const subType = msg.app_msg_type;
 		if (!msg.content) {
 			// 自己发送的消息拿不到 xml 内容
 			return null;
 		}
 		switch (msgType) {
-			case MessageType.Image:
+			case DtoMessageType.MsgTypeImage:
 				return null;
-			case MessageType.Video:
+			case DtoMessageType.MsgTypeVideo:
 				return (
 					<VideoDownload
 						robotId={props.robotId}
-						messageId={msg.id}
+						messageId={msg.id!}
 					/>
 				);
-			case MessageType.Voice:
+			case DtoMessageType.MsgTypeVoice:
 				return (
 					<VoiceDownload
 						robotId={props.robotId}
-						messageId={msg.id}
+						messageId={msg.id!}
 					/>
 				);
-			case MessageType.App:
-				if (subType === AppMessageType.Attach) {
+			case DtoMessageType.MsgTypeApp:
+				if (subType === DtoAppMessageType.AppMsgTypeAttach) {
 					return (
 						<AttachDownload
 							robotId={props.robotId}
-							messageId={msg.id}
+							messageId={msg.id!}
 						/>
 					);
 				}
@@ -176,8 +178,10 @@ const ChatHistory = (props: IProps) => {
 		}
 	};
 
-	const getMessageAvatar = (msg: Api.V1ChatHistoryList.ResponseBody['data']['items'][number]) => {
-		if (msg.is_group || msg.sender_wxid !== robot.wechat_id) {
+	const getMessageAvatar = (
+		msg: NonNullable<NonNullable<Api.Chat.HistoryList.ResponseBody['data']>['items']>[number],
+	) => {
+		if (msg.is_chat_room || msg.sender_wxid !== robot.wechat_id) {
 			if (msg.sender_wxid === props.contact.wechat_id) {
 				return (
 					<Avatar
@@ -201,8 +205,10 @@ const ChatHistory = (props: IProps) => {
 		);
 	};
 
-	const getMessageNickname = (msg: Api.V1ChatHistoryList.ResponseBody['data']['items'][number]) => {
-		if (msg.is_group || msg.sender_wxid !== robot.wechat_id) {
+	const getMessageNickname = (
+		msg: NonNullable<NonNullable<Api.Chat.HistoryList.ResponseBody['data']>['items']>[number],
+	) => {
+		if (msg.is_chat_room || msg.sender_wxid !== robot.wechat_id) {
 			if (msg.sender_wxid === props.contact.wechat_id) {
 				return <span style={{ color: '#191919' }}>系统消息</span>;
 			}
@@ -392,7 +398,7 @@ const ChatHistory = (props: IProps) => {
 												now - Number(item.created_at) < 60 * 2 && (
 													<MessageRevoke
 														robotId={props.robotId}
-														messageId={item.id}
+														messageId={item.id!}
 													/>
 												)}
 											{downloadButtonRender(item)}

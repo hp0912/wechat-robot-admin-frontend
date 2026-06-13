@@ -1,7 +1,7 @@
 import { useRequest } from 'ahooks';
 import { Alert, App, Button, Form, Input, Select, Spin, Switch } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 import type { AnyType } from '@/common/types';
 import { AliyunOSSConfig, CloudflareR2Config, TencentCloudOSSConfig, VolcengineTOSConfig } from '@/constant/oss';
@@ -10,7 +10,7 @@ interface IProps {
 	robotId: number;
 }
 
-type IFormValues = Api.V1OssSettingsCreate.RequestBody;
+type IFormValues = Api.OssSettings.OssSettingsCreate.RequestBody;
 
 const OSSSettings = (props: IProps) => {
 	const { message } = App.useApp();
@@ -19,7 +19,7 @@ const OSSSettings = (props: IProps) => {
 
 	const { loading, refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1OssSettingsList({
+			const resp = await window.wechatRobotClient.ossSettings.ossSettingsList({
 				id: props.robotId,
 			});
 			return resp.data?.data;
@@ -66,10 +66,13 @@ const OSSSettings = (props: IProps) => {
 	);
 
 	const { runAsync: onSave, loading: saveLoading } = useRequest(
-		async (data: Api.V1OssSettingsCreate.RequestBody) => {
-			const resp = await window.wechatRobotClient.api.v1OssSettingsCreate(data, {
-				id: props.robotId,
-			});
+		async (data: Api.OssSettings.OssSettingsCreate.RequestBody) => {
+			const resp = await window.wechatRobotClient.ossSettings.ossSettingsCreate(
+				{
+					id: props.robotId,
+				},
+				data,
+			);
 			return resp.data?.data;
 		},
 		{

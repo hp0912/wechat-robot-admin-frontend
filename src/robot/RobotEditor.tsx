@@ -1,7 +1,7 @@
 import { useRequest } from 'ahooks';
 import { App, Form, Input, Modal, Spin } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 
 interface IProps {
 	open: boolean;
@@ -15,11 +15,11 @@ const RobotEditor = (props: IProps) => {
 
 	const { open, onClose } = props;
 
-	const [form] = Form.useForm<Api.V1RobotUpdateUpdate.RequestBody>();
+	const [form] = Form.useForm<Api.Robot.UpdateUpdate.RequestBody>();
 
 	const { loading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1RobotViewList({
+			const resp = await window.wechatRobotClient.robot.viewList({
 				id: props.robotId,
 			});
 			return resp.data?.data;
@@ -45,8 +45,8 @@ const RobotEditor = (props: IProps) => {
 	);
 
 	const { runAsync: onUpdate, loading: updateLoading } = useRequest(
-		async (data: Api.V1RobotUpdateUpdate.RequestBody) => {
-			const resp = await window.wechatRobotClient.api.v1RobotUpdateUpdate({ id: props.robotId }, data);
+		async (data: Api.Robot.UpdateUpdate.RequestBody) => {
+			const resp = await window.wechatRobotClient.robot.updateUpdate({ id: props.robotId }, data);
 			return resp.data;
 		},
 		{
@@ -62,9 +62,9 @@ const RobotEditor = (props: IProps) => {
 
 	const onOk = async () => {
 		const values = await form.validateFields();
-		if (values.proxy.ProxyIp === '' && values.proxy.ProxyUser === '' && values.proxy.ProxyPassword === '') {
+		if (values.proxy?.ProxyIp === '' && values.proxy.ProxyUser === '' && values.proxy.ProxyPassword === '') {
 			//
-		} else if (values.proxy.ProxyIp === '' || values.proxy.ProxyUser === '' || values.proxy.ProxyPassword === '') {
+		} else if (values.proxy?.ProxyIp === '' || values.proxy?.ProxyUser === '' || values.proxy?.ProxyPassword === '') {
 			message.error('请完整填写代理信息，或者全部留空');
 			return;
 		}
