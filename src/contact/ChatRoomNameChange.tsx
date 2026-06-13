@@ -18,7 +18,7 @@ const ChatRoomNameChange = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async (content: string) => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomNameCreate(
+			const resp = await window.wechatRobotClient.chatRoom.nameCreate(
 				{ id: props.robotId },
 				{
 					id: props.robotId,

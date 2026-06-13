@@ -1,7 +1,8 @@
 import { theme } from 'antd';
 import { XMLParser } from 'fast-xml-parser';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
+import { DtoMessageType } from '@/api/wechat-robot/wechat-robot';
 import { AppMessageTypeMap, MessageTypeMap } from '@/constant';
 import { AppMessageType } from '@/constant/types';
 import { MessageType } from '@/constant/types';
@@ -9,7 +10,7 @@ import ImageMessage from './ImageMessage';
 
 interface IProps {
 	robotId: number;
-	message: Api.V1ChatHistoryList.ResponseBody['data']['items'][number];
+	message: NonNullable<NonNullable<Api.Chat.HistoryList.ResponseBody['data']>['items']>[number];
 	chatRoomMembers?: Record<string, string>;
 }
 
@@ -23,10 +24,10 @@ interface IReferMsg {
 const MessageContent = (props: IProps) => {
 	const { token } = theme.useToken();
 
-	const msgType = props.message.type as MessageType;
-	const subType = props.message.app_msg_type as AppMessageType;
+	const msgType = props.message.type;
+	const subType = props.message.app_msg_type;
 
-	if (props.message.is_group && props.message.from_wxid === props.message.sender_wxid) {
+	if (props.message.is_chat_room && props.message.from_wxid === props.message.sender_wxid) {
 		return '[群系统消息]';
 	}
 
@@ -45,23 +46,23 @@ const MessageContent = (props: IProps) => {
 	};
 
 	switch (msgType) {
-		case MessageType.Text:
+		case DtoMessageType.MsgTypeText:
 			return <pre className="text-message">{props.message.content}</pre>;
-		case MessageType.Image:
+		case DtoMessageType.MsgTypeImage:
 			return (
 				<ImageMessage
 					robotId={props.robotId}
 					message={props.message}
 				/>
 			);
-		case MessageType.Voice:
+		case DtoMessageType.MsgTypeVoice:
 			return (
 				<audio
 					controls
 					src={`/api/v1/chat/voice/download?id=${props.robotId}&message_id=${props.message.id}`}
 				/>
 			);
-		case MessageType.Emoticon: {
+		case DtoMessageType.MsgTypeEmoticon: {
 			if (!props.message.content) {
 				return '[表情消息] 异常';
 			}
@@ -84,10 +85,10 @@ const MessageContent = (props: IProps) => {
 			}
 			return '[表情消息] 异常';
 		}
-		case MessageType.App: {
+		case DtoMessageType.MsgTypeApp: {
 			try {
 				const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '' });
-				const jsonObj = parser.parse(props.message.content) as {
+				const jsonObj = parser.parse(props.message.content || '') as {
 					msg?: {
 						appmsg?: {
 							type: AppMessageType;
@@ -113,9 +114,9 @@ const MessageContent = (props: IProps) => {
 			if (props.message.display_full_content) {
 				return props.message.display_full_content;
 			}
-			return `[${AppMessageTypeMap[subType] || '未知消息'}]`;
+			return `[${AppMessageTypeMap[subType!] || '未知消息'}]`;
 		}
-		case MessageType.Sysmsg: {
+		case DtoMessageType.MsgTypeSys: {
 			if (!props.message.content) {
 				return '[未知消息]';
 			}
@@ -160,7 +161,7 @@ const MessageContent = (props: IProps) => {
 			if (props.message.display_full_content) {
 				return props.message.display_full_content;
 			}
-			return `[${MessageTypeMap[msgType] || '未知消息'}]`;
+			return `[${MessageTypeMap[msgType!] || '未知消息'}]`;
 		}
 	}
 };

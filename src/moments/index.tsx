@@ -14,7 +14,8 @@ import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import type { Api, SnsObject } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
+import type { DtoSnsObject as SnsObject } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import CommentFilled from '@/icons/CommentFilled';
 import CommentOutlined from '@/icons/CommentOutlined';
@@ -27,11 +28,11 @@ import { Container } from './styled';
 
 interface IProps {
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
 }
 
-type IContact = Api.V1ContactListList.ResponseBody['data']['items'][number];
-type IMoment = Api.V1MomentsListList.ResponseBody['data']['ObjectList'][number];
+type IContact = NonNullable<NonNullable<Api.Contact.ListList.ResponseBody['data']>['items']>[number];
+type IMoment = NonNullable<NonNullable<Api.Moments.ListList.ResponseBody['data']>['ObjectList']>[number];
 
 interface IPrevState {
 	done?: boolean;
@@ -64,7 +65,7 @@ const Moments = (props: IProps) => {
 
 	const { runAsync: getContacts } = useRequest(
 		async (contactIds: string[]) => {
-			const resp = await window.wechatRobotClient.api.v1ContactListList({
+			const resp = await window.wechatRobotClient.contact.listList({
 				id: props.robotId,
 				type: 'friend',
 				contact_ids: contactIds,
@@ -130,7 +131,7 @@ const Moments = (props: IProps) => {
 
 	const { runAsync: momentComment } = useRequest(
 		async (type: number, momentId: string, content?: string, replyCommnetId?: number) => {
-			const resp = await window.wechatRobotClient.api.v1MomentsCommentCreate(
+			const resp = await window.wechatRobotClient.moments.commentCreate(
 				{
 					id: props.robotId,
 				},
@@ -150,7 +151,7 @@ const Moments = (props: IProps) => {
 				switch (params[0]) {
 					case 1:
 						message.success('点赞成功');
-						onCommentMomentRefresh(resp);
+						onCommentMomentRefresh(resp!);
 						break;
 					case 2:
 						break;
@@ -172,15 +173,15 @@ const Moments = (props: IProps) => {
 
 	const { runAsync: momentOp } = useRequest(
 		async (type: number, momentId: string, commentId?: number) => {
-			const resp = await window.wechatRobotClient.api.v1MomentsOperateCreate(
+			const resp = await window.wechatRobotClient.moments.operateCreate(
+				{
+					id: props.robotId,
+				},
 				{
 					id: props.robotId,
 					Type: type,
 					MomentID: momentId,
 					CommentId: commentId,
-				},
-				{
-					id: props.robotId,
 				},
 			);
 			return resp.data?.data;
@@ -227,10 +228,10 @@ const Moments = (props: IProps) => {
 
 	const { runAsync: loadMoreData, loading: getLoading } = useRequest(
 		async (md5?: string, id?: string) => {
-			const resp = await window.wechatRobotClient.api.v1MomentsListList({
+			const resp = await window.wechatRobotClient.moments.listList({
 				id: props.robotId,
 				frist_page_md5: md5 !== undefined ? md5 : prevState.frist_page_md5,
-				max_id: id !== undefined ? id : prevState.max_id,
+				max_id: id !== undefined ? id : prevState.max_id!,
 			});
 			if (resp.data.data?.ObjectList?.length) {
 				const nextState: IPrevState = { moments: [...(prevState.moments || [])] };
@@ -241,7 +242,7 @@ const Moments = (props: IProps) => {
 				const contactMap: Record<string, IContact> = {};
 				try {
 					const contactResp = await getContacts(contactIds);
-					(contactResp.items || []).forEach(item => {
+					(contactResp!.items || []).forEach(item => {
 						contactMap[item.wechat_id!] = item;
 					});
 				} catch {

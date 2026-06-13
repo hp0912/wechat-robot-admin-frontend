@@ -54,13 +54,13 @@ const RobotList = () => {
 
 	const { data, loading, refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1RobotListList({
+			const resp = await window.wechatRobotClient.robot.listList({
 				keyword: search.keyword,
 				status: search.status === 'all' ? undefined : search.status,
 				page_index: search.pageIndex,
 				page_size: 10,
 			});
-			return resp.data?.data || [];
+			return resp.data?.data || {};
 		},
 		{
 			manual: false,

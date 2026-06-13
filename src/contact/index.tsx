@@ -28,7 +28,7 @@ import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import type { ReactNode } from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import ChatHistory from '@/chat';
 import ChatRoomMember from '@/chat-room/ChatRoomMember';
 import SendMessage from '@/components/send-message';
@@ -55,10 +55,10 @@ import { Container } from './styled';
 
 interface IProps {
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
 }
 
-type IContact = Api.V1ContactListList.ResponseBody['data']['items'][number];
+type IContact = NonNullable<NonNullable<Api.Contact.ListList.ResponseBody['data']>['items']>[number];
 type ChatRoomAction = 'change-name' | 'change-remark' | 'change-announcement' | 'invite' | 'quit';
 type FriendAction = 'change-remark' | 'delete' | 'moments';
 
@@ -126,9 +126,12 @@ const Contact = (props: IProps) => {
 	// 手动同步联系人
 	const { runAsync, loading: syncLoading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1ContactSyncCreate({
-				id: props.robotId,
-			});
+			await window.wechatRobotClient.contact.syncCreate(
+				{ id: props.robotId },
+				{
+					id: props.robotId,
+				},
+			);
 		},
 		{
 			manual: true,
@@ -140,7 +143,7 @@ const Contact = (props: IProps) => {
 
 	const { data, loading, refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ContactListList({
+			const resp = await window.wechatRobotClient.contact.listList({
 				id: props.robotId,
 				keyword: search.keyword,
 				type: search.type === 'all' ? undefined : search.type,

@@ -1,68 +1,41 @@
-import Editor from '@monaco-editor/react';
 import { useRequest } from 'ahooks';
-import { Alert, App, Button, Col, Drawer, Form, Input, Row } from 'antd';
+import { App, Button, Col, Drawer, Form, Input, Row } from 'antd';
 import React from 'react';
-import type * as Api from '@/api/wechat-robot/wechat-robot';
-
-type IKnowledgeBase = NonNullable<Api.Knowledge.CategoriesList.ResponseBody['data']>[number];
-type IKnowledgeDocument = NonNullable<NonNullable<Api.Knowledge.DocumentsList.ResponseBody['data']>['items']>[number];
+import type { DtoSystemPrompt as SystemPrompt } from '@/api/wechat-robot/wechat-robot';
 
 interface IFormValues {
-	id: number;
+	id?: number;
 	title: string;
 	content: string;
-	category: string;
-	source?: string;
 }
 
 interface IProps {
+	className?: string;
+	style?: React.CSSProperties;
 	robotId: number;
-	knowledgeBase: IKnowledgeBase;
-	dataSource?: IKnowledgeDocument;
+	dataSource?: SystemPrompt;
 	open: boolean;
 	onRefresh: () => void;
 	onClose: () => void;
 }
 
-const DocumentEditor = (props: { value?: string; onChange?: (value?: string) => void }) => {
-	return (
-		<div
-			style={{
-				border: '1px solid #d9d9d9',
-				borderRadius: 6,
-				padding: '8px 2px',
-			}}
-		>
-			<Editor
-				width="100%"
-				height="calc(100vh - 286px)"
-				language="markdown"
-				options={{
-					tabSize: 2,
-					insertSpaces: true,
-					fixedOverflowWidgets: true,
-					wordWrap: 'on',
-					scrollbar: { alwaysConsumeMouseWheel: false },
-				}}
-				value={props.value}
-				onChange={props.onChange}
-			/>
-		</div>
-	);
-};
+const SystemPromptEditor = (props: IProps) => {
+	const { className = '', style = {} } = props;
 
-const KnowledgeDocumentEditor = (props: IProps) => {
 	const { message } = App.useApp();
 
 	const [form] = Form.useForm<IFormValues>();
 
 	const { runAsync: onCreate, loading: createLoading } = useRequest(
 		async (values: IFormValues) => {
-			const resp = await window.wechatRobotClient.knowledge.documentCreate(
+			const resp = await window.wechatRobotClient.systemPrompts.systemPromptsCreate(
 				{
 					id: props.robotId,
 				},
-				values,
+				{
+					title: values.title,
+					content: values.content,
+				},
 			);
 			return resp.data?.data;
 		},
@@ -81,11 +54,15 @@ const KnowledgeDocumentEditor = (props: IProps) => {
 
 	const { runAsync: onUpdate, loading: updateLoading } = useRequest(
 		async (values: IFormValues) => {
-			const resp = await window.wechatRobotClient.knowledge.documentUpdate(
+			const resp = await window.wechatRobotClient.systemPrompts.systemPromptsUpdate(
 				{
 					id: props.robotId,
 				},
-				values,
+				{
+					id: values.id || 0,
+					title: values.title,
+					content: values.content,
+				},
 			);
 			return resp.data?.data;
 		},
@@ -104,10 +81,12 @@ const KnowledgeDocumentEditor = (props: IProps) => {
 
 	return (
 		<Drawer
-			title={`${props.dataSource ? '编辑' : '新建'}文档`}
+			className={className}
+			style={style}
+			title={`${props.dataSource ? '编辑' : '新建'}人设`}
 			open={props.open}
 			onClose={props.onClose}
-			size="min(99vw, 75vw)"
+			size="min(99vw, 600px)"
 			styles={{
 				header: { paddingTop: 12, paddingBottom: 12 },
 				body: { paddingTop: 16, paddingBottom: 0 },
@@ -136,9 +115,9 @@ const KnowledgeDocumentEditor = (props: IProps) => {
 							onClick={async () => {
 								const values = await form.validateFields();
 								if (props.dataSource) {
-									await onUpdate({ ...values, id: props.dataSource.id || 0 });
+									await onUpdate({ ...values, id: props.dataSource.id });
 								} else {
-									await onCreate({ ...values, category: props.knowledgeBase.code + '' });
+									await onCreate(values);
 								}
 							}}
 						>
@@ -150,40 +129,38 @@ const KnowledgeDocumentEditor = (props: IProps) => {
 		>
 			<Form
 				form={form}
-				labelCol={{ flex: '0 0 85px' }}
+				labelCol={{ flex: '0 0 70px' }}
 				wrapperCol={{ flex: '1 1 auto' }}
 				autoComplete="off"
 				initialValues={props.dataSource}
 			>
-				<Alert
-					description="文档片段之间使用两个或以上的空行分片，如果文档内容单个片段超过 1000 个字符，将会被强制分片。"
-					type="warning"
-					showIcon
-					style={{ marginBottom: 16 }}
-				/>
 				<Form.Item
 					name="title"
-					label="文档标题"
+					label="标题"
 					rules={[
-						{ required: true, message: '请输入文档标题' },
-						{ max: 128, message: '文档标题不能超过128个字符' },
+						{ required: true, message: '请输入标题' },
+						{ max: 128, message: '标题不能超过128个字符' },
 					]}
 				>
 					<Input
-						placeholder="请输入文档标题"
+						placeholder="请输入标题"
 						allowClear
 					/>
 				</Form.Item>
 				<Form.Item
 					name="content"
-					label="文档内容"
-					rules={[{ required: true, message: '请输入文档内容' }]}
+					label="提示词"
+					rules={[{ required: true, message: '请输入提示词' }]}
 				>
-					<DocumentEditor />
+					<Input.TextArea
+						rows={20}
+						placeholder="请输入提示词内容"
+						allowClear
+					/>
 				</Form.Item>
 			</Form>
 		</Drawer>
 	);
 };
 
-export default React.memo(KnowledgeDocumentEditor);
+export default React.memo(SystemPromptEditor);

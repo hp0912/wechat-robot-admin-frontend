@@ -2,7 +2,7 @@ import { useBoolean, useMemoizedFn, useSetState } from 'ahooks';
 import { Alert, Checkbox, Modal, Radio, theme, Tooltip } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import ScanOutlined from '@/icons/ScanOutlined';
 import RobotA16Login from './components/RobotA16Login';
 import RobotData62Login from './components/RobotData62Login';
@@ -14,7 +14,7 @@ interface IProps {
 	onRefresh: () => void;
 }
 
-type IRobot = Api.V1RobotListList.ResponseBody['data']['items'][number];
+type IRobot = NonNullable<NonNullable<Api.Robot.ListList.ResponseBody['data']>['items']>[number];
 
 type ILoginType = 'ipad' | 'win' | 'car' | 'mac' | 'iphone' | 'android';
 

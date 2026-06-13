@@ -4,13 +4,13 @@ import { App, Button, Space, Table, theme } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import TooltipPro from '@/components/TooltipPro';
 import { Container } from './styled';
 import KnowledgeBaseActions from './TextKnowledgeBaseActions';
 import KnowledgeBaseEditor from './TextKnowledgeBaseEditor';
 
-type IKnowledgeBase = NonNullable<Api.V1KnowledgeCategoriesList.ResponseBody['data']>[number];
+type IKnowledgeBase = NonNullable<Api.Knowledge.CategoriesList.ResponseBody['data']>[number];
 
 interface IProps {
 	robotId: number;
@@ -32,7 +32,7 @@ const KnowledgeBase = (props: IProps) => {
 
 	const { data, loading, refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1KnowledgeCategoriesList({
+			const resp = await window.wechatRobotClient.knowledge.categoriesList({
 				id: props.robotId,
 				type: props.type,
 			});
@@ -48,7 +48,7 @@ const KnowledgeBase = (props: IProps) => {
 
 	const { runAsync: reindex, loading: reindexLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1VectorReindexAllCreate({
+			const resp = await window.wechatRobotClient.vector.reindexAllCreate({
 				id: props.robotId,
 			});
 			return resp.data?.data;

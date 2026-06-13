@@ -2,7 +2,7 @@ import { QuestionCircleOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { App, Button, Form, InputNumber, Modal, Select, Space, Spin, Switch, Tooltip } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 
 interface IProps {
 	robotId: number;
@@ -18,11 +18,11 @@ interface IProps {
 const ChatRoomMemberSettings = (props: IProps) => {
 	const { message } = App.useApp();
 
-	const [form] = Form.useForm<Api.V1ChatRoomMemberCreate.RequestBody>();
+	const [form] = Form.useForm<Api.ChatRoom.MemberCreate.RequestBody>();
 
 	const { data, loading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomMemberList({
+			const resp = await window.wechatRobotClient.chatRoom.memberList({
 				id: props.robotId,
 				chat_room_id: props.chatRoomId,
 				wechat_id: props.chatRoomMemberId,
@@ -46,8 +46,8 @@ const ChatRoomMemberSettings = (props: IProps) => {
 	);
 
 	const { runAsync: onSave, loading: saveLoading } = useRequest(
-		async (values: Api.V1ChatRoomMemberCreate.RequestBody) => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomMemberCreate(
+		async (values: Api.ChatRoom.MemberCreate.RequestBody) => {
+			const resp = await window.wechatRobotClient.chatRoom.memberCreate(
 				{
 					id: props.robotId,
 				},

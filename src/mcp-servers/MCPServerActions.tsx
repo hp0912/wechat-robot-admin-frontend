@@ -2,7 +2,7 @@ import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { App, Button, Space, Switch, Tooltip } from 'antd';
 import React from 'react';
-import type { MCPServer } from '@/api/wechat-robot/wechat-robot';
+import type { DtoMCPServer as MCPServer } from '@/api/wechat-robot/wechat-robot';
 
 interface IProps {
 	robotId: number;
@@ -15,7 +15,7 @@ const MCPServerActions = (props: IProps) => {
 
 	const { runAsync: onEnable, loading: enableLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1McpServerEnableCreate(
+			const resp = await window.wechatRobotClient.mcpServer.enableCreate(
 				{
 					id: props.robotId,
 				},
@@ -39,7 +39,7 @@ const MCPServerActions = (props: IProps) => {
 
 	const { runAsync: onDisable, loading: disableLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1McpServerDisableCreate(
+			const resp = await window.wechatRobotClient.mcpServer.disableCreate(
 				{
 					id: props.robotId,
 				},
@@ -63,7 +63,7 @@ const MCPServerActions = (props: IProps) => {
 
 	const { runAsync: onRemove, loading: removeLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1McpServerDelete(
+			const resp = await window.wechatRobotClient.mcpServer.mcpServerDelete(
 				{
 					id: props.robotId,
 				},
@@ -87,7 +87,7 @@ const MCPServerActions = (props: IProps) => {
 
 	const { runAsync: viewTools, loading: viewLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1McpServerToolsList({
+			const resp = await window.wechatRobotClient.mcpServer.toolsList({
 				id: props.robotId,
 				mcp_server_id: props.mcpServer.id!,
 			});
@@ -101,7 +101,7 @@ const MCPServerActions = (props: IProps) => {
 					width: 600,
 					content: (
 						<div>
-							{resp.length === 0 ? (
+							{!resp || resp.length === 0 ? (
 								<p>该 MCP 服务器没有可用的工具</p>
 							) : (
 								<ul style={{ padding: 0 }}>

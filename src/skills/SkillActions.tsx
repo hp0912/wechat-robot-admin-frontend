@@ -2,7 +2,7 @@ import { DeleteOutlined, GlobalOutlined, ReloadOutlined } from '@ant-design/icon
 import { useBoolean, useRequest } from 'ahooks';
 import { App, Button, Space, Switch, Tooltip } from 'antd';
 import React from 'react';
-import type { Skill } from '@/api/wechat-robot/wechat-robot';
+import type { DtoSkill as Skill } from '@/api/wechat-robot/wechat-robot';
 import SkillEnvs from './SkillEnvs';
 
 interface IProps {
@@ -18,9 +18,12 @@ const SkillActions = (props: IProps) => {
 
 	const { runAsync: onClientRestart } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1RobotRestartClientCreate({
-				id: props.robotId,
-			});
+			await window.wechatRobotClient.robot.restartClientCreate(
+				{ id: props.robotId },
+				{
+					id: props.robotId,
+				},
+			);
 		},
 		{
 			manual: true,
@@ -35,12 +38,12 @@ const SkillActions = (props: IProps) => {
 
 	const { runAsync: onUpdate, loading: updateLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1SkillsUpdateUpdate(
+			const resp = await window.wechatRobotClient.skills.updateUpdate(
 				{
 					id: props.robotId,
 				},
 				{
-					name: props.skill.metadata.name,
+					name: props.skill.metadata?.name || '',
 				},
 			);
 			return resp.data?.data;
@@ -72,12 +75,12 @@ const SkillActions = (props: IProps) => {
 
 	const { runAsync: onEnable, loading: enableLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1SkillsEnableCreate(
+			const resp = await window.wechatRobotClient.skills.enableCreate(
 				{
 					id: props.robotId,
 				},
 				{
-					name: props.skill.metadata.name,
+					name: props.skill.metadata?.name || '',
 				},
 			);
 			return resp.data?.data;
@@ -96,12 +99,12 @@ const SkillActions = (props: IProps) => {
 
 	const { runAsync: onDisable, loading: disableLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1SkillsDisableCreate(
+			const resp = await window.wechatRobotClient.skills.disableCreate(
 				{
 					id: props.robotId,
 				},
 				{
-					name: props.skill.metadata.name,
+					name: props.skill.metadata?.name || '',
 				},
 			);
 			return resp.data?.data;
@@ -120,12 +123,12 @@ const SkillActions = (props: IProps) => {
 
 	const { runAsync: onUninstall, loading: uninstallLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1SkillsUninstallDelete(
+			const resp = await window.wechatRobotClient.skills.uninstallDelete(
 				{
 					id: props.robotId,
 				},
 				{
-					name: props.skill.metadata.name,
+					name: props.skill.metadata?.name || '',
 				},
 			);
 			return resp.data?.data;
@@ -187,7 +190,7 @@ const SkillActions = (props: IProps) => {
 							title: '更新技能',
 							content: (
 								<>
-									确认更新技能<b>{props.skill.metadata.name}</b>吗？
+									确认更新技能<b>{props.skill.metadata?.name || ''}</b>吗？
 								</>
 							),
 							width: 350,
@@ -209,7 +212,7 @@ const SkillActions = (props: IProps) => {
 							title: '启用技能',
 							content: (
 								<>
-									确认启用技能<b>{props.skill.metadata.name}</b>吗？
+									确认启用技能<b>{props.skill.metadata?.name || ''}</b>吗？
 								</>
 							),
 							width: 350,
@@ -222,7 +225,7 @@ const SkillActions = (props: IProps) => {
 							title: '禁用技能',
 							content: (
 								<>
-									确认禁用技能<b>{props.skill.metadata.name}</b>吗？
+									确认禁用技能<b>{props.skill.metadata?.name || ''}</b>吗？
 								</>
 							),
 							width: 350,

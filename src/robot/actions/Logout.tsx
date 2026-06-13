@@ -15,7 +15,7 @@ const Logout = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1RobotLogoutDelete({
+			await window.wechatRobotClient.robot.logoutDelete({
 				id: props.robotId,
 			});
 		},

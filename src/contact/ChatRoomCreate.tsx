@@ -2,12 +2,12 @@ import { UsergroupAddOutlined } from '@ant-design/icons';
 import { useBoolean } from 'ahooks';
 import { Button, Tooltip } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import ChatRoomCreateConfirm from './ChatRoomCreateConfirm';
 
 interface IProps {
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
 	onRefresh: () => void;
 }
 

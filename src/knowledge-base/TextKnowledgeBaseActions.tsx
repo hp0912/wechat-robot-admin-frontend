@@ -2,12 +2,12 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useBoolean, useRequest } from 'ahooks';
 import { App, Button, Space, Tooltip } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import ImageKnowledgeFilled from '@/icons/ImageKnowledgeFilled';
 import TextKnowledgeFilled from '@/icons/TextKnowledgeFilled';
 import KnowledgeBaseEditor from './TextKnowledgeBaseEditor';
 
-type IKnowledgeBase = NonNullable<Api.V1KnowledgeCategoriesList.ResponseBody['data']>[number];
+type IKnowledgeBase = NonNullable<Api.Knowledge.CategoriesList.ResponseBody['data']>[number];
 
 interface IProps {
 	robotId: number;
@@ -32,7 +32,7 @@ const KnowledgeBaseActions = (props: IProps) => {
 
 	const { runAsync: onRemove, loading: removeLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1KnowledgeCategoryDelete(
+			const resp = await window.wechatRobotClient.knowledge.categoryDelete(
 				{
 					id: props.robotId,
 				},

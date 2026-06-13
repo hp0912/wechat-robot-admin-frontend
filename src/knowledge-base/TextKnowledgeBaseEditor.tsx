@@ -1,9 +1,9 @@
 import { useRequest } from 'ahooks';
 import { App, Form, Input, Modal } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 
-type IDataSource = NonNullable<Api.V1KnowledgeCategoriesList.ResponseBody['data']>[number];
+type IDataSource = NonNullable<Api.Knowledge.CategoriesList.ResponseBody['data']>[number];
 
 interface IFormValues {
 	type: 'text' | 'image';
@@ -29,7 +29,7 @@ const KnowledgeBaseEditor = (props: IProps) => {
 
 	const { runAsync: onCreate, loading: createLoading } = useRequest(
 		async (values: IFormValues) => {
-			const resp = await window.wechatRobotClient.api.v1KnowledgeCategoryCreate(
+			const resp = await window.wechatRobotClient.knowledge.categoryCreate(
 				{
 					id: props.robotId,
 				},
@@ -52,7 +52,7 @@ const KnowledgeBaseEditor = (props: IProps) => {
 
 	const { runAsync: onUpdate, loading: updateLoading } = useRequest(
 		async (values: IFormValues) => {
-			const resp = await window.wechatRobotClient.api.v1KnowledgeCategoryUpdate(
+			const resp = await window.wechatRobotClient.knowledge.categoryUpdate(
 				{
 					id: props.robotId,
 				},
@@ -82,7 +82,7 @@ const KnowledgeBaseEditor = (props: IProps) => {
 			onOk={async () => {
 				const values = await form.validateFields();
 				if (props.dataSource) {
-					await onUpdate({ ...values, id: props.dataSource.id });
+					await onUpdate({ ...values, id: props.dataSource.id || 0 });
 				} else {
 					await onCreate({ ...values, type: props.type || 'text' });
 				}

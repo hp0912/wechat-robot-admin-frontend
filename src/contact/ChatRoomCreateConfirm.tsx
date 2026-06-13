@@ -3,14 +3,14 @@ import { useRequest, useSetState } from 'ahooks';
 import { Alert, App, Avatar, Button, Col, Drawer, Input, Row, Space, Table, Tag, theme } from 'antd';
 import type { TableProps } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 
-type IDataSource = Api.V1ContactListList.ResponseBody['data']['items'][number];
+type IDataSource = NonNullable<NonNullable<Api.Contact.ListList.ResponseBody['data']>['items']>[number];
 
 interface IProps {
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
 	open: boolean;
 	onRefresh?: () => void;
 	onClose: () => void;
@@ -29,7 +29,7 @@ const ChatRoomCreateConfirm = (props: IProps) => {
 	// 获取联系人
 	const { data, loading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ContactListList({
+			const resp = await window.wechatRobotClient.contact.listList({
 				id: props.robotId,
 				keyword: search.keyword,
 				type: 'friend',
@@ -50,12 +50,12 @@ const ChatRoomCreateConfirm = (props: IProps) => {
 	// 创建群聊
 	const { runAsync: createChatRoom, loading: createLoading } = useRequest(
 		async (contactIds: string[]) => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomCreateCreate(
+			const resp = await window.wechatRobotClient.chatRoom.createCreate(
+				{ id: props.robotId },
 				{
 					id: props.robotId,
 					contact_ids: contactIds,
 				},
-				{ id: props.robotId },
 			);
 			await new Promise(resolve => setTimeout(resolve, 6000)); // 等待6秒，确保群聊创建成功
 			return resp.data?.data;
@@ -128,7 +128,7 @@ const ChatRoomCreateConfirm = (props: IProps) => {
 						loading={createLoading}
 						onClick={async () => {
 							const contactIds = selectedState.rows.map(item => item.wechat_id!);
-							if (contactIds.includes(props.robot.wechat_id)) {
+							if (contactIds.includes(props.robot.wechat_id + '')) {
 								message.error('不能将自己添加到群聊中');
 								return;
 							}

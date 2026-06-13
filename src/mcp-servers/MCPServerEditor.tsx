@@ -2,7 +2,7 @@ import Editor from '@monaco-editor/react';
 import { useRequest } from 'ahooks';
 import { App, Button, Col, Drawer, Form, Input, InputNumber, Row, Select, Spin, Switch } from 'antd';
 import React, { useState } from 'react';
-import type { MCPServer } from '@/api/wechat-robot/wechat-robot';
+import type { DtoMCPServer as MCPServer } from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 import type { AnyType } from '@/common/types';
 
@@ -71,7 +71,7 @@ const MCPServerEditor = (props: IProps) => {
 
 	const { loading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1McpServerList({
+			const resp = await window.wechatRobotClient.mcpServer.mcpServerList({
 				id: props.robotId,
 				mcp_server_id: props.id!,
 			});
@@ -81,6 +81,9 @@ const MCPServerEditor = (props: IProps) => {
 			manual: false,
 			ready: !!props.id,
 			onSuccess: data => {
+				if (!data) {
+					return;
+				}
 				['env', 'headers'].forEach(field => respFormat(field, data));
 				if (data.is_built_in) {
 					setFormDisabled(true);
@@ -95,7 +98,7 @@ const MCPServerEditor = (props: IProps) => {
 
 	const { runAsync: onCreate, loading: createLoading } = useRequest(
 		async (data: MCPServer) => {
-			const resp = await window.wechatRobotClient.api.v1McpServerCreate(
+			const resp = await window.wechatRobotClient.mcpServer.mcpServerCreate(
 				{
 					id: props.robotId,
 				},
@@ -118,7 +121,7 @@ const MCPServerEditor = (props: IProps) => {
 
 	const { runAsync: onUpdate, loading: updateLoading } = useRequest(
 		async (data: MCPServer) => {
-			const resp = await window.wechatRobotClient.api.v1McpServerUpdate(
+			const resp = await window.wechatRobotClient.mcpServer.mcpServerUpdate(
 				{
 					id: props.robotId,
 				},

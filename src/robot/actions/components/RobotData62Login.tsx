@@ -2,9 +2,9 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
 import { App, Button, Form, Input, Modal, Spin } from 'antd';
 import React, { useEffect } from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 
-type IRobot = Api.V1RobotListList.ResponseBody['data']['items'][number];
+type IRobot = NonNullable<NonNullable<Api.Robot.ListList.ResponseBody['data']>['items']>[number];
 
 interface IProps {
 	robotId: number;
@@ -19,7 +19,7 @@ const RobotData62Login = (props: IProps) => {
 
 	const [smsState, SetSmsState] = useSetState({ open: false, smsCode: '', countdown: 0 });
 
-	const [form] = Form.useForm<Api.V1RobotLoginA16Create.RequestBody>();
+	const [form] = Form.useForm<Api.Robot.LoginA16Create.RequestBody>();
 
 	useEffect(() => {
 		let timer: number | undefined;
@@ -35,19 +35,22 @@ const RobotData62Login = (props: IProps) => {
 	}, [smsState.countdown]);
 
 	const { data, runAsync, loading } = useRequest(
-		async (data: Api.V1RobotLoginData62Create.RequestBody) => {
-			const resp = await window.wechatRobotClient.api.v1RobotLoginData62Create(data, {
-				id: props.robotId,
-			});
+		async (data: Api.Robot.LoginData62Create.RequestBody) => {
+			const resp = await window.wechatRobotClient.robot.loginData62Create(
+				{
+					id: props.robotId,
+				},
+				data,
+			);
 			return resp.data?.data;
 		},
 		{
 			manual: true,
 			onSuccess: resp => {
-				if (resp.Cookie && resp.CheckUrl) {
+				if (resp?.Cookie && resp?.checkUrl) {
 					message.success(`已成功发送短信验证码`);
 					SetSmsState({ open: true, smsCode: '', countdown: 60 });
-				} else if (resp.authSectResp?.uin) {
+				} else if (resp?.authSectResp?.uin) {
 					message.success(`登录成功`);
 					props.onRefresh();
 					props.onClose();
@@ -62,16 +65,19 @@ const RobotData62Login = (props: IProps) => {
 	);
 
 	const { runAsync: smsAgain, loading: againLoading } = useRequest(
-		async (data: Api.V1RobotLoginData62SmsAgainCreate.RequestBody) => {
-			const resp = await window.wechatRobotClient.api.v1RobotLoginData62SmsAgainCreate(data, {
-				id: props.robotId,
-			});
+		async (data: Api.Robot.LoginData62SmsAgainCreate.RequestBody) => {
+			const resp = await window.wechatRobotClient.robot.loginData62SmsAgainCreate(
+				{
+					id: props.robotId,
+				},
+				data,
+			);
 			return resp.data?.data;
 		},
 		{
 			manual: true,
-			onSuccess: resp => {
-				message.info(resp || '验证码已发送');
+			onSuccess: () => {
+				message.info('验证码已发送');
 			},
 			onError: reason => {
 				message.error(reason.message);
@@ -80,16 +86,19 @@ const RobotData62Login = (props: IProps) => {
 	);
 
 	const { runAsync: smsVerify, loading: verifyLoading } = useRequest(
-		async (data: Api.V1RobotLoginData62SmsVerifyCreate.RequestBody) => {
-			const resp = await window.wechatRobotClient.api.v1RobotLoginData62SmsVerifyCreate(data, {
-				id: props.robotId,
-			});
+		async (data: Api.Robot.LoginData62SmsVerifyCreate.RequestBody) => {
+			const resp = await window.wechatRobotClient.robot.loginData62SmsVerifyCreate(
+				{
+					id: props.robotId,
+				},
+				data,
+			);
 			return resp.data?.data;
 		},
 		{
 			manual: true,
-			onSuccess: resp => {
-				message.success(resp || '登录成功');
+			onSuccess: () => {
+				message.success('登录成功');
 				props.onRefresh();
 				props.onClose();
 			},
@@ -168,7 +177,7 @@ const RobotData62Login = (props: IProps) => {
 										if (value?.length && value.length >= 6) {
 											await smsVerify({
 												Cookie: data?.Cookie || '',
-												Url: data?.CheckUrl || '',
+												Url: data?.checkUrl || '',
 												Sms: value,
 											});
 										}

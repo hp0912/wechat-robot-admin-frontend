@@ -2,7 +2,7 @@ import { useRequest } from 'ahooks';
 import { App, Button, Tooltip } from 'antd';
 import axios from 'axios';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import PhoneOutlined from '@/icons/PhoneOutlined';
 
 type ClipboardWithRead = Clipboard & {
@@ -11,7 +11,7 @@ type ClipboardWithRead = Clipboard & {
 
 interface IProps {
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
 }
 
 const OAuth = (props: IProps) => {

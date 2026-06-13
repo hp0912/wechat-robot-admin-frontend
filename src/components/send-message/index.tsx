@@ -5,7 +5,7 @@ import type { GetProp, UploadFile, UploadProps } from 'antd';
 import axios from 'axios';
 import React, { useState } from 'react';
 import SparkMD5 from 'spark-md5';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 import { maxTagPlaceholder } from '@/common/maxTagPlaceholder';
 import { DefaultAvatar } from '@/constant';
@@ -16,8 +16,8 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 interface IProps {
 	open: boolean;
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
-	contact: Api.V1ContactListList.ResponseBody['data']['items'][number];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
+	contact: NonNullable<NonNullable<Api.Contact.ListList.ResponseBody['data']>['items']>[number];
 	onClose: () => void;
 }
 
@@ -40,14 +40,14 @@ const SendMessage = (props: IProps) => {
 
 	const { data, loading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ChatRoomMembersList({
+			const resp = await window.wechatRobotClient.chatRoom.membersList({
 				id: props.robotId,
-				chat_room_id: props.contact.wechat_id,
+				chat_room_id: props.contact.wechat_id || '',
 				page_index: 1,
 				page_size: 500,
 			});
 			// 去掉自己
-			return resp.data?.data?.items.filter(item => item.wechat_id !== props.robot.wechat_id) || [];
+			return (resp.data?.data?.items || []).filter(item => item.wechat_id !== props.robot.wechat_id) || [];
 		},
 		{
 			manual: false,
@@ -60,7 +60,7 @@ const SendMessage = (props: IProps) => {
 
 	const { data: timbres = [], loading: timbresLoading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1MessageTimbreList({
+			const resp = await window.wechatRobotClient.message.timbreList({
 				id: props.robotId,
 			});
 			return [...new Set(resp.data?.data || [])];
@@ -76,7 +76,7 @@ const SendMessage = (props: IProps) => {
 
 	const { runAsync: sendTextMessage } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1MessageSendTextCreate(
+			await window.wechatRobotClient.message.sendTextCreate(
 				{ id: props.robotId },
 				{
 					id: props.robotId,
@@ -101,14 +101,14 @@ const SendMessage = (props: IProps) => {
 
 	const { runAsync: sendAITTSMessage } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1MessageSendAiTtsCreate(
+			await window.wechatRobotClient.message.sendAiTtsCreate(
+				{ id: props.robotId },
 				{
 					id: props.robotId,
 					to_wxid: props.contact.wechat_id!,
 					speaker: speaker || '',
 					content: textMessageContent,
 				},
-				{ id: props.robotId },
 			);
 		},
 		{

@@ -3,7 +3,7 @@ import { useMemoizedFn, useRequest, useSetState, useSize } from 'ahooks';
 import { Alert, App, Button, Empty, List, Spin, Tag } from 'antd';
 import VirtualList from 'rc-virtual-list';
 import React, { useRef } from 'react';
-import type { MCPServer } from '@/api/wechat-robot/wechat-robot';
+import type { DtoMCPServer as MCPServer } from '@/api/wechat-robot/wechat-robot';
 import MCPServerActions from './MCPServerActions';
 import MCPServerEditor from './MCPServerEditor';
 
@@ -21,7 +21,7 @@ const MCPServers = (props: IProps) => {
 
 	const { data, loading, refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1McpServerListList({
+			const resp = await window.wechatRobotClient.mcpServer.listList({
 				id: props.robotId,
 			});
 			return resp.data?.data;

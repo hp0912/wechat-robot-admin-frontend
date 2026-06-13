@@ -16,9 +16,9 @@ const FriendDelete = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1ContactFriendDelete(
-				{ id: props.robotId, contact_id: props.contactId },
+			const resp = await window.wechatRobotClient.contact.friendDelete(
 				{ id: props.robotId },
+				{ id: props.robotId, contact_id: props.contactId },
 			);
 			return resp.data;
 		},

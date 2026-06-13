@@ -1,13 +1,13 @@
 import { useBoolean } from 'ahooks';
 import { Button, Tooltip } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import AddFriendsOutlined from '@/icons/AddFriendsOutlined';
 import SearchFriends from './SearchFriends';
 
 interface IProps {
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
 	onRefresh: () => void;
 }
 

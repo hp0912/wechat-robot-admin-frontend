@@ -1,11 +1,11 @@
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import * as Api from '@/api/wechat-robot/wechat-robot';
 
-type IUser = Api.V1UserSelfList.ResponseBody['data'];
+type IUser = NonNullable<Api.User.SelfList.ResponseBody['data']>;
 
 interface IContext {
 	user?: IUser;
-	signOut: () => Promise<Api.V1UserLogoutDelete.ResponseBody>;
+	signOut: () => Promise<Api.User.LogoutDelete.ResponseBody>;
 }
 
 export const UserContext = React.createContext<IContext>({
@@ -15,7 +15,7 @@ export const UserContext = React.createContext<IContext>({
 			code: 200,
 			message: '',
 			data: {
-				login_method: '',
+				login_method: Api.ModelLoginMethod.LoginMethodToken,
 			},
 		});
 	},

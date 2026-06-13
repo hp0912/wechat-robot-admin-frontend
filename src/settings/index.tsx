@@ -2,9 +2,10 @@ import { useRequest } from 'ahooks';
 import { Alert, App, AutoComplete, Button, Form, Input, InputNumber, Select, Spin, Switch, TimePicker } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 import type { AnyType } from '@/common/types';
 import ParamsGroup from '@/components/ParamsGroup';
+import SystemPromptEditor from '@/components/SystemPromptEditor';
 import { AiModels, TextEmbeddingDimensions, TextEmbeddingModels } from '@/constant/ai';
 import {
 	fromCronExpression,
@@ -22,7 +23,7 @@ interface IProps {
 	robotId: number;
 }
 
-type IFormValue = Api.V1GlobalSettingsCreate.RequestBody;
+type IFormValue = Api.GlobalSettings.GlobalSettingsCreate.RequestBody;
 
 const GlobalSettings = (props: IProps) => {
 	const { message } = App.useApp();
@@ -58,7 +59,7 @@ const GlobalSettings = (props: IProps) => {
 
 	const { loading, refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1GlobalSettingsList({ id: props.robotId });
+			const resp = await window.wechatRobotClient.globalSettings.globalSettingsList({ id: props.robotId });
 			return resp.data;
 		},
 		{
@@ -71,7 +72,7 @@ const GlobalSettings = (props: IProps) => {
 				if (resp.data.friend_sync_cron) {
 					resp.data.friend_sync_cron = '1';
 				}
-				const cronFields: (keyof Api.V1GlobalSettingsList.ResponseBody['data'])[] = [
+				const cronFields: (keyof NonNullable<Api.GlobalSettings.GlobalSettingsList.ResponseBody['data']>)[] = [
 					'chat_room_ranking_daily_cron',
 					'chat_room_summary_cron',
 					'morning_cron',
@@ -100,8 +101,8 @@ const GlobalSettings = (props: IProps) => {
 	);
 
 	const { runAsync: onSave, loading: saveLoading } = useRequest(
-		async (data: Api.V1GlobalSettingsCreate.RequestBody) => {
-			const resp = await window.wechatRobotClient.api.v1GlobalSettingsCreate({ id: props.robotId }, data);
+		async (data: Api.GlobalSettings.GlobalSettingsCreate.RequestBody) => {
+			const resp = await window.wechatRobotClient.globalSettings.globalSettingsCreate({ id: props.robotId }, data);
 			return resp.data;
 		},
 		{
@@ -145,7 +146,7 @@ const GlobalSettings = (props: IProps) => {
 				return;
 			}
 		}
-		const cronFields: (keyof Api.V1GlobalSettingsCreate.RequestBody)[] = [
+		const cronFields: (keyof Api.GlobalSettings.GlobalSettingsCreate.RequestBody)[] = [
 			'chat_room_ranking_daily_cron',
 			'chat_room_summary_cron',
 			'morning_cron',
@@ -360,11 +361,7 @@ const GlobalSettings = (props: IProps) => {
 													rules={[{ required: true, message: '人设不能为空' }]}
 													tooltip="人设是指在与AI进行对话时，系统会自动添加的提示信息，用于引导AI的回答方向和风格。"
 												>
-													<Input.TextArea
-														rows={3}
-														placeholder="请输入人设"
-														allowClear
-													/>
+													<SystemPromptEditor robotId={props.robotId} />
 												</Form.Item>
 											</>
 										);

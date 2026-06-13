@@ -1,4 +1,5 @@
 import {
+	AliwangwangFilled,
 	ClockCircleOutlined,
 	DatabaseOutlined,
 	DesktopOutlined,
@@ -48,6 +49,7 @@ const MCPServers = React.lazy(() => import(/* webpackChunkName: "mcp-servers" */
 const Skills = React.lazy(() => import(/* webpackChunkName: "skills" */ '@/skills'));
 const OSSSettings = React.lazy(() => import(/* webpackChunkName: "oss-settings" */ '@/oss-settings'));
 const SystemOverview = React.lazy(() => import(/* webpackChunkName: "system-overview" */ '@/system-overview'));
+const SystemPrompts = React.lazy(() => import(/* webpackChunkName: "system-prompts" */ '@/system-prompts'));
 
 const InfoRow = ({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) => (
 	<div className="base-info-row">
@@ -71,7 +73,7 @@ const RobotDetail = (props: IProps) => {
 
 	const { data, loading, refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1RobotViewList({
+			const resp = await window.wechatRobotClient.robot.viewList({
 				id: props.robotId,
 			});
 			return resp.data?.data;
@@ -142,6 +144,16 @@ const RobotDetail = (props: IProps) => {
 			children: (
 				<Suspense fallback={<Spin />}>
 					<SystemSettings robotId={props.robotId} />
+				</Suspense>
+			),
+		},
+		{
+			key: 'system-prompts',
+			icon: <AliwangwangFilled />,
+			label: '人设管理',
+			children: (
+				<Suspense fallback={<Spin />}>
+					<SystemPrompts robotId={props.robotId} />
 				</Suspense>
 			),
 		},
@@ -243,16 +255,16 @@ const RobotDetail = (props: IProps) => {
 			extra={
 				<Space className="hide-on-mobile">
 					<RestartRobotContainer
-						robotId={data.id}
+						robotId={data.id!}
 						robot={data}
 						onRefresh={onRefresh}
 					/>
 					<RecreateRobotContainer
-						robotId={data.id}
+						robotId={data.id!}
 						onRefresh={onRefresh}
 					/>
 					<Remove
-						robotId={data.id}
+						robotId={data.id!}
 						robot={data}
 						onRefresh={onRemoveRefresh}
 						buttonText="删除机器人"
@@ -486,7 +498,7 @@ const RobotDetail = (props: IProps) => {
 											icon={<ClockCircleOutlined />}
 											label="创建时间"
 										>
-											{dayjs(data.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')}
+											{dayjs(data.created_at || 1 * 1000).format('YYYY-MM-DD HH:mm:ss')}
 										</InfoRow>
 									</div>
 								</div>

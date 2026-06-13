@@ -13,10 +13,13 @@ const MessageRevoke = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1MessageRevokeCreate({
-				id: props.robotId,
-				message_id: props.messageId,
-			});
+			await window.wechatRobotClient.message.revokeCreate(
+				{ id: props.robotId },
+				{
+					id: props.robotId,
+					message_id: props.messageId,
+				},
+			);
 		},
 		{
 			manual: true,

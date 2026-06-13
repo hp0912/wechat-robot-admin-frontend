@@ -93,8 +93,8 @@ export const onTTSEnabledChange = (form: FormInstance<AnyType>, checked: boolean
 
 export const ObjectToString = <
 	T extends {
-		image_ai_settings: object;
-		tts_settings: object;
+		image_ai_settings?: object;
+		tts_settings?: object;
 		podcast_config?: object;
 		wxhb_notify_member_list?: string;
 	},

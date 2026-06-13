@@ -18,11 +18,11 @@ const FriendRemarkChange = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async (content: string) => {
-			const resp = await window.wechatRobotClient.api.v1ContactFriendRemarkCreate(
-				{ id: props.robotId, to_wxid: props.wechatId, remarks: content },
+			const resp = await window.wechatRobotClient.contact.friendRemarkCreate(
 				{
 					id: props.robotId,
 				},
+				{ id: props.robotId, to_wxid: props.wechatId, remarks: content },
 			);
 			return resp.data?.data;
 		},

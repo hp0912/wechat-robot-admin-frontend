@@ -4,7 +4,8 @@ import { App, Avatar, Button, Col, Drawer, Dropdown, Empty, Flex, List, Row, Spa
 import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
 import React, { useRef } from 'react';
-import type { Api, SnsObject } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
+import type { DtoSnsObject as SnsObject } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import CommentFilled from '@/icons/CommentFilled';
 import CommentOutlined from '@/icons/CommentOutlined';
@@ -16,7 +17,7 @@ import { Container } from './styled';
 interface IProps {
 	open?: boolean;
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
 	contactAvatar?: string;
 	contactId?: string;
 	contactName?: string;
@@ -32,7 +33,7 @@ interface ICommentState {
 	replyContent?: string;
 }
 
-type IContact = Api.V1ContactListList.ResponseBody['data']['items'][number];
+type IContact = NonNullable<NonNullable<Api.Contact.ListList.ResponseBody['data']>['items']>[number];
 
 const SpecifiContactMomentDetail = (props: IProps) => {
 	const { message, modal } = App.useApp();
@@ -44,7 +45,7 @@ const SpecifiContactMomentDetail = (props: IProps) => {
 
 	const { runAsync: getContacts } = useRequest(
 		async (contactIds: string[]) => {
-			const resp = await window.wechatRobotClient.api.v1ContactListList({
+			const resp = await window.wechatRobotClient.contact.listList({
 				id: props.robotId,
 				type: 'friend',
 				contact_ids: contactIds,
@@ -63,7 +64,7 @@ const SpecifiContactMomentDetail = (props: IProps) => {
 
 	const { data, loading, refresh } = useRequest(
 		async () => {
-			const resp = await window.wechatRobotClient.api.v1MomentsGetIdDetailList({
+			const resp = await window.wechatRobotClient.moments.getIdDetailList({
 				id: props.robotId,
 				Towxid: props.contactId!,
 				MomentId: props.momentId,
@@ -84,14 +85,14 @@ const SpecifiContactMomentDetail = (props: IProps) => {
 			}
 			const _contactMap: Record<string, IContact> = {};
 			// 把当前登录机器人也添加进去
-			_contactMap[props.robot.wechat_id] = {
+			_contactMap[props.robot.wechat_id!] = {
 				wechat_id: props.robot.wechat_id,
 				nickname: props.robot.nickname,
 				avatar: props.robot.avatar || DefaultAvatar,
 			};
 			try {
 				const contactResp = await getContacts(contactIds);
-				(contactResp.items || []).forEach(item => {
+				(contactResp!.items || []).forEach(item => {
 					_contactMap[item.wechat_id!] = item;
 				});
 				contactMap.current = _contactMap;
@@ -110,15 +111,15 @@ const SpecifiContactMomentDetail = (props: IProps) => {
 
 	const { runAsync: momentOp } = useRequest(
 		async (type: number, momentId: string, commentId?: number) => {
-			const resp = await window.wechatRobotClient.api.v1MomentsOperateCreate(
+			const resp = await window.wechatRobotClient.moments.operateCreate(
+				{
+					id: props.robotId,
+				},
 				{
 					id: props.robotId,
 					Type: type,
 					MomentID: momentId,
 					CommentId: commentId,
-				},
-				{
-					id: props.robotId,
 				},
 			);
 			return resp.data?.data;
@@ -160,7 +161,7 @@ const SpecifiContactMomentDetail = (props: IProps) => {
 
 	const { runAsync: momentComment } = useRequest(
 		async (type: number, momentId: string, content?: string, replyCommnetId?: number) => {
-			const resp = await window.wechatRobotClient.api.v1MomentsCommentCreate(
+			const resp = await window.wechatRobotClient.moments.commentCreate(
 				{
 					id: props.robotId,
 				},

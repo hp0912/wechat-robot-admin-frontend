@@ -12,9 +12,9 @@ import { App, Button, Dropdown, Space, Upload } from 'antd';
 import type { MenuProps } from 'antd';
 import type { RcFile } from 'antd/es/upload/interface';
 import React, { useEffect, useRef } from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 
-type IRobot = Api.V1RobotListList.ResponseBody['data']['items'][number];
+type IRobot = NonNullable<NonNullable<Api.Robot.ListList.ResponseBody['data']>['items']>[number];
 
 interface IProps {
 	robotId: number;
@@ -35,7 +35,7 @@ const RestartRobotContainer = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1RobotStateList({
+			await window.wechatRobotClient.robot.stateList({
 				id: props.robotId,
 			});
 		},
@@ -53,7 +53,7 @@ const RestartRobotContainer = (props: IProps) => {
 
 	const { runAsync: exportLoginData, loading: exportLoginDataLoading } = useRequest(
 		async () => {
-			return await window.wechatRobotClient.api.v1RobotExportLoginDataList({
+			return await window.wechatRobotClient.robot.exportLoginDataList({
 				id: props.robotId,
 			});
 		},
@@ -95,7 +95,7 @@ const RestartRobotContainer = (props: IProps) => {
 
 	const { runAsync: importLoginData, loading: importLoginDataLoading } = useRequest(
 		async (data: string) => {
-			return await window.wechatRobotClient.api.v1RobotImportLoginDataCreate(
+			return await window.wechatRobotClient.robot.importLoginDataCreate(
 				{
 					id: props.robotId,
 				},
@@ -139,9 +139,12 @@ const RestartRobotContainer = (props: IProps) => {
 
 	const { runAsync: restartClient, loading: restartClientLoading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1RobotRestartClientCreate({
-				id: props.robotId,
-			});
+			await window.wechatRobotClient.robot.restartClientCreate(
+				{ id: props.robotId },
+				{
+					id: props.robotId,
+				},
+			);
 		},
 		{
 			manual: true,
@@ -156,9 +159,12 @@ const RestartRobotContainer = (props: IProps) => {
 
 	const { runAsync: restartServer, loading: restartServerLoading } = useRequest(
 		async () => {
-			await window.wechatRobotClient.api.v1RobotRestartServerCreate({
-				id: props.robotId,
-			});
+			await window.wechatRobotClient.robot.restartServerCreate(
+				{ id: props.robotId },
+				{
+					id: props.robotId,
+				},
+			);
 		},
 		{
 			manual: true,

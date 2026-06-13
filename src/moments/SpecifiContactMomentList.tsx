@@ -3,7 +3,8 @@ import { App, Avatar, Col, Drawer, List, Row, Skeleton, Spin } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import type { Api, SnsObject } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
+import type { DtoSnsObject as SnsObject } from '@/api/wechat-robot/wechat-robot';
 import { DefaultAvatar } from '@/constant';
 import MediaList, { MediaVideo } from './MediaList';
 import SpecifiContactMomentDetail from './SpecifiContactMomentDetail';
@@ -12,7 +13,7 @@ import { Container } from './styled';
 interface IProps {
 	open?: boolean;
 	robotId: number;
-	robot: Api.V1RobotViewList.ResponseBody['data'];
+	robot: NonNullable<Api.Robot.ViewList.ResponseBody['data']>;
 	contactAvatar?: string;
 	contactId?: string;
 	contactName?: string;
@@ -44,7 +45,7 @@ const SpecifiContactMomentList = (props: IProps) => {
 		loading: getLoading,
 	} = useRequest(
 		async (md5?: string, id?: string) => {
-			const resp = await window.wechatRobotClient.api.v1MomentsGetDetailList({
+			const resp = await window.wechatRobotClient.moments.getDetailList({
 				id: props.robotId,
 				Towxid: props.contactId!,
 				Fristpagemd5: md5 !== undefined ? md5 : prevState.frist_page_md5,

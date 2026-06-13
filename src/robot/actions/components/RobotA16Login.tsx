@@ -2,9 +2,9 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { App, Form, Input, Modal } from 'antd';
 import React from 'react';
-import type { Api } from '@/api/wechat-robot/wechat-robot';
+import type * as Api from '@/api/wechat-robot/wechat-robot';
 
-type IRobot = Api.V1RobotListList.ResponseBody['data']['items'][number];
+type IRobot = NonNullable<NonNullable<Api.Robot.ListList.ResponseBody['data']>['items']>[number];
 
 interface IProps {
 	robotId: number;
@@ -17,19 +17,22 @@ interface IProps {
 const RobotA16Login = (props: IProps) => {
 	const { message } = App.useApp();
 
-	const [form] = Form.useForm<Api.V1RobotLoginA16Create.RequestBody>();
+	const [form] = Form.useForm<Api.Robot.LoginA16Create.RequestBody>();
 
 	const { runAsync, loading } = useRequest(
-		async (data: Api.V1RobotLoginA16Create.RequestBody) => {
-			const resp = await window.wechatRobotClient.api.v1RobotLoginA16Create(data, {
-				id: props.robotId,
-			});
+		async (data: Api.Robot.LoginA16Create.RequestBody) => {
+			const resp = await window.wechatRobotClient.robot.loginA16Create(
+				{
+					id: props.robotId,
+				},
+				data,
+			);
 			return resp.data?.data;
 		},
 		{
 			manual: true,
 			onSuccess: resp => {
-				if (resp.authSectResp?.uin) {
+				if (resp?.authSectResp?.uin) {
 					message.success(`登录成功`);
 					props.onRefresh();
 					props.onClose();

@@ -19,11 +19,11 @@ const ChatRoomMemberFriend = (props: IProps) => {
 
 	const { runAsync, loading } = useRequest(
 		async (verifyContent: string) => {
-			const resp = await window.wechatRobotClient.api.v1ContactFriendAddFromChatRoomCreate(
-				{ id: props.robotId, chat_room_member_id: props.chatRoomMemberId, verify_content: verifyContent },
+			const resp = await window.wechatRobotClient.contact.friendAddFromChatRoomCreate(
 				{
 					id: props.robotId,
 				},
+				{ id: props.robotId, chat_room_member_id: props.chatRoomMemberId, verify_content: verifyContent },
 			);
 			return resp.data?.data;
 		},
