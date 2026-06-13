@@ -71,7 +71,17 @@ const SystemPromptEditor = (props: IProps) => {
 				value={props.value}
 				onChange={props.onChange}
 			/>
-			<div style={{ position: 'absolute', top: 4, right: 4, zIndex: 9999 }}>
+			<div
+				style={{
+					position: 'absolute',
+					top: 4,
+					right: 4,
+					zIndex: 9999,
+					background: '#fff',
+					padding: 4,
+					borderRadius: 4,
+				}}
+			>
 				<Select
 					style={{ width: 200 }}
 					variant="filled"
