@@ -8987,6 +8987,306 @@
 				"security": []
 			}
 		},
+		"/api/v1/system-prompts": {
+			"get": {
+				"summary": "系统提示词列表",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "keyword",
+						"in": "query",
+						"description": "",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "array",
+											"items": {
+												"$ref": "#/components/schemas/SystemPrompt"
+											}
+										}
+									},
+									"required": ["code", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			},
+			"post": {
+				"summary": "创建系统提示词",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"content": {
+										"type": "string"
+									}
+								},
+								"required": ["title", "content"]
+							},
+							"examples": {}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"$ref": "#/components/schemas/SystemPrompt"
+										}
+									},
+									"required": ["code", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			},
+			"put": {
+				"summary": "更新系统提示词",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer"
+									},
+									"title": {
+										"type": "string"
+									},
+									"content": {
+										"type": "string"
+									}
+								},
+								"required": ["id", "title", "content"]
+							},
+							"examples": {}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "null"
+										}
+									},
+									"required": ["code", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			},
+			"delete": {
+				"summary": "删除系统提示词",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer"
+									}
+								},
+								"required": ["id"]
+							},
+							"examples": {}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"type": "null"
+										}
+									},
+									"required": ["code", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
+		"/api/v1/system-prompts/detail": {
+			"get": {
+				"summary": "系统提示词详情",
+				"deprecated": false,
+				"description": "",
+				"tags": [],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "prompt_id",
+						"in": "query",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"$ref": "#/components/schemas/SystemPrompt"
+										}
+									},
+									"required": ["code", "data"]
+								}
+							}
+						},
+						"headers": {}
+					}
+				},
+				"security": []
+			}
+		},
 		"/api/v1/message/timbre": {
 			"get": {
 				"summary": "获取音色列表",
@@ -10240,6 +10540,27 @@
 					}
 				},
 				"required": ["key", "value"]
+			},
+			"SystemPrompt": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "integer"
+					},
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"created_at": {
+						"type": "integer"
+					},
+					"updated_at": {
+						"type": "integer"
+					}
+				},
+				"required": ["id", "title", "content", "created_at", "updated_at"]
 			},
 			"SKBuiltinString_S": {
 				"type": "object",

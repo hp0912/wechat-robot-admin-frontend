@@ -1,4 +1,5 @@
 import {
+	AliwangwangFilled,
 	ClockCircleOutlined,
 	DatabaseOutlined,
 	DesktopOutlined,
@@ -48,6 +49,7 @@ const MCPServers = React.lazy(() => import(/* webpackChunkName: "mcp-servers" */
 const Skills = React.lazy(() => import(/* webpackChunkName: "skills" */ '@/skills'));
 const OSSSettings = React.lazy(() => import(/* webpackChunkName: "oss-settings" */ '@/oss-settings'));
 const SystemOverview = React.lazy(() => import(/* webpackChunkName: "system-overview" */ '@/system-overview'));
+const SystemPrompts = React.lazy(() => import(/* webpackChunkName: "system-prompts" */ '@/system-prompts'));
 
 const InfoRow = ({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) => (
 	<div className="base-info-row">
@@ -142,6 +144,16 @@ const RobotDetail = (props: IProps) => {
 			children: (
 				<Suspense fallback={<Spin />}>
 					<SystemSettings robotId={props.robotId} />
+				</Suspense>
+			),
+		},
+		{
+			key: 'system-prompts',
+			icon: <AliwangwangFilled />,
+			label: '人设管理',
+			children: (
+				<Suspense fallback={<Spin />}>
+					<SystemPrompts robotId={props.robotId} />
 				</Suspense>
 			),
 		},

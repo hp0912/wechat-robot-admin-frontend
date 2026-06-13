@@ -21,6 +21,7 @@ import type { Api } from '@/api/wechat-robot/wechat-robot';
 import { filterOption } from '@/common/filter-option';
 import { maxTagPlaceholder } from '@/common/maxTagPlaceholder';
 import ParamsGroup from '@/components/ParamsGroup';
+import SystemPromptEditor from '@/components/SystemPromptEditor';
 import { DefaultAvatar } from '@/constant';
 import { AiModels } from '@/constant/ai';
 import AIDrawingSettingsEditor from './AIDrawingSettingsEditor';
@@ -563,11 +564,7 @@ const ChatRoomSettings = (props: IProps) => {
 												labelCol={{ flex: '0 0 130px' }}
 												tooltip="人设是指在与AI进行对话时，系统会自动添加的提示信息，用于引导AI的回答方向和风格。"
 											>
-												<Input.TextArea
-													rows={3}
-													placeholder="不填则使用全局配置"
-													allowClear
-												/>
+												<SystemPromptEditor robotId={props.robotId} />
 											</Form.Item>
 										</>
 									);
