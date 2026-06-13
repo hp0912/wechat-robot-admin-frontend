@@ -80,7 +80,7 @@ const SystemPrompts = (props: IProps) => {
 				<Table<SystemPrompt>
 					rowKey="id"
 					dataSource={data}
-					scroll={{ x: 'max-content', y: 'calc(100vh - 235px)' }}
+					scroll={{ y: 'calc(100vh - 235px)' }}
 					locale={{ emptyText: <Empty description="暂无人设" /> }}
 					columns={[
 						{

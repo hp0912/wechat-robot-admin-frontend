@@ -65,6 +65,7 @@ const SystemPromptEditor = (props: IProps) => {
 					tabSize: 2,
 					insertSpaces: true,
 					fixedOverflowWidgets: true,
+					wordWrap: 'on',
 					scrollbar: { alwaysConsumeMouseWheel: false },
 				}}
 				value={props.value}
