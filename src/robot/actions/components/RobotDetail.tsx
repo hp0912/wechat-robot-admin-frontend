@@ -498,7 +498,7 @@ const RobotDetail = (props: IProps) => {
 											icon={<ClockCircleOutlined />}
 											label="创建时间"
 										>
-											{dayjs(data.created_at || 1 * 1000).format('YYYY-MM-DD HH:mm:ss')}
+											{dayjs((data.created_at || 0) * 1000).format('YYYY-MM-DD HH:mm:ss')}
 										</InfoRow>
 									</div>
 								</div>
