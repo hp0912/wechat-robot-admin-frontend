@@ -1,5 +1,5 @@
 import { useRequest } from 'ahooks';
-import { App, Form, Input, Modal } from 'antd';
+import { App, Form, Input, Modal, Select } from 'antd';
 import React from 'react';
 import type * as Api from '@/api/wechat-robot/wechat-robot';
 
@@ -75,6 +75,29 @@ const NewRobot = (props: IProps) => {
 					<Input
 						placeholder="请输入机器人名称"
 						allowClear
+					/>
+				</Form.Item>
+				<Form.Item
+					name="version"
+					label="协议版本"
+					rules={[{ required: true, message: '协议版本不能为空' }]}
+					wrapperCol={{ flex: '1 1 calc(100% - 95px)' }}
+					initialValue="8.0.59"
+					help={
+						<>
+							<b style={{ color: '#e46161' }}>温馨提示: </b>{' '}
+							<span style={{ fontSize: 12 }}>
+								优先使用 8.0.59 版本，如果 8.0.59 登录不上，再重新创建一个机器人，使用 8.0.74
+								版本，机器人创建成功以后不支持切换协议版本
+							</span>
+						</>
+					}
+				>
+					<Select
+						options={[
+							{ label: '8.0.59', value: '8.0.59' },
+							{ label: '8.0.74', value: '8.0.74' },
+						]}
 					/>
 				</Form.Item>
 				<Form.Item
