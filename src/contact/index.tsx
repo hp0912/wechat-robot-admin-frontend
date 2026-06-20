@@ -3,6 +3,8 @@ import {
 	EllipsisOutlined,
 	SearchOutlined,
 	SettingOutlined,
+	UserDeleteOutlined,
+	UsergroupDeleteOutlined,
 	WechatOutlined,
 } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
@@ -29,6 +31,7 @@ import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import type { ReactNode } from 'react';
 import type * as Api from '@/api/wechat-robot/wechat-robot';
+import { DtoContactType } from '@/api/wechat-robot/wechat-robot';
 import ChatHistory from '@/chat';
 import ChatRoomMember from '@/chat-room/ChatRoomMember';
 import SendMessage from '@/components/send-message';
@@ -161,6 +164,34 @@ const Contact = (props: IProps) => {
 		},
 	);
 
+	const contactStatusRender = (contact: Api.DtoGetContactsResponse) => {
+		if (contact.status !== -2) {
+			return null;
+		}
+		switch (contact.type) {
+			case DtoContactType.ContactTypeFriend:
+				return (
+					<Tooltip title="该好友已经被你删除或者你已经被好友删除">
+						<UserDeleteOutlined style={{ marginLeft: 8, color: 'red' }} />
+					</Tooltip>
+				);
+			case DtoContactType.ContactTypeChatRoom:
+				return (
+					<Tooltip title="你已经退出该群聊或者被移出群聊">
+						<UsergroupDeleteOutlined style={{ marginLeft: 8, color: 'red' }} />
+					</Tooltip>
+				);
+			case DtoContactType.ContactTypeOfficialAccount:
+				return (
+					<Tooltip title="你已经取消关注该公众号，可以手动删除该联系人">
+						<UserDeleteOutlined style={{ marginLeft: 8, color: 'red' }} />
+					</Tooltip>
+				);
+			default:
+				return null;
+		}
+	};
+
 	if (loading) {
 		return (
 			<Skeleton
@@ -289,7 +320,7 @@ const Contact = (props: IProps) => {
 							items.push({ label: '退出群聊', key: 'quit', danger: true });
 						}
 						return (
-							<List.Item className="tech-list-item">
+							<List.Item className={`tech-list-item${item.status === -2 ? ' list-item-disabled' : ''}`}>
 								<List.Item.Meta
 									avatar={
 										<Avatar
@@ -329,6 +360,7 @@ const Contact = (props: IProps) => {
 													{item.chat_room_owner?.endsWith('@openim') && <WechatWork style={{ marginLeft: 8 }} />}
 												</>
 											)}
+											{contactStatusRender(item)}
 										</>
 									}
 									description={
