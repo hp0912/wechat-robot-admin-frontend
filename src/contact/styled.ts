@@ -13,6 +13,10 @@ export const Container = styled.div`
 		${techScrollbar}
 	}
 
+	.list-item-disabled {
+		background-color: #e0e0e0;
+	}
+
 	.tech-list-item {
 		position: relative;
 		padding-inline: 4px;
