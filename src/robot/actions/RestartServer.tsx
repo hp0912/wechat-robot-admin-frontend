@@ -42,7 +42,7 @@ const RestartServer = (props: IProps) => {
 			content: (
 				<>
 					<p>
-						确定要重启这个机器人的<b>服务端</b>吗？
+						确定要重启这个机器人<b>{props.robot.robot_name}</b>的服务端吗？
 					</p>
 				</>
 			),

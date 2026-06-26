@@ -274,7 +274,7 @@ const GlobalSettings = (props: IProps) => {
 													rules={[{ required: true, message: '聊天模型不能为空' }]}
 													help={
 														<>
-															<b style={{ color: '#e46161' }}>特别注意</b>{' '}
+															<b style={{ color: '#9a6868' }}>特别注意</b>{' '}
 															提取记忆依赖全局聊天模型，这个模型必须支持JSON Schema
 														</>
 													}
@@ -316,7 +316,7 @@ const GlobalSettings = (props: IProps) => {
 													rules={[{ required: true, message: '文本嵌入维度不能为空' }]}
 													help={
 														<>
-															<b style={{ color: '#e46161' }}>特别注意</b>{' '}
+															<b style={{ color: '#9a6868' }}>特别注意</b>{' '}
 															修改文本嵌入模型后，需要在文本知识库重建索引，否则会导致数据不兼容
 														</>
 													}
