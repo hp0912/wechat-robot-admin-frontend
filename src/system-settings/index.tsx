@@ -197,9 +197,8 @@ const SystemSettings = (props: IProps) => {
 		<Spin spinning={loading}>
 			<div style={{ maxHeight: 'calc(100vh - 180px)', overflow: 'auto' }}>
 				<Form
+					layout="vertical"
 					form={form}
-					labelCol={{ flex: '0 0 125px' }}
-					wrapperCol={{ flex: '1 1 auto' }}
 					autoComplete="off"
 				>
 					<Form.Item
@@ -233,6 +232,7 @@ const SystemSettings = (props: IProps) => {
 						<JSONEditor />
 					</Form.Item>
 					<Form.Item
+						layout="horizontal"
 						name="api_token_enabled"
 						label="Api密钥调用接口"
 						valuePropName="checked"
@@ -270,6 +270,7 @@ const SystemSettings = (props: IProps) => {
 						/>
 					</Form.Item>
 					<Form.Item
+						layout="horizontal"
 						name="offline_notification_enabled"
 						label="离线通知"
 						valuePropName="checked"
@@ -441,11 +442,12 @@ const SystemSettings = (props: IProps) => {
 					<Alert
 						style={{ marginBottom: 24 }}
 						type="warning"
-						description={
+						title={
 							<>自动通过好友是高危操作，请谨慎使用！如果同一时间有多个好友请求，每个好友请求通过之后会休眠10秒钟。</>
 						}
 					/>
 					<Form.Item
+						layout="horizontal"
 						name="auto_verify_user"
 						label="自动通过好友"
 						valuePropName="checked"
@@ -489,6 +491,7 @@ const SystemSettings = (props: IProps) => {
 						}}
 					</Form.Item>
 					<Form.Item
+						layout="horizontal"
 						name="auto_chatroom_invite"
 						label="自动邀请入群"
 						valuePropName="checked"

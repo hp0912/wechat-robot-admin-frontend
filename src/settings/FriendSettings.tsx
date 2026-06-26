@@ -259,10 +259,9 @@ const FriendSettings = (props: IProps) => {
 		>
 			<Spin spinning={loading || globalLoading}>
 				<Form
+					layout="vertical"
 					form={form}
-					labelCol={{ flex: '0 0 95px' }}
 					labelWrap
-					wrapperCol={{ flex: '1 1 auto' }}
 					autoComplete="off"
 				>
 					<Form.Item
@@ -280,14 +279,14 @@ const FriendSettings = (props: IProps) => {
 								<Alert
 									style={{ marginTop: 10, marginBottom: 10 }}
 									type="warning"
-									description={<>全局设置下面的AI聊天设置未开启，当前设置将不会生效</>}
+									title={<>全局设置下面的AI聊天设置未开启，当前设置将不会生效</>}
 								/>
 							)}
 						</>
 						<Form.Item
+							layout="horizontal"
 							name="chat_ai_enabled"
 							label="聊天AI"
-							labelCol={{ flex: '0 0 130px' }}
 							valuePropName="checked"
 						>
 							<Switch
@@ -306,7 +305,6 @@ const FriendSettings = (props: IProps) => {
 											<Form.Item
 												name="chat_base_url"
 												label="API地址"
-												labelCol={{ flex: '0 0 130px' }}
 												tooltip={
 													<>
 														示例:{' '}
@@ -328,7 +326,6 @@ const FriendSettings = (props: IProps) => {
 											<Form.Item
 												name="chat_api_key"
 												label="API密钥"
-												labelCol={{ flex: '0 0 130px' }}
 												tooltip={
 													<>
 														可前往
@@ -351,7 +348,6 @@ const FriendSettings = (props: IProps) => {
 											<Form.Item
 												name="chat_model"
 												label="聊天模型"
-												labelCol={{ flex: '0 0 130px' }}
 											>
 												<AutoComplete
 													placeholder="不填则使用全局配置"
@@ -362,7 +358,6 @@ const FriendSettings = (props: IProps) => {
 											<Form.Item
 												name="image_recognition_model"
 												label="图像识别模型"
-												labelCol={{ flex: '0 0 130px' }}
 												tooltip={imageRecognitionModelTips}
 											>
 												<AutoComplete
@@ -374,7 +369,6 @@ const FriendSettings = (props: IProps) => {
 											<Form.Item
 												name="max_completion_tokens"
 												label="最大回复"
-												labelCol={{ flex: '0 0 130px' }}
 												tooltip="AI每次回复的最大词元个数，为0则表示不限制"
 											>
 												<InputNumber
@@ -387,7 +381,6 @@ const FriendSettings = (props: IProps) => {
 											<Form.Item
 												name="chat_prompt"
 												label="人设"
-												labelCol={{ flex: '0 0 130px' }}
 												tooltip="人设是指在与AI进行对话时，系统会自动添加的提示信息，用于引导AI的回答方向和风格。"
 											>
 												<SystemPromptEditor robotId={props.robotId} />
@@ -418,11 +411,12 @@ const FriendSettings = (props: IProps) => {
 								<Alert
 									style={{ marginTop: 10, marginBottom: 10 }}
 									type="warning"
-									description={<>全局设置下面的AI绘图设置未开启，当前设置将不会生效</>}
+									title={<>全局设置下面的AI绘图设置未开启，当前设置将不会生效</>}
 								/>
 							)}
 						</>
 						<Form.Item
+							layout="horizontal"
 							name="image_ai_enabled"
 							label="绘图AI"
 							valuePropName="checked"
@@ -472,14 +466,14 @@ const FriendSettings = (props: IProps) => {
 								<Alert
 									style={{ marginTop: 10, marginBottom: 10 }}
 									type="warning"
-									description={<>全局设置下面的AI文本转语音设置未开启，当前设置将不会生效</>}
+									title={<>全局设置下面的AI文本转语音设置未开启，当前设置将不会生效</>}
 								/>
 							)}
 						</>
 						<Form.Item
+							layout="horizontal"
 							name="tts_enabled"
 							label="文本转语音"
-							labelCol={{ flex: '0 0 110px' }}
 							valuePropName="checked"
 						>
 							<Switch
@@ -501,7 +495,6 @@ const FriendSettings = (props: IProps) => {
 											<Form.Item
 												name="tts_model"
 												label="语音模型"
-												labelCol={{ flex: '0 0 110px' }}
 												rules={[{ required: true, message: '语音模型不能为空' }]}
 											>
 												<Select
@@ -516,7 +509,6 @@ const FriendSettings = (props: IProps) => {
 											<Form.Item
 												name="tts_settings"
 												label="语音设置"
-												labelCol={{ flex: '0 0 110px' }}
 												rules={[{ required: true, message: '语音设置不能为空' }]}
 												tooltip={
 													<>

@@ -184,7 +184,7 @@ const ChatRoomInvite = (props: IProps) => {
 					<Alert
 						type="warning"
 						showIcon
-						description="温馨提示：无法进行跨页、跨搜索条件选择"
+						title="温馨提示：无法进行跨页、跨搜索条件选择"
 					/>
 				</Col>
 			</Row>

@@ -160,10 +160,9 @@ const Login = () => {
 				</>
 			)}
 			<Form
+				layout="vertical"
 				form={form}
 				style={{ width: 300 }}
-				labelCol={{ flex: '0 0 50px' }}
-				wrapperCol={{ flex: '1 1 auto' }}
 				autoComplete="off"
 			>
 				{loginMethod === 'scan' ? (

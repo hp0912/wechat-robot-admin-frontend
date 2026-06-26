@@ -160,7 +160,7 @@ const MCPServers = (props: IProps) => {
 				)}
 				<Alert
 					style={{ position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)' }}
-					description={
+					title={
 						<span style={{ fontSize: 12 }}>
 							文生图/图生图/生成视频/文本转语音，这些功能已经从内置 MCP 服务中移除，请使用{' '}
 							<a

@@ -136,12 +136,11 @@ const OSSSettings = (props: IProps) => {
 					showIcon
 					closable
 					style={{ marginBottom: 24 }}
-					description="考虑到刚登录的时候可能历史图片消息较多，因此登录一分钟内不会自动上传图片。"
+					title="考虑到刚登录的时候可能历史图片消息较多，因此登录一分钟内不会自动上传图片。"
 				/>
 				<Form
+					layout="vertical"
 					form={form}
-					labelCol={{ flex: '0 0 155px' }}
-					wrapperCol={{ flex: '1 1 auto' }}
 					autoComplete="off"
 				>
 					<Form.Item
@@ -151,6 +150,7 @@ const OSSSettings = (props: IProps) => {
 						<Input />
 					</Form.Item>
 					<Form.Item
+						layout="horizontal"
 						name="auto_upload_image"
 						label="自动上传图片"
 						valuePropName="checked"
@@ -181,6 +181,7 @@ const OSSSettings = (props: IProps) => {
 						/>
 					</Form.Item>
 					<Form.Item
+						layout="horizontal"
 						name="auto_upload_video"
 						label="自动上传视频"
 						valuePropName="checked"
@@ -211,6 +212,7 @@ const OSSSettings = (props: IProps) => {
 						/>
 					</Form.Item>
 					<Form.Item
+						layout="horizontal"
 						name="auto_upload_voice"
 						label="自动上传语音"
 						valuePropName="checked"
@@ -241,6 +243,7 @@ const OSSSettings = (props: IProps) => {
 						/>
 					</Form.Item>
 					<Form.Item
+						layout="horizontal"
 						name="auto_upload_file"
 						label="自动上传文件"
 						valuePropName="checked"

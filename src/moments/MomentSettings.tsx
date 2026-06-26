@@ -124,14 +124,13 @@ const MomentSettings = (props: IProps) => {
 		>
 			<Spin spinning={loading}>
 				<Form
+					layout="vertical"
 					form={form}
-					labelCol={{ flex: '0 0 125px' }}
-					wrapperCol={{ flex: '1 1 auto' }}
 					autoComplete="off"
 				>
 					<Alert
 						style={{ marginBottom: 16 }}
-						description="AI不会对朋友圈图片进行识别，因此，为了防止【别人发了一张讣告图片而点赞】这类情况的发生，当图片内容少于3张且没有文字内容时，AI会跳过处理这条朋友圈。同一个人，每天只会有一条朋友圈会被自动评论，点赞不受此限制。"
+						title="AI不会对朋友圈图片进行识别，因此，为了防止【别人发了一张讣告图片而点赞】这类情况的发生，当图片内容少于3张且没有文字内容时，AI会跳过处理这条朋友圈。同一个人，每天只会有一条朋友圈会被自动评论，点赞不受此限制。"
 						type="warning"
 						showIcon
 					/>
@@ -162,6 +161,7 @@ const MomentSettings = (props: IProps) => {
 						<Input />
 					</Form.Item>
 					<Form.Item
+						layout="horizontal"
 						name="auto_like"
 						label="自动点赞"
 						valuePropName="checked"
@@ -172,6 +172,7 @@ const MomentSettings = (props: IProps) => {
 						/>
 					</Form.Item>
 					<Form.Item
+						layout="horizontal"
 						name="auto_comment"
 						label="自动评论"
 						valuePropName="checked"

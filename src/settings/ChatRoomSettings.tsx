@@ -402,10 +402,9 @@ const ChatRoomSettings = (props: IProps) => {
 		>
 			<Spin spinning={loading || globalLoading}>
 				<Form
+					layout="vertical"
 					form={form}
-					labelCol={{ flex: '0 0 95px' }}
 					labelWrap
-					wrapperCol={{ flex: '1 1 auto' }}
 					autoComplete="off"
 				>
 					<Form.Item
@@ -419,9 +418,9 @@ const ChatRoomSettings = (props: IProps) => {
 						style={{ marginTop: 10 }}
 					>
 						<Form.Item
+							layout="horizontal"
 							name="chat_ai_enabled"
 							label="聊天AI"
-							labelCol={{ flex: '0 0 130px' }}
 							valuePropName="checked"
 						>
 							<Switch
@@ -440,7 +439,6 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="chat_ai_trigger"
 												label="AI触发词"
-												labelCol={{ flex: '0 0 130px' }}
 												tooltip="唤醒AI的关键词，以关键词开头的消息会被AI处理，而不用手动@AI"
 											>
 												<Input
@@ -451,7 +449,6 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="chat_base_url"
 												label="API地址"
-												labelCol={{ flex: '0 0 130px' }}
 												tooltip={
 													<>
 														示例:{' '}
@@ -473,7 +470,6 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="chat_api_key"
 												label="API密钥"
-												labelCol={{ flex: '0 0 130px' }}
 												tooltip={
 													<>
 														可前往
@@ -496,7 +492,6 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="chat_model"
 												label="聊天模型"
-												labelCol={{ flex: '0 0 130px' }}
 											>
 												<AutoComplete
 													placeholder="不填则使用全局配置"
@@ -507,7 +502,6 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="image_recognition_model"
 												label="图像识别模型"
-												labelCol={{ flex: '0 0 130px' }}
 												tooltip={imageRecognitionModelTips}
 											>
 												<AutoComplete
@@ -519,8 +513,6 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="knowledge_categories"
 												label="绑定知识库"
-												labelCol={{ flex: '0 0 130px' }}
-												wrapperCol={{ flex: '1 1 calc(100% - 130px)' }}
 												tooltip="绑定知识库后，AI 会按需从知识库中检索相关内容，并在回答中引用这些内容，提升回答的准确性和专业性"
 											>
 												<Select
@@ -539,8 +531,6 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="memory_extraction_blacklist"
 												label="记忆提取黑名单"
-												labelCol={{ flex: '0 0 130px' }}
-												wrapperCol={{ flex: '1 1 calc(100% - 130px)' }}
 												tooltip="屏蔽指定群成员的消息，他的消息不会提取到记忆中，比如群里的水军或者广告号，减少记忆噪音"
 											>
 												{getChatRoomMemberSelector('请选择记忆提取黑名单成员')}
@@ -548,7 +538,6 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="max_completion_tokens"
 												label="最大回复"
-												labelCol={{ flex: '0 0 130px' }}
 												tooltip="AI每次回复的最大词元个数，为0则表示不限制"
 											>
 												<InputNumber
@@ -561,7 +550,6 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="chat_prompt"
 												label="人设"
-												labelCol={{ flex: '0 0 130px' }}
 												tooltip="人设是指在与AI进行对话时，系统会自动添加的提示信息，用于引导AI的回答方向和风格。"
 											>
 												<SystemPromptEditor robotId={props.robotId} />
@@ -588,6 +576,7 @@ const ChatRoomSettings = (props: IProps) => {
 						style={{ marginTop: 24 }}
 					>
 						<Form.Item
+							layout="horizontal"
 							name="image_ai_enabled"
 							label="AI 绘图"
 							valuePropName="checked"
@@ -633,9 +622,9 @@ const ChatRoomSettings = (props: IProps) => {
 						style={{ marginTop: 24 }}
 					>
 						<Form.Item
+							layout="horizontal"
 							name="tts_enabled"
 							label="文本转语音"
-							labelCol={{ flex: '0 0 110px' }}
 							valuePropName="checked"
 						>
 							<Switch
@@ -657,7 +646,6 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="tts_model"
 												label="语音模型"
-												labelCol={{ flex: '0 0 110px' }}
 												rules={[{ required: true, message: '语音模型不能为空' }]}
 											>
 												<Select
@@ -672,7 +660,6 @@ const ChatRoomSettings = (props: IProps) => {
 											<Form.Item
 												name="tts_settings"
 												label="语音设置"
-												labelCol={{ flex: '0 0 110px' }}
 												rules={[{ required: true, message: '语音设置不能为空' }]}
 												tooltip={
 													<>
@@ -710,6 +697,7 @@ const ChatRoomSettings = (props: IProps) => {
 						style={{ marginTop: 24 }}
 					>
 						<Form.Item
+							layout="horizontal"
 							name="welcome_enabled"
 							label="欢迎新成员"
 							valuePropName="checked"
@@ -858,6 +846,7 @@ const ChatRoomSettings = (props: IProps) => {
 						style={{ marginTop: 24 }}
 					>
 						<Form.Item
+							layout="horizontal"
 							name="short_video_parsing_enabled"
 							label="短视频解析"
 							valuePropName="checked"
@@ -873,6 +862,7 @@ const ChatRoomSettings = (props: IProps) => {
 						style={{ marginTop: 24 }}
 					>
 						<Form.Item
+							layout="horizontal"
 							name="podcast_enabled"
 							label="AI 播客"
 							valuePropName="checked"
@@ -905,6 +895,7 @@ const ChatRoomSettings = (props: IProps) => {
 						style={{ marginTop: 24 }}
 					>
 						<Form.Item
+							layout="horizontal"
 							name="wxhb_notify_enabled"
 							label="红包提醒"
 							valuePropName="checked"
@@ -926,7 +917,6 @@ const ChatRoomSettings = (props: IProps) => {
 									<Form.Item
 										name="wxhb_notify_member_list"
 										label="提醒人"
-										wrapperCol={{ flex: '1 1 calc(100% - 95px)' }}
 										rules={[{ required: enabled, message: '提醒人不能为空' }]}
 									>
 										{getChatRoomMemberSelector('请选择提醒人')}
@@ -940,6 +930,7 @@ const ChatRoomSettings = (props: IProps) => {
 						style={{ marginTop: 24 }}
 					>
 						<Form.Item
+							layout="horizontal"
 							name="pat_enabled"
 							label="拍一拍"
 							valuePropName="checked"
@@ -1028,6 +1019,7 @@ const ChatRoomSettings = (props: IProps) => {
 						style={{ marginTop: 24 }}
 					>
 						<Form.Item
+							layout="horizontal"
 							name="leave_chat_room_alert_enabled"
 							label="退群提醒"
 							valuePropName="checked"
@@ -1090,11 +1082,12 @@ const ChatRoomSettings = (props: IProps) => {
 								<Alert
 									style={{ marginTop: 10, marginBottom: 10 }}
 									type="warning"
-									description={<>全局设置下面的群聊排行榜设置未开启，当前设置将不会生效</>}
+									title={<>全局设置下面的群聊排行榜设置未开启，当前设置将不会生效</>}
 								/>
 							)}
 						</>
 						<Form.Item
+							layout="horizontal"
 							name="chat_room_ranking_enabled"
 							label="排行榜"
 							valuePropName="checked"
@@ -1114,11 +1107,12 @@ const ChatRoomSettings = (props: IProps) => {
 								<Alert
 									style={{ marginTop: 10, marginBottom: 10 }}
 									type="warning"
-									description={<>全局设置下面的群聊总结设置未开启，当前设置将不会生效</>}
+									title={<>全局设置下面的群聊总结设置未开启，当前设置将不会生效</>}
 								/>
 							)}
 						</>
 						<Form.Item
+							layout="horizontal"
 							name="chat_room_summary_enabled"
 							label="群聊总结"
 							valuePropName="checked"
@@ -1177,11 +1171,12 @@ const ChatRoomSettings = (props: IProps) => {
 								<Alert
 									style={{ marginTop: 10, marginBottom: 10 }}
 									type="warning"
-									description={<>全局设置下面的每日早报设置未开启，当前设置将不会生效</>}
+									title={<>全局设置下面的每日早报设置未开启，当前设置将不会生效</>}
 								/>
 							)}
 						</>
 						<Form.Item
+							layout="horizontal"
 							name="news_enabled"
 							label="每日早报"
 							valuePropName="checked"
@@ -1229,11 +1224,12 @@ const ChatRoomSettings = (props: IProps) => {
 								<Alert
 									style={{ marginTop: 10, marginBottom: 10 }}
 									type="warning"
-									description={<>全局设置下面的每日早安设置未开启，当前设置将不会生效</>}
+									title={<>全局设置下面的每日早安设置未开启，当前设置将不会生效</>}
 								/>
 							)}
 						</>
 						<Form.Item
+							layout="horizontal"
 							name="morning_enabled"
 							label="每日早安"
 							valuePropName="checked"

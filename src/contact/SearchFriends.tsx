@@ -107,9 +107,8 @@ const SearchFriends = (props: IProps) => {
 			]}
 		>
 			<Form
+				layout="vertical"
 				form={form}
-				labelCol={{ flex: '0 0 115px' }}
-				wrapperCol={{ flex: '1 1 auto' }}
 				autoComplete="off"
 			>
 				<Form.Item

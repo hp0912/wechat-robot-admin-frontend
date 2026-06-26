@@ -56,9 +56,8 @@ const ChatRoomMemberFriend = (props: IProps) => {
 				确定要将<b>{props.chatRoomName}</b>的${props.chatRoomMemberName}添加为好友吗？
 			</p>
 			<Form
+				layout="vertical"
 				form={form}
-				labelCol={{ flex: '0 0 110px' }}
-				wrapperCol={{ flex: '1 1 auto' }}
 				autoComplete="off"
 			>
 				<Form.Item

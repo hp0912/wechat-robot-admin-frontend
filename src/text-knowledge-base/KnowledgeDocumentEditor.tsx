@@ -149,14 +149,13 @@ const KnowledgeDocumentEditor = (props: IProps) => {
 			}
 		>
 			<Form
+				layout="vertical"
 				form={form}
-				labelCol={{ flex: '0 0 85px' }}
-				wrapperCol={{ flex: '1 1 auto' }}
 				autoComplete="off"
 				initialValues={props.dataSource}
 			>
 				<Alert
-					description="文档片段之间使用两个或以上的空行分片，如果文档内容单个片段超过 1000 个字符，将会被强制分片。"
+					title="文档片段之间使用两个或以上的空行分片，如果文档内容单个片段超过 1000 个字符，将会被强制分片。"
 					type="warning"
 					showIcon
 					style={{ marginBottom: 16 }}

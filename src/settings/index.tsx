@@ -174,10 +174,9 @@ const GlobalSettings = (props: IProps) => {
 			<Spin spinning={loading}>
 				<div style={{ maxHeight: 'calc(100vh - 180px)', overflow: 'auto' }}>
 					<Form
+						layout="vertical"
 						form={form}
-						labelCol={{ flex: '0 0 95px' }}
 						labelWrap
-						wrapperCol={{ flex: '1 1 auto' }}
 						autoComplete="off"
 					>
 						<Form.Item
@@ -193,7 +192,7 @@ const GlobalSettings = (props: IProps) => {
 							<Alert
 								style={{ marginTop: 10, marginBottom: 10 }}
 								type="info"
-								description={
+								title={
 									<>
 										开启AI聊天设置会自动应用于每一个好友和群聊，也可以在<b>好友设置</b>和<b>群聊设置</b>
 										里面单独定制化设置。
@@ -201,9 +200,9 @@ const GlobalSettings = (props: IProps) => {
 								}
 							/>
 							<Form.Item
+								layout="horizontal"
 								name="chat_ai_enabled"
 								label="聊天AI"
-								labelCol={{ flex: '0 0 130px' }}
 								valuePropName="checked"
 							>
 								<Switch
@@ -222,7 +221,6 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="chat_ai_trigger"
 													label="AI触发词"
-													labelCol={{ flex: '0 0 130px' }}
 													tooltip="唤醒AI的关键词，以关键词开头的消息会被AI处理，而不用手动@AI"
 												>
 													<Input
@@ -233,7 +231,6 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="chat_base_url"
 													label="API地址"
-													labelCol={{ flex: '0 0 130px' }}
 													rules={[{ required: true, message: 'API地址不能为空' }]}
 													tooltip={chatBaseURLTips}
 												>
@@ -245,7 +242,6 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="chat_api_key"
 													label="API密钥"
-													labelCol={{ flex: '0 0 130px' }}
 													rules={[{ required: true, message: 'API密钥不能为空' }]}
 													tooltip={
 														<>
@@ -269,12 +265,10 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="chat_model"
 													label="聊天模型"
-													labelCol={{ flex: '0 0 130px' }}
-													wrapperCol={{ flex: '1 1 calc(100% - 130px)' }}
 													rules={[{ required: true, message: '聊天模型不能为空' }]}
 													help={
 														<>
-															<b style={{ color: '#9a6868' }}>特别注意</b>{' '}
+															<span style={{ color: '#e45c5c' }}>特别注意</span>:
 															提取记忆依赖全局聊天模型，这个模型必须支持JSON Schema
 														</>
 													}
@@ -286,9 +280,9 @@ const GlobalSettings = (props: IProps) => {
 													/>
 												</Form.Item>
 												<Form.Item
+													layout="horizontal"
 													name="memory_enabled"
 													label="会话持久记忆"
-													labelCol={{ flex: '0 0 130px' }}
 													valuePropName="checked"
 												>
 													<Switch
@@ -299,7 +293,6 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="text_embedding_model"
 													label="文本嵌入模型"
-													labelCol={{ flex: '0 0 130px' }}
 													rules={[{ required: true, message: '文本嵌入模型不能为空' }]}
 												>
 													<AutoComplete
@@ -311,12 +304,10 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="text_embedding_dimension"
 													label="文本嵌入维度"
-													labelCol={{ flex: '0 0 130px' }}
-													wrapperCol={{ flex: '1 1 calc(100% - 130px)' }}
 													rules={[{ required: true, message: '文本嵌入维度不能为空' }]}
 													help={
 														<>
-															<b style={{ color: '#9a6868' }}>特别注意</b>{' '}
+															<span style={{ color: '#e45c5c' }}>特别注意</span>:
 															修改文本嵌入模型后，需要在文本知识库重建索引，否则会导致数据不兼容
 														</>
 													}
@@ -330,7 +321,6 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="image_recognition_model"
 													label="图像识别模型"
-													labelCol={{ flex: '0 0 130px' }}
 													rules={[{ required: true, message: '图像识别模型不能为空' }]}
 													tooltip={imageRecognitionModelTips}
 												>
@@ -343,7 +333,6 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="max_completion_tokens"
 													label="最大回复"
-													labelCol={{ flex: '0 0 130px' }}
 													rules={[{ required: true, message: '最大回复不能为空' }]}
 													tooltip="AI每次回复的最大词元个数，为0则表示不限制"
 												>
@@ -357,7 +346,6 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="chat_prompt"
 													label="人设"
-													labelCol={{ flex: '0 0 130px' }}
 													rules={[{ required: true, message: '人设不能为空' }]}
 													tooltip="人设是指在与AI进行对话时，系统会自动添加的提示信息，用于引导AI的回答方向和风格。"
 												>
@@ -377,7 +365,7 @@ const GlobalSettings = (props: IProps) => {
 							<Alert
 								style={{ marginTop: 10, marginBottom: 10 }}
 								type="info"
-								description={
+								title={
 									<>
 										开启AI绘图设置会自动应用于每一个好友和群聊，也可以在<b>好友设置</b>和<b>群聊设置</b>
 										里面单独定制化设置。
@@ -385,6 +373,7 @@ const GlobalSettings = (props: IProps) => {
 								}
 							/>
 							<Form.Item
+								layout="horizontal"
 								name="image_ai_enabled"
 								label="绘图AI"
 								valuePropName="checked"
@@ -423,7 +412,7 @@ const GlobalSettings = (props: IProps) => {
 							<Alert
 								style={{ marginTop: 10, marginBottom: 10 }}
 								type="info"
-								description={
+								title={
 									<>
 										开启AI文本转语音设置会自动应用于每一个好友和群聊，也可以在<b>好友设置</b>和<b>群聊设置</b>
 										里面单独定制化设置。
@@ -431,10 +420,10 @@ const GlobalSettings = (props: IProps) => {
 								}
 							/>
 							<Form.Item
+								layout="horizontal"
 								name="tts_enabled"
 								label="文本转语音"
 								valuePropName="checked"
-								labelCol={{ flex: '0 0 110px' }}
 							>
 								<Switch
 									unCheckedChildren="关闭"
@@ -455,7 +444,6 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="tts_model"
 													label="语音模型"
-													labelCol={{ flex: '0 0 110px' }}
 													rules={[{ required: true, message: '语音模型不能为空' }]}
 												>
 													<Select
@@ -470,7 +458,6 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="tts_settings"
 													label="语音设置"
-													labelCol={{ flex: '0 0 110px' }}
 													rules={[{ required: true, message: '语音设置不能为空' }]}
 													tooltip={
 														<>
@@ -500,13 +487,14 @@ const GlobalSettings = (props: IProps) => {
 							<Alert
 								style={{ marginTop: 10, marginBottom: 10 }}
 								type="info"
-								description={
+								title={
 									<>
 										开启欢迎新成员会自动应用于每一个群聊，也可以在<b>群聊设置</b>里面单独定制化设置。
 									</>
 								}
 							/>
 							<Form.Item
+								layout="horizontal"
 								name="welcome_enabled"
 								label="欢迎新成员"
 								valuePropName="checked"
@@ -647,13 +635,14 @@ const GlobalSettings = (props: IProps) => {
 							<Alert
 								style={{ marginTop: 10, marginBottom: 10 }}
 								type="info"
-								description={
+								title={
 									<>
 										开启拍一拍交互会自动应用于每一个群聊，也可以在<b>群聊设置</b>里面单独定制化设置。
 									</>
 								}
 							/>
 							<Form.Item
+								layout="horizontal"
 								name="pat_enabled"
 								label="拍一拍"
 								valuePropName="checked"
@@ -734,7 +723,7 @@ const GlobalSettings = (props: IProps) => {
 							<Alert
 								style={{ marginTop: 10, marginBottom: 10 }}
 								type="info"
-								description={
+								title={
 									<>
 										开启群聊退群提醒设置会自动应用于每一个好友和群聊，也可以在<b>好友设置</b>和<b>群聊设置</b>
 										里面单独定制化设置。
@@ -742,6 +731,7 @@ const GlobalSettings = (props: IProps) => {
 								}
 							/>
 							<Form.Item
+								layout="horizontal"
 								name="leave_chat_room_alert_enabled"
 								label="退群提醒"
 								valuePropName="checked"
@@ -792,7 +782,7 @@ const GlobalSettings = (props: IProps) => {
 							<Alert
 								style={{ marginTop: 10, marginBottom: 10 }}
 								type="warning"
-								description={
+								title={
 									<>
 										群聊排行榜设置<b>不会</b>自动应用于每一个群聊，需要在<b>群聊设置</b>里面手动开启。
 										<span style={{ color: '#ff5722', fontSize: 12 }}>
@@ -802,10 +792,10 @@ const GlobalSettings = (props: IProps) => {
 								}
 							/>
 							<Form.Item
+								layout="horizontal"
 								name="chat_room_ranking_enabled"
 								label="排行榜"
 								valuePropName="checked"
-								labelCol={{ flex: '0 0 120px' }}
 							>
 								<Switch
 									unCheckedChildren="关闭"
@@ -826,7 +816,6 @@ const GlobalSettings = (props: IProps) => {
 													name="chat_room_ranking_daily_cron"
 													label="发榜时间(每天)"
 													rules={[{ required: true, message: '发榜时间不能为空' }]}
-													labelCol={{ flex: '0 0 120px' }}
 												>
 													<TimePicker
 														disabledTime={() => {
@@ -839,7 +828,6 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="chat_room_ranking_weekly_cron"
 													label="发榜时间(每周)"
-													labelCol={{ flex: '0 0 120px' }}
 												>
 													<TimePicker
 														disabledTime={() => {
@@ -852,7 +840,6 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="chat_room_ranking_month_cron"
 													label="发榜时间(每月)"
-													labelCol={{ flex: '0 0 120px' }}
 												>
 													<TimePicker
 														disabledTime={() => {
@@ -876,7 +863,7 @@ const GlobalSettings = (props: IProps) => {
 							<Alert
 								style={{ marginTop: 10, marginBottom: 10 }}
 								type="warning"
-								description={
+								title={
 									<>
 										群聊总结设置<b>不会</b>自动应用于每一个群聊，需要在<b>群聊设置</b>里面手动开启。
 										<span style={{ color: '#ff5722', fontSize: 12 }}>温馨提示: 群聊总结，总结的是前一天的聊天记录</span>
@@ -884,10 +871,10 @@ const GlobalSettings = (props: IProps) => {
 								}
 							/>
 							<Form.Item
+								layout="horizontal"
 								name="chat_room_summary_enabled"
 								label="群聊总结"
 								valuePropName="checked"
-								labelCol={{ flex: '0 0 120px' }}
 							>
 								<Switch
 									unCheckedChildren="关闭"
@@ -908,7 +895,6 @@ const GlobalSettings = (props: IProps) => {
 													name="chat_room_summary_model"
 													label="AI模型"
 													rules={[{ required: true, message: 'AI模型不能为空' }]}
-													labelCol={{ flex: '0 0 120px' }}
 												>
 													<AutoComplete
 														placeholder="请选择或者手动输入AI模型"
@@ -920,7 +906,6 @@ const GlobalSettings = (props: IProps) => {
 													name="chat_room_summary_mode"
 													label="显示模式"
 													rules={[{ required: true, message: '显示模式不能为空' }]}
-													labelCol={{ flex: '0 0 120px' }}
 												>
 													<Select
 														placeholder="请选择显示模式"
@@ -934,7 +919,6 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="chat_room_summary_cron"
 													label="总结时间(每天)"
-													labelCol={{ flex: '0 0 120px' }}
 													rules={[{ required: true, message: '总结时间不能为空' }]}
 												>
 													<TimePicker
@@ -959,7 +943,7 @@ const GlobalSettings = (props: IProps) => {
 							<Alert
 								style={{ marginTop: 10, marginBottom: 10 }}
 								type="warning"
-								description={
+								title={
 									<>
 										每日早报设置<b>不会</b>自动应用于每一个群聊，需要在<b>群聊设置</b>里面手动开启。
 										<span style={{ color: '#ff5722', fontSize: 12 }}>温馨提示: 每日早报报道的是前一天的新闻</span>
@@ -967,10 +951,10 @@ const GlobalSettings = (props: IProps) => {
 								}
 							/>
 							<Form.Item
+								layout="horizontal"
 								name="news_enabled"
 								label="每日早报"
 								valuePropName="checked"
-								labelCol={{ flex: '0 0 120px' }}
 							>
 								<Switch
 									unCheckedChildren="关闭"
@@ -989,7 +973,6 @@ const GlobalSettings = (props: IProps) => {
 													name="news_type"
 													label="早报类型"
 													rules={[{ required: true, message: '早报类型不能为空' }]}
-													labelCol={{ flex: '0 0 120px' }}
 												>
 													<Select
 														placeholder="请选择早报类型"
@@ -1003,7 +986,6 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="news_cron"
 													label="发布时间(每天)"
-													labelCol={{ flex: '0 0 120px' }}
 													rules={[{ required: true, message: '发布时间不能为空' }]}
 												>
 													<TimePicker
@@ -1028,7 +1010,7 @@ const GlobalSettings = (props: IProps) => {
 							<Alert
 								style={{ marginTop: 10, marginBottom: 10 }}
 								type="warning"
-								description={
+								title={
 									<>
 										每日早安设置<b>不会</b>自动应用于每一个群聊，需要在<b>群聊设置</b>里面手动开启。
 										<span style={{ color: '#ff5722', fontSize: 12 }}>温馨提示: 每日早安是对前一天的总结</span>
@@ -1036,10 +1018,10 @@ const GlobalSettings = (props: IProps) => {
 								}
 							/>
 							<Form.Item
+								layout="horizontal"
 								name="morning_enabled"
 								label="每日早安"
 								valuePropName="checked"
-								labelCol={{ flex: '0 0 120px' }}
 							>
 								<Switch
 									unCheckedChildren="关闭"
@@ -1057,7 +1039,6 @@ const GlobalSettings = (props: IProps) => {
 												<Form.Item
 													name="morning_cron"
 													label="发布时间(每天)"
-													labelCol={{ flex: '0 0 120px' }}
 													rules={[{ required: true, message: '发布时间不能为空' }]}
 												>
 													<TimePicker

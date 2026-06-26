@@ -199,9 +199,8 @@ const MCPServerEditor = (props: IProps) => {
 		>
 			<Spin spinning={loading}>
 				<Form
+					layout="vertical"
 					form={form}
-					labelCol={{ flex: '0 0 100px' }}
-					wrapperCol={{ flex: '1 1 auto' }}
 					autoComplete="off"
 					labelWrap
 					disabled={formDisabled}
@@ -461,6 +460,7 @@ const MCPServerEditor = (props: IProps) => {
 												<JSONEditor />
 											</Form.Item>
 											<Form.Item
+												layout="horizontal"
 												name="tls_skip_verify"
 												label="跳过TLS证书验证"
 												valuePropName="checked"
@@ -532,6 +532,7 @@ const MCPServerEditor = (props: IProps) => {
 												/>
 											</Form.Item>
 											<Form.Item
+												layout="horizontal"
 												name="heartbeat_enable"
 												label="心跳检测"
 												valuePropName="checked"
