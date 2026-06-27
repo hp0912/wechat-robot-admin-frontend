@@ -204,6 +204,7 @@ const MCPServerEditor = (props: IProps) => {
 					autoComplete="off"
 					labelWrap
 					disabled={formDisabled}
+					scrollToFirstError={{ behavior: 'instant', block: 'end', focus: true }}
 				>
 					<Form.Item
 						name="id"

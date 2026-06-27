@@ -61,6 +61,7 @@ const NewRobot = (props: IProps) => {
 				layout="vertical"
 				form={form}
 				autoComplete="off"
+				scrollToFirstError={{ behavior: 'instant', block: 'end', focus: true }}
 			>
 				<Form.Item
 					name="robot_name"

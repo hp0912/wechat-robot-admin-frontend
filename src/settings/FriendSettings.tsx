@@ -263,6 +263,7 @@ const FriendSettings = (props: IProps) => {
 					form={form}
 					labelWrap
 					autoComplete="off"
+					scrollToFirstError={{ behavior: 'instant', block: 'end', focus: true }}
 				>
 					<Form.Item
 						name="id"

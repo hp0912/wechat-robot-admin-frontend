@@ -43,6 +43,30 @@ const ScanAction = styled(ScanOutlined)`
 	}
 `;
 
+const HighlightTip = styled.b`
+	color: #2b920c;
+	background-image: linear-gradient(90deg, #ff6b1a, #ff6b1a);
+	background-size: 0% 2px;
+	background-repeat: no-repeat;
+	background-position: left bottom;
+	animation: underlineMove 2.5s ease-in-out infinite;
+
+	@keyframes underlineMove {
+		0% {
+			background-size: 0% 2px;
+			color: #2b920c;
+		}
+		50% {
+			background-size: 100% 2px;
+			color: #ff6b1a;
+		}
+		100% {
+			background-size: 0% 2px;
+			color: #2b920c;
+		}
+	}
+`;
+
 const LoginType = (props: {
 	open: boolean;
 	robot: IRobot;
@@ -89,7 +113,7 @@ const LoginType = (props: {
 						使用文档
 					</a>
 					在本地部署。
-					<b style={{ color: '#2b920c' }}>玩机器人第一要义：登录微信的手机和微信机器人服务器在同一局域网</b>。
+					<HighlightTip>玩机器人第一要义：登录微信的手机和微信机器人服务器在同一局域网</HighlightTip>。
 				</span>
 			</p>
 			<div>
