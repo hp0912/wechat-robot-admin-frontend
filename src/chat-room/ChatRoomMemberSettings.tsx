@@ -122,12 +122,12 @@ const ChatRoomMemberSettings = (props: IProps) => {
 		>
 			<Spin spinning={loading}>
 				<Form
+					layout="vertical"
 					form={form}
-					labelCol={{ flex: '0 0 90px' }}
-					wrapperCol={{ flex: '1 1 auto' }}
 					autoComplete="off"
 				>
 					<Form.Item
+						layout="horizontal"
 						name="is_admin"
 						label="管理员"
 						valuePropName="checked"
@@ -139,6 +139,7 @@ const ChatRoomMemberSettings = (props: IProps) => {
 						/>
 					</Form.Item>
 					<Form.Item
+						layout="horizontal"
 						name="is_blacklisted"
 						label="黑名单"
 						valuePropName="checked"

@@ -58,10 +58,10 @@ const NewRobot = (props: IProps) => {
 			onCancel={onClose}
 		>
 			<Form
+				layout="vertical"
 				form={form}
-				labelCol={{ flex: '0 0 95px' }}
-				wrapperCol={{ flex: '1 1 auto' }}
 				autoComplete="off"
+				scrollToFirstError={{ behavior: 'instant', block: 'end', focus: true }}
 			>
 				<Form.Item
 					name="robot_name"
@@ -81,11 +81,10 @@ const NewRobot = (props: IProps) => {
 					name="version"
 					label="协议版本"
 					rules={[{ required: true, message: '协议版本不能为空' }]}
-					wrapperCol={{ flex: '1 1 calc(100% - 95px)' }}
 					initialValue="8.0.59"
 					help={
 						<>
-							<b style={{ color: '#e46161' }}>温馨提示: </b>{' '}
+							<span style={{ color: '#e45c5c' }}>温馨提示: </span>:
 							<span style={{ fontSize: 12 }}>
 								优先使用 8.0.59 版本，如果 8.0.59 登录不上，再重新创建一个机器人，使用 8.0.74
 								版本，机器人创建成功以后不支持切换协议版本

@@ -94,9 +94,8 @@ const InstallSkill = (props: IProps) => {
 			onCancel={props.onClose}
 		>
 			<Form
+				layout="vertical"
 				form={form}
-				labelCol={{ flex: '0 0 85px' }}
-				wrapperCol={{ flex: '1 1 auto' }}
 				autoComplete="off"
 			>
 				<Divider

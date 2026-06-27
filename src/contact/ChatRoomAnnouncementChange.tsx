@@ -56,7 +56,7 @@ const ChatRoomAnnouncementChange = (props: IProps) => {
 			<Alert
 				showIcon
 				type="warning"
-				description={
+				title={
 					<>
 						只有<b>群主</b>或者<b>群管理</b>才能发布群公告
 					</>
@@ -64,9 +64,8 @@ const ChatRoomAnnouncementChange = (props: IProps) => {
 				style={{ marginBottom: 24 }}
 			/>
 			<Form
+				layout="vertical"
 				form={form}
-				labelCol={{ flex: '0 0 70px' }}
-				wrapperCol={{ flex: '1 1 auto' }}
 				autoComplete="off"
 			>
 				<Form.Item

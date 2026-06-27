@@ -44,6 +44,7 @@ const Remove = (props: IProps) => {
 					确定要删除机器人<b>{props.robot.robot_name}</b>吗？
 				</>
 			),
+			okButtonProps: { danger: true },
 			okText: '删除',
 			cancelText: '取消',
 			onOk: async () => {

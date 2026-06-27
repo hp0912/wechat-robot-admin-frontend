@@ -90,9 +90,8 @@ const KnowledgeBaseEditor = (props: IProps) => {
 			onCancel={props.onClose}
 		>
 			<Form
+				layout="vertical"
 				form={form}
-				labelCol={{ flex: '0 0 95px' }}
-				wrapperCol={{ flex: '1 1 auto' }}
 				autoComplete="off"
 				initialValues={props.dataSource}
 			>

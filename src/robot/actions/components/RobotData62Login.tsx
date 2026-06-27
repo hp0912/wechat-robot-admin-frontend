@@ -126,9 +126,8 @@ const RobotData62Login = (props: IProps) => {
 			onCancel={props.onClose}
 		>
 			<Form
+				layout="vertical"
 				form={form}
-				labelCol={{ flex: '0 0 110px' }}
-				wrapperCol={{ flex: '1 1 auto' }}
 				autoComplete="off"
 			>
 				<Form.Item

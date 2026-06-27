@@ -23,7 +23,7 @@ export const theme = {
 	label: 'rgba(0, 42, 76, 0.55)',
 	value: 'rgba(0, 0, 0, 0.82)',
 	// 背景
-	surface: '#ffffff',
+	surface: 'rgba(34, 211, 238, 0.06)',
 	surfaceSoft: 'rgba(247, 251, 255, 0.72)',
 } as const;
 
@@ -64,10 +64,10 @@ export const techCard = css`
 /** 卡片 hover 态：描边转青 + 投影略增 + 微青底色 */
 export const techCardHover = css`
 	border-color: ${theme.borderStrong};
-	background: rgba(34, 211, 238, 0.06);
+	background: #c1ab1c0f;
 	box-shadow:
 		0 1px 2px rgba(15, 23, 42, 0.05),
-		0 10px 24px rgba(34, 211, 238, 0.10);
+		0 10px 24px rgba(34, 211, 238, 0.1);
 `;
 
 /** 区块小标题：左侧细竖条 + 文本（克制版，无 HUD 装饰） */
