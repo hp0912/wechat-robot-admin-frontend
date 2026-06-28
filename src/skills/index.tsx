@@ -1,11 +1,11 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { useBoolean, useRequest, useSize } from 'ahooks';
-import { App, Button, Empty, List, Spin, Tooltip } from 'antd';
-import VirtualList from 'rc-virtual-list';
-import React, { useRef } from 'react';
+import { AppstoreAddOutlined, PlusOutlined } from '@ant-design/icons';
+import { useBoolean, useRequest } from 'ahooks';
+import { App, Button, Empty, Flex, Pagination, Space, Spin } from 'antd';
+import React, { useState } from 'react';
 import type * as Api from '@/api/wechat-robot/wechat-robot';
 import InstallSkill from './InstallSkill';
-import SkillActions from './SkillActions';
+import Skill from './Skill';
+import { CardsContainer } from './styled';
 
 interface IProps {
 	robotId: number;
@@ -16,16 +16,18 @@ const Skills = (props: IProps) => {
 	const { message } = App.useApp();
 
 	const [onInstallOpen, setInstallOpen] = useBoolean(false);
+	const [pageIndex, setPageIndex] = useState(1);
 
-	const containerRef = useRef<HTMLDivElement>(null);
-	const containerSize = useSize(containerRef);
-
-	const { data, loading, refresh } = useRequest(
+	const {
+		data = [],
+		loading,
+		refresh,
+	} = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.skills.skillsList({
 				id: props.robotId,
 			});
-			return resp.data?.data;
+			return resp.data?.data || [];
 		},
 		{
 			manual: false,
@@ -37,9 +39,26 @@ const Skills = (props: IProps) => {
 
 	return (
 		<Spin spinning={loading}>
-			<div
-				style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 16, paddingRight: 8 }}
+			<Flex
+				justify="space-between"
+				align="center"
+				style={{ marginBottom: 16, padding: 8, border: '1px solid #22d3ee2e', borderRadius: 6 }}
 			>
+				<Space style={{ color: '#0958d9' }}>
+					<AppstoreAddOutlined />
+					<span>
+						前往
+						<a
+							style={{ color: '#E4DA11' }}
+							href="https://git.houhoukang.com/houhou/wechat-robot-skills"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							技能市场
+						</a>
+						探索更多技能...
+					</span>
+				</Space>
 				<Button
 					color="primary"
 					variant="filled"
@@ -48,12 +67,9 @@ const Skills = (props: IProps) => {
 				>
 					安装技能
 				</Button>
-			</div>
-			<div
-				style={{ height: 'calc(100vh - 188px)', overflow: 'auto' }}
-				ref={containerRef}
-			>
-				{!data?.length ? (
+			</Flex>
+			<div>
+				{!data.length ? (
 					<Empty
 						description={
 							<>
@@ -70,45 +86,33 @@ const Skills = (props: IProps) => {
 						}
 					/>
 				) : (
-					<List bordered>
-						<VirtualList
-							data={data}
-							height={containerSize?.height ? containerSize.height - 2 : 0}
-							itemHeight={47}
-							itemKey={item => item.metadata?.name || ''}
-						>
-							{item => {
-								return (
-									<List.Item key={item.metadata?.name || ''}>
-										<List.Item.Meta
-											title={item.metadata?.name}
-											description={
-												<Tooltip
-													styles={{
-														container: {
-															width: 750,
-														},
-													}}
-													title={item.metadata?.description}
-													placement="topLeft"
-												>
-													<div className="ellipsis">{item.metadata?.description}</div>
-												</Tooltip>
-											}
-										/>
-										<div>
-											<SkillActions
-												robotId={props.robotId}
-												skill={item}
-												onRefresh={refresh}
-											/>
-										</div>
-									</List.Item>
-								);
-							}}
-						</VirtualList>
-					</List>
+					<CardsContainer>
+						{data.slice((pageIndex - 1) * 10, pageIndex * 10).map((item, index) => {
+							return (
+								<Skill
+									key={item.metadata?.name || index}
+									robotId={props.robotId}
+									skill={item}
+									onRefresh={refresh}
+								/>
+							);
+						})}
+					</CardsContainer>
 				)}
+				<div className="pagination">
+					<Pagination
+						align="end"
+						size="small"
+						current={pageIndex}
+						pageSize={10}
+						total={data.length}
+						showSizeChanger={false}
+						showTotal={total => `共 ${total} 条`}
+						onChange={page => {
+							setPageIndex(page);
+						}}
+					/>
+				</div>
 				{onInstallOpen && (
 					<InstallSkill
 						robotId={props.robotId}
