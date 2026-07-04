@@ -1,10 +1,18 @@
 import { AppstoreAddOutlined, PlusOutlined } from '@ant-design/icons';
 import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
-import { Alert, App, Button, Empty, Flex, Pagination, Space, Spin } from 'antd';
+import { Alert, App, Empty, Pagination, Spin } from 'antd';
 import React, { useState } from 'react';
 import MCPServer from './MCPServer';
 import MCPServerEditor from './MCPServerEditor';
-import { CardsContainer } from './styled';
+import {
+	CardsContainer,
+	MCPMarketLink,
+	MCPToolbar,
+	MCPToolbarButton,
+	MCPToolbarIcon,
+	MCPToolbarInfo,
+	MCPToolbarText,
+} from './styled';
 
 interface IProps {
 	robotId: number;
@@ -45,27 +53,24 @@ const MCPServers = (props: IProps) => {
 
 	return (
 		<Spin spinning={loading}>
-			<Flex
-				justify="space-between"
-				align="center"
-				style={{ marginBottom: 16, padding: 8, border: '1px solid #22d3ee2e', borderRadius: 6 }}
-			>
-				<Space style={{ color: '#0958d9' }}>
-					<AppstoreAddOutlined />
-					<span>
-						前往
-						<a
-							style={{ color: '#E4DA11' }}
+			<MCPToolbar>
+				<MCPToolbarInfo>
+					<MCPToolbarIcon>
+						<AppstoreAddOutlined />
+					</MCPToolbarIcon>
+					<MCPToolbarText>
+						前往{' '}
+						<MCPMarketLink
 							href="https://github.com/hp0912/wechat-robot-mcp-server"
 							target="_blank"
 							rel="noopener noreferrer"
 						>
 							MCP 市场
-						</a>
-						探索更多工具...
-					</span>
-				</Space>
-				<Button
+						</MCPMarketLink>{' '}
+						探索更多工具
+					</MCPToolbarText>
+				</MCPToolbarInfo>
+				<MCPToolbarButton
 					color="primary"
 					variant="filled"
 					icon={<PlusOutlined />}
@@ -74,8 +79,8 @@ const MCPServers = (props: IProps) => {
 					}}
 				>
 					添加 MCP 服务
-				</Button>
-			</Flex>
+				</MCPToolbarButton>
+			</MCPToolbar>
 			<div>
 				{!data?.length ? (
 					<Empty />

@@ -11,10 +11,23 @@ import {
 	StopOutlined,
 } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { App, Avatar, Button, Card, Flex, Space, Switch, Tag, theme, Tooltip, Typography } from 'antd';
+import { App, Avatar, Button, Card, Space, Switch, theme, Tooltip, Typography } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import type { DtoMCPServer } from '@/api/wechat-robot/wechat-robot';
+import {
+	ServerFooter,
+	ServerMetaContent,
+	ServerMetaGrid,
+	ServerMetaIcon,
+	ServerMetaItem,
+	ServerMetaLabel,
+	ServerMetaValue,
+	ServerName,
+	ServerStatusGroup,
+	ServerTitle,
+	StatusTag,
+} from './styled';
 
 interface IProps {
 	robotId: number;
@@ -168,33 +181,40 @@ const MCPServer = (props: IProps) => {
 		}
 	};
 
+	const online = isOnline(props.mcpServer);
+	const authTypeText = getAuthTypeText(props.mcpServer.auth_type);
+	const transportText = getTransportText(props.mcpServer.transport);
+	const createdAtText = dayjs(props.mcpServer.created_at).format('YYYY-MM-DD HH:mm:ss');
+
 	return (
 		<Card
 			title={
-				<>
+				<ServerTitle>
 					<Avatar
 						style={{
-							marginRight: 8,
-							backgroundColor: props.mcpServer.enabled ? '#08979c' : token.colorTextDisabled,
+							backgroundColor: props.mcpServer.enabled ? '#0f7490' : token.colorTextDisabled,
+							boxShadow: props.mcpServer.enabled ? '0 6px 16px rgba(15, 116, 144, 0.18)' : 'none',
 						}}
 						shape="square"
 						icon={<CodeOutlined />}
 					/>
-					{props.mcpServer.name}
-				</>
+					<ServerName>{props.mcpServer.name}</ServerName>
+				</ServerTitle>
 			}
 			size="medium"
 			styles={{
 				root: props.mcpServer.enabled
 					? {
-							backgroundColor: '#22d3ee0f',
-							borderColor: '#22d3ee2e',
+							background: 'linear-gradient(135deg, #f6fdff 0%, #ffffff 56%, #f0fdfa 100%)',
+							borderColor: '#bae6fd',
+							boxShadow: '0 12px 32px rgba(14, 116, 144, 0.08)',
 						}
 					: {
-							backgroundColor: '#64748b14',
+							background: 'linear-gradient(135deg, #f8fafc 0%, #ffffff 100%)',
+							borderColor: '#e2e8f0',
 						},
 				body: {
-					height: 200,
+					height: 236,
 					overflow: 'hidden',
 					display: 'flex',
 					flexDirection: 'column',
@@ -203,21 +223,19 @@ const MCPServer = (props: IProps) => {
 			}}
 			extra={
 				props.mcpServer.enabled ? (
-					<Tag
-						variant="filled"
-						color="success"
+					<StatusTag
+						$tone="success"
 						icon={<CheckCircleOutlined />}
 					>
 						启用中
-					</Tag>
+					</StatusTag>
 				) : (
-					<Tag
-						variant="filled"
-						color="default"
+					<StatusTag
+						$tone="neutral"
 						icon={<StopOutlined />}
 					>
 						已停用
-					</Tag>
+					</StatusTag>
 				)
 			}
 		>
@@ -227,7 +245,7 @@ const MCPServer = (props: IProps) => {
 						type="secondary"
 						styles={{
 							root: {
-								maxHeight: 88,
+								maxHeight: 72,
 								overflow: 'auto',
 							},
 						}}
@@ -237,71 +255,57 @@ const MCPServer = (props: IProps) => {
 					</Typography.Paragraph>
 				}
 			/>
-			<Flex
-				vertical
-				gap={4}
-			>
-				<Flex
-					justify="start"
-					align="center"
-				>
-					<Flex flex="0 0 90px">
-						<LockOutlined style={{ marginRight: 4 }} />
-						鉴权方式
-					</Flex>
-					<Flex flex="1 1 auto">{getAuthTypeText(props.mcpServer.auth_type)}</Flex>
-				</Flex>
-				<Flex
-					justify="start"
-					align="center"
-				>
-					<Flex flex="0 0 90px">
-						<MediumOutlined style={{ marginRight: 4 }} />
-						传输方式
-					</Flex>
-					<Flex flex="1 1 auto">{getTransportText(props.mcpServer.transport)}</Flex>
-				</Flex>
-				<Flex
-					justify="start"
-					align="center"
-				>
-					<Flex flex="0 0 90px">
-						<ClockCircleOutlined style={{ marginRight: 4 }} />
-						安装时间
-					</Flex>
-					<Flex flex="1 1 auto">{dayjs(props.mcpServer.created_at).format('YYYY-MM-DD HH:mm:ss')}</Flex>
-				</Flex>
-				<Flex
-					justify="space-between"
-					align="center"
-				>
-					<Space size={8}>
-						{isOnline(props.mcpServer) ? (
-							<Tag
-								variant="filled"
-								color="success"
+			<div>
+				<ServerMetaGrid>
+					<ServerMetaItem>
+						<ServerMetaIcon>
+							<LockOutlined />
+						</ServerMetaIcon>
+						<ServerMetaContent>
+							<ServerMetaLabel>鉴权方式</ServerMetaLabel>
+							<ServerMetaValue title={authTypeText}>{authTypeText}</ServerMetaValue>
+						</ServerMetaContent>
+					</ServerMetaItem>
+					<ServerMetaItem>
+						<ServerMetaIcon>
+							<MediumOutlined />
+						</ServerMetaIcon>
+						<ServerMetaContent>
+							<ServerMetaLabel>传输方式</ServerMetaLabel>
+							<ServerMetaValue title={transportText}>{transportText}</ServerMetaValue>
+						</ServerMetaContent>
+					</ServerMetaItem>
+					<ServerMetaItem $wide>
+						<ServerMetaIcon>
+							<ClockCircleOutlined />
+						</ServerMetaIcon>
+						<ServerMetaContent>
+							<ServerMetaLabel>安装时间</ServerMetaLabel>
+							<ServerMetaValue title={createdAtText}>{createdAtText}</ServerMetaValue>
+						</ServerMetaContent>
+					</ServerMetaItem>
+				</ServerMetaGrid>
+				<ServerFooter>
+					<ServerStatusGroup>
+						{online ? (
+							<StatusTag
+								$tone="success"
 								icon={<CheckCircleOutlined />}
 							>
 								在线
-							</Tag>
+							</StatusTag>
 						) : (
-							<Tag
-								variant="filled"
-								color="default"
+							<StatusTag
+								$tone="warning"
 								icon={<ExclamationCircleOutlined />}
 							>
 								离线
-							</Tag>
+							</StatusTag>
 						)}
 						{props.mcpServer.is_built_in ? (
-							<Tag
-								color="#108ee9"
-								style={{ marginRight: 8 }}
-							>
-								官方
-							</Tag>
+							<StatusTag $tone="info">官方</StatusTag>
 						) : null}
-					</Space>
+					</ServerStatusGroup>
 					<Space size={8}>
 						{props.mcpServer?.is_built_in ? null : (
 							<Tooltip title="删除">
@@ -385,8 +389,8 @@ const MCPServer = (props: IProps) => {
 							}}
 						/>
 					</Space>
-				</Flex>
-			</Flex>
+				</ServerFooter>
+			</div>
 		</Card>
 	);
 };
