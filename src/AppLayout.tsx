@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import logo from '../public/logo.svg';
 import { UrlLogin } from './constant/redirect-url';
 import { UserContext } from './context/user';
+import { ThemeSwitch, useThemeSettings } from './theme-settings';
 
 const { Header } = Layout;
 
@@ -138,8 +139,17 @@ const UserArea = styled.div`
 	}
 `;
 
-const AppLayout: React.FC = () => {
+const HeaderActions = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 8px;
+`;
+
+const AppLayout = () => {
 	const { message } = App.useApp();
+	const { resolvedThemeMode } = useThemeSettings();
+
+	const watermarkColor = resolvedThemeMode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.06)';
 
 	// 获取用户详情
 	const { data: user, loading: userLoading } = useRequest(
@@ -188,7 +198,7 @@ const AppLayout: React.FC = () => {
 	return (
 		<Watermark
 			content={`微信机器人管理后台: ${user.display_name}`}
-			font={{ color: 'rgba(0, 0, 0, 0.06)' }}
+			font={{ color: watermarkColor }}
 		>
 			<Layout style={rootStyle}>
 				<Header style={headerStyle}>
@@ -219,22 +229,25 @@ const AppLayout: React.FC = () => {
 							</div>
 						</Nav>
 					</div>
-					<Dropdown
-						menu={{ items }}
-						placement="bottomRight"
-					>
-						<UserArea>
-							<Avatar
-								size={32}
-								gap={4}
-								src={user.avatar_url}
-								alt={user.display_name}
-								icon={<UserOutlined />}
-								style={{ backgroundColor: '#0f3460', flexShrink: 0 }}
-							/>
-							<span className="username">{user.display_name}</span>
-						</UserArea>
-					</Dropdown>
+					<HeaderActions>
+						<ThemeSwitch />
+						<Dropdown
+							menu={{ items }}
+							placement="bottomRight"
+						>
+							<UserArea>
+								<Avatar
+									size={32}
+									gap={4}
+									src={user.avatar_url}
+									alt={user.display_name}
+									icon={<UserOutlined />}
+									style={{ backgroundColor: '#0f3460', flexShrink: 0 }}
+								/>
+								<span className="username">{user.display_name}</span>
+							</UserArea>
+						</Dropdown>
+					</HeaderActions>
 				</Header>
 				<Layout>
 					<UserContext.Provider value={{ user: user, signOut }}>
@@ -248,4 +261,4 @@ const AppLayout: React.FC = () => {
 	);
 };
 
-export default AppLayout;
+export default React.memo(AppLayout);
