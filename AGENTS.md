@@ -1,4 +1,4 @@
-### 项目技术栈
+## 项目技术栈
 
 - React 19
 
@@ -6,7 +6,11 @@
 
 - typescript 5
 
-### React 组件风格约束
+## 启动服务
+
+如果需要启动服务的话，要保证 pnpm 的版本是 8.15.9，否则可能会导致兼容性问题，可以考虑借助 corepack 锁定版本
+
+## React 组件风格约束
 
 ```tsx
 import React from 'react';
@@ -51,7 +55,34 @@ export default React.memo(ComponentExample);
 
 ## antd 组件样式覆盖约束
 
-- 当前版本 antd6 支持语义化的 className 和 style，也支持主题变量。进行个性化样式定制的时候，尽量使用语义化的 className，而不是通过 css 权重强行覆盖，除非 antd 语义化满足不了。antd 官方的`Semantic DOM` 和 `Design Token`。
+- 需要修改 antd 的组件的样式的时候，先看能不能通过定制主题的方式去覆盖
+
+- 定制主题覆盖不了，再看能不能使用antd6 的语义话 classnames 或者 styles 去覆盖
+
+- 如果还是不满足才使用增加 css 权重的方式去覆盖 antd 组件的样式
+
+## 弹窗组件约束
+
+所有弹窗组件都按条件渲染，弹窗组件里面不要处理 open 切换、状态重置等逻辑
+
+比如:
+
+```tsx
+{
+	open && (
+		<Modal
+			robotId={props.robotId}
+			chatRoomId={chatRoom.wechat_id!}
+			chatRoomName={chatRoom.remark! || chatRoom.nickname! || chatRoom.alias! || chatRoom.wechat_id!}
+			chatRoomMemberId={memberSettingsState.chatRoomMemberId!}
+			chatRoomMemberName={memberSettingsState.chatRoomMemberName!}
+			open={open}
+			onRefresh={refresh}
+			onClose={onChatRoomMemberSettingsClose}
+		/>
+	);
+}
+```
 
 ## 其它约束
 

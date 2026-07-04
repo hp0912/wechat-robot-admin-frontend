@@ -7,6 +7,11 @@ const STATUS_TAG_COLORS = {
 		border: 'var(--ant-color-success-border)',
 		color: 'var(--ant-color-success-text)',
 	},
+	warning: {
+		background: 'var(--ant-color-warning-bg)',
+		border: 'var(--ant-color-warning-border)',
+		color: 'var(--ant-color-warning-text)',
+	},
 	info: {
 		background: 'var(--ant-color-info-bg)',
 		border: 'var(--ant-color-info-border)',
@@ -21,7 +26,7 @@ const STATUS_TAG_COLORS = {
 
 type StatusTone = keyof typeof STATUS_TAG_COLORS;
 
-export const SkillsToolbar = styled.div`
+export const MCPToolbar = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -39,7 +44,7 @@ export const SkillsToolbar = styled.div`
 	box-shadow: var(--ant-box-shadow-tertiary);
 `;
 
-export const SkillsToolbarInfo = styled.div`
+export const MCPToolbarInfo = styled.div`
 	min-width: 0;
 	display: flex;
 	align-items: center;
@@ -49,7 +54,7 @@ export const SkillsToolbarInfo = styled.div`
 	line-height: 20px;
 `;
 
-export const SkillsToolbarIcon = styled.span`
+export const MCPToolbarIcon = styled.span`
 	flex: 0 0 26px;
 	width: 26px;
 	height: 26px;
@@ -62,14 +67,14 @@ export const SkillsToolbarIcon = styled.span`
 	color: var(--ant-color-info);
 `;
 
-export const SkillsToolbarText = styled.span`
+export const MCPToolbarText = styled.span`
 	min-width: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 `;
 
-export const SkillsMarketLink = styled.a`
+export const MCPMarketLink = styled.a`
 	color: var(--ant-color-primary);
 	font-weight: 650;
 	text-decoration: none;
@@ -81,7 +86,7 @@ export const SkillsMarketLink = styled.a`
 	}
 `;
 
-export const SkillsToolbarButton = styled(Button)`
+export const MCPToolbarButton = styled(Button)`
 	&& {
 		flex: 0 0 auto;
 		border-radius: 7px;
@@ -105,14 +110,14 @@ export const CardsContainer = styled.div`
 	}
 `;
 
-export const SkillTitle = styled.div`
+export const ServerTitle = styled.div`
 	min-width: 0;
 	display: flex;
 	align-items: center;
 	gap: 10px;
 `;
 
-export const SkillName = styled.span`
+export const ServerName = styled.span`
 	min-width: 0;
 	overflow: hidden;
 	color: var(--ant-color-text-heading);
@@ -121,7 +126,7 @@ export const SkillName = styled.span`
 	white-space: nowrap;
 `;
 
-export const SkillMetaGrid = styled.div`
+export const ServerMetaGrid = styled.div`
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
 	gap: 8px;
@@ -132,7 +137,7 @@ export const SkillMetaGrid = styled.div`
 	}
 `;
 
-export const SkillMetaItem = styled.div`
+export const ServerMetaItem = styled.div<{ $wide?: boolean }>`
 	min-width: 0;
 	display: flex;
 	align-items: flex-start;
@@ -141,9 +146,10 @@ export const SkillMetaItem = styled.div`
 	border: 1px solid var(--ant-color-primary-border);
 	border-radius: 8px;
 	background: linear-gradient(180deg, var(--ant-color-bg-container) 0%, var(--ant-color-fill-content) 100%);
+	${props => (props.$wide ? 'grid-column: 1 / -1;' : '')}
 `;
 
-export const SkillMetaIcon = styled.span`
+export const ServerMetaIcon = styled.span`
 	flex: 0 0 22px;
 	width: 22px;
 	height: 22px;
@@ -156,20 +162,20 @@ export const SkillMetaIcon = styled.span`
 	color: var(--ant-color-primary);
 `;
 
-export const SkillMetaContent = styled.div`
+export const ServerMetaContent = styled.div`
 	min-width: 0;
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
 `;
 
-export const SkillMetaLabel = styled.span`
+export const ServerMetaLabel = styled.span`
 	color: var(--ant-color-text-secondary);
 	font-size: 12px;
 	line-height: 16px;
 `;
 
-export const SkillMetaValue = styled.span`
+export const ServerMetaValue = styled.span`
 	min-width: 0;
 	overflow: hidden;
 	color: var(--ant-color-text-heading);
@@ -180,25 +186,7 @@ export const SkillMetaValue = styled.span`
 	white-space: nowrap;
 `;
 
-export const SkillMetaLink = styled.a`
-	min-width: 0;
-	overflow: hidden;
-	color: var(--ant-color-primary);
-	font-size: 12px;
-	font-weight: 600;
-	line-height: 18px;
-	text-overflow: ellipsis;
-	text-decoration: none;
-	white-space: nowrap;
-
-	&:hover {
-		color: var(--ant-color-primary-hover);
-		text-decoration: underline;
-		text-underline-offset: 3px;
-	}
-`;
-
-export const SkillFooter = styled.div`
+export const ServerFooter = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -207,7 +195,7 @@ export const SkillFooter = styled.div`
 	border-top: 1px solid var(--ant-color-border-secondary);
 `;
 
-export const SkillStatusGroup = styled.div`
+export const ServerStatusGroup = styled.div`
 	min-width: 0;
 	display: flex;
 	flex-wrap: wrap;
@@ -215,7 +203,7 @@ export const SkillStatusGroup = styled.div`
 	gap: 6px;
 `;
 
-export const SkillStatusTag = styled(Tag)<{ $tone: StatusTone }>`
+export const StatusTag = styled(Tag)<{ $tone: StatusTone }>`
 	&& {
 		height: 22px;
 		display: inline-flex;
