@@ -232,13 +232,13 @@ const RobotDetail = (props: IProps) => {
 					<Col flex="0 0 32px">
 						<Avatar
 							src={data.avatar}
-							style={{ boxShadow: '0 0 0 2px rgba(255, 255, 255, 0.92)' }}
+							style={{ boxShadow: '0 0 0 2px var(--app-color-surface)' }}
 						/>
 					</Col>
 					<Col
 						flex="0 1 auto"
 						className="ellipsis"
-						style={{ padding: '0 8px', fontWeight: 600, color: '#0958d9' }}
+						style={{ padding: '0 8px', fontWeight: 600, color: 'var(--app-color-brand)' }}
 					>
 						{data.nickname || data.wechat_id}
 					</Col>
@@ -278,8 +278,8 @@ const RobotDetail = (props: IProps) => {
 				header: {
 					paddingTop: 8,
 					paddingBottom: 8,
-					background: '#ffffff',
-					borderBottom: '1px solid rgba(15, 23, 42, 0.08)',
+					background: 'var(--app-color-surface)',
+					borderBottom: '1px solid var(--app-color-border-soft)',
 				},
 				body: { padding: 0 },
 			}}
@@ -288,26 +288,26 @@ const RobotDetail = (props: IProps) => {
 			<ConfigProvider
 				theme={{
 					token: {
-						colorBorderSecondary: 'rgba(15, 23, 42, 0.08)',
+						colorBorderSecondary: 'var(--app-color-border-soft)',
 					},
 					components: {
 						Tabs: {
-							itemColor: 'rgba(0, 42, 76, 0.62)',
-							itemHoverColor: '#0958d9',
-							itemSelectedColor: '#0958d9',
-							itemActiveColor: '#0958d9',
-							inkBarColor: '#22d3ee',
+							itemColor: 'var(--app-color-text-muted)',
+							itemHoverColor: 'var(--app-color-brand)',
+							itemSelectedColor: 'var(--app-color-brand)',
+							itemActiveColor: 'var(--app-color-brand)',
+							inkBarColor: 'var(--app-color-brand)',
 						},
 						Card: {
-							boxShadowTertiary: '0 1px 2px rgba(15, 23, 42, 0.04), 0 6px 16px rgba(22, 119, 255, 0.04)',
-							colorBorderSecondary: 'rgba(15, 23, 42, 0.08)',
+							boxShadowTertiary: 'var(--app-shadow-surface-soft)',
+							colorBorderSecondary: 'var(--app-color-border-soft)',
 						},
 						List: {
-							colorBorder: 'rgba(15, 23, 42, 0.08)',
+							colorBorder: 'var(--app-color-border-soft)',
 						},
 						Segmented: {
-							itemSelectedBg: '#1677ff',
-							itemSelectedColor: '#ffffff',
+							itemSelectedBg: 'var(--app-color-brand)',
+							itemSelectedColor: 'var(--app-color-surface)',
 						},
 					},
 				}}
@@ -357,13 +357,14 @@ const RobotDetail = (props: IProps) => {
 										<Avatar
 											src={data.avatar}
 											size={44}
-											style={{ boxShadow: '0 0 0 2px rgba(255, 255, 255, 0.92)' }}
+											style={{ boxShadow: '0 0 0 2px var(--app-color-surface)' }}
 										/>
 										<div className="base-info-profile">
 											<div className="ellipsis base-info-name">{data.nickname || data.wechat_id || '未命名'}</div>
 											<div style={{ marginTop: 2 }}>
 												{data.status === 'online' ? (
 													<Tag
+														className="base-info-status-tag status-online"
 														color={token.colorSuccess}
 														style={{ margin: 0 }}
 													>
@@ -371,6 +372,7 @@ const RobotDetail = (props: IProps) => {
 													</Tag>
 												) : (
 													<Tag
+														className="base-info-status-tag status-offline"
 														color="default"
 														style={{ margin: 0 }}
 													>
