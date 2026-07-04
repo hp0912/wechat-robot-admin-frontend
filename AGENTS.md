@@ -51,7 +51,11 @@ export default React.memo(ComponentExample);
 
 ## antd 组件样式覆盖约束
 
-- 当前版本 antd6 支持语义化的 className 和 style，也支持主题变量。进行个性化样式定制的时候，尽量使用语义化的 className，而不是通过 css 权重强行覆盖，除非 antd 语义化满足不了。antd 官方的`Semantic DOM` 和 `Design Token`。
+- 需要修改 antd 的组件的样式的时候，先看能不能通过定制主题的方式去覆盖
+
+- 定制主题覆盖不了，再看能不能使用antd6 的语义话 classnames 或者 styles 去覆盖
+
+- 如果还是不满足才使用增加 css 权重的方式去覆盖 antd 组件的样式
 
 ## 其它约束
 
