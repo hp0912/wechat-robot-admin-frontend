@@ -241,13 +241,19 @@ const Skill = (props: IProps) => {
 						flex="1 1 auto"
 						className="ellipsis"
 					>
-						<a
-							href={props.skill.source?.repo_url}
-							target="_blank"
-							rel="noreferrer"
-						>
-							{props.skill.source?.repo_url}
-						</a>
+						{props.skill.source?.repo_url ? (
+							<a
+								href={props.skill.source?.repo_url}
+								target="_blank"
+								rel="noreferrer"
+							>
+								{props.skill.source?.repo_url}
+							</a>
+						) : props.skill.path ? (
+							'本地'
+						) : (
+							'-'
+						)}
 					</Flex>
 				</Flex>
 				<Flex

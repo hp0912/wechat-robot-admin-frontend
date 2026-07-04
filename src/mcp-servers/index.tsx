@@ -1,11 +1,10 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { useMemoizedFn, useRequest, useSetState, useSize } from 'ahooks';
-import { Alert, App, Button, Empty, List, Spin, Tag } from 'antd';
-import VirtualList from 'rc-virtual-list';
-import React, { useRef } from 'react';
-import type { DtoMCPServer as MCPServer } from '@/api/wechat-robot/wechat-robot';
-import MCPServerActions from './MCPServerActions';
+import { AppstoreAddOutlined, PlusOutlined } from '@ant-design/icons';
+import { useMemoizedFn, useRequest, useSetState } from 'ahooks';
+import { Alert, App, Button, Empty, Flex, Pagination, Space, Spin } from 'antd';
+import React, { useState } from 'react';
+import MCPServer from './MCPServer';
 import MCPServerEditor from './MCPServerEditor';
+import { CardsContainer } from './styled';
 
 interface IProps {
 	robotId: number;
@@ -15,16 +14,18 @@ const MCPServers = (props: IProps) => {
 	const { message } = App.useApp();
 
 	const [mcpServerState, setMCPServerState] = useSetState<{ open: boolean; id?: number }>({ open: false });
+	const [pageIndex, setPageIndex] = useState(1);
 
-	const containerRef = useRef<HTMLDivElement>(null);
-	const containerSize = useSize(containerRef);
-
-	const { data, loading, refresh } = useRequest(
+	const {
+		data = [],
+		loading,
+		refresh,
+	} = useRequest(
 		async () => {
 			const resp = await window.wechatRobotClient.mcpServer.listList({
 				id: props.robotId,
 			});
-			return resp.data?.data;
+			return resp.data?.data || [];
 		},
 		{
 			manual: false,
@@ -42,44 +43,28 @@ const MCPServers = (props: IProps) => {
 		setMCPServerState({ open: false, id: undefined });
 	});
 
-	const isOnline = (mcpServer: MCPServer) => {
-		if (!mcpServer.enabled) {
-			return false;
-		}
-		return !mcpServer.last_error;
-	};
-
-	const getTransportText = (type: MCPServer['transport']) => {
-		switch (type) {
-			case 'stdio':
-				return '命令行模式（标准输入输出）';
-			case 'stream':
-				return '流模式';
-			default:
-				return type;
-		}
-	};
-
-	const getAuthTypeText = (type: MCPServer['auth_type']) => {
-		switch (type) {
-			case 'none':
-				return '无鉴权';
-			case 'bearer':
-				return 'Bearer Token 认证';
-			case 'basic':
-				return 'Basic 认证';
-			case 'apikey':
-				return 'API Key 认证';
-			default:
-				return type;
-		}
-	};
-
 	return (
 		<Spin spinning={loading}>
-			<div
-				style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 16, paddingRight: 8 }}
+			<Flex
+				justify="space-between"
+				align="center"
+				style={{ marginBottom: 16, padding: 8, border: '1px solid #22d3ee2e', borderRadius: 6 }}
 			>
+				<Space style={{ color: '#0958d9' }}>
+					<AppstoreAddOutlined />
+					<span>
+						前往
+						<a
+							style={{ color: '#E4DA11' }}
+							href="https://github.com/hp0912/wechat-robot-mcp-server"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							MCP 市场
+						</a>
+						探索更多工具...
+					</span>
+				</Space>
 				<Button
 					color="primary"
 					variant="filled"
@@ -90,65 +75,39 @@ const MCPServers = (props: IProps) => {
 				>
 					添加 MCP 服务
 				</Button>
-			</div>
-			<div
-				style={{ height: 'calc(100vh - 188px)', position: 'relative', overflow: 'auto' }}
-				ref={containerRef}
-			>
+			</Flex>
+			<div>
 				{!data?.length ? (
 					<Empty />
 				) : (
-					<List bordered>
-						<VirtualList
-							data={data}
-							height={containerSize?.height ? containerSize.height - 2 : 0}
-							itemHeight={47}
-							itemKey="id"
-						>
-							{item => (
-								<List.Item key={item.id}>
-									<List.Item.Meta
-										title={
-											<>
-												{isOnline(item) ? (
-													<Tag
-														color="#87d068"
-														style={{ marginRight: 8 }}
-													>
-														在线
-													</Tag>
-												) : null}
-												{item.is_built_in ? (
-													<Tag
-														color="#108ee9"
-														style={{ marginRight: 8 }}
-													>
-														官方
-													</Tag>
-												) : null}
-												<span>
-													{item.name}{' '}
-													<span style={{ fontSize: 12, color: 'gray' }}>
-														({getTransportText(item.transport)}, {getAuthTypeText(item.auth_type)})
-													</span>
-												</span>
-											</>
-										}
-										description={item.description}
-									/>
-									<div>
-										<MCPServerActions
-											robotId={props.robotId}
-											mcpServer={item}
-											onRefresh={refresh}
-											onEdit={onEdit}
-										/>
-									</div>
-								</List.Item>
-							)}
-						</VirtualList>
-					</List>
+					<CardsContainer>
+						{data.slice((pageIndex - 1) * 10, pageIndex * 10).map(item => {
+							return (
+								<MCPServer
+									key={item.id}
+									robotId={props.robotId}
+									mcpServer={item}
+									onEdit={onEdit}
+									onRefresh={refresh}
+								/>
+							);
+						})}
+					</CardsContainer>
 				)}
+				<div className="pagination">
+					<Pagination
+						align="end"
+						size="small"
+						current={pageIndex}
+						pageSize={10}
+						total={data.length}
+						showSizeChanger={false}
+						showTotal={total => `共 ${total} 条`}
+						onChange={page => {
+							setPageIndex(page);
+						}}
+					/>
+				</div>
 				{mcpServerState.open && (
 					<MCPServerEditor
 						open={mcpServerState.open}
