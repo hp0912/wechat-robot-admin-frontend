@@ -192,8 +192,8 @@ const MCPServer = (props: IProps) => {
 				<ServerTitle>
 					<Avatar
 						style={{
-							backgroundColor: props.mcpServer.enabled ? '#0f7490' : token.colorTextDisabled,
-							boxShadow: props.mcpServer.enabled ? '0 6px 16px rgba(15, 116, 144, 0.18)' : 'none',
+							backgroundColor: props.mcpServer.enabled ? 'var(--app-color-brand)' : token.colorTextDisabled,
+							boxShadow: props.mcpServer.enabled ? 'var(--app-shadow-icon-accent)' : 'none',
 						}}
 						shape="square"
 						icon={<MCPFilled />}
@@ -205,13 +205,14 @@ const MCPServer = (props: IProps) => {
 			styles={{
 				root: props.mcpServer.enabled
 					? {
-							background: 'linear-gradient(135deg, #f6fdff 0%, #ffffff 56%, #f0fdfa 100%)',
-							borderColor: '#bae6fd',
-							boxShadow: '0 12px 32px rgba(14, 116, 144, 0.08)',
+							background:
+								'linear-gradient(135deg, var(--app-color-surface-active) 0%, var(--app-color-surface) 56%, var(--app-color-surface-tint) 100%)',
+							borderColor: 'var(--app-color-border-accent)',
+							boxShadow: 'var(--app-shadow-surface-accent)',
 						}
 					: {
-							background: 'linear-gradient(135deg, #f8fafc 0%, #ffffff 100%)',
-							borderColor: '#e2e8f0',
+							background: 'linear-gradient(135deg, var(--app-color-surface-muted) 0%, var(--app-color-surface) 100%)',
+							borderColor: 'var(--app-color-border-subtle)',
 						},
 				body: {
 					height: 236,

@@ -1,7 +1,6 @@
 import {
 	CheckCircleOutlined,
 	ClockCircleOutlined,
-	CodeOutlined,
 	DeleteOutlined,
 	GlobalOutlined,
 	OpenAIOutlined,
@@ -9,11 +8,26 @@ import {
 	StopOutlined,
 } from '@ant-design/icons';
 import { useBoolean, useRequest } from 'ahooks';
-import { App, Avatar, Button, Card, Flex, Space, Switch, Tag, theme, Tooltip, Typography } from 'antd';
+import { App, Avatar, Button, Card, Space, Switch, theme, Tooltip, Typography } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import type { DtoSkill } from '@/api/wechat-robot/wechat-robot';
+import SkillsFilled from '@/icons/SkillsFilled';
 import SkillEnvs from './SkillEnvs';
+import {
+	SkillFooter,
+	SkillMetaContent,
+	SkillMetaGrid,
+	SkillMetaIcon,
+	SkillMetaItem,
+	SkillMetaLabel,
+	SkillMetaLink,
+	SkillMetaValue,
+	SkillName,
+	SkillStatusGroup,
+	SkillStatusTag,
+	SkillTitle,
+} from './styled';
 
 interface IProps {
 	robotId: number;
@@ -156,33 +170,41 @@ const Skill = (props: IProps) => {
 		},
 	);
 
+	const sourceText = props.skill.source?.repo_url || (props.skill.path ? '本地安装' : '-');
+	const sourceTypeText = props.skill.source?.type === 'git' ? 'Git' : props.skill.path ? '本地' : '未知';
+	const installedAtText = props.skill.installed_at ? dayjs(props.skill.installed_at).format('YYYY-MM-DD HH:mm:ss') : '-';
+	const envCount = props.skill.env_vars?.length || 0;
+
 	return (
 		<Card
 			title={
-				<>
+				<SkillTitle>
 					<Avatar
 						style={{
-							marginRight: 8,
-							backgroundColor: props.skill.enabled ? '#08979c' : token.colorTextDisabled,
+							backgroundColor: props.skill.enabled ? 'var(--app-color-brand)' : token.colorTextDisabled,
+							boxShadow: props.skill.enabled ? 'var(--app-shadow-icon-accent)' : 'none',
 						}}
 						shape="square"
-						icon={<CodeOutlined />}
+						icon={<SkillsFilled />}
 					/>
-					{props.skill.metadata?.name}
-				</>
+					<SkillName>{props.skill.metadata?.name}</SkillName>
+				</SkillTitle>
 			}
 			size="medium"
 			styles={{
 				root: props.skill.enabled
 					? {
-							backgroundColor: '#22d3ee0f',
-							borderColor: '#22d3ee2e',
+							background:
+								'linear-gradient(135deg, var(--app-color-surface-active) 0%, var(--app-color-surface) 56%, var(--app-color-surface-tint) 100%)',
+							borderColor: 'var(--app-color-border-accent)',
+							boxShadow: 'var(--app-shadow-surface-accent)',
 						}
 					: {
-							backgroundColor: '#64748b14',
+							background: 'linear-gradient(135deg, var(--app-color-surface-muted) 0%, var(--app-color-surface) 100%)',
+							borderColor: 'var(--app-color-border-subtle)',
 						},
 				body: {
-					height: 200,
+					height: 236,
 					overflow: 'hidden',
 					display: 'flex',
 					flexDirection: 'column',
@@ -191,21 +213,19 @@ const Skill = (props: IProps) => {
 			}}
 			extra={
 				props.skill.enabled ? (
-					<Tag
-						variant="filled"
-						color="success"
+					<SkillStatusTag
+						$tone="success"
 						icon={<CheckCircleOutlined />}
 					>
 						启用中
-					</Tag>
+					</SkillStatusTag>
 				) : (
-					<Tag
-						variant="filled"
-						color="default"
+					<SkillStatusTag
+						$tone="neutral"
 						icon={<StopOutlined />}
 					>
 						已停用
-					</Tag>
+					</SkillStatusTag>
 				)
 			}
 		>
@@ -215,7 +235,7 @@ const Skill = (props: IProps) => {
 						type="secondary"
 						styles={{
 							root: {
-								maxHeight: 88,
+								maxHeight: 72,
 								overflow: 'auto',
 							},
 						}}
@@ -225,51 +245,43 @@ const Skill = (props: IProps) => {
 					</Typography.Paragraph>
 				}
 			/>
-			<Flex
-				vertical
-				gap={4}
-			>
-				<Flex
-					justify="start"
-					align="center"
-				>
-					<Flex flex="0 0 90px">
-						<OpenAIOutlined style={{ marginRight: 4 }} />
-						来源
-					</Flex>
-					<Flex
-						flex="1 1 auto"
-						className="ellipsis"
-					>
-						{props.skill.source?.repo_url ? (
-							<a
-								href={props.skill.source?.repo_url}
-								target="_blank"
-								rel="noreferrer"
-							>
-								{props.skill.source?.repo_url}
-							</a>
-						) : props.skill.path ? (
-							'本地'
-						) : (
-							'-'
-						)}
-					</Flex>
-				</Flex>
-				<Flex
-					justify="start"
-					align="center"
-				>
-					<Flex flex="0 0 90px">
-						<ClockCircleOutlined style={{ marginRight: 4 }} />
-						安装时间
-					</Flex>
-					<Flex flex="1 1 auto">{dayjs(props.skill.installed_at).format('YYYY-MM-DD HH:mm:ss')}</Flex>
-				</Flex>
-				<Flex
-					justify="end"
-					align="center"
-				>
+			<div>
+				<SkillMetaGrid>
+					<SkillMetaItem>
+						<SkillMetaIcon>
+							<OpenAIOutlined />
+						</SkillMetaIcon>
+						<SkillMetaContent>
+							<SkillMetaLabel>来源</SkillMetaLabel>
+							{props.skill.source?.repo_url ? (
+								<SkillMetaLink
+									href={props.skill.source.repo_url}
+									target="_blank"
+									rel="noreferrer"
+									title={sourceText}
+								>
+									{sourceText}
+								</SkillMetaLink>
+							) : (
+								<SkillMetaValue title={sourceText}>{sourceText}</SkillMetaValue>
+							)}
+						</SkillMetaContent>
+					</SkillMetaItem>
+					<SkillMetaItem>
+						<SkillMetaIcon>
+							<ClockCircleOutlined />
+						</SkillMetaIcon>
+						<SkillMetaContent>
+							<SkillMetaLabel>安装时间</SkillMetaLabel>
+							<SkillMetaValue title={installedAtText}>{installedAtText}</SkillMetaValue>
+						</SkillMetaContent>
+					</SkillMetaItem>
+				</SkillMetaGrid>
+				<SkillFooter>
+					<SkillStatusGroup>
+						<SkillStatusTag $tone={props.skill.source?.type === 'git' ? 'info' : 'neutral'}>{sourceTypeText}</SkillStatusTag>
+						{envCount > 0 ? <SkillStatusTag $tone="info">环境变量 {envCount}</SkillStatusTag> : null}
+					</SkillStatusGroup>
 					<Space size={8}>
 						{!props.skill?.enabled && (
 							<Tooltip title="卸载">
@@ -361,8 +373,8 @@ const Skill = (props: IProps) => {
 							}}
 						/>
 					</Space>
-				</Flex>
-			</Flex>
+				</SkillFooter>
+			</div>
 			{onSkillEnvsOpen && (
 				<SkillEnvs
 					open={onSkillEnvsOpen}

@@ -3,24 +3,24 @@ import styled from 'styled-components';
 
 const STATUS_TAG_COLORS = {
 	success: {
-		background: '#ecfdf5',
-		border: '#bbf7d0',
-		color: '#047857',
+		background: 'var(--app-color-status-success-bg)',
+		border: 'var(--app-color-status-success-border)',
+		color: 'var(--app-color-status-success-text)',
 	},
 	warning: {
-		background: '#fff7ed',
-		border: '#fed7aa',
-		color: '#b45309',
+		background: 'var(--app-color-status-warning-bg)',
+		border: 'var(--app-color-status-warning-border)',
+		color: 'var(--app-color-status-warning-text)',
 	},
 	info: {
-		background: '#eff6ff',
-		border: '#bfdbfe',
-		color: '#1d4ed8',
+		background: 'var(--app-color-status-info-bg)',
+		border: 'var(--app-color-status-info-border)',
+		color: 'var(--app-color-status-info-text)',
 	},
 	neutral: {
-		background: '#f8fafc',
-		border: '#e2e8f0',
-		color: '#475569',
+		background: 'var(--app-color-status-neutral-bg)',
+		border: 'var(--app-color-status-neutral-border)',
+		color: 'var(--app-color-status-neutral-text)',
 	},
 };
 
@@ -33,10 +33,15 @@ export const MCPToolbar = styled.div`
 	gap: 12px;
 	margin-bottom: 16px;
 	padding: 10px 12px;
-	border: 1px solid #dbeafe;
+	border: 1px solid var(--app-color-border-primary-soft);
 	border-radius: 8px;
-	background: linear-gradient(135deg, #f8fbff 0%, #ffffff 58%, #f0fdfa 100%);
-	box-shadow: 0 8px 22px rgba(14, 116, 144, 0.05);
+	background: linear-gradient(
+		135deg,
+		var(--app-color-surface-soft) 0%,
+		var(--app-color-surface) 58%,
+		var(--app-color-surface-tint) 100%
+	);
+	box-shadow: var(--app-shadow-surface-soft);
 `;
 
 export const MCPToolbarInfo = styled.div`
@@ -44,7 +49,7 @@ export const MCPToolbarInfo = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	color: #334155;
+	color: var(--app-color-text-secondary);
 	font-size: 13px;
 	line-height: 20px;
 `;
@@ -56,10 +61,10 @@ export const MCPToolbarIcon = styled.span`
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	border: 1px solid #bfdbfe;
+	border: 1px solid var(--app-color-border-primary);
 	border-radius: 7px;
-	background: #eff6ff;
-	color: #1d4ed8;
+	background: var(--app-color-surface-primary-soft);
+	color: var(--app-color-primary);
 `;
 
 export const MCPToolbarText = styled.span`
@@ -70,12 +75,12 @@ export const MCPToolbarText = styled.span`
 `;
 
 export const MCPMarketLink = styled.a`
-	color: #0f7490;
+	color: var(--app-color-brand);
 	font-weight: 650;
 	text-decoration: none;
 
 	&:hover {
-		color: #0e5f76;
+		color: var(--app-color-brand-hover);
 		text-decoration: underline;
 		text-underline-offset: 3px;
 	}
@@ -85,7 +90,7 @@ export const MCPToolbarButton = styled(Button)`
 	&& {
 		flex: 0 0 auto;
 		border-radius: 7px;
-		box-shadow: 0 6px 14px rgba(22, 119, 255, 0.14);
+		box-shadow: var(--app-shadow-action-primary);
 	}
 `;
 
@@ -115,7 +120,7 @@ export const ServerTitle = styled.div`
 export const ServerName = styled.span`
 	min-width: 0;
 	overflow: hidden;
-	color: #0f172a;
+	color: var(--app-color-text-primary);
 	font-weight: 650;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -138,9 +143,9 @@ export const ServerMetaItem = styled.div<{ $wide?: boolean }>`
 	align-items: flex-start;
 	gap: 8px;
 	padding: 8px 10px;
-	border: 1px solid #dbeafe;
+	border: 1px solid var(--app-color-border-primary-soft);
 	border-radius: 8px;
-	background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+	background: linear-gradient(180deg, var(--app-color-surface) 0%, var(--app-color-surface-soft) 100%);
 	${props => (props.$wide ? 'grid-column: 1 / -1;' : '')}
 `;
 
@@ -153,8 +158,8 @@ export const ServerMetaIcon = styled.span`
 	justify-content: center;
 	margin-top: 1px;
 	border-radius: 6px;
-	background: #eef7ff;
-	color: #0f7490;
+	background: var(--app-color-surface-brand-soft);
+	color: var(--app-color-brand);
 `;
 
 export const ServerMetaContent = styled.div`
@@ -165,7 +170,7 @@ export const ServerMetaContent = styled.div`
 `;
 
 export const ServerMetaLabel = styled.span`
-	color: #64748b;
+	color: var(--app-color-text-muted);
 	font-size: 12px;
 	line-height: 16px;
 `;
@@ -173,7 +178,7 @@ export const ServerMetaLabel = styled.span`
 export const ServerMetaValue = styled.span`
 	min-width: 0;
 	overflow: hidden;
-	color: #0f172a;
+	color: var(--app-color-text-primary);
 	font-size: 12px;
 	font-weight: 600;
 	line-height: 18px;
@@ -187,7 +192,7 @@ export const ServerFooter = styled.div`
 	justify-content: space-between;
 	gap: 12px;
 	padding-top: 10px;
-	border-top: 1px solid #e5eefc;
+	border-top: 1px solid var(--app-color-border-soft);
 `;
 
 export const ServerStatusGroup = styled.div`

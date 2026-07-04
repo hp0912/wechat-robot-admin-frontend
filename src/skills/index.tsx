@@ -1,11 +1,19 @@
 import { AppstoreAddOutlined, PlusOutlined } from '@ant-design/icons';
 import { useBoolean, useRequest } from 'ahooks';
-import { App, Button, Empty, Flex, Pagination, Space, Spin } from 'antd';
+import { App, Empty, Pagination, Spin } from 'antd';
 import React, { useState } from 'react';
 import type * as Api from '@/api/wechat-robot/wechat-robot';
 import InstallSkill from './InstallSkill';
 import Skill from './Skill';
-import { CardsContainer } from './styled';
+import {
+	CardsContainer,
+	SkillsMarketLink,
+	SkillsToolbar,
+	SkillsToolbarButton,
+	SkillsToolbarIcon,
+	SkillsToolbarInfo,
+	SkillsToolbarText,
+} from './styled';
 
 interface IProps {
 	robotId: number;
@@ -39,35 +47,32 @@ const Skills = (props: IProps) => {
 
 	return (
 		<Spin spinning={loading}>
-			<Flex
-				justify="space-between"
-				align="center"
-				style={{ marginBottom: 16, padding: 8, border: '1px solid #22d3ee2e', borderRadius: 6 }}
-			>
-				<Space style={{ color: '#0958d9' }}>
-					<AppstoreAddOutlined />
-					<span>
-						前往
-						<a
-							style={{ color: '#E4DA11' }}
+			<SkillsToolbar>
+				<SkillsToolbarInfo>
+					<SkillsToolbarIcon>
+						<AppstoreAddOutlined />
+					</SkillsToolbarIcon>
+					<SkillsToolbarText>
+						前往{' '}
+						<SkillsMarketLink
 							href="https://git.houhoukang.com/houhou/wechat-robot-skills"
 							target="_blank"
 							rel="noopener noreferrer"
 						>
 							技能市场
-						</a>
-						探索更多技能...
-					</span>
-				</Space>
-				<Button
+						</SkillsMarketLink>{' '}
+						探索更多技能
+					</SkillsToolbarText>
+				</SkillsToolbarInfo>
+				<SkillsToolbarButton
 					color="primary"
 					variant="filled"
 					icon={<PlusOutlined />}
 					onClick={setInstallOpen.setTrue}
 				>
 					安装技能
-				</Button>
-			</Flex>
+				</SkillsToolbarButton>
+			</SkillsToolbar>
 			<div>
 				{!data.length ? (
 					<Empty
