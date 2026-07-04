@@ -21,6 +21,9 @@ ReactDOM.createRoot(root).render(
 			token: {
 				colorText: '#3e4659',
 			},
+			components: {
+				//
+			},
 		}}
 	>
 		<AntdApp>
