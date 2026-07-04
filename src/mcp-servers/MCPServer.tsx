@@ -1,7 +1,6 @@
 import {
 	CheckCircleOutlined,
 	ClockCircleOutlined,
-	CodeOutlined,
 	DeleteOutlined,
 	EditOutlined,
 	ExclamationCircleOutlined,
@@ -15,6 +14,7 @@ import { App, Avatar, Button, Card, Space, Switch, theme, Tooltip, Typography } 
 import dayjs from 'dayjs';
 import React from 'react';
 import type { DtoMCPServer } from '@/api/wechat-robot/wechat-robot';
+import MCPFilled from '@/icons/MCPFilled';
 import {
 	ServerFooter,
 	ServerMetaContent,
@@ -196,7 +196,7 @@ const MCPServer = (props: IProps) => {
 							boxShadow: props.mcpServer.enabled ? '0 6px 16px rgba(15, 116, 144, 0.18)' : 'none',
 						}}
 						shape="square"
-						icon={<CodeOutlined />}
+						icon={<MCPFilled />}
 					/>
 					<ServerName>{props.mcpServer.name}</ServerName>
 				</ServerTitle>
@@ -302,9 +302,7 @@ const MCPServer = (props: IProps) => {
 								离线
 							</StatusTag>
 						)}
-						{props.mcpServer.is_built_in ? (
-							<StatusTag $tone="info">官方</StatusTag>
-						) : null}
+						{props.mcpServer.is_built_in ? <StatusTag $tone="info">官方</StatusTag> : null}
 					</ServerStatusGroup>
 					<Space size={8}>
 						{props.mcpServer?.is_built_in ? null : (
