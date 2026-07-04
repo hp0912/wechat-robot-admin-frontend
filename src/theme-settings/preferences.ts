@@ -2,7 +2,16 @@ import type { SizeType } from 'antd/es/config-provider/SizeContext';
 
 export type ThemeMode = 'system' | 'light' | 'dark';
 export type ResolvedThemeMode = 'light' | 'dark';
-export type ThemeColorPreset = 'default' | 'anthropic' | 'midnight' | 'rose' | 'lake' | 'sunset' | 'forest' | 'ocean' | 'wisteria';
+export type ThemeColorPreset =
+	| 'default'
+	| 'anthropic'
+	| 'midnight'
+	| 'rose'
+	| 'lake'
+	| 'sunset'
+	| 'forest'
+	| 'ocean'
+	| 'wisteria';
 export type ThemeFontFamily = 'auto' | 'sans' | 'serif';
 export type ThemeRadius = 'auto' | '0' | '0.3' | '0.5' | '0.75' | '1.0';
 export type ThemeDensity = 'compact' | 'default' | 'spacious';
@@ -15,7 +24,7 @@ export interface ThemePreferences {
 	density: ThemeDensity;
 }
 
-export const themeStorageKey = 'wechat-robot-admin-theme-preferences';
+export const themeStorageKey = 'theme-preferences';
 
 export const defaultThemePreferences: ThemePreferences = {
 	themeMode: 'system',
@@ -26,7 +35,17 @@ export const defaultThemePreferences: ThemePreferences = {
 };
 
 export const themeModes: ThemeMode[] = ['system', 'light', 'dark'];
-export const colorPresets: ThemeColorPreset[] = ['default', 'anthropic', 'midnight', 'rose', 'lake', 'sunset', 'forest', 'ocean', 'wisteria'];
+export const colorPresets: ThemeColorPreset[] = [
+	'default',
+	'anthropic',
+	'midnight',
+	'rose',
+	'lake',
+	'sunset',
+	'forest',
+	'ocean',
+	'wisteria',
+];
 export const fontFamilies: ThemeFontFamily[] = ['auto', 'sans', 'serif'];
 export const radiusOptions: ThemeRadius[] = ['auto', '0', '0.3', '0.5', '0.75', '1.0'];
 export const densityOptions: ThemeDensity[] = ['compact', 'default', 'spacious'];
