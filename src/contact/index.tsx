@@ -13,7 +13,6 @@ import {
 	Avatar,
 	Button,
 	Col,
-	ConfigProvider,
 	Dropdown,
 	Flex,
 	Input,
@@ -231,32 +230,19 @@ const Contact = (props: IProps) => {
 						/>
 					</Col>
 					<Col flex="0 0 260px">
-						<ConfigProvider
-							theme={{
-								components: {
-									Radio: {
-										buttonSolidCheckedBg: '#1677ff',
-										buttonSolidCheckedHoverBg: '#0958d9',
-										colorPrimary: '#1677ff',
-										colorPrimaryHover: '#22d3ee',
-									},
-								},
+						<Radio.Group
+							optionType="button"
+							buttonStyle="solid"
+							value={search.type}
+							onChange={ev => {
+								setSearch({ type: ev.target.value, pageIndex: 1 });
 							}}
 						>
-							<Radio.Group
-								optionType="button"
-								buttonStyle="solid"
-								value={search.type}
-								onChange={ev => {
-									setSearch({ type: ev.target.value, pageIndex: 1 });
-								}}
-							>
-								<Radio.Button value="chat_room">群聊</Radio.Button>
-								<Radio.Button value="friend">朋友</Radio.Button>
-								<Radio.Button value="official_account">公众号</Radio.Button>
-								<Radio.Button value="all">全部</Radio.Button>
-							</Radio.Group>
-						</ConfigProvider>
+							<Radio.Button value="chat_room">群聊</Radio.Button>
+							<Radio.Button value="friend">朋友</Radio.Button>
+							<Radio.Button value="official_account">公众号</Radio.Button>
+							<Radio.Button value="all">全部</Radio.Button>
+						</Radio.Group>
 					</Col>
 				</Row>
 				<Space>

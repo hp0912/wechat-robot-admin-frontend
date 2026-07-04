@@ -192,7 +192,7 @@ const MCPServer = (props: IProps) => {
 				<ServerTitle>
 					<Avatar
 						style={{
-							backgroundColor: props.mcpServer.enabled ? 'var(--app-color-brand)' : token.colorTextDisabled,
+							backgroundColor: props.mcpServer.enabled ? 'var(--ant-color-primary)' : token.colorTextDisabled,
 							boxShadow: props.mcpServer.enabled ? 'var(--app-shadow-icon-accent)' : 'none',
 						}}
 						shape="square"
@@ -206,13 +206,13 @@ const MCPServer = (props: IProps) => {
 				root: props.mcpServer.enabled
 					? {
 							background:
-								'linear-gradient(135deg, var(--app-color-surface-active) 0%, var(--app-color-surface) 56%, var(--app-color-surface-tint) 100%)',
-							borderColor: 'var(--app-color-border-accent)',
-							boxShadow: 'var(--app-shadow-surface-accent)',
+								'linear-gradient(135deg, var(--ant-color-fill-content-hover) 0%, var(--ant-color-bg-container) 56%, var(--app-color-surface-tint) 100%)',
+							borderColor: 'var(--ant-color-info-border)',
+							boxShadow: 'var(--ant-box-shadow-secondary)',
 						}
 					: {
-							background: 'linear-gradient(135deg, var(--app-color-surface-muted) 0%, var(--app-color-surface) 100%)',
-							borderColor: 'var(--app-color-border-subtle)',
+							background: 'linear-gradient(135deg, var(--ant-color-fill-alter) 0%, var(--ant-color-bg-container) 100%)',
+							borderColor: 'var(--ant-color-border)',
 						},
 				body: {
 					height: 236,

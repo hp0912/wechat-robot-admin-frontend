@@ -172,7 +172,9 @@ const Skill = (props: IProps) => {
 
 	const sourceText = props.skill.source?.repo_url || (props.skill.path ? '本地安装' : '-');
 	const sourceTypeText = props.skill.source?.type === 'git' ? 'Git' : props.skill.path ? '本地' : '未知';
-	const installedAtText = props.skill.installed_at ? dayjs(props.skill.installed_at).format('YYYY-MM-DD HH:mm:ss') : '-';
+	const installedAtText = props.skill.installed_at
+		? dayjs(props.skill.installed_at).format('YYYY-MM-DD HH:mm:ss')
+		: '-';
 	const envCount = props.skill.env_vars?.length || 0;
 
 	return (
@@ -181,7 +183,7 @@ const Skill = (props: IProps) => {
 				<SkillTitle>
 					<Avatar
 						style={{
-							backgroundColor: props.skill.enabled ? 'var(--app-color-brand)' : token.colorTextDisabled,
+							backgroundColor: props.skill.enabled ? 'var(--ant-color-primary)' : token.colorTextDisabled,
 							boxShadow: props.skill.enabled ? 'var(--app-shadow-icon-accent)' : 'none',
 						}}
 						shape="square"
@@ -195,13 +197,13 @@ const Skill = (props: IProps) => {
 				root: props.skill.enabled
 					? {
 							background:
-								'linear-gradient(135deg, var(--app-color-surface-active) 0%, var(--app-color-surface) 56%, var(--app-color-surface-tint) 100%)',
-							borderColor: 'var(--app-color-border-accent)',
-							boxShadow: 'var(--app-shadow-surface-accent)',
+								'linear-gradient(135deg, var(--ant-color-fill-content-hover) 0%, var(--ant-color-bg-container) 56%, var(--app-color-surface-tint) 100%)',
+							borderColor: 'var(--ant-color-info-border)',
+							boxShadow: 'var(--ant-box-shadow-secondary)',
 						}
 					: {
-							background: 'linear-gradient(135deg, var(--app-color-surface-muted) 0%, var(--app-color-surface) 100%)',
-							borderColor: 'var(--app-color-border-subtle)',
+							background: 'linear-gradient(135deg, var(--ant-color-fill-alter) 0%, var(--ant-color-bg-container) 100%)',
+							borderColor: 'var(--ant-color-border)',
 						},
 				body: {
 					height: 236,
@@ -279,7 +281,9 @@ const Skill = (props: IProps) => {
 				</SkillMetaGrid>
 				<SkillFooter>
 					<SkillStatusGroup>
-						<SkillStatusTag $tone={props.skill.source?.type === 'git' ? 'info' : 'neutral'}>{sourceTypeText}</SkillStatusTag>
+						<SkillStatusTag $tone={props.skill.source?.type === 'git' ? 'info' : 'neutral'}>
+							{sourceTypeText}
+						</SkillStatusTag>
 						{envCount > 0 ? <SkillStatusTag $tone="info">环境变量 {envCount}</SkillStatusTag> : null}
 					</SkillStatusGroup>
 					<Space size={8}>
