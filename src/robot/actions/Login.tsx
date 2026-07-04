@@ -23,9 +23,9 @@ const ScanAction = styled(ScanOutlined)`
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
-	color: #4b556f;
+	color: var(--ant-color-primary);
 	font-size: 28px;
-	opacity: 0.88;
+	opacity: 0.9;
 	transform-origin: center;
 	transition:
 		color 0.2s ease,
@@ -35,10 +35,10 @@ const ScanAction = styled(ScanOutlined)`
 
 	&:hover,
 	&:focus-visible {
-		color: #1f2740;
+		color: var(--ant-color-primary-hover);
 		opacity: 1;
 		transform: translateY(-1px) scale(1.12);
-		filter: drop-shadow(0 4px 10px rgba(31, 39, 64, 0.18));
+		filter: drop-shadow(0 4px 10px rgba(14, 116, 144, 0.18));
 		outline: none;
 	}
 `;

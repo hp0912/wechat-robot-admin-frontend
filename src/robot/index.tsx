@@ -1,23 +1,17 @@
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { useBoolean, useMemoizedFn, useRequest, useSetState } from 'ahooks';
-import {
-	App,
-	Breadcrumb,
-	Button,
-	Col,
-	ConfigProvider,
-	Empty,
-	Input,
-	notification,
-	Pagination,
-	Radio,
-	Row,
-	Spin,
-} from 'antd';
+import { App, Breadcrumb, Button, Col, Empty, Input, notification, Pagination, Radio, Row, Spin } from 'antd';
 import { useEffect } from 'react';
-import { useStyle } from '@/hooks';
 import NewRobot from './NewRobot';
 import Robot from './Robot';
+import {
+	RobotCardsContainer,
+	RobotListContent,
+	RobotListFilter,
+	RobotListHeader,
+	RobotListPagination,
+	RobotListTitle,
+} from './styled';
 
 const RobotList = () => {
 	const { message } = App.useApp();
@@ -92,34 +86,26 @@ const RobotList = () => {
 		});
 	});
 
-	const { styles } = useStyle();
-
 	return (
 		<div>
-			<div className="nav">
+			<RobotListHeader>
 				<Breadcrumb
 					items={[
 						{
 							key: 'robot-list',
-							title: <span style={{ fontSize: 16, fontWeight: 600 }}>机器人列表</span>,
+							title: <RobotListTitle>机器人列表</RobotListTitle>,
 						},
 					]}
 				/>
-				<ConfigProvider
-					button={{
-						className: styles.linearGradientButton,
-					}}
+				<Button
+					type="primary"
+					icon={<PlusOutlined />}
+					onClick={setOnNewOpen.setTrue}
 				>
-					<Button
-						type="primary"
-						icon={<PlusOutlined />}
-						onClick={setOnNewOpen.setTrue}
-					>
-						创建机器人
-					</Button>
-				</ConfigProvider>
-			</div>
-			<div className="filter">
+					创建机器人
+				</Button>
+			</RobotListHeader>
+			<RobotListFilter>
 				<Row
 					align="middle"
 					wrap={false}
@@ -155,14 +141,11 @@ const RobotList = () => {
 						</Radio.Group>
 					</Col>
 				</Row>
-			</div>
-			<div
-				className="content"
-				style={{ height: 'calc(100vh - 278px)', overflowY: 'auto' }}
-			>
+			</RobotListFilter>
+			<RobotListContent>
 				<Spin spinning={loading}>
 					{data?.items?.length ? (
-						<div className="cards-container">
+						<RobotCardsContainer>
 							{data.items.map(item => {
 								return (
 									<Robot
@@ -172,7 +155,7 @@ const RobotList = () => {
 									/>
 								);
 							})}
-						</div>
+						</RobotCardsContainer>
 					) : (
 						<>
 							{!search.keyword && search.status === 'all' ? (
@@ -190,8 +173,8 @@ const RobotList = () => {
 						</>
 					)}
 				</Spin>
-			</div>
-			<div className="pagination">
+			</RobotListContent>
+			<RobotListPagination>
 				<Pagination
 					align="end"
 					current={search.pageIndex}
@@ -203,7 +186,7 @@ const RobotList = () => {
 						setSearch({ pageIndex: page });
 					}}
 				/>
-			</div>
+			</RobotListPagination>
 			{onNewOpen && (
 				<NewRobot
 					open={onNewOpen}
