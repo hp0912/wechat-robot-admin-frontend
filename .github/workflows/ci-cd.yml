@@ -37,6 +37,8 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
+          provenance: false
+          sbom: false
           cache-from: type=gha,scope=wechat-robot-admin-frontend
           cache-to: type=gha,mode=max,scope=wechat-robot-admin-frontend
           build-args: |
