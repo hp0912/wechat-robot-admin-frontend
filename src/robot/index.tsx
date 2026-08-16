@@ -34,10 +34,33 @@ const RobotList = () => {
 			},
 			description: (
 				<>
-					<p>欢迎加入我们</p>
+					<h2 style={{ margin: 0 }}>Pro 版本已经上线</h2>
+					<h3 style={{ margin: '8px 0' }}>新特性</h3>
+					<ul style={{ margin: 0, padding: 0 }}>
+						<li>支持设置大模型的推理强度: low high max 等等</li>
+						<li>内置搜索文件 / 写入、编辑文件 工具</li>
+						<li>开放发送远程文件接口</li>
+						<li>
+							MCP 工具、Skills 工具、内置工具支持按群/好友启用/禁用，支持设置工具是否要开启审核，支持给工具批量设置权限
+						</li>
+						<li>
+							支持设置定时任务，在制定的群/好友开启定时任务，支持定时发送固定文本/图片艾特指定的人/所有人，支持定时触发大模型
+						</li>
+						<li>人设管理支持批量设置人设</li>
+						<li>机器人出租模式，支持按群开启订阅模式</li>
+						<li>优化群聊总结图片样式</li>
+						<li>优化群聊排行榜交互，由发送文本改为发送图片</li>
+						<li>优化早安设置，早安图片支持自定义</li>
+						<li>优化下载文件可能导致文件损坏的问题</li>
+						<li>新增了几个内置 Skills，支持总结 PDF Excel Word</li>
+						<li>支持群聊消息监控，监控到特定的关键字后艾特指定的人、转发到指定的人</li>
+						<li>重构了记忆模块，优化记忆准确性、优化群成员关系建模，能描述更复杂的群成员关系</li>
+						<li>群里机器人支持仅管理员能触发，需要先在群聊查看群成员那里将指定群成员设置为管理员</li>
+					</ul>
+					<h4>欢迎加入我们</h4>
 					<img
-						src="https://img.houhoukang.com/char-room-qrcode.jpg?v=20260523"
-						style={{ width: 300, height: 450, display: 'block' }}
+						src="https://img.houhoukang.com/char-room-qrcode.jpg?v=20260726"
+						style={{ width: 100, height: 150, display: 'block' }}
 						alt="微信群二维码"
 					/>
 				</>
