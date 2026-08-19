@@ -1,13 +1,13 @@
 import { AppstoreAddOutlined, PlusOutlined } from '@ant-design/icons';
 import { useBoolean, useRequest } from 'ahooks';
-import { App, Empty, Pagination, Spin } from 'antd';
+import { App, Button, Empty, Pagination, Spin } from 'antd';
 import React, { useState } from 'react';
 import type * as Api from '@/api/wechat-robot/wechat-robot';
 import InstallSkill from './InstallSkill';
 import Skill from './Skill';
+import SkillsMarket from './SkillsMarket';
 import {
 	CardsContainer,
-	SkillsMarketLink,
 	SkillsToolbar,
 	SkillsToolbarButton,
 	SkillsToolbarIcon,
@@ -24,6 +24,7 @@ const Skills = (props: IProps) => {
 	const { message } = App.useApp();
 
 	const [onInstallOpen, setInstallOpen] = useBoolean(false);
+	const [onSkillsMarketOpen, setSkillsMarketOpen] = useBoolean(false);
 	const [pageIndex, setPageIndex] = useState(1);
 
 	const {
@@ -54,13 +55,15 @@ const Skills = (props: IProps) => {
 					</SkillsToolbarIcon>
 					<SkillsToolbarText>
 						前往{' '}
-						<SkillsMarketLink
-							href="https://git.houhoukang.com/houhou/wechat-robot-skills"
-							target="_blank"
-							rel="noopener noreferrer"
+						<Button
+							color="primary"
+							variant="link"
+							size="small"
+							style={{ height: 'auto', paddingInline: 2, fontWeight: 650 }}
+							onClick={setSkillsMarketOpen.setTrue}
 						>
 							技能市场
-						</SkillsMarketLink>{' '}
+						</Button>{' '}
 						探索更多技能
 					</SkillsToolbarText>
 				</SkillsToolbarInfo>
@@ -79,14 +82,16 @@ const Skills = (props: IProps) => {
 						description={
 							<>
 								暂无可用技能，前往{' '}
-								<a
-									href="https://git.houhoukang.com/houhou/wechat-robot-skills"
-									target="_blank"
-									rel="noopener noreferrer"
+								<Button
+									color="primary"
+									variant="link"
+									size="small"
+									style={{ height: 'auto', paddingInline: 2 }}
+									onClick={setSkillsMarketOpen.setTrue}
 								>
-									Skills
-								</a>{' '}
-								技能市场探索海量技能。
+									技能市场
+								</Button>{' '}
+								安装适合机器人的技能。
 							</>
 						}
 					/>
@@ -125,6 +130,15 @@ const Skills = (props: IProps) => {
 						open={onInstallOpen}
 						onRefresh={refresh}
 						onClose={setInstallOpen.setFalse}
+					/>
+				)}
+				{onSkillsMarketOpen && (
+					<SkillsMarket
+						robotId={props.robotId}
+						skills={data}
+						open={onSkillsMarketOpen}
+						onRefresh={refresh}
+						onClose={setSkillsMarketOpen.setFalse}
 					/>
 				)}
 			</div>

@@ -69,18 +69,6 @@ export const SkillsToolbarText = styled.span`
 	white-space: nowrap;
 `;
 
-export const SkillsMarketLink = styled.a`
-	color: var(--ant-color-primary);
-	font-weight: 650;
-	text-decoration: none;
-
-	&:hover {
-		color: var(--ant-color-primary-hover);
-		text-decoration: underline;
-		text-underline-offset: 3px;
-	}
-`;
-
 export const SkillsToolbarButton = styled(Button)`
 	&& {
 		flex: 0 0 auto;
