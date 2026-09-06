@@ -36,7 +36,6 @@ export const defaultAIDrawingValue = `{
 	"JiMeng": {
 		"enabled": true,
 		"base_url": "http://jimeng-api:9000",
-		"model": "jimeng-4.1",
 		"sessionid": ["xxxxxx"],
 		"sample_strength": 0.5,
 		"resolution": "2k",
@@ -46,7 +45,6 @@ export const defaultAIDrawingValue = `{
 	"DouBao": {
 		"enabled": true,
 		"api_key": "xxxxxxx",
-		"model": "doubao-seedream-4.0",
 		"size": "2K",
 		"response_format": "url",
 		"watermark": false
@@ -57,14 +55,12 @@ export const defaultAIDrawingValue = `{
 	"Z-Image": {
 		"enabled": true,
 		"base_url": "https://api-inference.modelscope.cn/",
-		"api_key": "xxxxxxx",
-		"model": "Z-Image-Turbo"
+		"api_key": "xxxxxxx"
 	},
 	"OpenAI": {
 		"enabled": true,
 		"base_url": "https://new-api.houhoukang.com",
 		"api_key": "",
-		"model": "gpt-image-2",
 		"n": 1,
 		"size": "auto",
 		"quality": "auto",
@@ -114,6 +110,18 @@ export const ObjectToString = <
 		data.wxhb_notify_member_list = data.wxhb_notify_member_list.split(',') as unknown as string;
 	} else {
 		data.wxhb_notify_member_list = [] as unknown as string;
+	}
+};
+
+export const parseSettingsJSON = (value: unknown, label: string) => {
+	try {
+		const parsedValue = typeof value === 'string' ? JSON.parse(value) : value;
+		if (!parsedValue || typeof parsedValue !== 'object' || Array.isArray(parsedValue)) {
+			throw new Error();
+		}
+		return parsedValue as Record<string, unknown>;
+	} catch {
+		throw new Error(`${label}格式错误，不是有效的JSON对象格式`);
 	}
 };
 

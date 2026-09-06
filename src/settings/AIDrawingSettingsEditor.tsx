@@ -1,5 +1,5 @@
 import Editor from '@monaco-editor/react';
-import { Button } from 'antd';
+import { Button, Popover, Space } from 'antd';
 import React from 'react';
 import { registerMonacoJsonSchema } from './monacoJsonSchema';
 import { defaultAIDrawingValue } from './utils';
@@ -49,14 +49,11 @@ const AIDrawingSettingsEditor = (props: IProps) => {
 										base_url: {
 											type: 'string',
 										},
-										model: {
-											type: 'string',
-										},
 										api_key: {
 											type: 'string',
 										},
 									},
-									required: ['enabled', 'base_url', 'model', 'api_key'],
+									required: ['enabled', 'base_url', 'api_key'],
 									description: '造像绘图',
 								},
 								GLM: {
@@ -74,9 +71,6 @@ const AIDrawingSettingsEditor = (props: IProps) => {
 									type: 'object',
 									properties: {
 										base_url: {
-											type: 'string',
-										},
-										model: {
 											type: 'string',
 										},
 										sessionid: {
@@ -102,7 +96,7 @@ const AIDrawingSettingsEditor = (props: IProps) => {
 											description: '是否启用',
 										},
 									},
-									required: ['base_url', 'model', 'sessionid', 'enabled'],
+									required: ['base_url', 'sessionid', 'enabled'],
 									description: '即梦绘图',
 								},
 								DouBao: {
@@ -113,9 +107,6 @@ const AIDrawingSettingsEditor = (props: IProps) => {
 											description: '是否启用',
 										},
 										api_key: {
-											type: 'string',
-										},
-										model: {
 											type: 'string',
 										},
 										response_format: {
@@ -129,7 +120,7 @@ const AIDrawingSettingsEditor = (props: IProps) => {
 											type: 'string',
 										},
 									},
-									required: ['enabled', 'api_key', 'model'],
+									required: ['enabled', 'api_key'],
 									description: '豆包绘图',
 								},
 								OpenAI: {
@@ -175,15 +166,40 @@ const AIDrawingSettingsEditor = (props: IProps) => {
 				}}
 			/>
 			<div style={{ position: 'absolute', top: 4, right: 4, zIndex: 9999 }}>
-				<Button
-					color="default"
-					variant="filled"
-					onClick={() => {
-						props.onChange?.(defaultAIDrawingValue);
-					}}
-				>
-					重置为默认值
-				</Button>
+				<Space>
+					<Popover
+						trigger="click"
+						destroyOnHidden
+						content={
+							<div>
+								<p>1. 当前绘图模型供应商支持即梦、豆包、GLM、Z-Image 和 OpenAI</p>
+								<p>
+									2. 绘图模型由上下文指定，不在这里配置。如果不指定，则使用即梦供应商 jimeng-5.0
+									进行绘图，请确保即梦绘图配置正确。
+								</p>
+								<p>示例1: @你的机器人 使用即梦 5.0 Pro 为我生成一只小兔子。</p>
+								<p>示例2: @你的机器人 使用 OpenAI GPT 为我画一个大美女。</p>
+								<p>示例3: @你的机器人 为我生成一个机器人海报。(这里没有指定模型，则默认使用 jimeng-5.0)</p>
+							</div>
+						}
+					>
+						<Button
+							color="default"
+							variant="filled"
+						>
+							配置说明
+						</Button>
+					</Popover>
+					<Button
+						color="default"
+						variant="filled"
+						onClick={() => {
+							props.onChange?.(defaultAIDrawingValue);
+						}}
+					>
+						重置为默认值
+					</Button>
+				</Space>
 			</div>
 		</div>
 	);
