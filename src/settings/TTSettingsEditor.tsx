@@ -216,8 +216,8 @@ const TTSettingsEditor = (props: IProps) => {
 						destroyOnHidden
 						content={
 							<div>
-								使用默认中转站的话，小米语音的 base_url 和 api_key 可以配置成和 AI
-								聊天的一样，中转站已经支持小米语音模型。
+								使用默认中转站的话，小米语音的 base_url 和 api_key 可以配置成和 AI 聊天的一样(注意:
+								中转站还不支持豆包语音)，中转站已经支持小米语音模型。
 								<br />
 							</div>
 						}
