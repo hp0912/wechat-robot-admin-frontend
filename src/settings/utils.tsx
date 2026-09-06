@@ -28,7 +28,24 @@ export const defaultTTSValue = `{
 		"url": "https://openspeech.bytedance.com/api/v3/tts/unidirectional"
 	},
 	"mimo": {
-		"model": "mimo-v2.5-tts"
+		"base_url": "https://api.xiaomimimo.com/v1",
+		"api_key": "",
+		"voice": "mimo_default",
+		"audio_format": "wav",
+		"stream": false,
+		"timeout": 300,
+		"auto_model": true,
+		"voice_prompt": "",
+		"style_prompt": [],
+		"context_texts": [],
+		"audio_tags": [],
+		"emotion": "",
+		"speaking_rate": "",
+		"pitch": "",
+		"volume": "",
+		"dialect": "",
+		"voice_clone_audio": "",
+		"voice_clone_mime_type": "audio/mpeg"
 	}
 }`;
 
