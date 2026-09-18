@@ -24,6 +24,7 @@ const LogContent = styled.pre`
 
 interface IProps {
 	content?: string;
+	height?: React.CSSProperties['height'];
 }
 
 const Log = (props: IProps) => {
@@ -58,7 +59,7 @@ const Log = (props: IProps) => {
 	}, [props.content]);
 
 	return (
-		<Container>
+		<Container style={{ height: props.height }}>
 			<LogContent
 				ref={contentRef}
 				dangerouslySetInnerHTML={{ __html: logRenderStr }}
