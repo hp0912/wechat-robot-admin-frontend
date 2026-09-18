@@ -1,7 +1,7 @@
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import type { AnyType } from '@/common/types';
-import { UrlLogin } from '@/constant/redirect-url';
 import { clientInit } from './clientInit';
+import { redirectToLogin } from './login';
 
 const baseURL = '';
 
@@ -22,8 +22,8 @@ export const Init = () => {
 			case 200:
 				return response;
 			case 401:
-				window.location.href = `${UrlLogin}?login_method=${data.data?.login_method ?? 'scan'}&redirect=${encodeURIComponent(window.location.href)}`;
-				return;
+				redirectToLogin(data.data?.login_method);
+				return Promise.reject(errorWrapper(data));
 			default:
 				return Promise.reject(errorWrapper(data));
 		}

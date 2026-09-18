@@ -6,9 +6,9 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../public/logo.svg';
-import { UrlLogin } from './constant/redirect-url';
 import { UserContext } from './context/user';
 import { ThemeSwitch, useThemeSettings } from './theme-settings';
+import { redirectToLogin } from './utils/login';
 
 const { Header } = Layout;
 
@@ -186,7 +186,7 @@ const AppLayout = () => {
 			icon: <LogoutOutlined />,
 			onClick: async () => {
 				const resp = await signOut();
-				window.location.href = `${UrlLogin}?login_method=${resp?.data?.login_method ?? 'scan'}&redirect=${encodeURIComponent(window.location.href)}`;
+				redirectToLogin(resp?.data?.login_method);
 			},
 		},
 	];

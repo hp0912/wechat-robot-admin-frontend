@@ -1,10 +1,11 @@
 import { LockOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { App, Button, Form, Input } from 'antd';
+import { App, Button, Form, Input, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import type * as Api from '@/api/wechat-robot/wechat-robot';
+import { loadLoginMethod } from '@/utils/login';
 
 const Container = styled.div`
 	width: 345px;
@@ -75,8 +76,12 @@ const Login = () => {
 	const { message, modal } = App.useApp();
 	const navigate = useNavigate();
 
-	const params = new URLSearchParams(window.location.search);
-	const loginMethod = params.get('login_method') || 'scan';
+	const {
+		data: loginMethod,
+		loading: loginMethodLoading,
+		error: loginMethodError,
+		refresh: refreshLoginMethod,
+	} = useRequest(loadLoginMethod);
 
 	const [form] = Form.useForm<{ code: string; token: string }>();
 
@@ -147,6 +152,22 @@ const Login = () => {
 		}
 	};
 
+	if (!loginMethod || loginMethodLoading) {
+		return (
+			<Container>
+				<h1>微信机器人管理后台</h1>
+				{loginMethodError && !loginMethodLoading ? (
+					<>
+						<p>{loginMethodError.message}</p>
+						<Button onClick={refreshLoginMethod}>重试</Button>
+					</>
+				) : (
+					<Spin />
+				)}
+			</Container>
+		);
+	}
+
 	return (
 		<Container className={className}>
 			<h1>微信机器人管理后台</h1>
@@ -210,7 +231,7 @@ const Login = () => {
 						type="primary"
 						size="large"
 						block
-						loading={loading}
+						loading={loading || loginLoading}
 						onClick={onSignIn}
 					>
 						登录
