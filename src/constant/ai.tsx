@@ -1,21 +1,244 @@
-export const AiModels: Array<{ value: string }> = [
-	{ value: 'deepseek-v4-pro' },
-	{ value: 'deepseek-v4-flash' },
-	{ value: 'doubao-seed-2-0-pro-260215' },
-	{ value: 'doubao-seed-2-0-lite-260215' },
-	{ value: 'doubao-seed-2-0-mini-260215' },
-	{ value: 'qwen3.6-plus' },
-	{ value: 'qwen3.5-plus' },
-	{ value: 'glm-5.1' },
-	{ value: 'glm-5' },
-	{ value: 'glm-4.6v' },
-	{ value: 'gpt-4o-mini' },
-	{ value: 'gpt-4o' },
-	{ value: 'gpt-4.1' },
-	{ value: 'gemini-3-pro-preview' },
-	{ value: 'gemini-3.1-pro-preview' },
-	{ value: 'SparkDesk-v4.0' },
-	{ value: 'ERNIE-4.0-Turbo-8K' },
+import { DeepSeekFilled, ExclamationCircleOutlined, QwenFilled } from '@ant-design/icons';
+import { Flex, Space, Tag } from 'antd';
+import DoubaoFilled from '@/icons/DoubaoFilled';
+import GlmFilled from '@/icons/GlmFilled';
+import HyFilled from '@/icons/HyFilled';
+
+export const AiModels: Array<{ label?: React.ReactNode; value: string }> = [
+	{
+		label: (
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				<Space size={4}>
+					<DeepSeekFilled />
+					<span>deepseek-flash</span>
+				</Space>
+				<Tag
+					color="warning"
+					icon={<ExclamationCircleOutlined />}
+					variant="filled"
+				>
+					不支持结构化输出
+				</Tag>
+			</Flex>
+		),
+		value: 'deepseek-flash',
+	},
+	{
+		label: (
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				<Space size={4}>
+					<DoubaoFilled />
+					<span>doubao-seed-2-1-pro-260915</span>
+				</Space>
+			</Flex>
+		),
+		value: 'doubao-seed-2-1-pro-260915',
+	},
+	{
+		label: (
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				<Space size={4}>
+					<DoubaoFilled />
+					<span>doubao-seed-2-1-turbo-260628</span>
+				</Space>
+			</Flex>
+		),
+		value: 'doubao-seed-2-1-turbo-260628',
+	},
+	{
+		label: (
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				<Space size={4}>
+					<DoubaoFilled />
+					<span>doubao-seed-2-0-pro-260215</span>
+				</Space>
+				<Tag
+					color="warning"
+					icon={<ExclamationCircleOutlined />}
+					variant="filled"
+				>
+					不支持结构化输出
+				</Tag>
+			</Flex>
+		),
+		value: 'doubao-seed-2-0-pro-260215',
+	},
+	{
+		label: (
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				<Space size={4}>
+					<DoubaoFilled />
+					<span>doubao-seed-2-0-lite-260215</span>
+				</Space>
+			</Flex>
+		),
+		value: 'doubao-seed-2-0-lite-260215',
+	},
+	{
+		label: (
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				<Space size={4}>
+					<DoubaoFilled />
+					<span>doubao-seed-2-0-mini-260215</span>
+				</Space>
+			</Flex>
+		),
+		value: 'doubao-seed-2-0-mini-260215',
+	},
+	{
+		label: (
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				<Space size={4}>
+					<QwenFilled />
+					<span>qwen3.8-max</span>
+				</Space>
+			</Flex>
+		),
+		value: 'qwen3.8-max',
+	},
+	{
+		label: (
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				<Space size={4}>
+					<QwenFilled />
+					<span>qwen3.8-flash</span>
+				</Space>
+			</Flex>
+		),
+		value: 'qwen3.8-flash',
+	},
+	{
+		label: (
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				<Space size={4}>
+					<QwenFilled />
+					<span>qwen3.7-max</span>
+				</Space>
+			</Flex>
+		),
+		value: 'qwen3.7-max',
+	},
+	{
+		label: (
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				<Space size={4}>
+					<QwenFilled />
+					<span>qwen3.7-flash</span>
+				</Space>
+			</Flex>
+		),
+		value: 'qwen3.7-flash',
+	},
+	{
+		label: (
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				<Space size={4}>
+					<GlmFilled />
+					<span>glm-5.3</span>
+				</Space>
+				<Tag
+					color="warning"
+					icon={<ExclamationCircleOutlined />}
+					variant="filled"
+				>
+					不支持结构化输出
+				</Tag>
+			</Flex>
+		),
+		value: 'glm-5.3',
+	},
+	{
+		label: (
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				<Space size={4}>
+					<GlmFilled />
+					<span>glm-5.3-flash</span>
+				</Space>
+				<Tag
+					color="warning"
+					icon={<ExclamationCircleOutlined />}
+					variant="filled"
+				>
+					不支持结构化输出
+				</Tag>
+			</Flex>
+		),
+		value: 'glm-5.3-flash',
+	},
+	{
+		label: (
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				<Space size={4}>
+					<HyFilled />
+					<span>hy4-preview</span>
+				</Space>
+			</Flex>
+		),
+		value: 'hy4-preview',
+	},
+	{
+		label: (
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				<Space size={4}>
+					<HyFilled />
+					<span>hy3</span>
+				</Space>
+			</Flex>
+		),
+		value: 'hy3',
+	},
+];
+
+export const ReasoningEffortOptions: Array<{ value: string }> = [
+	{ value: 'none' },
+	{ value: 'minimal' },
+	{ value: 'low' },
+	{ value: 'medium' },
+	{ value: 'high' },
+	{ value: 'xhigh' },
+	{ value: 'max' },
 ];
 
 export const TextEmbeddingModels: Array<{ value: string }> = [

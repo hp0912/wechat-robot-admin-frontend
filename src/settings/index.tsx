@@ -270,7 +270,7 @@ const GlobalSettings = (props: IProps) => {
 													help={
 														<>
 															<span style={{ color: '#e45c5c' }}>特别注意</span>:
-															提取记忆依赖全局聊天模型，这个模型必须支持JSON Schema
+															提取记忆依赖全局聊天模型，这个模型必须支持结构化输出
 														</>
 													}
 												>
